@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nerzid.autocomment.swum;
+package com.nerzid.autocomment.nlp;
 
+import com.nerzid.autocomment.nlp.IdentifierSplitter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -46,7 +47,7 @@ public class IdentifierSplitterTest {
      */
     @Test
     public void testSplit1() {
-        System.out.println("split");
+        System.out.println("split-1");
         String identifier = "_isTo-beHere-_";
         List<String> expResult = Arrays.asList("is", "to", "be", "here");
         List<String> result = IdentifierSplitter.split(identifier);
@@ -58,7 +59,7 @@ public class IdentifierSplitterTest {
      */
     @Test
     public void testSplit2() {
-        System.out.println("split");
+        System.out.println("split-2");
         String identifier = "RGBtoGRAY";
         List<String> expResult = Arrays.asList("rgb", "to", "gray");
         List<String> result = IdentifierSplitter.split(identifier);
@@ -70,7 +71,7 @@ public class IdentifierSplitterTest {
      */
     @Test
     public void testSplit3() {
-        System.out.println("split");
+        System.out.println("split-3");
         String identifier = "canProduceSuch_results";
         List<String> expResult = Arrays.asList("can", "produce", "such", "results");
         List<String> result = IdentifierSplitter.split(identifier);
@@ -79,9 +80,18 @@ public class IdentifierSplitterTest {
     
     @Test
     public void testSplit4() {
-        System.out.println("split");
+        System.out.println("split-4");
         String identifier = "isItKillable-likeThis";
         List<String> expResult = Arrays.asList("is", "it", "killable", "like", "this");
+        List<String> result = IdentifierSplitter.split(identifier);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testSplit5(){
+        System.out.println("split-5");
+        String identifier = "convertInt32toFloat64";
+        List<String> expResult = Arrays.asList("convert", "int32", "to", "float64");
         List<String> result = IdentifierSplitter.split(identifier);
         assertEquals(expResult, result);
     }

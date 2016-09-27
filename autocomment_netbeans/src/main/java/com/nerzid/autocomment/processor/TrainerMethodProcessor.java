@@ -15,7 +15,7 @@
  */
 package com.nerzid.autocomment.processor;
 
-import com.nerzid.autocomment.nlp.Trainer;
+import com.nerzid.autocomment.train.Trainer;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.declaration.CtMethod;
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nerzid.autocomment.nlp;
+package com.nerzid.autocomment.train;
 
 import com.nerzid.autocomment.database.Database;
 import com.nerzid.autocomment.database.Word;
@@ -13,8 +13,8 @@ import com.nerzid.autocomment.filehandler.FilePicker;
 import com.nerzid.autocomment.generator.CommentGenerator;
 import com.nerzid.autocomment.processor.CtCommentProcessor;
 import com.nerzid.autocomment.processor.TrainerMethodProcessor;
-import com.nerzid.autocomment.swum.IdentifierSplitter;
-import com.nerzid.autocomment.swum.NLPToolkit;
+import com.nerzid.autocomment.nlp.IdentifierSplitter;
+import com.nerzid.autocomment.nlp.NLPToolkit;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;

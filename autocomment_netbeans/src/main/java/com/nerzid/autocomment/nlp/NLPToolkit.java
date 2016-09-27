@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nerzid.autocomment.swum;
+package com.nerzid.autocomment.nlp;
 
 import com.nerzid.autocomment.database.Word;
 import edu.stanford.nlp.simple.Sentence;
