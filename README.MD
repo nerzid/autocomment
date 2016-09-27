@@ -6,7 +6,7 @@ in your favorite terminal to download the project.
 
 Feel free to **Fork** and send **Pull Requests** :+1:
 
-## To Do List :loudspeaker:
+## :loudspeaker: To Do List 
 - Use a logging library instead of a custom one.
 - Gather at least 10.000 java files for training process. Current count Approximately: 2.200.
 - Finish all of the javadocs.
