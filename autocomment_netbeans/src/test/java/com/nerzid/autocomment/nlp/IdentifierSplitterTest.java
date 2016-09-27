@@ -95,6 +95,15 @@ public class IdentifierSplitterTest {
         List<String> result = IdentifierSplitter.split(identifier);
         assertEquals(expResult, result);
     }
+    
+    @Test
+    public void testSplit6(){
+        System.out.println("split-6");
+        String identifier = "convertINT32ToDouble16";
+        List<String> expResult = Arrays.asList("convert", "int32", "to", "double16");
+        List<String> result = IdentifierSplitter.split(identifier);
+        assertEquals(expResult, result);
+    }
 
     /**
      * Test of getPunctuations method, of class IdentifierSplitter.

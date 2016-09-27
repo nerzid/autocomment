@@ -43,12 +43,21 @@ public class IdentifierSplitter {
             String newWord = "";
             boolean waitingUpperCaseLetter = false;
             boolean beforeWasUpperCase = false;
+            boolean beforeWasNumber = false;
             for (int j = 0; j < afterPuncsRemovedArr[i].length(); j++) {
                 String word = afterPuncsRemovedArr[i];
-                if (word.charAt(j) == ' ') {
+                char ch = word.charAt(j);
+                if (ch == ' ') {
                     continue;
                 }
-                if (Character.isUpperCase(word.charAt(j))) {
+                if(Character.isDigit(ch)){
+                    if(!newWord.isEmpty()){
+                        beforeWasNumber = true;
+                        beforeWasUpperCase = false;
+                        waitingUpperCaseLetter = false;
+                    }
+                }
+                else if (Character.isUpperCase(ch)) {
                     if (!newWord.isEmpty()) {
                         if (beforeWasUpperCase) {
                             waitingUpperCaseLetter = true;
@@ -58,19 +67,21 @@ public class IdentifierSplitter {
                             newWord = "";
                         }
                     }
+                    beforeWasNumber = false;
                     beforeWasUpperCase = true;
                 } else {
-                    if (waitingUpperCaseLetter) {
+                    if (waitingUpperCaseLetter || beforeWasNumber) {
                         splitted.add(newWord.toLowerCase());
                         newWord = "";
                     }
+                    beforeWasNumber = false;
                     beforeWasUpperCase = false;
                     waitingUpperCaseLetter = false;
                 }
-                newWord += word.charAt(j);
+                newWord += ch;
 
                 // If it's the last character of the word
-                // Then add it to the list
+                // Then add word to the list
                 if (j == word.length() - 1) {
                     splitted.add(newWord.toLowerCase());
                 }
@@ -101,6 +112,7 @@ public class IdentifierSplitter {
         }
         return false;
     }
+    
 
     /**
      * Gets punctuations to be used on splitting methods.
