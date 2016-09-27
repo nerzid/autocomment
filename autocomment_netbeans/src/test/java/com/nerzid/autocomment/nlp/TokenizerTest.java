@@ -53,7 +53,7 @@ public class TokenizerTest {
         List<String> result = Tokenizer.split(identifier);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of split method, of class Tokenizer.
      */
@@ -65,7 +65,7 @@ public class TokenizerTest {
         List<String> result = Tokenizer.split(identifier);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of split method, of class Tokenizer.
      */
@@ -77,7 +77,7 @@ public class TokenizerTest {
         List<String> result = Tokenizer.split(identifier);
         assertEquals(expResult, result);
     }
-    
+
     @Test
     public void testSplit4() {
         System.out.println("split-4");
@@ -86,22 +86,61 @@ public class TokenizerTest {
         List<String> result = Tokenizer.split(identifier);
         assertEquals(expResult, result);
     }
-    
+
     @Test
-    public void testSplit5(){
+    public void testSplit5() {
         System.out.println("split-5");
         String identifier = "convertInt32toFloat64";
         List<String> expResult = Arrays.asList("convert", "int32", "to", "float64");
         List<String> result = Tokenizer.split(identifier);
         assertEquals(expResult, result);
     }
-    
+
     @Test
-    public void testSplit6(){
+    public void testSplit6() {
         System.out.println("split-6");
         String identifier = "convertINT32ToDouble16";
         List<String> expResult = Arrays.asList("convert", "int32", "to", "double16");
         List<String> result = Tokenizer.split(identifier);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of simplifyDataType method, of class Tokenizer
+     */
+    @Test
+    public void testSimplifyDataType1() {
+        System.out.println("simplifyDataType-1");
+        String data_type = "java.io.File[]";
+        String expResult= "Collection of File";
+        String result = Tokenizer.simplifyDataType(data_type);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testSimplifyDataType2() {
+        System.out.println("simplifyDataType-2");
+        String data_type = "java.util.SortedMap<java.lang.String, java.nio.charset.Charset>";
+        String expResult= "Collection of Charset";
+        String result = Tokenizer.simplifyDataType(data_type);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testSimplifyDataType3() {
+        System.out.println("simplifyDataType-3");
+        String data_type = "java.nio.charset.Charset";
+        String expResult= "Charset";
+        String result = Tokenizer.simplifyDataType(data_type);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testSimplifyDataType4() {
+        System.out.println("simplifyDataType-4");
+        String data_type = "java.util.Set<java.util.Map.Entry<java.lang.String, java.lang.Object>>";
+        String expResult= "Collection of Object";
+        String result = Tokenizer.simplifyDataType(data_type);
         assertEquals(expResult, result);
     }
 

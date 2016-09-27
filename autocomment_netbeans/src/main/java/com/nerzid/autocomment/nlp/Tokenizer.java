@@ -18,6 +18,54 @@ public class Tokenizer {
     private final static char[] PUNCTUATION = {'-', '_'};
 
     /**
+     * Simplifies the data_type. e.g java.lang.String to String e.g
+     * java.util.List<java.lang.String> to Collection of String
+     *
+     * @param data_type
+     * @return simplified version of data_type as String
+     */
+    public static String simplifyDataType(String data_type) {
+        int len = data_type.length();
+
+        // If last character of data_type isn't ']' or '>', that means this is not a collection
+        // e.g. java.io.File[] is collection, but java.io.File doesn't.
+        if (data_type.charAt(len - 1) != ']' && data_type.charAt(len - 1) != '>') {
+            return getLastStringBeforeDot(data_type);
+        }
+        
+        return "Collection of " + removePunctuations(getLastStringBeforeDot(data_type));
+    }
+
+    /**
+     * Gets last string before dot. e.g. for 'java.io.File', output will be
+     * 'File'.
+     * 
+     * @param s
+     * @return
+     */
+    private static String getLastStringBeforeDot(String s) {
+        String[] splitted = s.split("\\.");
+        if (splitted.length != 0)
+            return splitted[splitted.length - 1];
+        else
+            return s;
+    }
+    
+    /**
+     * Removes all
+     * @param s
+     * @return 
+     */
+    private static String removePunctuations(String s) {
+        String res = "";
+        for (Character c : s.toCharArray()) {
+            if(Character.isLetterOrDigit(c))
+                res += c;
+        }
+        return res;
+    }
+
+    /**
      * Splits the identifier as String based on camelcase notation and
      * punctuation
      *
@@ -50,14 +98,13 @@ public class Tokenizer {
                 if (ch == ' ') {
                     continue;
                 }
-                if(Character.isDigit(ch)){
-                    if(!newWord.isEmpty()){
+                if (Character.isDigit(ch)) {
+                    if (!newWord.isEmpty()) {
                         beforeWasNumber = true;
                         beforeWasUpperCase = false;
                         waitingUpperCaseLetter = false;
                     }
-                }
-                else if (Character.isUpperCase(ch)) {
+                } else if (Character.isUpperCase(ch)) {
                     if (!newWord.isEmpty()) {
                         if (beforeWasUpperCase) {
                             waitingUpperCaseLetter = true;
@@ -112,7 +159,6 @@ public class Tokenizer {
         }
         return false;
     }
-    
 
     /**
      * Gets punctuations to be used on splitting methods.
