@@ -9,7 +9,7 @@ import com.nerzid.autocomment.database.Database;
 import com.nerzid.autocomment.database.Word;
 import com.nerzid.autocomment.log.ErrorLog;
 import com.nerzid.autocomment.log.ErrorMessage;
-import com.nerzid.autocomment.filehandler.FilePicker;
+import com.nerzid.autocomment.io.FilePicker;
 import com.nerzid.autocomment.generator.CommentGenerator;
 import com.nerzid.autocomment.processor.CtCommentProcessor;
 import com.nerzid.autocomment.processor.TrainerMethodProcessor;

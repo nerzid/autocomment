@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.nerzid.autocomment.filehandler;
+package com.nerzid.autocomment.io;
 
 import com.nerzid.autocomment.log.ErrorMessage;
 import java.io.File;
