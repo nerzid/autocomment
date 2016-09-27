@@ -13,7 +13,7 @@ import com.nerzid.autocomment.io.FilePicker;
 import com.nerzid.autocomment.generator.CommentGenerator;
 import com.nerzid.autocomment.processor.CtCommentProcessor;
 import com.nerzid.autocomment.processor.TrainerMethodProcessor;
-import com.nerzid.autocomment.nlp.IdentifierSplitter;
+import com.nerzid.autocomment.nlp.Tokenizer;
 import com.nerzid.autocomment.nlp.NLPToolkit;
 import java.io.File;
 import java.io.IOException;
@@ -48,8 +48,8 @@ public class Trainer {
      * @param data_type 
      */
     public static void train(String method_name, String data_type) {
-        Collection<String> identifiers = IdentifierSplitter.split(method_name);
-        String identifier_sentence = IdentifierSplitter.getIdentifiersSentence(identifiers);
+        Collection<String> identifiers = Tokenizer.split(method_name);
+        String identifier_sentence = Tokenizer.getIdentifiersSentence(identifiers);
         Collection<Word> words_list = NLPToolkit.getWordsWithFeatures(identifier_sentence, data_type);
 
         Word.insertAll(words_list);

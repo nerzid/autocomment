@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author nerzid
  */
-public class IdentifierSplitter {
+public class Tokenizer {
 
     private final static char[] PUNCTUATION = {'-', '_'};
 
