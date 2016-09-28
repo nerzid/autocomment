@@ -46,8 +46,8 @@ public class TokenizerTest {
      * Test of split method, of class Tokenizer.
      */
     @Test
-    public void testSplit1() {
-        System.out.println("split-1");
+    public void split_DashAndUnderDash_NoDashes() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.split_DashAndUnderDash_NoDashes");
         String identifier = "_isTo-beHere-_";
         List<String> expResult = Arrays.asList("is", "to", "be", "here");
         List<String> result = Tokenizer.split(identifier);
@@ -58,8 +58,8 @@ public class TokenizerTest {
      * Test of split method, of class Tokenizer.
      */
     @Test
-    public void testSplit2() {
-        System.out.println("split-2");
+    public void split_UpperCaseLettersRepeatedly_UpperCaseLettersGrouped() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.split_UpperCaseLettersRepeatedly_UpperCaseLettersGrouped");
         String identifier = "RGBtoGRAY";
         List<String> expResult = Arrays.asList("rgb", "to", "gray");
         List<String> result = Tokenizer.split(identifier);
@@ -70,8 +70,8 @@ public class TokenizerTest {
      * Test of split method, of class Tokenizer.
      */
     @Test
-    public void testSplit3() {
-        System.out.println("split-3");
+    public void split_LowerCaseLetterBeforeUnderDash_NewTokenAfterUnderDash() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.split_LowerCaseLetterBeforeUnderDash_NewTokenAfterUnderDash");
         String identifier = "canProduceSuch_results";
         List<String> expResult = Arrays.asList("can", "produce", "such", "results");
         List<String> result = Tokenizer.split(identifier);
@@ -79,8 +79,8 @@ public class TokenizerTest {
     }
 
     @Test
-    public void testSplit4() {
-        System.out.println("split-4");
+    public void split_LowerCaseLetterBeforeDash_NewTokenAfterDash() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.split_LowerCaseLetterBeforeDash_NewTokenAfterDash");
         String identifier = "isItKillable-likeThis";
         List<String> expResult = Arrays.asList("is", "it", "killable", "like", "this");
         List<String> result = Tokenizer.split(identifier);
@@ -88,8 +88,8 @@ public class TokenizerTest {
     }
 
     @Test
-    public void testSplit5() {
-        System.out.println("split-5");
+    public void split_NumbersLowerCaseBeforeToken_NumbersAndTokenAreOneSingleToken() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.split_NumbersLowerCaseBeforeToken_NumbersAndTokenAreOneSingleToken");
         String identifier = "convertInt32toFloat64";
         List<String> expResult = Arrays.asList("convert", "int32", "to", "float64");
         List<String> result = Tokenizer.split(identifier);
@@ -97,8 +97,8 @@ public class TokenizerTest {
     }
 
     @Test
-    public void testSplit6() {
-        System.out.println("split-6");
+    public void split_NumbersBeforeUpperCaseToken_NumbersAndTokenAreOneSingleTokenTotal() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.split_NumbersBeforeUpperCaseToken_NumbersAndTokenAreOneSingleTokenTotal");
         String identifier = "convertINT32ToDouble16";
         List<String> expResult = Arrays.asList("convert", "int32", "to", "double16");
         List<String> result = Tokenizer.split(identifier);
@@ -109,49 +109,38 @@ public class TokenizerTest {
      * Test of simplifyDataType method, of class Tokenizer
      */
     @Test
-    public void testSimplifyDataType1() {
-        System.out.println("simplifyDataType-1");
+    public void simplifyDataType_GivenArrayAsParam_OutputIsCollectionOfObjectAsString() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_GivenArrayAsParam_OutputIsCollectionOfObjectAsString");
         String data_type = "java.io.File[]";
-        String expResult= "Collection of File";
-        String result = Tokenizer.simplifyDataType(data_type);
-        assertEquals(expResult, result);
-    }
-    
-    @Test
-    public void testSimplifyDataType2() {
-        System.out.println("simplifyDataType-2");
-        String data_type = "java.util.SortedMap<java.lang.String, java.nio.charset.Charset>";
-        String expResult= "Collection of Charset";
-        String result = Tokenizer.simplifyDataType(data_type);
-        assertEquals(expResult, result);
-    }
-    
-    @Test
-    public void testSimplifyDataType3() {
-        System.out.println("simplifyDataType-3");
-        String data_type = "java.nio.charset.Charset";
-        String expResult= "Charset";
-        String result = Tokenizer.simplifyDataType(data_type);
-        assertEquals(expResult, result);
-    }
-    
-    @Test
-    public void testSimplifyDataType4() {
-        System.out.println("simplifyDataType-4");
-        String data_type = "java.util.Set<java.util.Map.Entry<java.lang.String, java.lang.Object>>";
-        String expResult= "Collection of Object";
+        String expResult = "Collection of File";
         String result = Tokenizer.simplifyDataType(data_type);
         assertEquals(expResult, result);
     }
 
-    /**
-     * Test of getPunctuations method, of class Tokenizer.
-     */
     @Test
-    public void testGetPunctuations() {
-        System.out.println("getPunctuations");
-        char[] expResult = {'-', '_'};
-        char[] result = Tokenizer.getPunctuations();
-        assertArrayEquals(expResult, result);
+    public void simplifyDataType_GivenMapAsParam_OutputIsCollectionOfValueObjectAsString() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_GivenMapAsParam_OutputIsCollectionOfValueObjectAsString");
+        String data_type = "java.util.SortedMap<java.lang.String, java.nio.charset.Charset>";
+        String expResult = "Collection of Charset";
+        String result = Tokenizer.simplifyDataType(data_type);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void simplifyDataType_GivenObjectAsParam_OutputIsObjectAsString() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_GivenObjectAsParam_OutputIsObjectAsString");
+        String data_type = "java.nio.charset.Charset";
+        String expResult = "Charset";
+        String result = Tokenizer.simplifyDataType(data_type);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString");
+        String data_type = "java.util.Set<java.util.Map.Entry<java.lang.String, java.lang.Object>>";
+        String expResult = "Collection of Object";
+        String result = Tokenizer.simplifyDataType(data_type);
+        assertEquals(expResult, result);
     }
 }
