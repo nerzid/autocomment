@@ -135,6 +135,9 @@ public class TokenizerTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * This is not the best output. It'll need another look in the future.
+     */
     @Test
     public void simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString() {
         System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString");
