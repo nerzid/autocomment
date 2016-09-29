@@ -43,7 +43,7 @@ public class Tokenizer {
      * @param s
      * @return
      */
-    private static String getLastStringBeforeDot(String s) {
+    public static String getLastStringBeforeDot(String s) {
         String[] splitted = s.split("\\.");
         if (splitted.length != 0)
             return splitted[splitted.length - 1];
