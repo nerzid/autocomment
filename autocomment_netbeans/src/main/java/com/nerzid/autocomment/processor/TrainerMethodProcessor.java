@@ -96,11 +96,11 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
                     CtReturn returnStmt = (CtReturn) flowBreakersList.get(0);
                     CtExpression returnExp = returnStmt.getReturnedExpression();
 
-                    // in returnExp, returned variable has always brackets like
-                    // e.g. (variable_name)
                     String returned_var = returnExp.toString(); 
                     List<CtVariable> var_list = clazz.getFields();
 
+                    // returned variable_name must exist in class variables list
+                    // if it is, then it is an ordinary get method
                     for (int i = 0; i < var_list.size(); i++) {
                         if (returned_var.equals(var_list.get(i).getSimpleName()))
                             return true;
