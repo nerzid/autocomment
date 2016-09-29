@@ -16,15 +16,15 @@
 package com.nerzid.autocomment.processor;
 
 import com.nerzid.autocomment.nlp.Tokenizer;
-import com.nerzid.autocomment.train.Trainer;
 import java.util.List;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtCFlowBreak;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtReturn;
 import spoon.reflect.declaration.CtClass;
+import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
-import spoon.reflect.declaration.CtParameter;
+import spoon.reflect.declaration.CtVariable;
 import spoon.reflect.visitor.filter.ReturnOrThrowFilter;
 
 /**
@@ -98,16 +98,12 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
 
                     // in returnExp, returned variable has always brackets like
                     // e.g. (variable_name)
-                    String returned_var = returnExp.toString();                   
-                    String[] returnStmtTokens = returnStmt.toString().split(" ");
-                    
-                    // e.g. return count
-                    // first token is always "return" second one always "variable_name"
-                    if (returnStmtTokens.length != 2) {
-                        return false;
-                    } else {
-                        String returnStmtStr = returnStmtTokens[1];
-                        return returned_var.equals(returnStmtStr);
+                    String returned_var = returnExp.toString(); 
+                    List<CtVariable> var_list = clazz.getFields();
+
+                    for (int i = 0; i < var_list.size(); i++) {
+                        if (returned_var.equals(var_list.get(i).getSimpleName()))
+                            return true;
                     }
                 }
             }
@@ -126,7 +122,7 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
 
         // Get method's parent which is class itself
         CtClass clazz = (CtClass) e.getParent();
-
+        
         return false;
     }
 
