@@ -6,7 +6,7 @@
 package com.nerzid.autocomment.database;
 
 import java.sql.Connection;
-import java.util.Collection;
+import java.sql.SQLException;
 import org.javalite.activejdbc.Base;
 
 /**
@@ -31,6 +31,16 @@ public class Database {
         Base.close();
     }
 
+    public static void createIfNotExists() throws SQLException {
+        conn.prepareStatement(""
+                + "CREATE TABLE IF NOT EXISTS Word("
+                + WordModel.COLUMN_TEXT + " " + WordModel.COLUMN_TEXT_FIELD + ","
+                + WordModel.COLUMN_LEMMA + " " + WordModel.COLUMN_LEMMA_FIELD + ","
+                + WordModel.COLUMN_POSTAG + " " + WordModel.COLUMN_POSTAG_FIELD + ","
+                + WordModel.COLUMN_DATA_TYPE + " " + WordModel.COLUMN_DATA_TYPE_FIELD + ")"
+        );
+    }
+
     public static void main(String[] args) {
 //        Sentence sent = new Sentence("has next");
 //        System.out.println(sent.lemmas().toString());
@@ -38,7 +48,6 @@ public class Database {
 //        open();
 //        Word.insert(new Word("deneme", "denemo", "denemz", "public"));
 //        close();
-
 
     }
 }
