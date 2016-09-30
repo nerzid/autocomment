@@ -7,6 +7,8 @@ package com.nerzid.autocomment.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.javalite.activejdbc.Base;
 
 /**
@@ -42,12 +44,14 @@ public class Database {
     }
 
     public static void main(String[] args) {
-//        Sentence sent = new Sentence("has next");
-//        System.out.println(sent.lemmas().toString());
-//        System.out.println(sent.posTags().toString());
-//        open();
-//        Word.insert(new Word("deneme", "denemo", "denemz", "public"));
-//        close();
-
+        try {
+            Database.open();
+            createIfNotExists();
+            System.out.println("Database was successfully created.");
+        } catch (SQLException ex) {
+            System.out.println("Database couldn't be created.");
+        } finally {
+            Database.close();
+        }
     }
 }
