@@ -71,8 +71,8 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
      * method means that it only returns a class field (variable), and doesn't
      * do any operation on it.
      *
-     * e.g. ordinary get method -> return count; e.g. not ordinary get method ->
-     * return count/2;
+     * e.g. ordinary get method -> return count; 
+     * e.g. not ordinary get method -> return count/2;
      *
      * @param e
      * @return True if get method is ordinary, false if not.
@@ -113,9 +113,15 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
     }
 
     /**
-     *
+     * Checks whether the method is an ordinary set method or not. Ordinary set
+     * method means that it only sets a class field (variable)'s with a new one, 
+     * and doesn't do any more operation on it.
+     * 
+     * e.g. ordinary set method -> this.value = value; or value = newValue;
+     * e.g. not ordinary set method -> this.value = value+1; or value = newValue/2;
+     * 
      * @param e
-     * @return
+     * @return True if set method is ordinary, false if not.
      */
     public boolean isOrdinarySetMethod(CtMethod e) {
         // Get method's simple name
