@@ -54,7 +54,8 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
         // Checkout related issue #3 on github.com/nerzid/autocomment for further info.
         if (!isOrdinaryGetMethod(e) && !isOrdinarySetMethod(e)) {
             // Train database using method's name and return type
-            Trainer.train(method_name, e.getType().toString());
+            String simplified = Tokenizer.simplifyDataType(e.getType().toString());
+            Trainer.train(method_name, simplified);
         }
 
     }

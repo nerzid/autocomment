@@ -6,6 +6,7 @@
 package com.nerzid.autocomment.database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,13 +35,15 @@ public class Database {
     }
 
     public static void createIfNotExists() throws SQLException {
-        conn.prepareStatement(""
+        PreparedStatement psmt = conn.prepareStatement(""
                 + "CREATE TABLE IF NOT EXISTS Word("
                 + WordModel.COLUMN_TEXT + " " + WordModel.COLUMN_TEXT_FIELD + ","
                 + WordModel.COLUMN_LEMMA + " " + WordModel.COLUMN_LEMMA_FIELD + ","
                 + WordModel.COLUMN_POSTAG + " " + WordModel.COLUMN_POSTAG_FIELD + ","
                 + WordModel.COLUMN_DATA_TYPE + " " + WordModel.COLUMN_DATA_TYPE_FIELD + ")"
         );
+        
+        psmt.execute();
     }
 
     public static void main(String[] args) {
