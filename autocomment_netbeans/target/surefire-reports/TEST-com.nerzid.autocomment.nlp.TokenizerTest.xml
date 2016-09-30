@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="10" failures="0" name="com.nerzid.autocomment.nlp.TokenizerTest" time="0.06" errors="0" skipped="0">
+<testsuite tests="11" failures="1" name="com.nerzid.autocomment.nlp.TokenizerTest" time="0.062" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_101\jre\bin"/>
@@ -15,6 +15,7 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value=""/>
+    <property name="test" value="com.nerzid.autocomment.nlp.TokenizerTest"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="user.dir" value="C:\Users\nerzid\Desktop\autocomment-project\autocomment\autocomment_netbeans"/>
     <property name="java.runtime.version" value="1.8.0_101-b13"/>
@@ -45,7 +46,7 @@
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_101\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dmaven.ext.class.path=C:\Program Files\NetBeans 8.1\java\maven-nblib\netbeans-eventspy.jar -Dfile.encoding=UTF-8 clean install"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dtest=com.nerzid.autocomment.nlp.TokenizerTest -Dmaven.ext.class.path=C:\Program Files\NetBeans 8.1\java\maven-nblib\netbeans-eventspy.jar -Dfile.encoding=UTF-8 surefire:test"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="en"/>
     <property name="user.language.format" value="tr"/>
@@ -66,11 +67,53 @@
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_UpperCaseLettersRepeatedly_UpperCaseLettersGrouped" time="0.003"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenArrayAsParam_OutputIsCollectionOfObjectAsString" time="0"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_LowerCaseLetterBeforeUnderDash_NewTokenAfterUnderDash" time="0"/>
+  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_NotAllPunctuationsRemoved_CollectionTagsExist" time="0.003">
+    <failure message="expected:&lt;Collection of List[&lt;boolean&gt;]&gt; but was:&lt;Collection of List[boolean]&gt;" type="org.junit.ComparisonFailure">org.junit.ComparisonFailure: expected:&lt;Collection of List[&lt;boolean&gt;]&gt; but was:&lt;Collection of List[boolean]&gt;
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at com.nerzid.autocomment.nlp.TokenizerTest.simplifyDataType_NotAllPunctuationsRemoved_CollectionTagsExist(TokenizerTest.java:153)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.apache.maven.surefire.junit4.JUnit4TestSet.execute(JUnit4TestSet.java:53)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:123)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:104)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:164)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:110)
+	at org.apache.maven.surefire.booter.SurefireStarter.invokeProvider(SurefireStarter.java:175)
+	at org.apache.maven.surefire.booter.SurefireStarter.runSuitesInProcessWhenForked(SurefireStarter.java:107)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:68)
+</failure>
+    <system-out>com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_NotAllPunctuationsRemoved_CollectionTagsExist
+</system-out>
+  </testcase>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_DashAndUnderDash_NoDashes" time="0"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenMapAsParam_OutputIsCollectionOfValueObjectAsString" time="0"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_LowerCaseLetterBeforeDash_NewTokenAfterDash" time="0"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenObjectAsParam_OutputIsObjectAsString" time="0"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_NumbersLowerCaseBeforeToken_NumbersAndTokenAreOneSingleToken" time="0"/>
-  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString" time="0.001"/>
-  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_NumbersBeforeUpperCaseToken_NumbersAndTokenAreOneSingleTokenTotal" time="0"/>
+  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString" time="0"/>
+  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_NumbersBeforeUpperCaseToken_NumbersAndTokenAreOneSingleTokenTotal" time="0.001"/>
 </testsuite>

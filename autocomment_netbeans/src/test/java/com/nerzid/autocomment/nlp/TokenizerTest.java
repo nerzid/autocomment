@@ -5,10 +5,7 @@
  */
 package com.nerzid.autocomment.nlp;
 
-import com.nerzid.autocomment.nlp.Tokenizer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -143,6 +140,15 @@ public class TokenizerTest {
         System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString");
         String data_type = "java.util.Set<java.util.Map.Entry<java.lang.String, java.lang.Object>>";
         String expResult = "Collection of Object";
+        String result = Tokenizer.simplifyDataType(data_type);
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void simplifyDataType_NotAllPunctuationsRemoved_CollectionTagsExist() {
+        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_NotAllPunctuationsRemoved_CollectionTagsExist");
+        String data_type = "java.util.List<java.util.List<boolean>>";
+        String expResult = "Collection of List<boolean>";
         String result = Tokenizer.simplifyDataType(data_type);
         assertEquals(expResult, result);
     }
