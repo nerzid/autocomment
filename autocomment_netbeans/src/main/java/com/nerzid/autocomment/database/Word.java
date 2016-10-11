@@ -5,12 +5,6 @@
  */
 package com.nerzid.autocomment.database;
 
-import static com.nerzid.autocomment.database.WordModel.COLUMN_DATA_TYPE;
-import static com.nerzid.autocomment.database.WordModel.COLUMN_LEMMA;
-import static com.nerzid.autocomment.database.WordModel.COLUMN_POSTAG;
-import static com.nerzid.autocomment.database.WordModel.COLUMN_TEXT;
-import java.util.Collection;
-
 /**
  *
  * @author nerzid
@@ -27,46 +21,6 @@ public class Word {
         this.lemma = lemma;
         this.postag = postag;
         this.data_type = data_type;
-    }
-
-    /**
-     * Insert all words from list into database.
-     *
-     * @param list
-     * @return
-     */
-    public static boolean insertAll(Collection<Word> list) {
-        for (Word w : list) {
-            if (!insert(w)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * If Word w doesn't exist in database, insert it into database.
-     *
-     * @param w
-     * @return
-     */
-    public static boolean insert(Word w) {
-        if (WordModel.findFirst(
-                WordModel.COLUMN_TEXT + " = ? AND "
-                + WordModel.COLUMN_LEMMA + " = ? AND "
-                + WordModel.COLUMN_POSTAG + " = ? AND "
-                + WordModel.COLUMN_DATA_TYPE + " = ?",
-                w.getText(), w.getLemma(), w.getPostag(), w.getData_type()) == null) {
-            boolean isSucces = new WordModel().set(
-                    COLUMN_TEXT, w.getText(),
-                    COLUMN_LEMMA, w.getLemma(),
-                    COLUMN_POSTAG, w.getPostag(),
-                    COLUMN_DATA_TYPE, w.getData_type())
-                    .saveIt();
-            return isSucces;
-        } else {
-            return false;
-        }
     }
 
     public String getText() {

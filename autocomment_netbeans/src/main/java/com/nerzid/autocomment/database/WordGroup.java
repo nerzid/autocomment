@@ -36,6 +36,12 @@ public class WordGroup {
         this.words = words;
     }
 
+    /**
+     * Inserts WordGroup w into Database
+     * 
+     * @param w
+     * @return True if successfully inserted into database false if not.
+     */
     public static boolean insert(WordGroup w) {
         if (WordModel.findFirst(
                 WordModel.COLUMN_TEXT + " = ? AND "
@@ -55,6 +61,11 @@ public class WordGroup {
         }
     }
     
+    /**
+     * Gets all text of words
+     * 
+     * @return A String of texts of words separated by space
+     */
     public String getAllTexts(){
         String s = "";
         Iterator it = words.iterator();
@@ -68,6 +79,11 @@ public class WordGroup {
         return s;
     }
     
+    /**
+     * Gets all lemmas
+     * 
+     * @return A String of lemmas of words separated by space
+     */
     public String getAllLemmas(){
         String s = "";
         Iterator it = words.iterator();
@@ -81,6 +97,11 @@ public class WordGroup {
         return s;
     }
     
+    /**
+     * Gets all postags
+     * 
+     * @return A String of postags of words separated by space
+     */
     public String getAllPostags(){
         String s = "";
         Iterator it = words.iterator();
@@ -94,6 +115,11 @@ public class WordGroup {
         return s;
     }
     
+    /**
+     * Gets data type of words
+     * 
+     * @return data_type as String
+     */
     public String getDataType(){
         String s = "";
         Iterator it = words.iterator();
