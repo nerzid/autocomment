@@ -29,38 +29,94 @@ public class Tokenizer {
 
         // If last character of data_type isn't ']' or '>', that means this is not a collection
         // e.g. java.io.File[] is collection, but java.io.File doesn't.
-        if (data_type.charAt(len - 1) != ']' && data_type.charAt(len - 1) != '>') {
+        if (data_type.charAt(len - 1) != '>' && data_type.charAt(len - 1) != ']') {
             return getLastStringBeforeDot(data_type);
         }
-        
-        return "Collection of " + removePunctuations(getLastStringBeforeDot(data_type));
+
+        return getCollectionOrMapString(data_type);
+        //return "Collection of " + removePunctuations(getLastStringBeforeDot(data_type));
+    }
+
+    public static String getCollectionOrMapString(String s) {
+        String lastString = getLastStringBeforeDot(s);
+
+        if (s.contains(",")) {
+            return getMapString(lastString);
+        } else {
+            return getCollectionString(lastString);
+        }
+    }
+
+    public static String getCollectionString(String s) {
+        // Array
+        if (s.contains("[")) {
+            // check for dimensionality of array
+            // '[' count will give us the number of dimensionalities
+            int count = 0;
+            for (Character ch : s.toCharArray()) {
+                if (ch == '[') {
+                    count++;
+                }
+            }
+            return count + "D " + "Array of " + removePunctuations(s);
+        } else {
+            // Other Collections, such as list etc.
+            // check for dimensionality of collection
+            // '>' count will give us the number of dimensionalities
+            int count = 0;
+            for (Character ch : s.toCharArray()) {
+                if (ch == '>') {
+                    count++;
+                }
+            }
+            String[] ss = s.split("<");
+            String lastString = ss[ss.length - 1];
+            return count + "D " + "Collection of " + removePunctuations(lastString);
+        }
+    }
+
+    public static String getMapString(String s) {
+        // check for dimensionality of collection
+        // '>' count will give us the number of dimensionalities
+        int count = 0;
+        for (Character ch : s.toCharArray()) {
+            if (ch == '>') {
+                count++;
+            }
+        }
+        String[] ss = s.split(",");
+        String lastString = ss[ss.length - 1];
+        return count + "D " + "Map of " + removePunctuations(lastString);
     }
 
     /**
      * Gets last string before dot. e.g. for 'java.io.File', output will be
      * 'File'.
-     * 
+     *
      * @param s
      * @return
      */
     public static String getLastStringBeforeDot(String s) {
         String[] splitted = s.split("\\.");
-        if (splitted.length != 0)
+        if (splitted.length != 0) {
             return splitted[splitted.length - 1];
-        else
+        } else {
             return s;
+        }
     }
-    
+
     /**
      * Removes all
+     *
      * @param s
-     * @return 
+     * @return
      */
     private static String removePunctuations(String s) {
         String res = "";
         for (Character c : s.toCharArray()) {
-            if(Character.isLetterOrDigit(c))
+            if (Character.isLetterOrDigit(c)) {
                 res += c;
+            }
         }
         return res;
     }

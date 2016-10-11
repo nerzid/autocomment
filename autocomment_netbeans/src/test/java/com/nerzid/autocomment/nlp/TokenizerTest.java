@@ -109,7 +109,7 @@ public class TokenizerTest {
     public void simplifyDataType_GivenArrayAsParam_OutputIsCollectionOfObjectAsString() {
         System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_GivenArrayAsParam_OutputIsCollectionOfObjectAsString");
         String data_type = "java.io.File[]";
-        String expResult = "Collection of File";
+        String expResult = "1D Array of File";
         String result = Tokenizer.simplifyDataType(data_type);
         assertEquals(expResult, result);
     }
@@ -118,7 +118,7 @@ public class TokenizerTest {
     public void simplifyDataType_GivenMapAsParam_OutputIsCollectionOfValueObjectAsString() {
         System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_GivenMapAsParam_OutputIsCollectionOfValueObjectAsString");
         String data_type = "java.util.SortedMap<java.lang.String, java.nio.charset.Charset>";
-        String expResult = "Collection of Charset";
+        String expResult = "1D Map of Charset";
         String result = Tokenizer.simplifyDataType(data_type);
         assertEquals(expResult, result);
     }
@@ -139,7 +139,7 @@ public class TokenizerTest {
     public void simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString() {
         System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString");
         String data_type = "java.util.Set<java.util.Map.Entry<java.lang.String, java.lang.Object>>";
-        String expResult = "Collection of Object";
+        String expResult = "2D Map of Object";
         String result = Tokenizer.simplifyDataType(data_type);
         assertEquals(expResult, result);
     }
@@ -148,7 +148,7 @@ public class TokenizerTest {
     public void simplifyDataType_NotAllPunctuationsRemoved_CollectionTagsExist() {
         System.out.println("com.nerzid.autocomment.nlp.Tokenizer.simplifyDataType_NotAllPunctuationsRemoved_CollectionTagsExist");
         String data_type = "java.util.List<java.util.List<boolean>>";
-        String expResult = "Collection of List<boolean>";
+        String expResult = "2D Collection of boolean";
         String result = Tokenizer.simplifyDataType(data_type);
         assertEquals(expResult, result);
     }

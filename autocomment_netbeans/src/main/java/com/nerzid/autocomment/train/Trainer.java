@@ -7,6 +7,7 @@ package com.nerzid.autocomment.train;
 
 import com.nerzid.autocomment.database.Database;
 import com.nerzid.autocomment.database.Word;
+import com.nerzid.autocomment.database.WordGroup;
 import com.nerzid.autocomment.log.ErrorLog;
 import com.nerzid.autocomment.log.ErrorMessage;
 import com.nerzid.autocomment.io.FilePicker;
@@ -50,9 +51,10 @@ public class Trainer {
     public static void train(String method_name, String data_type) {
         Collection<String> identifiers = Tokenizer.split(method_name);
         String identifier_sentence = Tokenizer.getIdentifiersSentence(identifiers);
-        Collection<Word> words_list = NLPToolkit.getWordsWithFeatures(identifier_sentence, data_type);
-
-        Word.insertAll(words_list);
+        //Collection<Word> words_list = NLPToolkit.getWordsWithFeatures(identifier_sentence, data_type);
+        WordGroup wg = NLPToolkit.getWordGroup(identifier_sentence, data_type);
+        //Word.insertAll(words_list);
+        WordGroup.insert(wg);
     }
 
     /**
