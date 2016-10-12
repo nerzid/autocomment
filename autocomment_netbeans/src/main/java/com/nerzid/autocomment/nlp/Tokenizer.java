@@ -1,7 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2016 nerzid.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.nerzid.autocomment.nlp;
 
@@ -29,38 +39,94 @@ public class Tokenizer {
 
         // If last character of data_type isn't ']' or '>', that means this is not a collection
         // e.g. java.io.File[] is collection, but java.io.File doesn't.
-        if (data_type.charAt(len - 1) != ']' && data_type.charAt(len - 1) != '>') {
+        if (data_type.charAt(len - 1) != '>' && data_type.charAt(len - 1) != ']') {
             return getLastStringBeforeDot(data_type);
         }
-        
-        return "Collection of " + removePunctuations(getLastStringBeforeDot(data_type));
+
+        return getCollectionOrMapString(data_type);
+        //return "Collection of " + removePunctuations(getLastStringBeforeDot(data_type));
+    }
+
+    public static String getCollectionOrMapString(String s) {
+        String lastString = getLastStringBeforeDot(s);
+
+        if (s.contains(",")) {
+            return getMapString(lastString);
+        } else {
+            return getCollectionString(lastString);
+        }
+    }
+
+    public static String getCollectionString(String s) {
+        // Array
+        if (s.contains("[")) {
+            // check for dimensionality of array
+            // '[' count will give us the number of dimensionalities
+            int count = 0;
+            for (Character ch : s.toCharArray()) {
+                if (ch == '[') {
+                    count++;
+                }
+            }
+            return count + "D " + "Array of " + removePunctuations(s);
+        } else {
+            // Other Collections, such as list etc.
+            // check for dimensionality of collection
+            // '>' count will give us the number of dimensionalities
+            int count = 0;
+            for (Character ch : s.toCharArray()) {
+                if (ch == '>') {
+                    count++;
+                }
+            }
+            String[] ss = s.split("<");
+            String lastString = ss[ss.length - 1];
+            return count + "D " + "Collection of " + removePunctuations(lastString);
+        }
+    }
+
+    public static String getMapString(String s) {
+        // check for dimensionality of collection
+        // '>' count will give us the number of dimensionalities
+        int count = 0;
+        for (Character ch : s.toCharArray()) {
+            if (ch == '>') {
+                count++;
+            }
+        }
+        String[] ss = s.split(",");
+        String lastString = ss[ss.length - 1];
+        return count + "D " + "Map of " + removePunctuations(lastString);
     }
 
     /**
      * Gets last string before dot. e.g. for 'java.io.File', output will be
      * 'File'.
-     * 
+     *
      * @param s
      * @return
      */
     public static String getLastStringBeforeDot(String s) {
         String[] splitted = s.split("\\.");
-        if (splitted.length != 0)
+        if (splitted.length != 0) {
             return splitted[splitted.length - 1];
-        else
+        } else {
             return s;
+        }
     }
-    
+
     /**
      * Removes all
+     *
      * @param s
-     * @return 
+     * @return
      */
     private static String removePunctuations(String s) {
         String res = "";
         for (Character c : s.toCharArray()) {
-            if(Character.isLetterOrDigit(c))
+            if (Character.isLetterOrDigit(c)) {
                 res += c;
+            }
         }
         return res;
     }

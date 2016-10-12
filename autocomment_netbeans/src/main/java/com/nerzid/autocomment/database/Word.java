@@ -1,15 +1,19 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2016 nerzid.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.nerzid.autocomment.database;
-
-import static com.nerzid.autocomment.database.WordModel.COLUMN_DATA_TYPE;
-import static com.nerzid.autocomment.database.WordModel.COLUMN_LEMMA;
-import static com.nerzid.autocomment.database.WordModel.COLUMN_POSTAG;
-import static com.nerzid.autocomment.database.WordModel.COLUMN_TEXT;
-import java.util.Collection;
 
 /**
  *
@@ -27,46 +31,6 @@ public class Word {
         this.lemma = lemma;
         this.postag = postag;
         this.data_type = data_type;
-    }
-
-    /**
-     * Insert all words from list into database.
-     *
-     * @param list
-     * @return
-     */
-    public static boolean insertAll(Collection<Word> list) {
-        for (Word w : list) {
-            if (!insert(w)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * If Word w doesn't exist in database, insert it into database.
-     *
-     * @param w
-     * @return
-     */
-    public static boolean insert(Word w) {
-        if (WordModel.findFirst(
-                WordModel.COLUMN_TEXT + " = ? AND "
-                + WordModel.COLUMN_LEMMA + " = ? AND "
-                + WordModel.COLUMN_POSTAG + " = ? AND "
-                + WordModel.COLUMN_DATA_TYPE + " = ?",
-                w.getText(), w.getLemma(), w.getPostag(), w.getData_type()) == null) {
-            boolean isSucces = new WordModel().set(
-                    COLUMN_TEXT, w.getText(),
-                    COLUMN_LEMMA, w.getLemma(),
-                    COLUMN_POSTAG, w.getPostag(),
-                    COLUMN_DATA_TYPE, w.getData_type())
-                    .saveIt();
-            return isSucces;
-        } else {
-            return false;
-        }
     }
 
     public String getText() {
