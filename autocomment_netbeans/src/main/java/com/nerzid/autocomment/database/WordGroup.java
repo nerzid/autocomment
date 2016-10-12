@@ -15,10 +15,10 @@
  */
 package com.nerzid.autocomment.database;
 
-import static com.nerzid.autocomment.database.WordModel.COLUMN_DATA_TYPE;
-import static com.nerzid.autocomment.database.WordModel.COLUMN_LEMMA;
-import static com.nerzid.autocomment.database.WordModel.COLUMN_POSTAG;
-import static com.nerzid.autocomment.database.WordModel.COLUMN_TEXT;
+import static com.nerzid.autocomment.database.WordGroupModel.COLUMN_DATA_TYPE;
+import static com.nerzid.autocomment.database.WordGroupModel.COLUMN_LEMMA;
+import static com.nerzid.autocomment.database.WordGroupModel.COLUMN_POSTAG;
+import static com.nerzid.autocomment.database.WordGroupModel.COLUMN_TEXT;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -43,13 +43,13 @@ public class WordGroup {
      * @return True if successfully inserted into database false if not.
      */
     public static boolean insert(WordGroup w) {
-        if (WordModel.findFirst(
-                WordModel.COLUMN_TEXT + " = ? AND "
-                + WordModel.COLUMN_LEMMA + " = ? AND "
-                + WordModel.COLUMN_POSTAG + " = ? AND "
-                + WordModel.COLUMN_DATA_TYPE + " = ?",
+        if (WordGroupModel.findFirst(
+                WordGroupModel.COLUMN_TEXT + " = ? AND "
+                + WordGroupModel.COLUMN_LEMMA + " = ? AND "
+                + WordGroupModel.COLUMN_POSTAG + " = ? AND "
+                + WordGroupModel.COLUMN_DATA_TYPE + " = ?",
                 w.getAllTexts(), w.getAllLemmas(), w.getAllPostags(), w.getDataType()) == null) {
-            boolean isSucces = new WordModel().set(
+            boolean isSucces = new WordGroupModel().set(
                     COLUMN_TEXT, w.getAllTexts(),
                     COLUMN_LEMMA, w.getAllLemmas(),
                     COLUMN_POSTAG, w.getAllPostags(),

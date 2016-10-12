@@ -22,8 +22,8 @@ import org.javalite.activejdbc.annotations.Table;
  *
  * @author nerzid
  */
-@Table(value = "Word")
-public class WordModel extends Model {
+@Table(value = "WordGroup")
+public class WordGroupModel extends Model {
 
     public static final String COLUMN_TEXT = "text";
     public static final String COLUMN_LEMMA = "lemma";

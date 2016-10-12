@@ -45,10 +45,10 @@ public class Database {
     public static void createIfNotExists() throws SQLException {
         PreparedStatement psmt = conn.prepareStatement(""
                 + "CREATE TABLE IF NOT EXISTS Word("
-                + WordModel.COLUMN_TEXT + " " + WordModel.COLUMN_TEXT_FIELD + ","
-                + WordModel.COLUMN_LEMMA + " " + WordModel.COLUMN_LEMMA_FIELD + ","
-                + WordModel.COLUMN_POSTAG + " " + WordModel.COLUMN_POSTAG_FIELD + ","
-                + WordModel.COLUMN_DATA_TYPE + " " + WordModel.COLUMN_DATA_TYPE_FIELD + ")"
+                + WordGroupModel.COLUMN_TEXT + " " + WordGroupModel.COLUMN_TEXT_FIELD + ","
+                + WordGroupModel.COLUMN_LEMMA + " " + WordGroupModel.COLUMN_LEMMA_FIELD + ","
+                + WordGroupModel.COLUMN_POSTAG + " " + WordGroupModel.COLUMN_POSTAG_FIELD + ","
+                + WordGroupModel.COLUMN_DATA_TYPE + " " + WordGroupModel.COLUMN_DATA_TYPE_FIELD + ")"
         );
         
         psmt.execute();
