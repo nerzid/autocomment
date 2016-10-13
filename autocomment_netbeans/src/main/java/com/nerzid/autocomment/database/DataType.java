@@ -19,41 +19,41 @@ package com.nerzid.autocomment.database;
  *
  * @author nerzid
  */
-public class Parameter {
+public class DataType {
     private String text;
     private String lemma;
     private String postag;
-    private String data_type;
-    private String word_group;
 
-    public Parameter() {
+    public DataType() {
     }
- 
-    public Parameter(String text, String lemma, String postag, String data_type, String word_group) {
+
+    public DataType(String text, String lemma, String postag) {
         this.text = text;
         this.lemma = lemma;
         this.postag = postag;
-        this.data_type = data_type;
-        this.word_group = word_group;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public void setText(String text) {
         this.text = text;
     }
 
+    public String getLemma() {
+        return lemma;
+    }
+
     public void setLemma(String lemma) {
         this.lemma = lemma;
     }
 
+    public String getPostag() {
+        return postag;
+    }
+
     public void setPostag(String postag) {
         this.postag = postag;
-    }
-
-    public void setData_type(String data_type) {
-        this.data_type = data_type;
-    }
-
-    public void setWord_group(String word_group) {
-        this.word_group = word_group;
     }
 }

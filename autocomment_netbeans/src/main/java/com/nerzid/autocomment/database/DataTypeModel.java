@@ -22,7 +22,19 @@ import org.javalite.activejdbc.annotations.Table;
  *
  * @author nerzid
  */
-@Table(value = "UserDefinedType")
-public class UserDefinedTypeModel extends Model{
+@Table(value = "DataType")
+public class DataTypeModel extends Model{
+    public static final String TABLE_NAME = "DataType";
     
+    public static final String COLUMN_TEXT = "text";
+    public static final String COLUMN_LEMMA = "lemma";
+    public static final String COLUMN_POSTAG = "postag";
+    
+    public static final String COLUMN_TEXT_FIELD = "varchar(255) PRIMARY KEY";
+    public static final String COLUMN_LEMMA_FIELD = "varchar(255)";
+    public static final String COLUMN_POSTAG_FIELD = "varchar(255)";
+
+    public static final int COLUMN_TEXT_INT = 1;
+    public static final int COLUMN_LEMMA_INT = 2;
+    public static final int COLUMN_POSTAG_INT = 3;
 }
