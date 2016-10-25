@@ -15,11 +15,16 @@
  */
 package com.nerzid.autocomment.database;
 
+import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_LEMMA;
+import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_POSTAG;
+import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_TEXT;
+
 /**
  *
  * @author nerzid
  */
 public class DataType {
+    private int dtid;
     private String text;
     private String lemma;
     private String postag;
@@ -33,6 +38,31 @@ public class DataType {
         this.postag = postag;
     }
 
+    public static boolean insert(DataType dt) {
+        if (DataTypeModel.findFirst(
+                DataTypeModel.COLUMN_TEXT + " = ? AND "
+                + DataTypeModel.COLUMN_LEMMA + " = ? AND "
+                + DataTypeModel.COLUMN_POSTAG + " = ?",
+                dt.getText(), dt.getLemma(), dt.getPostag()) == null) {
+            boolean isSucces = new DataTypeModel().set(
+                    COLUMN_TEXT, dt.getText(),
+                    COLUMN_LEMMA, dt.getLemma(),
+                    COLUMN_POSTAG, dt.getPostag())
+                    .saveIt();
+            return isSucces;
+        } else {
+            return false;
+        }
+    }
+
+    public int getDtid() {
+        return dtid;
+    }
+
+    public void setDtid(int dtid) {
+        this.dtid = dtid;
+    }
+    
     public String getText() {
         return text;
     }

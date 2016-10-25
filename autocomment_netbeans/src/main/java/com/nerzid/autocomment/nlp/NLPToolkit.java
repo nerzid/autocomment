@@ -15,11 +15,8 @@
  */
 package com.nerzid.autocomment.nlp;
 
-import com.nerzid.autocomment.database.Word;
-import com.nerzid.autocomment.database.WordGroup;
+import com.nerzid.autocomment.database.Method;
 import edu.stanford.nlp.simple.Sentence;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,55 +24,26 @@ import java.util.List;
  * @author nerzid
  */
 public class NLPToolkit {
-    
+
     /**
-     * 
-     * @param identifiers_sentence
-     * @param data_type
-     * @return
-     * @deprecated Use {@link #getWordGroup(java.lang.String, java.lang.String) getWordGroup} instead
-     */
-    @Deprecated
-    public static Collection<Word> getWordsWithFeatures(String identifiers_sentence, String data_type){
-        Collection<Word> words_list = new ArrayList<>();
-        String[] identifiers_list = identifiers_sentence.split(" ");
-        Sentence sent = new Sentence(identifiers_sentence);
-        List<String> lemmas_list = sent.lemmas();
-        List<String> posttags_list = sent.posTags();
-        
-        
-        for(int i = 0; i < lemmas_list.size(); i++){
-            words_list.add(new Word(identifiers_list[i],
-                    lemmas_list.get(i),
-                    posttags_list.get(i),
-                    data_type
-            ));
-        }
-        return words_list;
-    }
-    
-    /**
-     * Gets the {@link com.nerzid.autocomment.database.WordGroup} instance.
+     * Gets the {@link com.nerzid.autocomment.database.Method} instance.
      * 
      * @param identifiers_sentence Use {@link com.nerzid.autocomment.nlp.Tokenizer#getIdentifiersSentence(java.util.Collection) getIdentifiersSentence}
      * @param data_type Use {@link com.nerzid.autocomment.nlp.Tokenizer#simplifyDataType(java.lang.String) simplifyDataType}
      * @return 
      */
-    public static WordGroup getWordGroup(String identifiers_sentence, String data_type){
-        Collection<Word> words_list = new ArrayList<>();
+    public static Method getWordGroup(String identifiers_sentence, String data_type){
         String[] identifiers_list = identifiers_sentence.split(" ");
         Sentence sent = new Sentence(identifiers_sentence);
         List<String> lemmas_list = sent.lemmas();
-        List<String> posttags_list = sent.posTags();
- 
+        List<String> postags_list = sent.posTags();
+        
+        Method wg = new Method();
         for(int i = 0; i < lemmas_list.size(); i++){
-            words_list.add(new Word(identifiers_list[i],
-                    lemmas_list.get(i),
-                    posttags_list.get(i),
-                    data_type
-            ));
+            wg.addText(identifiers_list[i]);
+            wg.addLemma(lemmas_list.get(i));
+            wg.addPostag(postags_list.get(i));
         }
-        WordGroup wg = new WordGroup(words_list);
         return wg;
     }
 }

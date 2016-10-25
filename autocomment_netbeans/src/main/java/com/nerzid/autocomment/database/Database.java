@@ -18,6 +18,8 @@ package com.nerzid.autocomment.database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.javalite.activejdbc.Base;
 
 /**
@@ -42,25 +44,71 @@ public class Database {
         Base.close();
     }
 
-    public static void createIfNotExists() throws SQLException {
+    public static void createTablesIfNotExist() throws SQLException {
+        createWordGroupTable();
+        createParameterGroupTable();
+        createDataTypeTable();        
+    }
+
+    private static void createWordGroupTable() {
+        PreparedStatement psmt;
+        try {
+            psmt = conn.prepareStatement(""
+                    + "CREATE TABLE IF NOT EXISTS" + " "
+                    + MethodModel.TABLE_NAME + "("
+                    + MethodModel.COLUMN_MID + " " + MethodModel.COLUMN_MID_FIELD + ","
+                    + MethodModel.COLUMN_TEXT + " " + MethodModel.COLUMN_TEXT_FIELD + ","
+                    + MethodModel.COLUMN_LEMMA + " " + MethodModel.COLUMN_LEMMA_FIELD + ","
+                    + MethodModel.COLUMN_POSTAG + " " + MethodModel.COLUMN_POSTAG_FIELD + ","
+                    + MethodModel.COLUMN_FK_DTID + " " + MethodModel.COLUMN_FK_DTID_FIELD + ","
+                    + MethodModel.COLUMN_FK_DTID_FIELD_FOREIGNKEY + ")"
+            );
+            psmt.execute();
+            psmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private static void createParameterGroupTable() throws SQLException {
         PreparedStatement psmt = conn.prepareStatement(""
-                + "CREATE TABLE IF NOT EXISTS Word("
-                + WordGroupModel.COLUMN_TEXT + " " + WordGroupModel.COLUMN_TEXT_FIELD + ","
-                + WordGroupModel.COLUMN_LEMMA + " " + WordGroupModel.COLUMN_LEMMA_FIELD + ","
-                + WordGroupModel.COLUMN_POSTAG + " " + WordGroupModel.COLUMN_POSTAG_FIELD + ","
-                + WordGroupModel.COLUMN_DATA_TYPE + " " + WordGroupModel.COLUMN_DATA_TYPE_FIELD + ")"
+                + "CREATE TABLE IF NOT EXISTS" + " "
+                + ParameterModel.TABLE_NAME + "("
+                + ParameterModel.COLUMN_PID + " " + ParameterModel.COLUMN_PID_FIELD + ","
+                + ParameterModel.COLUMN_TEXT + " " + ParameterModel.COLUMN_TEXT_FIELD + ","
+                + ParameterModel.COLUMN_LEMMA + " " + ParameterModel.COLUMN_LEMMA_FIELD + ","
+                + ParameterModel.COLUMN_POSTAG + " " + ParameterModel.COLUMN_POSTAG_FIELD + ","
+                + ParameterModel.COLUMN_FK_DTID + " " + ParameterModel.COLUMN_FK_DTID_FIELD + ","
+                + ParameterModel.COLUMN_FK_MID + " " + ParameterModel.COLUMN_FK_MID_FIELD + ","
+                + ParameterModel.COLUMN_FK_DTID_FIELD_FOREIGNKEY + ","
+                + ParameterModel.COLUMN_FK_MID_FIELD_FOREIGNKEY + ")"
         );
-        
         psmt.execute();
+        psmt.close();
+    }
+
+    private static void createDataTypeTable() throws SQLException {
+        PreparedStatement psmt = conn.prepareStatement(""
+                + "CREATE TABLE IF NOT EXISTS" + " "
+                + DataTypeModel.TABLE_NAME + "("
+                + DataTypeModel.COLUMN_DTID + " " + DataTypeModel.COLUMN_DTID + ","
+                + DataTypeModel.COLUMN_TEXT + " " + DataTypeModel.COLUMN_TEXT_FIELD + ","
+                + DataTypeModel.COLUMN_LEMMA + " " + DataTypeModel.COLUMN_LEMMA_FIELD + ","
+                + DataTypeModel.COLUMN_POSTAG + " " + DataTypeModel.COLUMN_POSTAG_FIELD + ")"
+        );
+        psmt.execute();
+        psmt.close();
     }
 
     public static void main(String[] args) {
         try {
             Database.open();
-            createIfNotExists();
+            createTablesIfNotExist();
             System.out.println("Database was successfully created.");
         } catch (SQLException ex) {
             System.out.println("Database couldn't be created.");
+            System.out.println(ex.getMessage());
         } finally {
             Database.close();
         }

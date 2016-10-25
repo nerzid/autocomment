@@ -23,26 +23,33 @@ import org.javalite.activejdbc.annotations.Table;
  * @author nerzid
  */
 @Table(value = "WordGroup")
-public class WordGroupModel extends Model {
+public class MethodModel extends Model {
 
-    public static final String TABLE_NAME = "WordGroup";
+    public static final String TABLE_NAME = "Method";
     
+    public static final String COLUMN_MID = "wgid";
     public static final String COLUMN_TEXT = "text";
     public static final String COLUMN_LEMMA = "lemma";
     public static final String COLUMN_POSTAG = "postag";
-    public static final String COLUMN_DATA_TYPE = "data_type";
+    public static final String COLUMN_FK_DTID = "FK_dtid";
     
-    public static final String COLUMN_TEXT_FIELD = "varchar(255) PRIMARY KEY";
+    public static final String COLUMN_MID_FIELD = "INTEGER PRIMARY KEY AUTOINCREMENT";
+    public static final String COLUMN_TEXT_FIELD = "varchar(255)";
     public static final String COLUMN_LEMMA_FIELD = "varchar(255)";
     public static final String COLUMN_POSTAG_FIELD = "varchar(255)";
-    public static final String COLUMN_DATA_TYPE_FIELD = "varchar(255), FOREIGN KEY("
-            + COLUMN_DATA_TYPE + ")" + " "
+    public static final String COLUMN_FK_DTID_FIELD = "INTEGER";
+    public static final String COLUMN_FK_PGID_FIELD = "INTEGER";
+    
+    public static final String COLUMN_FK_DTID_FIELD_FOREIGNKEY = "FOREIGN KEY("
+            + COLUMN_FK_DTID + ")" + " "
             + "REFERENCES " + DataTypeModel.TABLE_NAME
-            + "(" + DataTypeModel.COLUMN_TEXT + ")";
+            + "(" + DataTypeModel.COLUMN_DTID + ")";
 
-    public static final int COLUMN_TEXT_INT = 1;
-    public static final int COLUMN_LEMMA_INT = 2;
-    public static final int COLUMN_POSTAG_INT = 3;
-    public static final int COLUMN_DATA_TYPE_INT = 4;
+    public static final int COLUMN_MID_INT = 1;
+    public static final int COLUMN_TEXT_INT = 2;
+    public static final int COLUMN_LEMMA_INT = 3;
+    public static final int COLUMN_POSTAG_INT = 4;
+    public static final int COLUMN_FK_DTID_INT = 5;
+    public static final int COLUMN_FK_PGID_INT = 6;
 
 }
