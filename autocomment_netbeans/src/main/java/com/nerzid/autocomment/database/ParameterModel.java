@@ -23,6 +23,7 @@ public class ParameterModel {
      public static final String TABLE_NAME = "Parameter";
     
     public static final String COLUMN_PID = "pid";
+    public static final String COLUMN_ORIGINAL = "original";
     public static final String COLUMN_TEXT = "text";
     public static final String COLUMN_LEMMA = "lemma";
     public static final String COLUMN_POSTAG = "postag";
@@ -30,6 +31,7 @@ public class ParameterModel {
     public static final String COLUMN_FK_MID = "FK_mid";
     
     public static final String COLUMN_PID_FIELD = "INTEGER PRIMARY KEY AUTOINCREMENT";
+    public static final String COLUMN_ORIGINAL_FIELD = "varchar(255)";
     public static final String COLUMN_TEXT_FIELD = "varchar(255)";
     public static final String COLUMN_LEMMA_FIELD = "varchar(255)";
     public static final String COLUMN_POSTAG_FIELD = "varchar(255)";
@@ -46,9 +48,10 @@ public class ParameterModel {
             + "(" + MethodModel.COLUMN_MID + ")";
     
     public static final int COLUMN_PID_INT = 1;
-    public static final int COLUMN_TEXT_INT = 2;
-    public static final int COLUMN_LEMMA_INT = 3;
-    public static final int COLUMN_POSTAG_INT = 4;
-    public static final int COLUMN_FK_DTID_INT = 4;
-    public static final int COLUMN_FK_MID_INT = 5;
+    public static final int COLUMN_ORIGINAL_INT = 2;
+    public static final int COLUMN_TEXT_INT = 3;
+    public static final int COLUMN_LEMMA_INT = 4;
+    public static final int COLUMN_POSTAG_INT = 5;
+    public static final int COLUMN_FK_DTID_INT = 6;
+    public static final int COLUMN_FK_MID_INT = 7;
 }

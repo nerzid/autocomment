@@ -27,13 +27,15 @@ public class MethodModel extends Model {
 
     public static final String TABLE_NAME = "Method";
     
-    public static final String COLUMN_MID = "wgid";
+    public static final String COLUMN_MID = "mid";
+    public static final String COLUMN_ORIGINAL = "original";
     public static final String COLUMN_TEXT = "text";
     public static final String COLUMN_LEMMA = "lemma";
     public static final String COLUMN_POSTAG = "postag";
     public static final String COLUMN_FK_DTID = "FK_dtid";
     
     public static final String COLUMN_MID_FIELD = "INTEGER PRIMARY KEY AUTOINCREMENT";
+    public static final String COLUMN_ORIGINAL_FIELD = "varchar(255)";
     public static final String COLUMN_TEXT_FIELD = "varchar(255)";
     public static final String COLUMN_LEMMA_FIELD = "varchar(255)";
     public static final String COLUMN_POSTAG_FIELD = "varchar(255)";
@@ -46,10 +48,11 @@ public class MethodModel extends Model {
             + "(" + DataTypeModel.COLUMN_DTID + ")";
 
     public static final int COLUMN_MID_INT = 1;
-    public static final int COLUMN_TEXT_INT = 2;
-    public static final int COLUMN_LEMMA_INT = 3;
-    public static final int COLUMN_POSTAG_INT = 4;
-    public static final int COLUMN_FK_DTID_INT = 5;
-    public static final int COLUMN_FK_PGID_INT = 6;
+    public static final int COLUMN_ORIGINAL_INT = 3;
+    public static final int COLUMN_TEXT_INT = 4;
+    public static final int COLUMN_LEMMA_INT = 5;
+    public static final int COLUMN_POSTAG_INT = 6;
+    public static final int COLUMN_FK_DTID_INT = 7;
+    public static final int COLUMN_FK_PGID_INT = 8;
 
 }

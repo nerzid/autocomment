@@ -17,6 +17,7 @@ package com.nerzid.autocomment.database;
 
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_FK_DTID;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_LEMMA;
+import static com.nerzid.autocomment.database.MethodModel.COLUMN_ORIGINAL;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_POSTAG;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_TEXT;
 
@@ -26,22 +27,26 @@ import static com.nerzid.autocomment.database.MethodModel.COLUMN_TEXT;
  */
 public class Method {
     private int mid;
+    private String original;
     private String text;
     private String lemma;
     private String postag;
     private int FK_dtid;
 
     public Method() {
+        original = "";
         text = "";
         lemma = "";
         postag = "";
     }
 
-    public Method(String text, String lemma, String postag) {
+    public Method(String original, String text, String lemma, String postag) {
+        this.original = original;
         this.text = text;
         this.lemma = lemma;
         this.postag = postag;
     }
+
 
     /**
      * Inserts Method w into Database
@@ -51,11 +56,14 @@ public class Method {
      */
     public static boolean insert(Method w) {
         if (MethodModel.findFirst(
-                MethodModel.COLUMN_TEXT + " = ? AND "
+                MethodModel.COLUMN_ORIGINAL + " = ? AND"
+                + MethodModel.COLUMN_TEXT + " = ? AND "
                 + MethodModel.COLUMN_LEMMA + " = ? AND "
-                + MethodModel.COLUMN_POSTAG + " = ? ",
-                w.getText(), w.getLemma(), w.getPostag(), w.getFK_dtid()) == null) {
+                + MethodModel.COLUMN_POSTAG + " = ? AND "
+                + MethodModel.COLUMN_FK_DTID +  " = ?",
+                w.getOriginal(), w.getText(), w.getLemma(), w.getPostag(), w.getFK_dtid()) == null) {
             boolean isSucces = new MethodModel().set(
+                    COLUMN_ORIGINAL, w.getOriginal(),
                     COLUMN_TEXT, w.getText(),
                     COLUMN_LEMMA, w.getLemma(),
                     COLUMN_POSTAG, w.getLemma(),
@@ -85,6 +93,14 @@ public class Method {
 
     public void setMid(int mid) {
         this.mid = mid;
+    }
+
+    public String getOriginal() {
+        return original;
+    }
+
+    public void setOriginal(String original) {
+        this.original = original;
     }
 
     public String getText() {
