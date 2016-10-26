@@ -15,19 +15,22 @@
  */
 package com.nerzid.autocomment.train;
 
+import com.nerzid.autocomment.database.DataType;
+import com.nerzid.autocomment.database.DataTypeModel;
 import com.nerzid.autocomment.database.Database;
-import com.nerzid.autocomment.database.WordGroup;
+import com.nerzid.autocomment.database.Method;
+import com.nerzid.autocomment.database.MethodModel;
+import com.nerzid.autocomment.database.Parameter;
+import com.nerzid.autocomment.database.ParameterModel;
 import com.nerzid.autocomment.log.ErrorLog;
 import com.nerzid.autocomment.log.ErrorMessage;
 import com.nerzid.autocomment.io.FilePicker;
 import com.nerzid.autocomment.generator.CommentGenerator;
 import com.nerzid.autocomment.processor.CtCommentProcessor;
 import com.nerzid.autocomment.processor.TrainerMethodProcessor;
-import com.nerzid.autocomment.nlp.Tokenizer;
 import com.nerzid.autocomment.nlp.NLPToolkit;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,21 +56,38 @@ public class Trainer {
     }
 
     /**
-     * 
+     *
+     * @param signature
      * @param method_name
-     * @param data_type 
+     * @param data_typeStr
      */
-    public static void train(String method_name, String data_type) {
-        Collection<String> identifiers = Tokenizer.split(method_name);
-        String identifier_sentence = Tokenizer.getIdentifiersSentence(identifiers);
+    public static void train(String signature, String method_name, String data_typeStr, List<String> params, List<String> params_data_types) {
+
         //Collection<Word> words_list = NLPToolkit.getWordsWithFeatures(identifier_sentence, data_type);
-        WordGroup wg = NLPToolkit.getWordGroup(identifier_sentence, data_type);
-        //Word.insertAll(words_list);
-        WordGroup.insert(wg);
+        DataType data_type = NLPToolkit.getDataTypeWithProperties(data_typeStr);
+        DataTypeModel dtm = DataType.insertOrGet(data_type);
+
+        data_type.setDtid((int) dtm.getId());
+        Method m = NLPToolkit.getMethodWithProperties(signature, method_name, data_type.getDtid());
+        MethodModel mm = (MethodModel) Method.insertOrGet(m);
+
+        m.setMid((int) mm.getId());
+        for (int i = 0; i < params.size(); i++) {
+            int dtid;
+
+            data_type = NLPToolkit.getDataTypeWithProperties(params_data_types.get(i));
+            dtm = DataType.insertOrGet(data_type);
+            dtid = ((int) dtm.getId());
+            data_type.setDtid(dtid);
+
+            Parameter p = NLPToolkit.getParameterWithProperties(params.get(i), data_type.getDtid());
+            p.setFK_mid(m.getMid());
+            ParameterModel pm = (ParameterModel) Parameter.insert(p);
+        }
     }
 
     /**
-     * 
+     *
      */
     private static void prepareTrainingProcess() {
         // Choose Java Source Files via FilePicker

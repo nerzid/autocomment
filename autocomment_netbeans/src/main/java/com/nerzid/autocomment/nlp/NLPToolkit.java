@@ -15,10 +15,10 @@
  */
 package com.nerzid.autocomment.nlp;
 
-import com.nerzid.autocomment.database.Word;
-import com.nerzid.autocomment.database.WordGroup;
+import com.nerzid.autocomment.database.DataType;
+import com.nerzid.autocomment.database.Method;
+import com.nerzid.autocomment.database.Parameter;
 import edu.stanford.nlp.simple.Sentence;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,55 +27,72 @@ import java.util.List;
  * @author nerzid
  */
 public class NLPToolkit {
-    
+
     /**
+     * Gets the {@link com.nerzid.autocomment.database.Method} instance.
      * 
-     * @param identifiers_sentence
-     * @param data_type
-     * @return
-     * @deprecated Use {@link #getWordGroup(java.lang.String, java.lang.String) getWordGroup} instead
-     */
-    @Deprecated
-    public static Collection<Word> getWordsWithFeatures(String identifiers_sentence, String data_type){
-        Collection<Word> words_list = new ArrayList<>();
-        String[] identifiers_list = identifiers_sentence.split(" ");
-        Sentence sent = new Sentence(identifiers_sentence);
-        List<String> lemmas_list = sent.lemmas();
-        List<String> posttags_list = sent.posTags();
-        
-        
-        for(int i = 0; i < lemmas_list.size(); i++){
-            words_list.add(new Word(identifiers_list[i],
-                    lemmas_list.get(i),
-                    posttags_list.get(i),
-                    data_type
-            ));
-        }
-        return words_list;
-    }
-    
-    /**
-     * Gets the {@link com.nerzid.autocomment.database.WordGroup} instance.
-     * 
-     * @param identifiers_sentence Use {@link com.nerzid.autocomment.nlp.Tokenizer#getIdentifiersSentence(java.util.Collection) getIdentifiersSentence}
-     * @param data_type Use {@link com.nerzid.autocomment.nlp.Tokenizer#simplifyDataType(java.lang.String) simplifyDataType}
+     * @param signature
+     * @param method_name
+     * @param dtid
      * @return 
      */
-    public static WordGroup getWordGroup(String identifiers_sentence, String data_type){
-        Collection<Word> words_list = new ArrayList<>();
-        String[] identifiers_list = identifiers_sentence.split(" ");
-        Sentence sent = new Sentence(identifiers_sentence);
+    public static Method getMethodWithProperties(String signature, String method_name, int dtid){
+        Collection<String> identifiers = Tokenizer.split(method_name);
+        String identifier_sentence = Tokenizer.getIdentifiersSentence(identifiers);
+        String[] identifiers_list = identifier_sentence.split(" ");
+        Sentence sent = new Sentence(identifier_sentence);
         List<String> lemmas_list = sent.lemmas();
-        List<String> posttags_list = sent.posTags();
- 
+        List<String> postags_list = sent.posTags();
+        
+        Method m = new Method();
         for(int i = 0; i < lemmas_list.size(); i++){
-            words_list.add(new Word(identifiers_list[i],
-                    lemmas_list.get(i),
-                    posttags_list.get(i),
-                    data_type
-            ));
+            m.addSplittedIdentifier(identifiers_list[i]);
+            m.addLemma(lemmas_list.get(i));
+            m.addPostag(postags_list.get(i));
         }
-        WordGroup wg = new WordGroup(words_list);
-        return wg;
+        m.setSignature(signature);
+        m.setIdentifier(method_name);
+        m.setFK_dtid(dtid);
+        
+        return m;
+    }
+    
+    public static Parameter getParameterWithProperties(String param_name, int dtid) {
+        Collection<String> identifiers = Tokenizer.split(param_name);
+        String identifier_sentence = Tokenizer.getIdentifiersSentence(identifiers);
+        String[] identifiers_list = identifier_sentence.split(" ");
+        Sentence sent = new Sentence(identifier_sentence);
+        List<String> lemmas_list = sent.lemmas();
+        List<String> postags_list = sent.posTags();
+        
+        Parameter p = new Parameter();
+        for(int i = 0; i < lemmas_list.size(); i++){
+            p.addSplittedIdentifier(identifiers_list[i]);
+            p.addLemma(lemmas_list.get(i));
+            p.addPostag(postags_list.get(i));
+        }
+        p.setIdentifier(param_name);
+        p.setFK_dtid(dtid);
+        
+        return p;
+    }
+    
+    public static DataType getDataTypeWithProperties(String data_typeStr) {
+        String original = data_typeStr;
+        String text = Tokenizer.getCollectionOrMapString(original);
+        String[] identifiers_list = text.split(" ");
+        Sentence sent = new Sentence(text);
+        List<String> lemmas_list = sent.lemmas();
+        List<String> postags_list = sent.posTags();
+        
+        DataType data_type = new DataType();
+        for (int i = 0; i < lemmas_list.size(); i++) {
+            data_type.addSimplifiedIdentifier(identifiers_list[i]);
+            data_type.addLemma(lemmas_list.get(i));
+            data_type.addPostag(postags_list.get(i));
+        }
+        data_type.setIdentifier(original);
+        
+        return data_type;
     }
 }
