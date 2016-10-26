@@ -17,9 +17,10 @@ package com.nerzid.autocomment.database;
 
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_FK_DTID;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_LEMMA;
-import static com.nerzid.autocomment.database.MethodModel.COLUMN_ORIGINAL;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_POSTAG;
-import static com.nerzid.autocomment.database.MethodModel.COLUMN_TEXT;
+import static com.nerzid.autocomment.database.MethodModel.COLUMN_SIGNATURE;
+import static com.nerzid.autocomment.database.MethodModel.COLUMN_IDENTIFIER;
+import static com.nerzid.autocomment.database.MethodModel.COLUMN_SPLITTED_IDENTIFIER;
 
 /**
  *
@@ -27,22 +28,24 @@ import static com.nerzid.autocomment.database.MethodModel.COLUMN_TEXT;
  */
 public class Method {
     private int mid;
-    private String original;
-    private String text;
+    private String signature;
+    private String identifier;
+    private String splittedIdentifier;
     private String lemma;
     private String postag;
     private int FK_dtid;
 
     public Method() {
-        original = "";
-        text = "";
+        identifier = "";
+        splittedIdentifier = "";
         lemma = "";
         postag = "";
     }
 
-    public Method(String original, String text, String lemma, String postag) {
-        this.original = original;
-        this.text = text;
+    public Method(String signature, String original, String text, String lemma, String postag) {
+        this.signature = signature;
+        this.identifier = original;
+        this.splittedIdentifier = text;
         this.lemma = lemma;
         this.postag = postag;
     }
@@ -51,32 +54,41 @@ public class Method {
     /**
      * Inserts Method w into Database
      * 
-     * @param w
+     * @param m
      * @return True if successfully inserted into database false if not.
      */
-    public static boolean insert(Method w) {
+    public static MethodModel insertOrGet(Method m) {
+        MethodModel mm = null;
         if (MethodModel.findFirst(
-                MethodModel.COLUMN_ORIGINAL + " = ? AND"
-                + MethodModel.COLUMN_TEXT + " = ? AND "
+                MethodModel.COLUMN_SIGNATURE + " = ? AND "
+                + MethodModel.COLUMN_IDENTIFIER + " = ? AND "
+                + MethodModel.COLUMN_SPLITTED_IDENTIFIER + " = ? AND "
                 + MethodModel.COLUMN_LEMMA + " = ? AND "
                 + MethodModel.COLUMN_POSTAG + " = ? AND "
                 + MethodModel.COLUMN_FK_DTID +  " = ?",
-                w.getOriginal(), w.getText(), w.getLemma(), w.getPostag(), w.getFK_dtid()) == null) {
-            boolean isSucces = new MethodModel().set(
-                    COLUMN_ORIGINAL, w.getOriginal(),
-                    COLUMN_TEXT, w.getText(),
-                    COLUMN_LEMMA, w.getLemma(),
-                    COLUMN_POSTAG, w.getLemma(),
-                    COLUMN_FK_DTID, w.getFK_dtid())
-                    .saveIt();
-            return isSucces;
+                m.getIdentifier(), 
+                m.getSplittedIdentifier(), 
+                m.getLemma(), 
+                m.getPostag(), 
+                m.getFK_dtid()) == null) {
+            mm = new MethodModel().set(
+                    COLUMN_SIGNATURE, m.getSignature(),
+                    COLUMN_IDENTIFIER, m.getIdentifier(),
+                    COLUMN_SPLITTED_IDENTIFIER, m.getSplittedIdentifier(),
+                    COLUMN_LEMMA, m.getLemma(),
+                    COLUMN_POSTAG, m.getLemma(),
+                    COLUMN_FK_DTID, m.getFK_dtid());
+            if (mm.saveIt())
+                return mm;
+            else
+                return null;
         } else {
-            return false;
+            return MethodModel.getMethodModelUsingSignature(m.getSignature());
         }
     }
     
-    public String addText(String t) {
-        return text += t;
+    public String addSplittedIdentifier(String si) {
+        return splittedIdentifier += si;
     }
     
     public String addLemma(String l) {
@@ -95,20 +107,28 @@ public class Method {
         this.mid = mid;
     }
 
-    public String getOriginal() {
-        return original;
+    public String getSignature() {
+        return signature;
     }
 
-    public void setOriginal(String original) {
-        this.original = original;
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 
-    public String getText() {
-        return text;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getSplittedIdentifier() {
+        return splittedIdentifier;
+    }
+
+    public void setSplittedIdentifier(String splittedIdentifier) {
+        this.splittedIdentifier = splittedIdentifier;
     }
 
     public String getLemma() {

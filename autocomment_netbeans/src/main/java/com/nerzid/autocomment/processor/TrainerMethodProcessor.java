@@ -15,8 +15,10 @@
  */
 package com.nerzid.autocomment.processor;
 
+import com.nerzid.autocomment.database.Parameter;
 import com.nerzid.autocomment.nlp.Tokenizer;
 import com.nerzid.autocomment.train.Trainer;
+import java.util.ArrayList;
 import java.util.List;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtCFlowBreak;
@@ -49,15 +51,24 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
 
         // Get method's simple name without any package extensions
         String method_name = e.getSimpleName();
-        
+        String signature = e.getSignature();
         // This part is to ignore get/set methods.
         // Checkout related issue #3 on github.com/nerzid/autocomment for further info.
         if (!isOrdinaryGetMethod(e) && !isOrdinarySetMethod(e)) {
             // Train database using method's name and return type
             String simplified = Tokenizer.simplifyDataType(e.getType().toString());
-            Trainer.train(method_name, simplified);
+            String data_type = e.getType().toString();
+            List<CtParameter> ctParams = e.getParameters();
+            List<String> params = new ArrayList<>();
+            List<String> params_data_types = new ArrayList<>();
+            for (CtParameter ctp: ctParams) {
+                params.add(ctp.getSimpleName());
+                params_data_types.add(ctp.getType().toString());
+            }
+            Trainer.train(signature, method_name, data_type, params, params_data_types);
         }
-
+        
+        
     }
 
     @Override

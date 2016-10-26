@@ -17,7 +17,7 @@ package com.nerzid.autocomment.database;
 
 import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_LEMMA;
 import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_POSTAG;
-import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_TEXT;
+import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER;
 
 /**
  *
@@ -25,36 +25,56 @@ import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_TEXT;
  */
 public class DataType {
     private int dtid;
-    private String text;
+    private String identifier;
+    private String simplifiedIdentifier;
     private String lemma;
     private String postag;
 
     public DataType() {
     }
 
-    public DataType(String text, String lemma, String postag) {
-        this.text = text;
+    public DataType(String identifier, String simplifiedIdentifier, String lemma, String postag) {
+        this.identifier = identifier;
+        this.simplifiedIdentifier = simplifiedIdentifier;
         this.lemma = lemma;
         this.postag = postag;
     }
 
-    public static boolean insert(DataType dt) {
-        if (DataTypeModel.findFirst(
-                DataTypeModel.COLUMN_TEXT + " = ? AND "
+    public static DataTypeModel insertOrGet(DataType dt) {
+        DataTypeModel data_type = null;
+        data_type = DataTypeModel.findFirst(
+                DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER + " = ? AND "
                 + DataTypeModel.COLUMN_LEMMA + " = ? AND "
                 + DataTypeModel.COLUMN_POSTAG + " = ?",
-                dt.getText(), dt.getLemma(), dt.getPostag()) == null) {
-            boolean isSucces = new DataTypeModel().set(
-                    COLUMN_TEXT, dt.getText(),
+                dt.getSimplifiedIdentifier(), 
+                dt.getLemma(), 
+                dt.getPostag());
+        if (data_type == null) {
+            data_type = new DataTypeModel().set(
+                    COLUMN_SIMPLIFIED_IDENTIFIER, dt.getSimplifiedIdentifier(),
                     COLUMN_LEMMA, dt.getLemma(),
-                    COLUMN_POSTAG, dt.getPostag())
-                    .saveIt();
-            return isSucces;
+                    COLUMN_POSTAG, dt.getPostag());
+            if (data_type.saveIt())
+                return data_type;
+            else 
+                return null;
         } else {
-            return false;
+            return DataTypeModel.getDataTypeModelUsingIdentifier(dt.getIdentifier());
         }
     }
-
+    
+    public String addSimplifiedIdentifier(String si) {
+        return simplifiedIdentifier += si;
+    }
+    
+    public String addLemma(String l) {
+        return lemma += l;
+    }
+    
+    public String addPostag(String p) {
+        return postag += p;
+    }
+    
     public int getDtid() {
         return dtid;
     }
@@ -62,13 +82,21 @@ public class DataType {
     public void setDtid(int dtid) {
         this.dtid = dtid;
     }
-    
-    public String getText() {
-        return text;
+
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+    
+    public String getSimplifiedIdentifier() {
+        return simplifiedIdentifier;
+    }
+
+    public void setSimplifiedIdentifier(String simplifiedIdentifier) {
+        this.simplifiedIdentifier = simplifiedIdentifier;
     }
 
     public String getLemma() {
