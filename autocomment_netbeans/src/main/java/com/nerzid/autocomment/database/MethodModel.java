@@ -22,12 +22,12 @@ import org.javalite.activejdbc.annotations.Table;
  *
  * @author nerzid
  */
-@Table(value = "WordGroup")
+@Table(value = "Method")
 public class MethodModel extends Model {
 
     public static final String TABLE_NAME = "Method";
     
-    public static final String COLUMN_MID = "mid";
+    public static final String COLUMN_MID = "id";
     public static final String COLUMN_SIGNATURE = "signature";
     public static final String COLUMN_IDENTIFIER = "identifier";
     public static final String COLUMN_SPLITTED_IDENTIFIER = "splitted_identifier";
@@ -42,7 +42,6 @@ public class MethodModel extends Model {
     public static final String COLUMN_LEMMA_FIELD = "varchar(255)";
     public static final String COLUMN_POSTAG_FIELD = "varchar(255)";
     public static final String COLUMN_FK_DTID_FIELD = "INTEGER";
-    public static final String COLUMN_FK_PGID_FIELD = "INTEGER";
     
     public static final String COLUMN_FK_DTID_FIELD_FOREIGNKEY = "FOREIGN KEY("
             + COLUMN_FK_DTID + ")" + " "
@@ -56,7 +55,6 @@ public class MethodModel extends Model {
     public static final int COLUMN_LEMMA_INT = 5;
     public static final int COLUMN_POSTAG_INT = 6;
     public static final int COLUMN_FK_DTID_INT = 7;
-    public static final int COLUMN_FK_PGID_INT = 8;
     
     public static MethodModel getMethodModelUsingSignature(String signature) {
         MethodModel mm;

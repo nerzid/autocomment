@@ -27,6 +27,7 @@ import static com.nerzid.autocomment.database.MethodModel.COLUMN_SPLITTED_IDENTI
  * @author nerzid
  */
 public class Method {
+
     private int mid;
     private String signature;
     private String identifier;
@@ -50,53 +51,71 @@ public class Method {
         this.postag = postag;
     }
 
-
     /**
      * Inserts Method w into Database
-     * 
+     *
      * @param m
      * @return True if successfully inserted into database false if not.
      */
     public static MethodModel insertOrGet(Method m) {
         MethodModel mm = null;
-        if (MethodModel.findFirst(
-                MethodModel.COLUMN_SIGNATURE + " = ? AND "
-                + MethodModel.COLUMN_IDENTIFIER + " = ? AND "
-                + MethodModel.COLUMN_SPLITTED_IDENTIFIER + " = ? AND "
-                + MethodModel.COLUMN_LEMMA + " = ? AND "
-                + MethodModel.COLUMN_POSTAG + " = ? AND "
-                + MethodModel.COLUMN_FK_DTID +  " = ?",
-                m.getIdentifier(), 
-                m.getSplittedIdentifier(), 
-                m.getLemma(), 
-                m.getPostag(), 
-                m.getFK_dtid()) == null) {
+        try {
+            mm = MethodModel.findFirst(
+                    MethodModel.COLUMN_SIGNATURE + " = ? AND "
+                    + MethodModel.COLUMN_IDENTIFIER + " = ? AND "
+                    + MethodModel.COLUMN_SPLITTED_IDENTIFIER + " = ? AND "
+                    + MethodModel.COLUMN_LEMMA + " = ? AND "
+                    + MethodModel.COLUMN_POSTAG + " = ? AND "
+                    + MethodModel.COLUMN_FK_DTID + " = ?",
+                    m.getSignature(),
+                    m.getIdentifier(),
+                    m.getSplittedIdentifier(),
+                    m.getLemma(),
+                    m.getPostag(),
+                    m.getFK_dtid());
+            if (mm == null) {
+                mm = new MethodModel().set(
+                        COLUMN_SIGNATURE, m.getSignature(),
+                        COLUMN_IDENTIFIER, m.getIdentifier(),
+                        COLUMN_SPLITTED_IDENTIFIER, m.getSplittedIdentifier(),
+                        COLUMN_LEMMA, m.getLemma(),
+                        COLUMN_POSTAG, m.getPostag(),
+                        COLUMN_FK_DTID, m.getFK_dtid());
+                if (mm.saveIt()) {
+                    return mm;
+                } else {
+                    return null;
+                }
+            } else {
+                return MethodModel.getMethodModelUsingSignature(m.getSignature());
+            }
+        } catch (NullPointerException e) {
             mm = new MethodModel().set(
                     COLUMN_SIGNATURE, m.getSignature(),
                     COLUMN_IDENTIFIER, m.getIdentifier(),
                     COLUMN_SPLITTED_IDENTIFIER, m.getSplittedIdentifier(),
                     COLUMN_LEMMA, m.getLemma(),
-                    COLUMN_POSTAG, m.getLemma(),
+                    COLUMN_POSTAG, m.getPostag(),
                     COLUMN_FK_DTID, m.getFK_dtid());
-            if (mm.saveIt())
+            if (mm.saveIt()) {
                 return mm;
-            else
+            } else {
                 return null;
-        } else {
-            return MethodModel.getMethodModelUsingSignature(m.getSignature());
+            }
         }
+
     }
-    
+
     public String addSplittedIdentifier(String si) {
-        return splittedIdentifier += si;
+        return splittedIdentifier += si + " ";
     }
-    
+
     public String addLemma(String l) {
-        return lemma += l;
+        return lemma += l + " ";
     }
-    
+
     public String addPostag(String p) {
-        return postag += p;
+        return postag += p + " ";
     }
 
     public int getMid() {
@@ -154,5 +173,5 @@ public class Method {
     public void setFK_dtid(int FK_dtid) {
         this.FK_dtid = FK_dtid;
     }
-    
+
 }

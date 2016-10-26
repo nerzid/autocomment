@@ -15,6 +15,13 @@
  */
 package com.nerzid.autocomment.database;
 
+import static com.nerzid.autocomment.database.ParameterModel.COLUMN_FK_DTID;
+import static com.nerzid.autocomment.database.ParameterModel.COLUMN_FK_MID;
+import static com.nerzid.autocomment.database.ParameterModel.COLUMN_IDENTIFIER;
+import static com.nerzid.autocomment.database.ParameterModel.COLUMN_LEMMA;
+import static com.nerzid.autocomment.database.ParameterModel.COLUMN_POSTAG;
+import static com.nerzid.autocomment.database.ParameterModel.COLUMN_SPLITTED_IDENTIFIER;
+
 /**
  *
  * @author nerzid
@@ -30,6 +37,10 @@ public class Parameter {
     private int FK_mid;
 
     public Parameter() {
+        identifier = "";
+        splittedIdentifier = "";
+        lemma = "";
+        postag = "";
     }
 
     public Parameter(String identifier, String splittedIdentifier, String lemma, String postag) {
@@ -41,33 +52,29 @@ public class Parameter {
 
     public static ParameterModel insert(Parameter p) {
         ParameterModel pm;
+
         pm = new ParameterModel().set(
-                ParameterModel.COLUMN_IDENTIFIER + " = ? AND "
-                + ParameterModel.COLUMN_SPLITTED_IDENTIFIER + " = ? AND "
-                + ParameterModel.COLUMN_LEMMA + " = ? AND "
-                + ParameterModel.COLUMN_POSTAG + " = ? AND "
-                + ParameterModel.COLUMN_FK_DTID + " = ? AND "
-                + ParameterModel.COLUMN_FK_MID + " = ?" ,
-                p.getIdentifier(),
-                p.getSplittedIdentifier(),
-                p.getLemma(),
-                p.getPostag(),
-                p.getFK_dtid(),
-                p.getFK_mid());
+                COLUMN_IDENTIFIER, p.getIdentifier(),
+                COLUMN_SPLITTED_IDENTIFIER, p.getSplittedIdentifier(),
+                COLUMN_LEMMA, p.getLemma(),
+                COLUMN_POSTAG, p.getPostag(),
+                COLUMN_FK_DTID, p.getFK_dtid(),
+                COLUMN_FK_MID, p.getFK_mid());
         pm.saveIt();
+ 
         return pm;
     }
     
     public String addSplittedIdentifier(String si) {
-        return splittedIdentifier += si;
+        return splittedIdentifier += si + " ";
     }
 
     public String addLemma(String l) {
-        return lemma += l;
+        return lemma += l + " ";
     }
 
     public String addPostag(String p) {
-        return postag += p;
+        return postag += p + " ";
     }
 
     public int getPid() {

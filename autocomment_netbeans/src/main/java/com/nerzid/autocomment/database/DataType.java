@@ -15,6 +15,7 @@
  */
 package com.nerzid.autocomment.database;
 
+import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_IDENTIFIER;
 import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_LEMMA;
 import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_POSTAG;
 import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER;
@@ -24,6 +25,7 @@ import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_SIMPLIFIED_ID
  * @author nerzid
  */
 public class DataType {
+
     private int dtid;
     private String identifier;
     private String simplifiedIdentifier;
@@ -31,6 +33,10 @@ public class DataType {
     private String postag;
 
     public DataType() {
+        identifier = "";
+        simplifiedIdentifier = "";
+        lemma = "";
+        postag = "";
     }
 
     public DataType(String identifier, String simplifiedIdentifier, String lemma, String postag) {
@@ -42,39 +48,61 @@ public class DataType {
 
     public static DataTypeModel insertOrGet(DataType dt) {
         DataTypeModel data_type = null;
-        data_type = DataTypeModel.findFirst(
-                DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER + " = ? AND "
-                + DataTypeModel.COLUMN_LEMMA + " = ? AND "
-                + DataTypeModel.COLUMN_POSTAG + " = ?",
-                dt.getSimplifiedIdentifier(), 
-                dt.getLemma(), 
-                dt.getPostag());
-        if (data_type == null) {
-            data_type = new DataTypeModel().set(
-                    COLUMN_SIMPLIFIED_IDENTIFIER, dt.getSimplifiedIdentifier(),
-                    COLUMN_LEMMA, dt.getLemma(),
-                    COLUMN_POSTAG, dt.getPostag());
-            if (data_type.saveIt())
-                return data_type;
-            else 
-                return null;
-        } else {
-            return DataTypeModel.getDataTypeModelUsingIdentifier(dt.getIdentifier());
+        try {
+            data_type = DataTypeModel.findFirst(
+                    DataTypeModel.COLUMN_IDENTIFIER + " = ? AND "
+                    + DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER + " = ? AND "
+                    + DataTypeModel.COLUMN_LEMMA + " = ? AND "
+                    + DataTypeModel.COLUMN_POSTAG + " = ?",
+                    dt.getIdentifier(),
+                    dt.getSimplifiedIdentifier(),
+                    dt.getLemma(),
+                    dt.getPostag());
+            if (data_type == null) {
+                data_type = new DataTypeModel().set(
+                        COLUMN_IDENTIFIER, dt.getIdentifier(),
+                        COLUMN_SIMPLIFIED_IDENTIFIER, dt.getSimplifiedIdentifier(),
+                        COLUMN_LEMMA, dt.getLemma(),
+                        COLUMN_POSTAG, dt.getPostag());
+                if (data_type.saveIt()) {
+                    return data_type;
+                } else {
+                    return null;
+                }
+            } else {
+                return DataTypeModel.getDataTypeModelUsingIdentifier(dt.getIdentifier());
+            }
+        } catch (NullPointerException e) {
+            if (data_type == null) {
+                data_type = new DataTypeModel().set(
+                        COLUMN_IDENTIFIER, dt.getIdentifier(),
+                        COLUMN_SIMPLIFIED_IDENTIFIER, dt.getSimplifiedIdentifier(),
+                        COLUMN_LEMMA, dt.getLemma(),
+                        COLUMN_POSTAG, dt.getPostag());
+                if (data_type.saveIt()) {
+                    return data_type;
+                } else {
+                    return null;
+                }
+            } else {
+                return DataTypeModel.getDataTypeModelUsingIdentifier(dt.getIdentifier());
+            }
         }
+
     }
-    
+
     public String addSimplifiedIdentifier(String si) {
-        return simplifiedIdentifier += si;
+        return simplifiedIdentifier += si + " ";
     }
-    
+
     public String addLemma(String l) {
-        return lemma += l;
+        return lemma += l + " ";
     }
-    
+
     public String addPostag(String p) {
-        return postag += p;
+        return postag += p + " ";
     }
-    
+
     public int getDtid() {
         return dtid;
     }
@@ -90,7 +118,7 @@ public class DataType {
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
-    
+
     public String getSimplifiedIdentifier() {
         return simplifiedIdentifier;
     }

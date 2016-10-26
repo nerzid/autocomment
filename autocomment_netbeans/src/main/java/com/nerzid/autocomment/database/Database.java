@@ -45,12 +45,12 @@ public class Database {
     }
 
     public static void createTablesIfNotExist() throws SQLException {
-        createWordGroupTable();
-        createParameterGroupTable();
-        createDataTypeTable();        
+        createDataTypeTable();
+        createMethodTable();
+        createParameterTable();        
     }
 
-    private static void createWordGroupTable() {
+    private static void createMethodTable() {
         PreparedStatement psmt;
         try {
             psmt = conn.prepareStatement(""
@@ -73,7 +73,7 @@ public class Database {
 
     }
 
-    private static void createParameterGroupTable() throws SQLException {
+    private static void createParameterTable() throws SQLException {
         PreparedStatement psmt = conn.prepareStatement(""
                 + "CREATE TABLE IF NOT EXISTS" + " "
                 + ParameterModel.TABLE_NAME + "("
@@ -95,7 +95,7 @@ public class Database {
         PreparedStatement psmt = conn.prepareStatement(""
                 + "CREATE TABLE IF NOT EXISTS" + " "
                 + DataTypeModel.TABLE_NAME + "("
-                + DataTypeModel.COLUMN_DTID + " " + DataTypeModel.COLUMN_DTID + ","
+                + DataTypeModel.COLUMN_DTID + " " + DataTypeModel.COLUMN_DTID_FIELD + ","
                 + DataTypeModel.COLUMN_IDENTIFIER + " " + DataTypeModel.COLUMN_IDENTIFIER_FIELD + ","
                 + DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER + " " + DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER_FIELD + ","
                 + DataTypeModel.COLUMN_LEMMA + " " + DataTypeModel.COLUMN_LEMMA_FIELD + ","

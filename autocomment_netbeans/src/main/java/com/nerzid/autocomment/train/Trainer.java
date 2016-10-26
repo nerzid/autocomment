@@ -67,21 +67,21 @@ public class Trainer {
         DataType data_type = NLPToolkit.getDataTypeWithProperties(data_typeStr);
         DataTypeModel dtm = DataType.insertOrGet(data_type);
 
-        data_type.setDtid((int) dtm.get(DataTypeModel.COLUMN_DTID));
+        data_type.setDtid((int) dtm.getId());
         Method m = NLPToolkit.getMethodWithProperties(signature, method_name, data_type.getDtid());
         MethodModel mm = (MethodModel) Method.insertOrGet(m);
 
-        m.setMid((int) mm.get(MethodModel.COLUMN_MID));
-
+        m.setMid((int) mm.getId());
         for (int i = 0; i < params.size(); i++) {
             int dtid;
 
             data_type = NLPToolkit.getDataTypeWithProperties(params_data_types.get(i));
             dtm = DataType.insertOrGet(data_type);
-            dtid = (int) dtm.get(DataTypeModel.COLUMN_DTID);
+            dtid = ((int) dtm.getId());
             data_type.setDtid(dtid);
 
             Parameter p = NLPToolkit.getParameterWithProperties(params.get(i), data_type.getDtid());
+            p.setFK_mid(m.getMid());
             ParameterModel pm = (ParameterModel) Parameter.insert(p);
         }
     }

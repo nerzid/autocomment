@@ -71,6 +71,7 @@ public class NLPToolkit {
             p.addLemma(lemmas_list.get(i));
             p.addPostag(postags_list.get(i));
         }
+        p.setIdentifier(param_name);
         p.setFK_dtid(dtid);
         
         return p;

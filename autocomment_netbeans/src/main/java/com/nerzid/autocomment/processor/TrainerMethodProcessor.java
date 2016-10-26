@@ -66,9 +66,7 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
                 params_data_types.add(ctp.getType().toString());
             }
             Trainer.train(signature, method_name, data_type, params, params_data_types);
-        }
-        
-        
+        } 
     }
 
     @Override

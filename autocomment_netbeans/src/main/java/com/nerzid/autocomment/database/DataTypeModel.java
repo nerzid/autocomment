@@ -26,7 +26,7 @@ import org.javalite.activejdbc.annotations.Table;
 public class DataTypeModel extends Model{
     public static final String TABLE_NAME = "DataType";
     
-    public static final String COLUMN_DTID = "dtid";
+    public static final String COLUMN_DTID = "id";
     public static final String COLUMN_IDENTIFIER = "identifier";
     public static final String COLUMN_SIMPLIFIED_IDENTIFIER = "simplified_identifier";
     public static final String COLUMN_LEMMA = "lemma";

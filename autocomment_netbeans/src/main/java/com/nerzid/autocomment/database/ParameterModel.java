@@ -16,15 +16,17 @@
 package com.nerzid.autocomment.database;
 
 import org.javalite.activejdbc.Model;
+import org.javalite.activejdbc.annotations.Table;
 
 /**
  *
  * @author nerzid
  */
+@Table(value = "Parameter")
 public class ParameterModel extends Model{
      public static final String TABLE_NAME = "Parameter";
     
-    public static final String COLUMN_PID = "pid";
+    public static final String COLUMN_PID = "id";
     public static final String COLUMN_IDENTIFIER = "identifier";
     public static final String COLUMN_SPLITTED_IDENTIFIER = "splitted_identifier";
     public static final String COLUMN_LEMMA = "lemma";
