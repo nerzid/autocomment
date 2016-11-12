@@ -179,7 +179,7 @@ public class HumanTaskTest extends JbpmTestCase {
         taskService.complete(task.getId(), "john", null);
         EntityManagerFactory emf = getEmf();
         assertProcessInstanceCompleted(pi.getId());
-        String language = emf.createEntityManager().createNativeQuery("SELECT language from I18NTEXT WHERE shorttext='??'").getSingleResult().toString();
+        String language = emf.createEntityManager().createNativeQuery("SELECT language from I18NTEXT WHERE shorttext='空手'").getSingleResult().toString();
         Assertions.assertThat(language).isEqualTo("ja_JP");
     }
 

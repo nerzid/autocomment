@@ -2,7 +2,7 @@
 grammar CommentTitle;
 
 rule1
-  : V NP PP?
+  : V NP PP? EOF
   ;
 NP
   : 'NN'

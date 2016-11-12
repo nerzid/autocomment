@@ -15,30 +15,20 @@
  */
 package com.nerzid.autocomment.template;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
-
 /**
  *
  * @author nerzid
  */
-public class PostagParsingErrorListener extends BaseErrorListener{
+public class EvalCommentTitleListener extends CommentTitleBaseListener{
 
-    public List<String> errorList;
-
-    public PostagParsingErrorListener() {
-        errorList = new ArrayList<>();
-    }
-    
+  
     
     @Override
-    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        super.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e); 
-        errorList.add(msg);
+    public void enterRule1(CommentTitleParser.Rule1Context ctx) {
+        System.out.println("******");
+        System.out.println("V: " + ctx.V().getText());
+        System.out.println("NP: " + ctx.NP().getText());
+        System.out.println("PP?: " + ctx.PP().getText());
+        System.out.println("**********");
     }
-    
-    
 }

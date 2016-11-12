@@ -21,12 +21,13 @@ import static com.nerzid.autocomment.database.MethodModel.COLUMN_POSTAG;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_SIGNATURE;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_IDENTIFIER;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_SPLITTED_IDENTIFIER;
+import java.util.List;
 
 /**
  *
  * @author nerzid
  */
-public class Method {
+public class MethodTable {
 
     private int mid;
     private String signature;
@@ -36,14 +37,14 @@ public class Method {
     private String postag;
     private int FK_dtid;
 
-    public Method() {
+    public MethodTable() {
         identifier = "";
         splittedIdentifier = "";
         lemma = "";
         postag = "";
     }
 
-    public Method(String signature, String original, String text, String lemma, String postag) {
+    public MethodTable(String signature, String original, String text, String lemma, String postag) {
         this.signature = signature;
         this.identifier = original;
         this.splittedIdentifier = text;
@@ -52,12 +53,12 @@ public class Method {
     }
 
     /**
-     * Inserts Method w into Database
+     * Inserts MethodTable w into Database
      *
      * @param m
      * @return True if successfully inserted into database false if not.
      */
-    public static MethodModel insertOrGet(Method m) {
+    public static MethodModel insertOrGet(MethodTable m) {
         MethodModel mm = null;
         try {
             mm = MethodModel.findFirst(
@@ -104,6 +105,13 @@ public class Method {
             }
         }
 
+    }
+    
+    public static List<MethodModel> getAll(){
+        List<MethodModel> mm_list = null;
+        
+        mm_list = MethodModel.findAll();
+        return mm_list;
     }
 
     public String addSplittedIdentifier(String si) {

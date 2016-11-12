@@ -24,7 +24,7 @@ import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_SIMPLIFIED_ID
  *
  * @author nerzid
  */
-public class DataType {
+public class DataTypeTable {
 
     private int dtid;
     private String identifier;
@@ -32,21 +32,21 @@ public class DataType {
     private String lemma;
     private String postag;
 
-    public DataType() {
+    public DataTypeTable() {
         identifier = "";
         simplifiedIdentifier = "";
         lemma = "";
         postag = "";
     }
 
-    public DataType(String identifier, String simplifiedIdentifier, String lemma, String postag) {
+    public DataTypeTable(String identifier, String simplifiedIdentifier, String lemma, String postag) {
         this.identifier = identifier;
         this.simplifiedIdentifier = simplifiedIdentifier;
         this.lemma = lemma;
         this.postag = postag;
     }
 
-    public static DataTypeModel insertOrGet(DataType dt) {
+    public static DataTypeModel insertOrGet(DataTypeTable dt) {
         DataTypeModel data_type = null;
         try {
             data_type = DataTypeModel.findFirst(

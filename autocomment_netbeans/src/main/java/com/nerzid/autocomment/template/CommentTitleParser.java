@@ -82,6 +82,7 @@ public class CommentTitleParser extends Parser {
 	public static class Rule1Context extends ParserRuleContext {
 		public TerminalNode V() { return getToken(CommentTitleParser.V, 0); }
 		public TerminalNode NP() { return getToken(CommentTitleParser.NP, 0); }
+		public TerminalNode EOF() { return getToken(CommentTitleParser.EOF, 0); }
 		public TerminalNode PP() { return getToken(CommentTitleParser.PP, 0); }
 		public Rule1Context(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -122,6 +123,8 @@ public class CommentTitleParser extends Parser {
 				}
 			}
 
+			setState(7);
+			match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -136,9 +139,10 @@ public class CommentTitleParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\6\n\4\2\t\2\3\2\3"+
-		"\2\3\2\5\2\b\n\2\3\2\2\2\3\2\2\2\t\2\4\3\2\2\2\4\5\7\4\2\2\5\7\7\3\2\2"+
-		"\6\b\7\5\2\2\7\6\3\2\2\2\7\b\3\2\2\2\b\3\3\2\2\2\3\7";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\6\f\4\2\t\2\3\2\3"+
+		"\2\3\2\5\2\b\n\2\3\2\3\2\3\2\2\2\3\2\2\2\13\2\4\3\2\2\2\4\5\7\4\2\2\5"+
+		"\7\7\3\2\2\6\b\7\5\2\2\7\6\3\2\2\2\7\b\3\2\2\2\b\t\3\2\2\2\t\n\7\2\2\3"+
+		"\n\3\3\2\2\2\3\7";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

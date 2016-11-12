@@ -29,6 +29,7 @@ import java.util.HashSet;
 import org.jbpm.services.task.HumanTaskConfigurator;
 import org.jbpm.services.task.HumanTaskServiceFactory;
 import javax.inject.Inject;
+import javax.enterprise.inject.Instance;
 import org.kie.internal.task.api.InternalTaskService;
 import org.jbpm.services.task.audit.JPATaskLifeCycleEventListener;
 import java.util.List;

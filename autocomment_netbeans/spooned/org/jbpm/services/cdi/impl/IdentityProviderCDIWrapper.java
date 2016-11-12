@@ -19,6 +19,7 @@ package org.jbpm.services.cdi.impl;
 
 import javax.enterprise.context.ContextNotActiveException;
 import org.kie.internal.identity.IdentityProvider;
+import javax.enterprise.inject.Instance;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -15,6 +15,9 @@
  */
 package com.nerzid.autocomment.database;
 
+import com.nerzid.autocomment.io.FilePicker;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,7 +31,12 @@ import org.javalite.activejdbc.Base;
  */
 public class Database {
 
-    public static final String DB_FILE = "C:/sqlite/db/autocomment.db";
+    public static String DB_FILE_NAME = "autocomment.db";
+
+    // DB_FILE_PATH is the path of database.
+    // IMPORTANT: this path has to change if your db isn't in that path.
+    public static String DB_FILE_PATH = "C:/sqlite/db/" + DB_FILE_NAME;
+
     public static Connection conn;
 
     public static boolean isOpen() {
@@ -36,7 +44,8 @@ public class Database {
     }
 
     public static void open() {
-        Base.open("org.sqlite.JDBC", "jdbc:sqlite:" + DB_FILE, "", "");
+        DB_FILE_PATH = FilePicker.chooseDBFile().getPath();
+        Base.open("org.sqlite.JDBC", "jdbc:sqlite:" + DB_FILE_PATH, "", "");
         conn = Base.connection();
     }
 
@@ -47,7 +56,7 @@ public class Database {
     public static void createTablesIfNotExist() throws SQLException {
         createDataTypeTable();
         createMethodTable();
-        createParameterTable();        
+        createParameterTable();
     }
 
     private static void createMethodTable() {
@@ -65,7 +74,7 @@ public class Database {
                     + MethodModel.COLUMN_FK_DTID + " " + MethodModel.COLUMN_FK_DTID_FIELD + ","
                     + MethodModel.COLUMN_FK_DTID_FIELD_FOREIGNKEY + ")"
             );
-            psmt.execute();
+            psmt.executeUpdate();
             psmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,34 +96,59 @@ public class Database {
                 + ParameterModel.COLUMN_FK_DTID_FIELD_FOREIGNKEY + ","
                 + ParameterModel.COLUMN_FK_MID_FIELD_FOREIGNKEY + ")"
         );
-        psmt.execute();
+        psmt.executeUpdate();
         psmt.close();
     }
 
-    private static void createDataTypeTable() throws SQLException {
-        PreparedStatement psmt = conn.prepareStatement(""
-                + "CREATE TABLE IF NOT EXISTS" + " "
-                + DataTypeModel.TABLE_NAME + "("
-                + DataTypeModel.COLUMN_DTID + " " + DataTypeModel.COLUMN_DTID_FIELD + ","
-                + DataTypeModel.COLUMN_IDENTIFIER + " " + DataTypeModel.COLUMN_IDENTIFIER_FIELD + ","
-                + DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER + " " + DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER_FIELD + ","
-                + DataTypeModel.COLUMN_LEMMA + " " + DataTypeModel.COLUMN_LEMMA_FIELD + ","
-                + DataTypeModel.COLUMN_POSTAG + " " + DataTypeModel.COLUMN_POSTAG_FIELD + ")"
-        );
-        psmt.execute();
-        psmt.close();
+    private static void createDataTypeTable() {
+        try {
+            PreparedStatement psmt = conn.prepareStatement(""
+                    + "CREATE TABLE IF NOT EXISTS" + " "
+                    + DataTypeModel.TABLE_NAME + "("
+                    + DataTypeModel.COLUMN_DTID + " " + DataTypeModel.COLUMN_DTID_FIELD + ","
+                    + DataTypeModel.COLUMN_IDENTIFIER + " " + DataTypeModel.COLUMN_IDENTIFIER_FIELD + ","
+                    + DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER + " " + DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER_FIELD + ","
+                    + DataTypeModel.COLUMN_LEMMA + " " + DataTypeModel.COLUMN_LEMMA_FIELD + ","
+                    + DataTypeModel.COLUMN_POSTAG + " " + DataTypeModel.COLUMN_POSTAG_FIELD + ")"
+            );
+            psmt.executeUpdate();
+            psmt.close();
+        } catch (SQLException ex) {
+            System.out.println("msg: " + ex.getMessage());
+        }
     }
 
     public static void main(String[] args) {
-        try {
-            Database.open();
-            createTablesIfNotExist();
-            System.out.println("Database was successfully created.");
-        } catch (SQLException ex) {
-            System.out.println("Database couldn't be created.");
-            System.out.println(ex.getMessage());
-        } finally {
-            Database.close();
+
+        // Here we need Database File's path in order to create it there
+        DB_FILE_PATH = FilePicker.getFilePath(FilePicker.chooseDir());
+
+        if (DB_FILE_PATH != null) {
+            try {
+                DB_FILE_PATH = DB_FILE_PATH + "/" + DB_FILE_NAME;
+                File db_file = new File(DB_FILE_PATH);
+                db_file.createNewFile();
+                
+                while(!db_file.exists())
+                {
+                    System.out.println("waitin for file to be created");
+                }
+                
+                System.out.println("File is created, continuing process...");
+                
+                Database.open();
+                createTablesIfNotExist();
+                System.out.println("Database was successfully created.");
+            } catch (SQLException ex) {
+                System.out.println("Database couldn't be created.");
+                System.out.println(ex.getMessage());
+            } catch (IOException ex) {
+                Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                Database.close();
+            }
+        } else {
+            System.err.println("Database's file path can not be null");
         }
     }
 }

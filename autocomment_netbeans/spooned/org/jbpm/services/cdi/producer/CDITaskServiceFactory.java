@@ -19,6 +19,7 @@ package org.jbpm.services.cdi.producer;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.enterprise.inject.Instance;
 import org.kie.api.task.TaskService;
 import org.kie.internal.runtime.manager.TaskServiceFactory;
 

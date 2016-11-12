@@ -26,7 +26,7 @@ import static com.nerzid.autocomment.database.ParameterModel.COLUMN_SPLITTED_IDE
  *
  * @author nerzid
  */
-public class Parameter {
+public class ParameterTable {
 
     private int pid;
     private String identifier;
@@ -36,21 +36,21 @@ public class Parameter {
     private int FK_dtid;
     private int FK_mid;
 
-    public Parameter() {
+    public ParameterTable() {
         identifier = "";
         splittedIdentifier = "";
         lemma = "";
         postag = "";
     }
 
-    public Parameter(String identifier, String splittedIdentifier, String lemma, String postag) {
+    public ParameterTable(String identifier, String splittedIdentifier, String lemma, String postag) {
         this.identifier = identifier;
         this.splittedIdentifier = splittedIdentifier;
         this.lemma = lemma;
         this.postag = postag;
     }
 
-    public static ParameterModel insert(Parameter p) {
+    public static ParameterModel insert(ParameterTable p) {
         ParameterModel pm;
 
         pm = new ParameterModel().set(

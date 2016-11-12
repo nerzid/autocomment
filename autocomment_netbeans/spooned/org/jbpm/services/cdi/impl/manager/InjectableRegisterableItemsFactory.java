@@ -40,6 +40,7 @@ import org.kie.internal.runtime.manager.GlobalProducer;
 import java.util.HashMap;
 import java.io.IOException;
 import javax.inject.Inject;
+import javax.enterprise.inject.Instance;
 import org.kie.api.runtime.KieContainer;
 import org.drools.compiler.kie.builder.impl.KieContainerImpl;
 import org.kie.api.builder.model.KieSessionModel;
@@ -57,6 +58,7 @@ import org.kie.api.runtime.manager.RuntimeManager;
 import org.drools.core.util.StringUtils;
 import org.jbpm.runtime.manager.api.qualifiers.Task;
 import org.kie.api.task.TaskLifeCycleEventListener;
+import javax.enterprise.inject.UnsatisfiedResolutionException;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.internal.runtime.manager.WorkItemHandlerProducer;
 import org.jbpm.runtime.manager.api.qualifiers.WorkingMemory;
@@ -336,7 +338,7 @@ public class InjectableRegisterableItemsFactory extends DefaultRegisterableItems
     protected static <T> T getInstanceByType(BeanManager manager, Class<T> type, Annotation... bindings) {
         final Bean<?> bean = manager.resolve(manager.getBeans(type, bindings));
         if (bean == null) {
-            throw new javax.enterprise.inject.UnsatisfiedResolutionException(((("Unable to resolve a bean for " + type) + " with bindings ") + (Arrays.asList(bindings))));
+            throw new UnsatisfiedResolutionException(((("Unable to resolve a bean for " + type) + " with bindings ") + (Arrays.asList(bindings))));
         } 
         CreationalContext<?> cc = manager.createCreationalContext(null);
         return type.cast(manager.getReference(bean, type, cc));

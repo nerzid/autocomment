@@ -15,12 +15,10 @@
  */
 package com.nerzid.autocomment.nlp;
 
-import com.nerzid.autocomment.database.DataType;
-import com.nerzid.autocomment.database.Method;
-import com.nerzid.autocomment.database.Parameter;
+import com.nerzid.autocomment.database.DataTypeTable;
+import com.nerzid.autocomment.database.MethodTable;
+import com.nerzid.autocomment.database.ParameterTable;
 import edu.stanford.nlp.simple.Sentence;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,23 +29,24 @@ import java.util.List;
 public class NLPToolkit {
 
     /**
-     * Gets the {@link com.nerzid.autocomment.database.Method} instance.
+     * Gets the {@link com.nerzid.autocomment.database.MethodTable} instance.
      *
      * @param signature
      * @param method_name
      * @param dtid
      * @return
      */
-    public static Method getMethodWithProperties(String signature, String method_name, int dtid) {
+    public static MethodTable getMethodWithProperties(String signature, String method_name, int dtid) {
         Collection<String> identifiers = Tokenizer.split(method_name);
         String identifier_sentence = Tokenizer.getIdentifiersSentence(identifiers);
+        identifier_sentence = "Joe " + identifier_sentence;
         String[] identifiers_list = identifier_sentence.split(" ");
         Sentence sent = new Sentence(identifier_sentence);
         List<String> lemmas_list = sent.lemmas();
         List<String> postags_list = sent.posTags();
 
-        Method m = new Method();
-        for (int i = 0; i < lemmas_list.size(); i++) {
+        MethodTable m = new MethodTable();
+        for (int i = 1; i < lemmas_list.size(); i++) {
             m.addSplittedIdentifier(identifiers_list[i]);
             m.addLemma(lemmas_list.get(i));
             m.addPostag(postags_list.get(i));
@@ -59,16 +58,17 @@ public class NLPToolkit {
         return m;
     }
 
-    public static Parameter getParameterWithProperties(String param_name, int dtid) {
+    public static ParameterTable getParameterWithProperties(String param_name, int dtid) {
         Collection<String> identifiers = Tokenizer.split(param_name);
         String identifier_sentence = Tokenizer.getIdentifiersSentence(identifiers);
+        identifier_sentence = "Joe " + identifier_sentence;
         String[] identifiers_list = identifier_sentence.split(" ");
         Sentence sent = new Sentence(identifier_sentence);
         List<String> lemmas_list = sent.lemmas();
         List<String> postags_list = sent.posTags();
 
-        Parameter p = new Parameter();
-        for (int i = 0; i < lemmas_list.size(); i++) {
+        ParameterTable p = new ParameterTable();
+        for (int i = 1; i < lemmas_list.size(); i++) {
             p.addSplittedIdentifier(identifiers_list[i]);
             p.addLemma(lemmas_list.get(i));
             p.addPostag(postags_list.get(i));
@@ -79,16 +79,17 @@ public class NLPToolkit {
         return p;
     }
 
-    public static DataType getDataTypeWithProperties(String data_typeStr) {
+    public static DataTypeTable getDataTypeWithProperties(String data_typeStr) {
         String original = data_typeStr;
-        String text = Tokenizer.getCollectionOrMapString(original);
+        String text = Tokenizer.simplifyDataType(original);
+        text = "Joe " + text;
         String[] identifiers_list = text.split(" ");
         Sentence sent = new Sentence(text);
         List<String> lemmas_list = sent.lemmas();
         List<String> postags_list = sent.posTags();
 
-        DataType data_type = new DataType();
-        for (int i = 0; i < lemmas_list.size(); i++) {
+        DataTypeTable data_type = new DataTypeTable();
+        for (int i = 1; i < lemmas_list.size(); i++) {
             data_type.addSimplifiedIdentifier(identifiers_list[i]);
             data_type.addLemma(lemmas_list.get(i));
             data_type.addPostag(postags_list.get(i));
@@ -96,10 +97,6 @@ public class NLPToolkit {
         data_type.setIdentifier(original);
 
         return data_type;
-    }
-
-    public static void foo() {
-
     }
 
     public static void main(String[] args) {

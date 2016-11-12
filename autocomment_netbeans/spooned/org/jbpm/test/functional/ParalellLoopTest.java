@@ -55,7 +55,7 @@ public class ParalellLoopTest extends JbpmTestCase {
         }
         // assertNodeTriggered(processInstance.getId(), "ApproveMary");
         // assertNodeTriggered(processInstance.getId(), "ApproveJohn");
-        // A JÛv·hagy·s folyamatnak vÈge
+        // A J√≥v√°hagy√°s folyamatnak v√©ge
         complete("john", "Approve");
         complete("mary", "Approve");
         assertProcessInstanceCompleted(processInstance.getId());
@@ -81,7 +81,7 @@ public class ParalellLoopTest extends JbpmTestCase {
         }
         // assertNodeTriggered(processInstance.getId(), "ApproveMary");
         // assertNodeTriggered(processInstance.getId(), "ApproveJohn");
-        // A JÛv·hagy·s folyamatnak vÈge
+        // A J√≥v√°hagy√°s folyamatnak v√©ge
         complete("john", "Approve");
         complete("mary", "Approve");
         assertProcessInstanceCompleted(processInstance.getId());
@@ -103,7 +103,7 @@ public class ParalellLoopTest extends JbpmTestCase {
             complete("mary", "Approve");
             complete("john", "Reject");
         }
-        // A JÛv·hagy·s folyamatnak vÈge
+        // A J√≥v√°hagy√°s folyamatnak v√©ge
         complete("john", "Approve");
         complete("mary", "Approve");
         assertProcessInstanceCompleted(processInstance.getId());
@@ -125,7 +125,7 @@ public class ParalellLoopTest extends JbpmTestCase {
             complete("john", "Approve");
             complete("mary", "Reject");
         }
-        // A JÛv·hagy·s folyamatnak vÈge
+        // A J√≥v√°hagy√°s folyamatnak v√©ge
         complete("john", "Approve");
         complete("mary", "Approve");
         assertProcessInstanceCompleted(processInstance.getId());

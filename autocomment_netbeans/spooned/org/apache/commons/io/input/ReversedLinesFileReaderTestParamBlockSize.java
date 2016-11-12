@@ -52,13 +52,13 @@ public class ReversedLinesFileReaderTestParamBlockSize {
     }
 
     // Strings are escaped in constants to avoid java source encoding issues (source file enc is UTF-8):
-    // "A Test Line. Special chars: ÄäÜüÖöß ÃáéíïçñÂ ©µ¥£±²®"
+    // "A Test Line. Special chars: Ã„Ã¤ÃœÃ¼Ã–Ã¶ÃŸ ÃƒÃ¡Ã©Ã­Ã¯Ã§Ã±Ã‚ Â©ÂµÂ¥Â£Â±Â²Â®"
     private static final String TEST_LINE = "A Test Line. Special chars: \u00c4\u00e4\u00dc\u00fc\u00d6\u00f6\u00df \u00c3\u00e1\u00e9\u00ed\u00ef\u00e7\u00f1\u00c2 \u00a9\u00b5\u00a5\u00a3\u00b1\u00b2\u00ae";
 
-    // Hiragana letters: �??�?��?��?��?�
+    // Hiragana letters: ã��ã�‚ã�ƒã�„ã�…
     private static final String TEST_LINE_SHIFT_JIS1 = "Hiragana letters: \u3041\u3042\u3043\u3044\u3045";
 
-    // Kanji letters: �?輸�?京
+    // Kanji letters: æ˜Žè¼¸å­�äº¬
     private static final String TEST_LINE_SHIFT_JIS2 = "Kanji letters: \u660e\u8f38\u5b50\u4eac";
 
     // windows-31j characters

@@ -19,6 +19,7 @@ package org.jbpm.services.cdi.impl.manager;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.enterprise.inject.Instance;
 import org.kie.api.runtime.manager.RuntimeEnvironment;
 import org.jbpm.runtime.manager.impl.RuntimeManagerFactoryImpl;
 import org.jbpm.runtime.manager.impl.SimpleRuntimeEnvironment;

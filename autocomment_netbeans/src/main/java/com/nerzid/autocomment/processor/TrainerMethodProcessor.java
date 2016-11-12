@@ -15,7 +15,7 @@
  */
 package com.nerzid.autocomment.processor;
 
-import com.nerzid.autocomment.database.Parameter;
+import com.nerzid.autocomment.database.ParameterTable;
 import com.nerzid.autocomment.nlp.Tokenizer;
 import com.nerzid.autocomment.train.Trainer;
 import java.util.ArrayList;

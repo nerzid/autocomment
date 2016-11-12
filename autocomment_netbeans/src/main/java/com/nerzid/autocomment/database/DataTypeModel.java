@@ -22,9 +22,9 @@ import org.javalite.activejdbc.annotations.Table;
  *
  * @author nerzid
  */
-@Table(value = "DataType")
+@Table(value = "DataTypeTable")
 public class DataTypeModel extends Model{
-    public static final String TABLE_NAME = "DataType";
+    public static final String TABLE_NAME = "DataTypeTable";
     
     public static final String COLUMN_DTID = "id";
     public static final String COLUMN_IDENTIFIER = "identifier";

@@ -70,7 +70,7 @@ public class JaxbContent implements Content {
                 } 
             } catch (Exception e) {
                 // don't fail in case of unmarshalling problem as it might be content not handled via jaxb
-                // ?e.g. custom classes, non map based etc
+                // Ļe.g. custom classes, non map based etc
             }
         }
     }

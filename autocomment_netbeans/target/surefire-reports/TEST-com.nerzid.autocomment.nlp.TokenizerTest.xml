@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<<<<<<< HEAD
-<<<<<<< HEAD
 <testsuite tests="11" failures="0" name="com.nerzid.autocomment.nlp.TokenizerTest" time="0.001" errors="0" skipped="0">
-=======
-<testsuite tests="11" failures="0" name="com.nerzid.autocomment.nlp.TokenizerTest" time="0.07" errors="0" skipped="0">
->>>>>>> 191bf1a254fdbafd10bae7732e4e74500ae8a8aa
-=======
-<testsuite tests="11" failures="0" name="com.nerzid.autocomment.nlp.TokenizerTest" time="0.001" errors="0" skipped="0">
->>>>>>> 08fcc0284d6de7789ab6bd7194251f575912a30c
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/usr/local/java/jdk1.8.0_111/jre/lib/amd64"/>
@@ -20,15 +12,7 @@
     <property name="file.encoding.pkg" value="sun.io"/>
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <property name="sun.os.patch.level" value="unknown"/>
-=======
-    <property name="sun.os.patch.level" value=""/>
->>>>>>> 191bf1a254fdbafd10bae7732e4e74500ae8a8aa
-=======
-    <property name="sun.os.patch.level" value="unknown"/>
->>>>>>> 08fcc0284d6de7789ab6bd7194251f575912a30c
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="user.dir" value="/home/nerzid/Documents/autocomment/autocomment_netbeans"/>
     <property name="java.runtime.version" value="1.8.0_111-b14"/>
@@ -39,26 +23,11 @@
     <property name="line.separator" value="
 "/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 08fcc0284d6de7789ab6bd7194251f575912a30c
     <property name="os.name" value="Linux"/>
     <property name="maven.ext.class.path" value="/home/nerzid/netbeans-8.2/java/maven-nblib/netbeans-eventspy.jar"/>
     <property name="classworlds.conf" value="/home/nerzid/netbeans-8.2/java/maven/bin/m2.conf"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/usr/local/java/jdk1.8.0_111/jre/lib/amd64:/usr/local/java/jdk1.8.0_111/jre/lib/i386::/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib"/>
-<<<<<<< HEAD
-=======
-    <property name="user.variant" value=""/>
-    <property name="os.name" value="Windows 10"/>
-    <property name="maven.ext.class.path" value="C:\Program Files\NetBeans 8.1\java\maven-nblib\netbeans-eventspy.jar"/>
-    <property name="classworlds.conf" value="C:\Program Files\NetBeans 8.1\java\maven\bin\m2.conf"/>
-    <property name="sun.jnu.encoding" value="Cp1254"/>
-    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_101\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Python27\;C:\php;C:\ProgramData\ComposerSetup\bin;C:\Users\nerzid\AppData\Local\atom\bin;C:\apache-maven-3.3.9\bin;C:\Program Files (x86)\WinSCP\;C:\Python27\Scripts;C:\Program Files\nodejs\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\sqlite;C:\Program Files\Mercurial\;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\Git\cmd;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Users\nerzid\AppData\Roaming\Composer\vendor\bin;C:\Users\nerzid\AppData\Local\Microsoft\WindowsApps;C:\Users\nerzid\AppData\Roaming\npm;."/>
->>>>>>> 191bf1a254fdbafd10bae7732e4e74500ae8a8aa
-=======
->>>>>>> 08fcc0284d6de7789ab6bd7194251f575912a30c
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="52.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -72,18 +41,8 @@
     <property name="java.class.path" value="/home/nerzid/netbeans-8.2/java/maven/boot/plexus-classworlds-2.4.jar"/>
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <property name="java.home" value="/usr/local/java/jdk1.8.0_111/jre"/>
     <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dmaven.ext.class.path=/home/nerzid/netbeans-8.2/java/maven-nblib/netbeans-eventspy.jar clean install"/>
-=======
-    <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_101\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dmaven.ext.class.path=C:\Program Files\NetBeans 8.1\java\maven-nblib\netbeans-eventspy.jar -Dfile.encoding=UTF-8 clean install"/>
->>>>>>> 191bf1a254fdbafd10bae7732e4e74500ae8a8aa
-=======
-    <property name="java.home" value="/usr/local/java/jdk1.8.0_111/jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dmaven.ext.class.path=/home/nerzid/netbeans-8.2/java/maven-nblib/netbeans-eventspy.jar clean install"/>
->>>>>>> 08fcc0284d6de7789ab6bd7194251f575912a30c
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="en"/>
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
@@ -101,18 +60,8 @@
     <property name="sun.desktop" value="gnome"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-<<<<<<< HEAD
-<<<<<<< HEAD
-  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_UpperCaseLettersRepeatedly_UpperCaseLettersGrouped" time="0"/>
+  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_UpperCaseLettersRepeatedly_UpperCaseLettersGrouped" time="0.001"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenArrayAsParam_OutputIsCollectionOfObjectAsString" time="0"/>
-=======
-  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_UpperCaseLettersRepeatedly_UpperCaseLettersGrouped" time="0.004"/>
-  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenArrayAsParam_OutputIsCollectionOfObjectAsString" time="0.001"/>
->>>>>>> 191bf1a254fdbafd10bae7732e4e74500ae8a8aa
-=======
-  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_UpperCaseLettersRepeatedly_UpperCaseLettersGrouped" time="0"/>
-  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenArrayAsParam_OutputIsCollectionOfObjectAsString" time="0"/>
->>>>>>> 08fcc0284d6de7789ab6bd7194251f575912a30c
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_LowerCaseLetterBeforeUnderDash_NewTokenAfterUnderDash" time="0"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_NotAllPunctuationsRemoved_CollectionTagsExist" time="0"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_DashAndUnderDash_NoDashes" time="0"/>
@@ -120,14 +69,6 @@
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_LowerCaseLetterBeforeDash_NewTokenAfterDash" time="0"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenObjectAsParam_OutputIsObjectAsString" time="0"/>
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_NumbersLowerCaseBeforeToken_NumbersAndTokenAreOneSingleToken" time="0"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString" time="0"/>
-=======
-  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString" time="0.001"/>
->>>>>>> 191bf1a254fdbafd10bae7732e4e74500ae8a8aa
-=======
-  <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="simplifyDataType_GivenMapEntryInSetAsParam_OutputIsCollectionOfObjectAsString" time="0"/>
->>>>>>> 08fcc0284d6de7789ab6bd7194251f575912a30c
   <testcase classname="com.nerzid.autocomment.nlp.TokenizerTest" name="split_NumbersBeforeUpperCaseToken_NumbersAndTokenAreOneSingleTokenTotal" time="0"/>
 </testsuite>

@@ -1,12 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.nerzid.autocomment.nlp.TokenizerTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-<<<<<<< HEAD
 Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
-=======
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.07 sec
->>>>>>> 191bf1a254fdbafd10bae7732e4e74500ae8a8aa
-=======
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
->>>>>>> 08fcc0284d6de7789ab6bd7194251f575912a30c

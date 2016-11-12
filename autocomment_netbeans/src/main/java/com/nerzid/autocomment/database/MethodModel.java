@@ -22,10 +22,10 @@ import org.javalite.activejdbc.annotations.Table;
  *
  * @author nerzid
  */
-@Table(value = "Method")
+@Table(value = "MethodTable")
 public class MethodModel extends Model {
 
-    public static final String TABLE_NAME = "Method";
+    public static final String TABLE_NAME = "MethodTable";
     
     public static final String COLUMN_MID = "id";
     public static final String COLUMN_SIGNATURE = "signature";

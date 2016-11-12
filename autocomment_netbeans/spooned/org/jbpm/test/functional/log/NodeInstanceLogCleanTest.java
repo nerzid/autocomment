@@ -92,10 +92,10 @@ public class NodeInstanceLogCleanTest extends JbpmTestCase {
             kieSession = createKSession(NodeInstanceLogCleanTest.HUMAN_TASK_LOCALE);
             processInstanceList = startProcess(kieSession, NodeInstanceLogCleanTest.HUMAN_TASK_LOCALE_ID, 1);
             // Let's see how the code will manage Japan characters.
-            List<NodeInstanceLog> nodeInstanceList = auditService.nodeInstanceLogQuery().nodeName("??").build().getResultList();
+            List<NodeInstanceLog> nodeInstanceList = auditService.nodeInstanceLogQuery().nodeName("空手").build().getResultList();
             // We are expecting only NodeInstanceLog.TYPE_ENTERED as execution will be paused on the human task
             Assertions.assertThat(nodeInstanceList).hasSize(1);
-            // Delete node named "??" based on it's id.
+            // Delete node named "空手" based on it's id.
             int resultCount = auditService.nodeInstanceLogDelete().nodeInstanceId(nodeInstanceList.get(0).getNodeId()).build().execute();
             Assertions.assertThat(resultCount).isEqualTo(0);
         } finally {

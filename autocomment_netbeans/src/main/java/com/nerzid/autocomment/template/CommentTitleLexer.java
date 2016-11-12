@@ -111,4 +111,18 @@ public class CommentTitleLexer extends Lexer {
 			_decisionToDFA[i] = new DFA(_ATN.getDecisionState(i), i);
 		}
 	}
+
+    @Override
+    public void recover(LexerNoViableAltException e) {
+        throw new RuntimeException();
+    }
+
+    @Override
+    public void recover(RecognitionException re) {
+        throw new RuntimeException();
+    }
+    
+    
+        
+        
 }

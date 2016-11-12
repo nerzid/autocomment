@@ -21,6 +21,7 @@ import javax.enterprise.util.AnnotationLiteral;
 import javax.enterprise.inject.Any;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.enterprise.inject.Instance;
 import org.kie.internal.runtime.manager.cdi.qualifier.PerProcessInstance;
 import org.kie.internal.runtime.manager.cdi.qualifier.PerRequest;
 import javax.enterprise.inject.Produces;

@@ -15,12 +15,12 @@
  */
 package com.nerzid.autocomment.train;
 
-import com.nerzid.autocomment.database.DataType;
+import com.nerzid.autocomment.database.DataTypeTable;
 import com.nerzid.autocomment.database.DataTypeModel;
 import com.nerzid.autocomment.database.Database;
-import com.nerzid.autocomment.database.Method;
+import com.nerzid.autocomment.database.MethodTable;
 import com.nerzid.autocomment.database.MethodModel;
-import com.nerzid.autocomment.database.Parameter;
+import com.nerzid.autocomment.database.ParameterTable;
 import com.nerzid.autocomment.database.ParameterModel;
 import com.nerzid.autocomment.log.ErrorLog;
 import com.nerzid.autocomment.log.ErrorMessage;
@@ -62,29 +62,31 @@ public class Trainer {
      * @param signature
      * @param method_name
      * @param data_typeStr
+     * @param params
+     * @param params_data_types
      */
     public static void train(String signature, String method_name, String data_typeStr, List<String> params, List<String> params_data_types) {
 
         //Collection<Word> words_list = NLPToolkit.getWordsWithFeatures(identifier_sentence, data_type);
-        DataType data_type = NLPToolkit.getDataTypeWithProperties(data_typeStr);
-        DataTypeModel dtm = DataType.insertOrGet(data_type);
+        DataTypeTable data_type = NLPToolkit.getDataTypeWithProperties(data_typeStr);
+        DataTypeModel dtm = DataTypeTable.insertOrGet(data_type);
 
         data_type.setDtid((int) dtm.getId());
-        Method m = NLPToolkit.getMethodWithProperties(signature, method_name, data_type.getDtid());
-        MethodModel mm = (MethodModel) Method.insertOrGet(m);
+        MethodTable m = NLPToolkit.getMethodWithProperties(signature, method_name, data_type.getDtid());
+        MethodModel mm = (MethodModel) MethodTable.insertOrGet(m);
 
         m.setMid((int) mm.getId());
         for (int i = 0; i < params.size(); i++) {
             int dtid;
 
             data_type = NLPToolkit.getDataTypeWithProperties(params_data_types.get(i));
-            dtm = DataType.insertOrGet(data_type);
+            dtm = DataTypeTable.insertOrGet(data_type);
             dtid = ((int) dtm.getId());
             data_type.setDtid(dtid);
 
-            Parameter p = NLPToolkit.getParameterWithProperties(params.get(i), data_type.getDtid());
+            ParameterTable p = NLPToolkit.getParameterWithProperties(params.get(i), data_type.getDtid());
             p.setFK_mid(m.getMid());
-            ParameterModel pm = (ParameterModel) Parameter.insert(p);
+            ParameterModel pm = (ParameterModel) ParameterTable.insert(p);
         }
     }
 
@@ -92,6 +94,9 @@ public class Trainer {
      *
      */
     private static void prepareTrainingProcess() {
+        
+        JOptionPane.showMessageDialog(null, "Select projects to be used in training.");
+        
         // Choose Java Source Files via FilePicker
         //files_list = FilePicker.chooseAndGetJavaFiles();
         files_list = FilePicker.chooseDirAndGetJavaFiles();
@@ -128,7 +133,7 @@ public class Trainer {
                 env.setAutoImports(true);
 
                 // Add Processors to Spoon Launcher
-                // WARNING: Priority is import DO NOT CHANGE
+                // WARNING: Priority is important DO NOT CHANGE
                 // JavaOutputProcessor must be at LOWERMOST to get all differences
                 // and write them
                 l.addProcessor(new CtCommentProcessor());

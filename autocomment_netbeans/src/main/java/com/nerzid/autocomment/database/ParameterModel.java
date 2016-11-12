@@ -22,9 +22,9 @@ import org.javalite.activejdbc.annotations.Table;
  *
  * @author nerzid
  */
-@Table(value = "Parameter")
+@Table(value = "ParameterTable")
 public class ParameterModel extends Model{
-     public static final String TABLE_NAME = "Parameter";
+     public static final String TABLE_NAME = "ParameterTable";
     
     public static final String COLUMN_PID = "id";
     public static final String COLUMN_IDENTIFIER = "identifier";

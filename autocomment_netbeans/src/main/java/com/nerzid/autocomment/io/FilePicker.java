@@ -77,6 +77,70 @@ public class FilePicker {
 
         return files_list;
     }
+    
+    public static File chooseFile(){
+        setLookAndFeel();
+        
+        File f = null;
+        
+        JFileChooser fc = new  JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("JAVA Source Files (.java)", "java");
+        fc.setFileFilter(filter);
+        fc.setMultiSelectionEnabled(false);
+        
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            f = fc.getSelectedFile();
+        } else {
+            System.out.println(ErrorMessage.FILE_HANDLER_NO_JAVA_FILE);
+        }
+        
+        return f;
+    }
+    
+    public static File chooseDBFile(){
+        setLookAndFeel();
+        
+        File f = null;
+        
+        JFileChooser fc = new  JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Database File (.db)", "db");
+        fc.setFileFilter(filter);
+        fc.setMultiSelectionEnabled(false);
+        
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            f = fc.getSelectedFile();
+        } else {
+            System.out.println(ErrorMessage.FILE_HANDLER_NO_JAVA_FILE);
+        }
+        
+        return f;
+    }
+    
+    public static File chooseDir(){
+        setLookAndFeel();
+        
+        File f = null;
+        
+        JFileChooser fc = new  JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setMultiSelectionEnabled(false);
+        
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            f = fc.getSelectedFile();
+        } else {
+            System.out.println(ErrorMessage.FILE_HANDLER_NO_JAVA_FILE);
+        }
+        
+        return f;
+    }
+    
+    public static String getFilePath(File f){
+        return f == null ? null : f.getPath(); 
+    }
 
     private static void setLookAndFeel() {
         try {
