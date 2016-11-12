@@ -47,6 +47,8 @@ public class Trainer {
 
     public static List<File> files_list; // Java Source Files List
     public static ErrorLog errorlog;
+    public static int currentFileNo = 0;
+    public static boolean trainingProcessStarted = false;
 
     public static void main(String[] args) {
         errorlog = new ErrorLog("C:/users/nerzid/desktop/");
@@ -93,11 +95,10 @@ public class Trainer {
         // Choose Java Source Files via FilePicker
         //files_list = FilePicker.chooseAndGetJavaFiles();
         files_list = FilePicker.chooseDirAndGetJavaFiles();
-        int count = 0;
         if (files_list == null || files_list.isEmpty()) {
             errorlog.add(new com.nerzid.autocomment.log.Error(ErrorMessage.FILE_HANDLER_NO_JAVA_FILE));
         } else {
-
+            trainingProcessStarted = true;
             for (File f : files_list) {
 
                 // Will be deleted in the future
@@ -142,8 +143,8 @@ public class Trainer {
                 } catch (Exception e) {
                     errorlog.add(new com.nerzid.autocomment.log.Error(e.getMessage(), null));
                 }
-                count++;
-                System.out.println("Status: " + count + "/" + files_list.size());
+                currentFileNo++;
+                //System.out.println("Status: " + currentFileNo + "/" + files_list.size());
             }
             finish();
         }

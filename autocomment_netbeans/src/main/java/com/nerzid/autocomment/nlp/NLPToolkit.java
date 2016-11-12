@@ -19,6 +19,8 @@ import com.nerzid.autocomment.database.DataType;
 import com.nerzid.autocomment.database.Method;
 import com.nerzid.autocomment.database.Parameter;
 import edu.stanford.nlp.simple.Sentence;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,22 +32,22 @@ public class NLPToolkit {
 
     /**
      * Gets the {@link com.nerzid.autocomment.database.Method} instance.
-     * 
+     *
      * @param signature
      * @param method_name
      * @param dtid
-     * @return 
+     * @return
      */
-    public static Method getMethodWithProperties(String signature, String method_name, int dtid){
+    public static Method getMethodWithProperties(String signature, String method_name, int dtid) {
         Collection<String> identifiers = Tokenizer.split(method_name);
         String identifier_sentence = Tokenizer.getIdentifiersSentence(identifiers);
         String[] identifiers_list = identifier_sentence.split(" ");
         Sentence sent = new Sentence(identifier_sentence);
         List<String> lemmas_list = sent.lemmas();
         List<String> postags_list = sent.posTags();
-        
+
         Method m = new Method();
-        for(int i = 0; i < lemmas_list.size(); i++){
+        for (int i = 0; i < lemmas_list.size(); i++) {
             m.addSplittedIdentifier(identifiers_list[i]);
             m.addLemma(lemmas_list.get(i));
             m.addPostag(postags_list.get(i));
@@ -53,10 +55,10 @@ public class NLPToolkit {
         m.setSignature(signature);
         m.setIdentifier(method_name);
         m.setFK_dtid(dtid);
-        
+
         return m;
     }
-    
+
     public static Parameter getParameterWithProperties(String param_name, int dtid) {
         Collection<String> identifiers = Tokenizer.split(param_name);
         String identifier_sentence = Tokenizer.getIdentifiersSentence(identifiers);
@@ -64,19 +66,19 @@ public class NLPToolkit {
         Sentence sent = new Sentence(identifier_sentence);
         List<String> lemmas_list = sent.lemmas();
         List<String> postags_list = sent.posTags();
-        
+
         Parameter p = new Parameter();
-        for(int i = 0; i < lemmas_list.size(); i++){
+        for (int i = 0; i < lemmas_list.size(); i++) {
             p.addSplittedIdentifier(identifiers_list[i]);
             p.addLemma(lemmas_list.get(i));
             p.addPostag(postags_list.get(i));
         }
         p.setIdentifier(param_name);
         p.setFK_dtid(dtid);
-        
+
         return p;
     }
-    
+
     public static DataType getDataTypeWithProperties(String data_typeStr) {
         String original = data_typeStr;
         String text = Tokenizer.getCollectionOrMapString(original);
@@ -84,7 +86,7 @@ public class NLPToolkit {
         Sentence sent = new Sentence(text);
         List<String> lemmas_list = sent.lemmas();
         List<String> postags_list = sent.posTags();
-        
+
         DataType data_type = new DataType();
         for (int i = 0; i < lemmas_list.size(); i++) {
             data_type.addSimplifiedIdentifier(identifiers_list[i]);
@@ -92,7 +94,16 @@ public class NLPToolkit {
             data_type.addPostag(postags_list.get(i));
         }
         data_type.setIdentifier(original);
-        
+
         return data_type;
+    }
+
+    public static void foo() {
+
+    }
+
+    public static void main(String[] args) {
+        Sentence sent = new Sentence("get average of student grades");
+        sent.parse().pennPrint();
     }
 }
