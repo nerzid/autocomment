@@ -62,6 +62,15 @@ public class TokenizerTest {
         List<String> result = Tokenizer.split(identifier);
         assertEquals(expResult, result);
     }
+    
+//    @Test
+//    public void split_UpperCaseLetterGroupBeforeOneUppercaseAndTrailingLowerCase_NewTokenAfterUpperGroup(){
+//        System.out.println("com.nerzid.autocomment.nlp.Tokenizer.split_UpperCaseLetterGroupBeforeOneUppercaseAndTrailingLowerCase_NewTokenAfterUpperGroup");
+//        String identifier="RGBToGray";
+//        List<String> expResult = Arrays.asList("rgb", "to", "gray");
+//        List<String> result = Tokenizer.split(identifier);
+//        assertEquals(expResult, result);
+//    }
 
     /**
      * Test of split method, of class Tokenizer.

@@ -15,6 +15,7 @@
  */
 package com.nerzid.autocomment.io;
 
+import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.log.ErrorMessage;
 import java.io.File;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class FilePicker {
      *
      * @return
      */
-    public static ArrayList<File> chooseAndGetJavaFiles() {
+    public static ArrayList<File> chooseAndGetJavaFiles() throws FileNotSelected {
         setLookAndFeel();
         ArrayList<File> files_list = null;
 
@@ -53,13 +54,13 @@ public class FilePicker {
             File[] files_arr = fc.getSelectedFiles();
             files_list = new ArrayList<>(Arrays.asList(files_arr));
         } else {
-            System.out.println(ErrorMessage.FILE_HANDLER_NO_JAVA_FILE);
+            throw new FileNotSelected(FileNotSelected.MESSAGE_NO_FILE_SELECTED);
         }
 
         return files_list;
     }
 
-    public static LinkedList<File> chooseDirAndGetJavaFiles() {
+    public static LinkedList<File> chooseDirAndGetJavaFiles() throws FileNotSelected {
         setLookAndFeel();
         LinkedList<File> files_list = null;
 
@@ -69,6 +70,8 @@ public class FilePicker {
 
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             files_list = (LinkedList<File>) FileUtils.listFiles(fc.getSelectedFile(), extn, true);
+        } else {
+            throw new FileNotSelected(FileNotSelected.MESSAGE_NO_DIR_SELECTED);
         }
         
         for (File f : files_list) {
@@ -78,7 +81,7 @@ public class FilePicker {
         return files_list;
     }
     
-    public static File chooseFile(){
+    public static File chooseFile() throws FileNotSelected{
         setLookAndFeel();
         
         File f = null;
@@ -93,13 +96,13 @@ public class FilePicker {
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             f = fc.getSelectedFile();
         } else {
-            System.out.println(ErrorMessage.FILE_HANDLER_NO_JAVA_FILE);
+            throw new FileNotSelected(FileNotSelected.MESSAGE_NO_FILE_SELECTED);
         }
         
         return f;
     }
     
-    public static File chooseDBFile(){
+    public static File chooseDBFile() throws FileNotSelected{
         setLookAndFeel();
         
         File f = null;
@@ -114,13 +117,13 @@ public class FilePicker {
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             f = fc.getSelectedFile();
         } else {
-            System.out.println(ErrorMessage.FILE_HANDLER_NO_JAVA_FILE);
+            throw new FileNotSelected(FileNotSelected.MESSAGE_NO_FILE_SELECTED);
         }
         
         return f;
     }
     
-    public static File chooseDir(){
+    public static File chooseDir() throws FileNotSelected{
         setLookAndFeel();
         
         File f = null;
@@ -132,7 +135,7 @@ public class FilePicker {
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             f = fc.getSelectedFile();
         } else {
-            System.out.println(ErrorMessage.FILE_HANDLER_NO_JAVA_FILE);
+            throw new FileNotSelected(FileNotSelected.MESSAGE_NO_FILE_SELECTED);
         }
         
         return f;

@@ -44,6 +44,8 @@ public class DataTypeModel extends Model{
     public static final int COLUMN_LEMMA_INT = 4;
     public static final int COLUMN_POSTAG_INT = 5;
     
+    public static final int COUNT_OF_COLUMNS = 5;
+    
     public static DataTypeModel getDataTypeModelUsingIdentifier(String identifier) {
         DataTypeModel data_type;
         data_type = (DataTypeModel) DataTypeModel.findFirst(

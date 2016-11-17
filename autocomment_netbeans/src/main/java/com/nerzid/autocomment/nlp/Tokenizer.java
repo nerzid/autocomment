@@ -174,6 +174,16 @@ public class Tokenizer {
                     if (!newWord.isEmpty()) {
                         if (beforeWasUpperCase) {
                             waitingUpperCaseLetter = true;
+//                            if(j + 1 < word.length()){
+//                                if(Character.isLowerCase(word.charAt(j+1))){
+//                                    splitted.add(newWord.toLowerCase());
+//                                    newWord = "";
+//                                    newWord += Character.toLowerCase(ch);
+//                                    waitingUpperCaseLetter = false;
+//                                    beforeWasUpperCase = false;
+//                                    continue;
+//                                }
+//                            }
                         }
                         if (!waitingUpperCaseLetter) {
                             splitted.add(newWord.toLowerCase());

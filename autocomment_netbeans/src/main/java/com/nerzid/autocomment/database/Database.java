@@ -15,6 +15,7 @@
  */
 package com.nerzid.autocomment.database;
 
+import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.io.FilePicker;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.javalite.activejdbc.Base;
 
 /**
@@ -37,14 +39,29 @@ public class Database {
     // IMPORTANT: this path has to change if your db isn't in that path.
     public static String DB_FILE_PATH = "C:/sqlite/db/" + DB_FILE_NAME;
 
+    public static boolean isSet = false;
+
     public static Connection conn;
 
     public static boolean isOpen() {
         return conn != null;
     }
 
-    public static void open() {
-        DB_FILE_PATH = FilePicker.chooseDBFile().getPath();
+    public static void openIfNot() throws FileNotSelected {
+        if (!isOpen()) {
+            open();
+        }
+    }
+
+    public static void open() throws FileNotSelected {
+        if (!isSet) {
+            if (chooseDB()) {
+                Base.open("org.sqlite.JDBC", "jdbc:sqlite:" + DB_FILE_PATH, "", "");
+                conn = Base.connection();
+            } else {
+                return;
+            }
+        }
         Base.open("org.sqlite.JDBC", "jdbc:sqlite:" + DB_FILE_PATH, "", "");
         conn = Base.connection();
     }
@@ -118,7 +135,20 @@ public class Database {
         }
     }
 
-    public static void main(String[] args) {
+    public static boolean chooseDB() throws FileNotSelected {
+        JOptionPane.showMessageDialog(null, "Choose Database file with extension .db");
+        File f = FilePicker.chooseDBFile();
+        if (f == null) {
+            return false;
+        }
+        DB_FILE_PATH = f.getPath();
+        System.out.println(DB_FILE_PATH);
+        isSet = true;
+        System.out.println("Database choosen.");
+        return true;
+    }
+
+    public static void main(String[] args) throws FileNotSelected {
 
         // Here we need Database File's path in order to create it there
         DB_FILE_PATH = FilePicker.getFilePath(FilePicker.chooseDir());
@@ -128,14 +158,13 @@ public class Database {
                 DB_FILE_PATH = DB_FILE_PATH + "/" + DB_FILE_NAME;
                 File db_file = new File(DB_FILE_PATH);
                 db_file.createNewFile();
-                
-                while(!db_file.exists())
-                {
+
+                while (!db_file.exists()) {
                     System.out.println("waitin for file to be created");
                 }
-                
+
                 System.out.println("File is created, continuing process...");
-                
+
                 Database.open();
                 createTablesIfNotExist();
                 System.out.println("Database was successfully created.");

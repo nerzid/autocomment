@@ -59,6 +59,8 @@ public class ParameterModel extends Model{
     public static final int COLUMN_FK_DTID_INT = 6;
     public static final int COLUMN_FK_MID_INT = 7;
     
+    public static final int COUNT_OF_COLUMNS = 7;
+    
     public static ParameterModel getParameterModelUsingMid(int mid) {
         ParameterModel pm;
         pm = (ParameterModel) ParameterModel.findFirst(

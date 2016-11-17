@@ -1,5 +1,6 @@
 package com.nerzid.autocomment.generator;
 
+import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.io.FilePicker;
 import com.nerzid.autocomment.processor.CommentGeneratorMethodProcessor;
 import com.nerzid.autocomment.processor.CtCommentProcessor;
@@ -7,6 +8,8 @@ import com.nerzid.autocomment.processor.TrainerMethodProcessor;
 import static com.nerzid.autocomment.train.Trainer.currentFileNo;
 import static com.nerzid.autocomment.train.Trainer.errorlog;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import spoon.Launcher;
 import spoon.compiler.Environment;
 import spoon.support.JavaOutputProcessor;
@@ -19,7 +22,12 @@ public class CommentGenerator {
 
 
     public static void main(String[] args) {
-        File f = FilePicker.chooseFile();
+        File f = null;
+        try {
+            f = FilePicker.chooseFile();
+        } catch (FileNotSelected ex) {
+            Logger.getLogger(CommentGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         // Will be deleted in the future
                 f.setWritable(true);

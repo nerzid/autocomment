@@ -13,15 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.nerzid.autocomment.log;
+package com.nerzid.autocomment.exception;
 
 /**
  *
  * @author nerzid
  */
-public class ErrorMessage {
-    public static final String FILE_HANDLER_NO_JAVA_FILE = "You haven't selected any files or you haven't selected files with the extension .java";
-    public static final String FILE_HANDLER_NO_DB_FILE = "You haven't selected any files or you haven't selected files with the extension .db";
-    public static final String COMMENT_GENERATOR_FILELIST_NULL_OR_EMPTY = "JAVA Source file list is empty or null. Either you haven't selected files properly or didn't use autocomment.filehandler.filepicker to select files.";
+public class FileNotSelected extends Exception {
+
+    public static final String MESSAGE_NO_DIR_SELECTED = "No folder selected.";
+    public static final String MESSAGE_NO_FILE_SELECTED = "No file selected.";
     
+    /**
+     * Creates a new instance of <code>FileNotSelected</code> without detail
+     * message.
+     */
+    public FileNotSelected() {
+        
+    }
+    
+    public FileNotSelected(String msg){
+        super(msg);
+    }
+
 }

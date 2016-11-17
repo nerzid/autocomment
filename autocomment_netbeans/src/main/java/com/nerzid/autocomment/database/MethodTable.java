@@ -21,6 +21,7 @@ import static com.nerzid.autocomment.database.MethodModel.COLUMN_POSTAG;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_SIGNATURE;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_IDENTIFIER;
 import static com.nerzid.autocomment.database.MethodModel.COLUMN_SPLITTED_IDENTIFIER;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +36,8 @@ public class MethodTable {
     private String splittedIdentifier;
     private String lemma;
     private String postag;
+    // list param
+    private List<ParameterTable> params_list;
     private int FK_dtid;
 
     public MethodTable() {
@@ -50,6 +53,7 @@ public class MethodTable {
         this.splittedIdentifier = text;
         this.lemma = lemma;
         this.postag = postag;
+        params_list = new ArrayList<>();
     }
 
     /**
@@ -106,6 +110,15 @@ public class MethodTable {
         }
 
     }
+    
+    public static String getSignatureFromDB(String identifier) throws NullPointerException{
+        return MethodModel.findFirst(MethodModel.COLUMN_SIGNATURE + " = ?", 
+                identifier).get(COLUMN_SIGNATURE).toString();
+    }
+    
+//    public static String getSignatureFromDB(String identifier, List<ParameterTable> params_list) throws NullPointerException{
+//        
+//    }
     
     public static List<MethodModel> getAll(){
         List<MethodModel> mm_list = null;

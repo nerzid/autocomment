@@ -18,6 +18,7 @@ package com.nerzid.autocomment.template;
 import com.nerzid.autocomment.database.Database;
 import com.nerzid.autocomment.database.MethodModel;
 import com.nerzid.autocomment.database.MethodTable;
+import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.io.FilePicker;
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +37,8 @@ import org.apache.commons.io.FileUtils;
  */
 public class Test {
 
-    public static void main(String[] args) throws IOException {
-        Database.open();
+    public static void main(String[] args) throws IOException, FileNotSelected {
+        Database.openIfNot();
         work();
         Database.close();
     }
@@ -72,7 +73,7 @@ public class Test {
 
     }
 
-    private static void work() throws IOException {
+    private static void work() throws IOException, FileNotSelected {
         List<MethodModel> m_list = MethodTable.getAll();
         JOptionPane.showMessageDialog(null, "Choose path for valid files.");
         String path = FilePicker.getFilePath(FilePicker.chooseDir());

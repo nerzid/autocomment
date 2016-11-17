@@ -22,10 +22,12 @@ import com.nerzid.autocomment.database.MethodTable;
 import com.nerzid.autocomment.database.MethodModel;
 import com.nerzid.autocomment.database.ParameterTable;
 import com.nerzid.autocomment.database.ParameterModel;
+import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.log.ErrorLog;
 import com.nerzid.autocomment.log.ErrorMessage;
 import com.nerzid.autocomment.io.FilePicker;
 import com.nerzid.autocomment.generator.CommentGenerator;
+import com.nerzid.autocomment.gui.MainFrame;
 import com.nerzid.autocomment.processor.CtCommentProcessor;
 import com.nerzid.autocomment.processor.TrainerMethodProcessor;
 import com.nerzid.autocomment.nlp.NLPToolkit;
@@ -49,10 +51,11 @@ public class Trainer {
     public static ErrorLog errorlog;
     public static int currentFileNo = 0;
     public static boolean trainingProcessStarted = false;
+    public static String current_training_file_name = "";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotSelected {
         errorlog = new ErrorLog("C:/users/nerzid/desktop/");
-        Database.open();
+        Database.openIfNot();
         prepareTrainingProcess();
         Database.close();
     }
@@ -93,10 +96,10 @@ public class Trainer {
     /**
      *
      */
-    private static void prepareTrainingProcess() {
-        
+    private static void prepareTrainingProcess() throws FileNotSelected {
+
         JOptionPane.showMessageDialog(null, "Select projects to be used in training.");
-        
+
         // Choose Java Source Files via FilePicker
         //files_list = FilePicker.chooseAndGetJavaFiles();
         files_list = FilePicker.chooseDirAndGetJavaFiles();
@@ -105,6 +108,9 @@ public class Trainer {
         } else {
             trainingProcessStarted = true;
             for (File f : files_list) {
+                MainFrame.latch.countDown();
+
+                current_training_file_name = f.getName();
 
                 // Will be deleted in the future
                 f.setWritable(true);

@@ -56,6 +56,8 @@ public class MethodModel extends Model {
     public static final int COLUMN_POSTAG_INT = 6;
     public static final int COLUMN_FK_DTID_INT = 7;
     
+    public static final int COUNT_OF_COLUMNS = 7;
+    
     public static MethodModel getMethodModelUsingSignature(String signature) {
         MethodModel mm;
         mm = (MethodModel) MethodModel.findFirst(
