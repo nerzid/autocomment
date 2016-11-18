@@ -15,7 +15,6 @@
  */
 package com.nerzid.autocomment.processor;
 
-import com.nerzid.autocomment.database.ParameterTable;
 import com.nerzid.autocomment.nlp.Tokenizer;
 import com.nerzid.autocomment.train.Trainer;
 import java.util.ArrayList;
@@ -42,31 +41,24 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
 
     @Override
     public void process(CtMethod e) {
-//        String commentStr = "This javadoc is for " + e.getSimpleName();
-//        CtComment c = getFactory().Code().createComment(commentStr, CtComment.CommentType.JAVADOC);
-//        e.addComment(c);
-//        System.out.println("Method Name: " + e.getSimpleName());
-//        System.out.println("Comments: " + e.getComments());
-//        System.out.println("Body: " + e.toString());
-
         // Get method's simple name without any package extensions
         String method_name = e.getSimpleName();
         String signature = e.getSignature();
         // This part is to ignore get/set methods.
         // Checkout related issue #3 on github.com/nerzid/autocomment for further info.
-        if (!isOrdinaryGetMethod(e) && !isOrdinarySetMethod(e)) {
+        if (!isOrdinaryGetMethod(e) && !isOrdinarySetMethod(e) && !shouldBeExcluded(e)) {
             // Train database using method's name and return type
             String simplified = Tokenizer.simplifyDataType(e.getType().toString());
             String data_type = e.getType().toString();
             List<CtParameter> ctParams = e.getParameters();
             List<String> params = new ArrayList<>();
             List<String> params_data_types = new ArrayList<>();
-            for (CtParameter ctp: ctParams) {
+            for (CtParameter ctp : ctParams) {
                 params.add(ctp.getSimpleName());
                 params_data_types.add(ctp.getType().toString());
             }
             Trainer.train(signature, method_name, data_type, params, params_data_types);
-        } 
+        }
     }
 
     @Override
@@ -74,13 +66,30 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
         return true;
     }
 
+    public boolean shouldBeExcluded(CtMethod e) {
+        for (String name : Trainer.excluded_files) {
+            if (name.equals(e.getSimpleName())) {
+                Trainer.errorlog.add(new com.nerzid.autocomment.log.Error(name + "excluded"));
+                Trainer.errorlog.increaseExcludedCount();
+                return true;
+            }
+            String firstTokenIsTest = Tokenizer.split(e.getSimpleName()).get(0);
+            if (firstTokenIsTest.equalsIgnoreCase("test")) {
+                Trainer.errorlog.add(new com.nerzid.autocomment.log.Error(name + "excluded"));
+                Trainer.errorlog.increaseExcludedCount();
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Checks whether the method is an ordinary get method or not. Ordinary get
      * method means that it only returns a class field (variable), and doesn't
      * do any operation on it.
      *
-     * e.g. ordinary get method -> return count; 
-     * e.g. not ordinary get method -> return count/2;
+     * e.g. ordinary get method -> return count; e.g. not ordinary get method ->
+     * return count/2;
      *
      * @param e
      * @return True if get method is ordinary, false if not.
@@ -122,12 +131,12 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
 
     /**
      * Checks whether the method is an ordinary set method or not. Ordinary set
-     * method means that it only sets a class field (variable)'s with a new one, 
+     * method means that it only sets a class field (variable)'s with a new one,
      * and doesn't do any more operation on it.
-     * 
-     * e.g. ordinary set method -> this.value = value; or value = newValue;
-     * e.g. not ordinary set method -> this.value = value+1; or value = newValue/2;
-     * 
+     *
+     * e.g. ordinary set method -> this.value = value; or value = newValue; e.g.
+     * not ordinary set method -> this.value = value+1; or value = newValue/2;
+     *
      * @param e
      * @return True if set method is ordinary, false if not.
      */
@@ -152,16 +161,16 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
                         // e.g. panel = newPanel
                         String[] tokens = stmt.toString().split(" = ");
                         String token_var = tokens[0];
-                        
+
                         // Although when we put -> "this." before variable name
                         // It's actually like that -> "package_name.class_name.this.variable_name"
                         // But we need only the variable name so we get last string before dot.
                         token_var = Tokenizer.getLastStringBeforeDot(token_var);
                         String token_param = tokens[1];
-                        
+
                         // First token must be class variable
                         boolean isFirstTokenClassVar = false;
-                        
+
                         for (CtVariable var : class_var_list) {
                             if (var.getSimpleName().equals(token_var)) {
                                 isFirstTokenClassVar = true;

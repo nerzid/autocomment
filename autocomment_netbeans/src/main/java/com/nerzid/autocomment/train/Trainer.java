@@ -47,6 +47,8 @@ import spoon.support.JavaOutputProcessor;
  */
 public class Trainer {
 
+    public static String[] excluded_files = {"test","equals","toString", "run", "init", "main"};
+    
     public static List<File> files_list; // Java Source Files List
     public static ErrorLog errorlog;
     public static int currentFileNo = 0;
@@ -54,10 +56,13 @@ public class Trainer {
     public static String current_training_file_name = "";
 
     public static void main(String[] args) throws FileNotSelected {
-        errorlog = new ErrorLog("C:/users/nerzid/desktop/");
+        
+        JOptionPane.showMessageDialog(null, "Choose Error file path");
+        String f = FilePicker.chooseDir().getPath();
+        errorlog = new ErrorLog(f);
         Database.openIfNot();
         prepareTrainingProcess();
-        Database.close();
+        //Database.close();
     }
 
     /**

@@ -27,6 +27,7 @@ public class ErrorLog {
     private String text;
     private String f_name = "errorlog";
     private int count;
+    private int excluded_count = 0;
     private File f;
 
     public ErrorLog(String path) {
@@ -56,11 +57,16 @@ public class ErrorLog {
         count++;
     }
     
+    public void increaseExcludedCount(){
+        excluded_count++;
+    }
+    
     /**
      * Adds error count to errorlog file f
      */
     private void addCountToErrorLog(){
-        text += "Error Count = " + count;
+        text += "Error Count = " + count +"\n";
+        text += "Excluded Files Count = " + excluded_count;
     }
     
     /**

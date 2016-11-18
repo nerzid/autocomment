@@ -80,6 +80,8 @@ public class MainFrame extends javax.swing.JFrame {
         createDB_MenuItem = new javax.swing.JMenuItem();
         selectDB_MenuItem = new javax.swing.JMenuItem();
         exit_MenuItem = new javax.swing.JMenuItem();
+        help_btn = new javax.swing.JMenu();
+        about_btn = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Autocomment Tool");
@@ -291,6 +293,18 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        help_btn.setText("Help");
+
+        about_btn.setText("About");
+        about_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                about_btnActionPerformed(evt);
+            }
+        });
+        help_btn.add(about_btn);
+
+        jMenuBar1.add(help_btn);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -342,7 +356,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void selectDB_MenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDB_MenuItemActionPerformed
         try {
-            Database.chooseDB();
+            Database.openIfNot();
         } catch (FileNotSelected ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -384,6 +398,10 @@ public class MainFrame extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exit_MenuItemActionPerformed
 
+    private void about_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_about_btnActionPerformed
+        JOptionPane.showMessageDialog(null, "www.github.com/nerzid/autocomment");
+    }//GEN-LAST:event_about_btnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -417,64 +435,113 @@ public class MainFrame extends javax.swing.JFrame {
     public void updateJTableData() {
         try {
             Database.openIfNot();
-        } catch (FileNotSelected ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        String search_text = search_txt.getText().replaceAll(";", "");
-
-        // Allow only SELECT Queries
-        if (!search_text.split(" ")[0].toLowerCase().equals("select")) {
-            JOptionPane.showMessageDialog(null, "Only SELECT Queries are allowed!");
-            return;
-        }
-
-        if (limit_checkbox.isSelected()) {
-            search_text += " LIMIT 1000";
-        }
-
-        List<Map> results = null;
-        try {
-            results = Base.findAll(search_text);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-            return;
-        }
-
-        String db_table_name_tmp = (search_text.toLowerCase().split("from"))[1];
-        String db_table_name = "";
-        boolean isFindFirstChar = false;
-        for (Character c : db_table_name_tmp.toCharArray()) {
-            if (!c.equals(' ')) {
-                isFindFirstChar = true;
+            String search_text = search_txt.getText().replaceAll(";", "");
+            
+            // Allow only SELECT Queries
+            if (!search_text.split(" ")[0].toLowerCase().equals("select")) {
+                JOptionPane.showMessageDialog(null, "Only SELECT Queries are allowed!");
+                return;
             }
-            if (!isFindFirstChar) {
-                continue;
-            } else {
-                db_table_name += c;
+            
+            if (limit_checkbox.isSelected()) {
+                search_text += " LIMIT 1000";
             }
-        }
-
-        String[] cols = search_text
-                .toLowerCase()
-                .replaceFirst("select", "")
-                .split("from")[0]
-                .trim()
-                .split(",");
-
-        db_table_name = db_table_name.split(" ")[0];
-        DefaultTableModel dtm;
-        int col_count = 0;
-        if (db_table_name.equals(MethodModel.TABLE_NAME.toLowerCase())) {
-            if (cols[0].equals("*")) {
-                col_count = MethodModel.COUNT_OF_COLUMNS;
+            
+            List<Map> results = null;
+            try {
+                results = Base.findAll(search_text);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+                return;
+            }
+            
+            String db_table_name_tmp = (search_text.toLowerCase().split("from"))[1];
+            String db_table_name = "";
+            boolean isFindFirstChar = false;
+            for (Character c : db_table_name_tmp.toCharArray()) {
+                if (!c.equals(' ')) {
+                    isFindFirstChar = true;
+                }
+                if (!isFindFirstChar) {
+                    continue;
+                } else {
+                    db_table_name += c;
+                }
+            }
+            
+            String[] cols = search_text
+                    .toLowerCase()
+                    .replaceFirst("select", "")
+                    .split("from")[0]
+                    .trim()
+                    .split(",");
+            
+            db_table_name = db_table_name.split(" ")[0];
+            DefaultTableModel dtm;
+            int col_count = 0;
+            if (db_table_name.equals(MethodModel.TABLE_NAME.toLowerCase())) {
+                if (cols[0].equals("*")) {
+                    col_count = MethodModel.COUNT_OF_COLUMNS;
+                    Object[][] data = new Object[results.size()][col_count];
+                    Object[] column_arr = {MethodModel.COLUMN_MID,
+                        MethodModel.COLUMN_SIGNATURE,
+                        MethodModel.COLUMN_IDENTIFIER,
+                        MethodModel.COLUMN_SPLITTED_IDENTIFIER,
+                        MethodModel.COLUMN_LEMMA,
+                        MethodModel.COLUMN_POSTAG,
+                        MethodModel.COLUMN_FK_DTID};
+                    for (int i = 0; i < results.size(); i++) {
+                        Map entry = results.get(i);
+                        data[i][0] = entry.get(column_arr[0]);
+                        data[i][1] = entry.get(column_arr[1]);
+                        data[i][2] = entry.get(column_arr[2]);
+                        data[i][3] = entry.get(column_arr[3]);
+                        data[i][4] = entry.get(column_arr[4]);
+                        data[i][5] = entry.get(column_arr[5]);
+                        data[i][6] = entry.get(column_arr[6]);
+                    }
+                    dtm = new DefaultTableModel(data, column_arr);
+                } else {
+                    col_count = cols.length;
+                    Object[][] data = new Object[results.size()][col_count];
+                    Object[] column_arr = cols;
+                    for (int i = 0; i < results.size(); i++) {
+                        Map entry = results.get(i);
+                        for (int j = 0; j < column_arr.length; j++) {
+                            data[i][j] = entry.get(column_arr[j].toString().trim());
+                        }
+                    }
+                    dtm = new DefaultTableModel(data, column_arr);
+                }
+                
+                query_Table.setModel(dtm);
+            } else if (db_table_name.equals(DataTypeModel.TABLE_NAME.toLowerCase())) {
+                col_count = DataTypeModel.COUNT_OF_COLUMNS;
                 Object[][] data = new Object[results.size()][col_count];
-                Object[] column_arr = {MethodModel.COLUMN_MID,
-                    MethodModel.COLUMN_SIGNATURE,
-                    MethodModel.COLUMN_IDENTIFIER,
-                    MethodModel.COLUMN_SPLITTED_IDENTIFIER,
-                    MethodModel.COLUMN_LEMMA,
-                    MethodModel.COLUMN_POSTAG,
-                    MethodModel.COLUMN_FK_DTID};
+                Object[] column_arr = {DataTypeModel.COLUMN_DTID,
+                    DataTypeModel.COLUMN_IDENTIFIER,
+                    DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER,
+                    DataTypeModel.COLUMN_LEMMA,
+                    DataTypeModel.COLUMN_POSTAG};
+                for (int i = 0; i < results.size(); i++) {
+                    Map entry = results.get(i);
+                    data[i][0] = entry.get(column_arr[0]);
+                    data[i][1] = entry.get(column_arr[1]);
+                    data[i][2] = entry.get(column_arr[2]);
+                    data[i][3] = entry.get(column_arr[3]);
+                    data[i][4] = entry.get(column_arr[4]);
+                }
+                dtm = new DefaultTableModel(data, column_arr);
+                query_Table.setModel(dtm);
+            } else if (db_table_name.equals(ParameterModel.TABLE_NAME.toLowerCase())) {
+                col_count = ParameterModel.COUNT_OF_COLUMNS;
+                Object[][] data = new Object[results.size()][col_count];
+                Object[] column_arr = {ParameterModel.COLUMN_PID,
+                    ParameterModel.COLUMN_IDENTIFIER,
+                    ParameterModel.COLUMN_SPLITTED_IDENTIFIER,
+                    ParameterModel.COLUMN_LEMMA,
+                    ParameterModel.COLUMN_POSTAG,
+                    ParameterModel.COLUMN_FK_DTID};
                 for (int i = 0; i < results.size(); i++) {
                     Map entry = results.get(i);
                     data[i][0] = entry.get(column_arr[0]);
@@ -483,64 +550,15 @@ public class MainFrame extends javax.swing.JFrame {
                     data[i][3] = entry.get(column_arr[3]);
                     data[i][4] = entry.get(column_arr[4]);
                     data[i][5] = entry.get(column_arr[5]);
-                    data[i][6] = entry.get(column_arr[6]);
                 }
+                
                 dtm = new DefaultTableModel(data, column_arr);
+                query_Table.setModel(dtm);
             } else {
-                col_count = cols.length;
-                Object[][] data = new Object[results.size()][col_count];
-                Object[] column_arr = cols;
-                for (int i = 0; i < results.size(); i++) {
-                    Map entry = results.get(i);
-                    for (int j = 0; j < column_arr.length; j++) {
-                        data[i][j] = entry.get(column_arr[j].toString().trim());
-                    }
-                }
-                dtm = new DefaultTableModel(data, column_arr);
+                System.out.println("Table name '" + db_table_name + "' not found in database");
             }
-
-            query_Table.setModel(dtm);
-        } else if (db_table_name.equals(DataTypeModel.TABLE_NAME.toLowerCase())) {
-            col_count = DataTypeModel.COUNT_OF_COLUMNS;
-            Object[][] data = new Object[results.size()][col_count];
-            Object[] column_arr = {DataTypeModel.COLUMN_DTID,
-                DataTypeModel.COLUMN_IDENTIFIER,
-                DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER,
-                DataTypeModel.COLUMN_LEMMA,
-                DataTypeModel.COLUMN_POSTAG};
-            for (int i = 0; i < results.size(); i++) {
-                Map entry = results.get(i);
-                data[i][0] = entry.get(column_arr[0]);
-                data[i][1] = entry.get(column_arr[1]);
-                data[i][2] = entry.get(column_arr[2]);
-                data[i][3] = entry.get(column_arr[3]);
-                data[i][4] = entry.get(column_arr[4]);
-            }
-            dtm = new DefaultTableModel(data, column_arr);
-            query_Table.setModel(dtm);
-        } else if (db_table_name.equals(ParameterModel.TABLE_NAME.toLowerCase())) {
-            col_count = ParameterModel.COUNT_OF_COLUMNS;
-            Object[][] data = new Object[results.size()][col_count];
-            Object[] column_arr = {ParameterModel.COLUMN_PID,
-                ParameterModel.COLUMN_IDENTIFIER,
-                ParameterModel.COLUMN_SPLITTED_IDENTIFIER,
-                ParameterModel.COLUMN_LEMMA,
-                ParameterModel.COLUMN_POSTAG,
-                ParameterModel.COLUMN_FK_DTID};
-            for (int i = 0; i < results.size(); i++) {
-                Map entry = results.get(i);
-                data[i][0] = entry.get(column_arr[0]);
-                data[i][1] = entry.get(column_arr[1]);
-                data[i][2] = entry.get(column_arr[2]);
-                data[i][3] = entry.get(column_arr[3]);
-                data[i][4] = entry.get(column_arr[4]);
-                data[i][5] = entry.get(column_arr[5]);
-            }
-
-            dtm = new DefaultTableModel(data, column_arr);
-            query_Table.setModel(dtm);
-        } else {
-            System.out.println("Table name '" + db_table_name + "' not found in database");
+        } catch (FileNotSelected ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE,null, ex);
         }
     }
 
@@ -572,8 +590,10 @@ public class MainFrame extends javax.swing.JFrame {
     private Thread thread;
     private Thread thread2;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem about_btn;
     private javax.swing.JMenuItem createDB_MenuItem;
     private javax.swing.JMenuItem exit_MenuItem;
+    private javax.swing.JMenu help_btn;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;

@@ -53,21 +53,30 @@ public class Database {
         }
     }
 
+    /**
+     * 
+     * @throws FileNotSelected
+     * @deprecated Use openIfNot() instead
+     */
+    @Deprecated
     public static void open() throws FileNotSelected {
         if (!isSet) {
             if (chooseDB()) {
                 Base.open("org.sqlite.JDBC", "jdbc:sqlite:" + DB_FILE_PATH, "", "");
                 conn = Base.connection();
-            } else {
-                return;
-            }
+                isSet = true;
+            } 
+            return;
         }
         Base.open("org.sqlite.JDBC", "jdbc:sqlite:" + DB_FILE_PATH, "", "");
         conn = Base.connection();
+        isSet = true;
     }
 
     public static void close() {
         Base.close();
+        isSet = false;
+        conn = null;
     }
 
     public static void createTablesIfNotExist() throws SQLException {
@@ -135,6 +144,13 @@ public class Database {
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws FileNotSelected
+     * @deprecated Use openIfNot instead
+     */
+    @Deprecated
     public static boolean chooseDB() throws FileNotSelected {
         JOptionPane.showMessageDialog(null, "Choose Database file with extension .db");
         File f = FilePicker.chooseDBFile();
@@ -143,8 +159,8 @@ public class Database {
         }
         DB_FILE_PATH = f.getPath();
         System.out.println(DB_FILE_PATH);
-        isSet = true;
         System.out.println("Database choosen.");
+        isSet = true;
         return true;
     }
 
@@ -165,7 +181,7 @@ public class Database {
 
                 System.out.println("File is created, continuing process...");
 
-                Database.open();
+                Database.openIfNot();
                 createTablesIfNotExist();
                 System.out.println("Database was successfully created.");
             } catch (SQLException ex) {
