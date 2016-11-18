@@ -19,6 +19,8 @@ import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_IDENTIFIER;
 import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_LEMMA;
 import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_POSTAG;
 import static com.nerzid.autocomment.database.DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -91,6 +93,30 @@ public class DataTypeTable {
 
     }
 
+    /**
+     * Gets all data type's identifiers
+     *
+     * @param param_models
+     * @return List of identifiers as string
+     */
+    public static List<String> getAll(List<ParameterModel> param_models) {
+        List<String> dtm = new ArrayList<>();
+
+        for (ParameterModel pm : param_models) {
+
+            int dtid = pm.getInteger(ParameterModel.COLUMN_FK_DTID);
+
+            String data_type = (String) DataTypeModel
+                    .findFirst(DataTypeModel.COLUMN_DTID + " = ?", dtid)
+                    .get(DataTypeModel.COLUMN_IDENTIFIER);
+            if (data_type != null) {
+                dtm.add(data_type);
+            }
+
+        }
+        return dtm;
+    }
+
     public String addSimplifiedIdentifier(String si) {
         return simplifiedIdentifier += si + " ";
     }
@@ -98,11 +124,11 @@ public class DataTypeTable {
     public String addLastSimplifiedIdentifier(String si) {
         return simplifiedIdentifier += si;
     }
-    
+
     public String addLemma(String l) {
         return lemma += l + " ";
     }
-    
+
     public String addLastLemma(String l) {
         return lemma += l;
     }
@@ -110,8 +136,8 @@ public class DataTypeTable {
     public String addPostag(String p) {
         return postag += p + " ";
     }
-    
-    public String addLastPostag(String p){
+
+    public String addLastPostag(String p) {
         return postag += p;
     }
 

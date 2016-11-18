@@ -62,22 +62,10 @@ public class MethodTable {
      * @param m
      * @return True if successfully inserted into database false if not.
      */
-    public static MethodModel insertOrGet(MethodTable m) {
+    public static boolean insert(MethodTable m) {
         MethodModel mm = null;
         try {
-            mm = MethodModel.findFirst(
-                    MethodModel.COLUMN_SIGNATURE + " = ? AND "
-                    + MethodModel.COLUMN_IDENTIFIER + " = ? AND "
-                    + MethodModel.COLUMN_SPLITTED_IDENTIFIER + " = ? AND "
-                    + MethodModel.COLUMN_LEMMA + " = ? AND "
-                    + MethodModel.COLUMN_POSTAG + " = ? AND "
-                    + MethodModel.COLUMN_FK_DTID + " = ?",
-                    m.getSignature(),
-                    m.getIdentifier(),
-                    m.getSplittedIdentifier(),
-                    m.getLemma(),
-                    m.getPostag(),
-                    m.getFK_dtid());
+            mm = findBySignature(m.getSignature());
             if (mm == null) {
                 mm = new MethodModel().set(
                         COLUMN_SIGNATURE, m.getSignature(),
@@ -87,50 +75,86 @@ public class MethodTable {
                         COLUMN_POSTAG, m.getPostag(),
                         COLUMN_FK_DTID, m.getFK_dtid());
                 if (mm.saveIt()) {
-                    return mm;
-                } else {
-                    return null;
+                    return true;
                 }
-            } else {
-                return MethodModel.getMethodModelUsingSignature(m.getSignature());
             }
         } catch (NullPointerException e) {
-            mm = new MethodModel().set(
-                    COLUMN_SIGNATURE, m.getSignature(),
-                    COLUMN_IDENTIFIER, m.getIdentifier(),
-                    COLUMN_SPLITTED_IDENTIFIER, m.getSplittedIdentifier(),
-                    COLUMN_LEMMA, m.getLemma(),
-                    COLUMN_POSTAG, m.getPostag(),
-                    COLUMN_FK_DTID, m.getFK_dtid());
-            if (mm.saveIt()) {
-                return mm;
-            } else {
-                return null;
+            System.out.println("Null : " + e.getMessage());
+        }
+        return false;
+    }
+
+    public static MethodModel findBySignature(String signature) {
+        MethodModel mm = null;
+        mm = MethodModel.findFirst(MethodModel.COLUMN_SIGNATURE + " = ?", signature);
+        return mm;
+    }
+
+    /**
+     *
+     * @param identifier
+     * @return
+     * @throws NullPointerException
+     * @deprecated Don't use this, it won't be unique.
+     */
+    @Deprecated
+    public static String getSignatureFromDB(String identifier) throws NullPointerException {
+        return MethodModel.findFirst(MethodModel.COLUMN_SIGNATURE + " = ?",
+                identifier).get(COLUMN_SIGNATURE).toString();
+    }
+
+    public static String getSignatureFromDB(String identifier, List<String> data_types) throws NullPointerException {
+        List<MethodModel> mm_list = MethodTable.getAll("find");
+
+        for (MethodModel m : mm_list) {
+            System.out.println(m.get(MethodModel.COLUMN_SIGNATURE));
+
+            int mid = m.getInteger(MethodModel.COLUMN_MID);
+
+            List<ParameterModel> params_models = ParameterTable.getAll(mid);
+            if (params_models.size() != data_types.size()) {
+                continue;
+            }
+
+            List<String> data_types_fromDB = DataTypeTable.getAll(params_models);
+            if (data_types.size() != data_types_fromDB.size()) {
+                continue;
+            }
+
+            boolean isSame = true;
+            for (int i = 0; i < data_types.size(); i++) {
+                if (!data_types.get(i).equals(data_types_fromDB.get(i))) {
+                    isSame = false;
+                    break;
+                }
+            }
+            if (isSame) {
+                return m.getString(MethodModel.COLUMN_SIGNATURE);
+
             }
         }
 
+        return null;
     }
-    
-    public static String getSignatureFromDB(String identifier) throws NullPointerException{
-        return MethodModel.findFirst(MethodModel.COLUMN_SIGNATURE + " = ?", 
-                identifier).get(COLUMN_SIGNATURE).toString();
-    }
-    
-//    public static String getSignatureFromDB(String identifier, List<ParameterTable> params_list) throws NullPointerException{
-//        
-//    }
-    
-    public static List<MethodModel> getAll(){
+
+    public static List<MethodModel> getAll() {
         List<MethodModel> mm_list = null;
-        
+
         mm_list = MethodModel.findAll();
+        return mm_list;
+    }
+
+    public static List<MethodModel> getAll(String identifier) {
+        List<MethodModel> mm_list = null;
+
+        mm_list = MethodModel.find(MethodModel.COLUMN_IDENTIFIER + " = ?", identifier);
         return mm_list;
     }
 
     public String addSplittedIdentifier(String si) {
         return splittedIdentifier += si + " ";
     }
-    
+
     public String addLastSplittedIdentifier(String si) {
         return splittedIdentifier += si;
     }
@@ -138,7 +162,7 @@ public class MethodTable {
     public String addLemma(String l) {
         return lemma += l + " ";
     }
-    
+
     public String addLastLemma(String l) {
         return lemma += l;
     }
@@ -146,8 +170,8 @@ public class MethodTable {
     public String addPostag(String p) {
         return postag += p + " ";
     }
-    
-    public String addLastPostag(String p){
+
+    public String addLastPostag(String p) {
         return postag += p;
     }
 

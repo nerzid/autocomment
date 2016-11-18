@@ -21,6 +21,7 @@ import static com.nerzid.autocomment.database.ParameterModel.COLUMN_IDENTIFIER;
 import static com.nerzid.autocomment.database.ParameterModel.COLUMN_LEMMA;
 import static com.nerzid.autocomment.database.ParameterModel.COLUMN_POSTAG;
 import static com.nerzid.autocomment.database.ParameterModel.COLUMN_SPLITTED_IDENTIFIER;
+import java.util.List;
 
 /**
  *
@@ -63,6 +64,13 @@ public class ParameterTable {
         pm.saveIt();
  
         return pm;
+    }
+    
+    public static List<ParameterModel> getAll(int mid){
+        List<ParameterModel> params = null;
+        
+        params = ParameterModel.find(ParameterModel.COLUMN_FK_MID + " = ?", mid);
+        return params;
     }
     
     public String addSplittedIdentifier(String si) {

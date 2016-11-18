@@ -47,8 +47,8 @@ import spoon.support.JavaOutputProcessor;
  */
 public class Trainer {
 
-    public static String[] excluded_files = {"test","equals","toString", "run", "init", "main"};
-    
+    public static String[] excluded_files = {"test", "equals", "toString", "run", "init", "main"};
+
     public static List<File> files_list; // Java Source Files List
     public static ErrorLog errorlog;
     public static int currentFileNo = 0;
@@ -56,7 +56,7 @@ public class Trainer {
     public static String current_training_file_name = "";
 
     public static void main(String[] args) throws FileNotSelected {
-        
+
         JOptionPane.showMessageDialog(null, "Choose Error file path");
         String f = FilePicker.chooseDir().getPath();
         errorlog = new ErrorLog(f);
@@ -81,20 +81,29 @@ public class Trainer {
 
         data_type.setDtid((int) dtm.getId());
         MethodTable m = NLPToolkit.getMethodWithProperties(signature, method_name, data_type.getDtid());
-        MethodModel mm = (MethodModel) MethodTable.insertOrGet(m);
+        MethodModel mm = null;
 
-        m.setMid((int) mm.getId());
-        for (int i = 0; i < params.size(); i++) {
-            int dtid;
+        if (MethodTable.insert(m)) {
+            System.out.println("Insertion Success");
+            mm = (MethodModel) MethodTable.findBySignature(signature);
+        }
 
-            data_type = NLPToolkit.getDataTypeWithProperties(params_data_types.get(i));
-            dtm = DataTypeTable.insertOrGet(data_type);
-            dtid = ((int) dtm.getId());
-            data_type.setDtid(dtid);
+        if (mm != null) {
+            m.setMid((int) mm.getId());
+            for (int i = 0; i < params.size(); i++) {
+                int dtid;
 
-            ParameterTable p = NLPToolkit.getParameterWithProperties(params.get(i), data_type.getDtid());
-            p.setFK_mid(m.getMid());
-            ParameterModel pm = (ParameterModel) ParameterTable.insert(p);
+                data_type = NLPToolkit.getDataTypeWithProperties(params_data_types.get(i));
+                dtm = DataTypeTable.insertOrGet(data_type);
+                dtid = ((int) dtm.getId());
+                data_type.setDtid(dtid);
+
+                ParameterTable p = NLPToolkit.getParameterWithProperties(params.get(i), data_type.getDtid());
+                p.setFK_mid(m.getMid());
+                ParameterModel pm = (ParameterModel) ParameterTable.insert(p);
+            }
+        } else {
+            throw new NullPointerException();
         }
     }
 

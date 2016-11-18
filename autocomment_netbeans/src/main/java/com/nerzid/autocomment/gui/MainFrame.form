@@ -115,10 +115,8 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="startTraining_btn" alignment="1" max="32767" attributes="0"/>
-                          <Group type="103" alignment="2" groupAlignment="2" attributes="0">
-                              <Component id="jProgressBar1" alignment="2" pref="718" max="32767" attributes="0"/>
-                              <Component id="status_Panel" alignment="2" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jProgressBar1" alignment="2" pref="718" max="32767" attributes="0"/>
+                          <Component id="status_Panel" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>

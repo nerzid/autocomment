@@ -75,7 +75,7 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
             }
             String firstTokenIsTest = Tokenizer.split(e.getSimpleName()).get(0);
             if (firstTokenIsTest.equalsIgnoreCase("test")) {
-                Trainer.errorlog.add(new com.nerzid.autocomment.log.Error(name + "excluded"));
+                Trainer.errorlog.add(new com.nerzid.autocomment.log.Error(name + " excluded"));
                 Trainer.errorlog.increaseExcludedCount();
                 return true;
             }

@@ -7,6 +7,7 @@ import com.nerzid.autocomment.database.ParameterModel;
 import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.train.Trainer;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -45,6 +46,7 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
         status_Panel.setVisible(false);
+        previous_queries = new ArrayList<>();
     }
 
     /**
@@ -363,9 +365,20 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_search_btnKeyReleased
 
     private void search_txtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_txtKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            updateJTableData();
+        switch (evt.getKeyCode()) {
+            case KeyEvent.VK_ENTER:
+                updateJTableData();
+                break;
+            case KeyEvent.VK_UP:
+                goToPreviousQuery();
+                break;
+            case KeyEvent.VK_DOWN:
+                goToNextQuery();
+                break;
+            default:
+                break;
         }
+
     }//GEN-LAST:event_search_txtKeyReleased
 
     private void createDB_MenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createDB_MenuItemActionPerformed
@@ -422,6 +435,8 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             Database.openIfNot();
             String search_text = search_txt.getText().replaceAll(";", "");
+
+            updatePreviosQueryList(search_text);
 
             // Allow only SELECT Queries
             if (!search_text.split(" ")[0].toLowerCase().equals("select")) {
@@ -599,8 +614,28 @@ public class MainFrame extends javax.swing.JFrame {
         thread.start();
     }
 
-    public static CountDownLatch latch = new CountDownLatch(1);
+    public void goToPreviousQuery() {
+        if (previous_query_index - 1 >= 0) {
+            previous_query_index--;
+            search_txt.setText(previous_queries.get(previous_query_index));
+        }
+    }
 
+    public void goToNextQuery() {
+        if (previous_query_index + 1 < previous_queries.size()) {
+            previous_query_index++;
+            search_txt.setText(previous_queries.get(previous_query_index));
+        }
+    }
+
+    public void updatePreviosQueryList(String q) {
+        previous_queries.add(q);
+        previous_query_index = previous_queries.size() - 1;
+    }
+
+    public static CountDownLatch latch = new CountDownLatch(1);
+    public static List<String> previous_queries;
+    public static int previous_query_index = 0;
     private Thread thread;
     private Thread thread2;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -627,4 +662,5 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel status_progress_lbl;
     private javax.swing.JLabel trainingFile_lbl;
     // End of variables declaration//GEN-END:variables
+
 }
