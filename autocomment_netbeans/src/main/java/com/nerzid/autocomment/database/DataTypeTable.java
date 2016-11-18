@@ -95,12 +95,24 @@ public class DataTypeTable {
         return simplifiedIdentifier += si + " ";
     }
 
+    public String addLastSimplifiedIdentifier(String si) {
+        return simplifiedIdentifier += si;
+    }
+    
     public String addLemma(String l) {
         return lemma += l + " ";
+    }
+    
+    public String addLastLemma(String l) {
+        return lemma += l;
     }
 
     public String addPostag(String p) {
         return postag += p + " ";
+    }
+    
+    public String addLastPostag(String p){
+        return postag += p;
     }
 
     public int getDtid() {

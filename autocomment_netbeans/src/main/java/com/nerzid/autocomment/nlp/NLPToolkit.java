@@ -46,11 +46,16 @@ public class NLPToolkit {
         List<String> postags_list = sent.posTags();
 
         MethodTable m = new MethodTable();
-        for (int i = 1; i < lemmas_list.size(); i++) {
+        for (int i = 1; i < lemmas_list.size() - 1; i++) {
             m.addSplittedIdentifier(identifiers_list[i]);
             m.addLemma(lemmas_list.get(i));
             m.addPostag(postags_list.get(i));
         }
+
+        m.addLastSplittedIdentifier(identifiers_list[lemmas_list.size()-1]);
+        m.addLastLemma(lemmas_list.get(lemmas_list.size()-1));
+        m.addLastPostag(postags_list.get(lemmas_list.size()-1));
+        
         m.setSignature(signature);
         m.setIdentifier(method_name);
         m.setFK_dtid(dtid);
@@ -68,11 +73,16 @@ public class NLPToolkit {
         List<String> postags_list = sent.posTags();
 
         ParameterTable p = new ParameterTable();
-        for (int i = 1; i < lemmas_list.size(); i++) {
+        for (int i = 1; i < lemmas_list.size() - 1; i++) {
             p.addSplittedIdentifier(identifiers_list[i]);
             p.addLemma(lemmas_list.get(i));
             p.addPostag(postags_list.get(i));
         }
+        
+        p.addLastSplittedIdentifier(identifiers_list[lemmas_list.size()-1]);
+        p.addLastLemma(lemmas_list.get(lemmas_list.size()-1));
+        p.addLastPostag(postags_list.get(lemmas_list.size()-1));
+        
         p.setIdentifier(param_name);
         p.setFK_dtid(dtid);
 
@@ -89,11 +99,16 @@ public class NLPToolkit {
         List<String> postags_list = sent.posTags();
 
         DataTypeTable data_type = new DataTypeTable();
-        for (int i = 1; i < lemmas_list.size(); i++) {
+        for (int i = 1; i < lemmas_list.size() - 1; i++) {
             data_type.addSimplifiedIdentifier(identifiers_list[i]);
             data_type.addLemma(lemmas_list.get(i));
             data_type.addPostag(postags_list.get(i));
         }
+        
+        data_type.addLastSimplifiedIdentifier(identifiers_list[lemmas_list.size()-1]);
+        data_type.addLastLemma(lemmas_list.get(lemmas_list.size()-1));
+        data_type.addLastPostag(postags_list.get(lemmas_list.size()-1));
+        
         data_type.setIdentifier(original);
 
         return data_type;

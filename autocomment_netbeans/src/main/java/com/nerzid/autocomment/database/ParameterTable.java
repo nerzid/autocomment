@@ -68,13 +68,25 @@ public class ParameterTable {
     public String addSplittedIdentifier(String si) {
         return splittedIdentifier += si + " ";
     }
+    
+    public String addLastSplittedIdentifier(String si) {
+        return splittedIdentifier += si;
+    }
 
     public String addLemma(String l) {
         return lemma += l + " ";
     }
+    
+    public String addLastLemma(String l) {
+        return lemma += l;
+    }
 
     public String addPostag(String p) {
         return postag += p + " ";
+    }
+    
+    public String addLastPostag(String p){
+        return postag += p;
     }
 
     public int getPid() {

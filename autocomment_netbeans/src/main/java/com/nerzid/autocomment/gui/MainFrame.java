@@ -60,7 +60,6 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         startTraining_btn = new javax.swing.JButton();
         jProgressBar1 = new javax.swing.JProgressBar();
-        jPanel3 = new javax.swing.JPanel();
         status_Panel = new javax.swing.JPanel();
         status_lbl = new javax.swing.JLabel();
         status_progress_lbl = new javax.swing.JLabel();
@@ -96,17 +95,6 @@ public class MainFrame extends javax.swing.JFrame {
                 jProgressBar1PropertyChange(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 201, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 101, Short.MAX_VALUE)
-        );
 
         status_lbl.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         status_lbl.setText("Status:");
@@ -153,12 +141,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(startTraining_btn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.CENTER, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(status_Panel, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.CENTER, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
+                        .addComponent(status_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -166,14 +151,9 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(83, 83, 83)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(status_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addGap(62, 62, 62)
+                .addComponent(status_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
                 .addComponent(startTraining_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
@@ -442,17 +422,17 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             Database.openIfNot();
             String search_text = search_txt.getText().replaceAll(";", "");
-            
+
             // Allow only SELECT Queries
             if (!search_text.split(" ")[0].toLowerCase().equals("select")) {
                 JOptionPane.showMessageDialog(null, "Only SELECT Queries are allowed!");
                 return;
             }
-            
+
             if (limit_checkbox.isSelected()) {
                 search_text += " LIMIT 1000";
             }
-            
+
             List<Map> results = null;
             try {
                 results = Base.findAll(search_text);
@@ -460,7 +440,7 @@ public class MainFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e.getMessage());
                 return;
             }
-            
+
             String db_table_name_tmp = (search_text.toLowerCase().split("from"))[1];
             String db_table_name = "";
             boolean isFindFirstChar = false;
@@ -474,14 +454,14 @@ public class MainFrame extends javax.swing.JFrame {
                     db_table_name += c;
                 }
             }
-            
+
             String[] cols = search_text
                     .toLowerCase()
                     .replaceFirst("select", "")
                     .split("from")[0]
                     .trim()
                     .split(",");
-            
+
             db_table_name = db_table_name.split(" ")[0];
             DefaultTableModel dtm;
             int col_count = 0;
@@ -519,54 +499,80 @@ public class MainFrame extends javax.swing.JFrame {
                     }
                     dtm = new DefaultTableModel(data, column_arr);
                 }
-                
+
                 query_Table.setModel(dtm);
             } else if (db_table_name.equals(DataTypeModel.TABLE_NAME.toLowerCase())) {
-                col_count = DataTypeModel.COUNT_OF_COLUMNS;
-                Object[][] data = new Object[results.size()][col_count];
-                Object[] column_arr = {DataTypeModel.COLUMN_DTID,
-                    DataTypeModel.COLUMN_IDENTIFIER,
-                    DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER,
-                    DataTypeModel.COLUMN_LEMMA,
-                    DataTypeModel.COLUMN_POSTAG};
-                for (int i = 0; i < results.size(); i++) {
-                    Map entry = results.get(i);
-                    data[i][0] = entry.get(column_arr[0]);
-                    data[i][1] = entry.get(column_arr[1]);
-                    data[i][2] = entry.get(column_arr[2]);
-                    data[i][3] = entry.get(column_arr[3]);
-                    data[i][4] = entry.get(column_arr[4]);
+                if (cols[0].equals("*")) {
+                    col_count = DataTypeModel.COUNT_OF_COLUMNS;
+                    Object[][] data = new Object[results.size()][col_count];
+                    Object[] column_arr = {DataTypeModel.COLUMN_DTID,
+                        DataTypeModel.COLUMN_IDENTIFIER,
+                        DataTypeModel.COLUMN_SIMPLIFIED_IDENTIFIER,
+                        DataTypeModel.COLUMN_LEMMA,
+                        DataTypeModel.COLUMN_POSTAG};
+                    for (int i = 0; i < results.size(); i++) {
+                        Map entry = results.get(i);
+                        data[i][0] = entry.get(column_arr[0]);
+                        data[i][1] = entry.get(column_arr[1]);
+                        data[i][2] = entry.get(column_arr[2]);
+                        data[i][3] = entry.get(column_arr[3]);
+                        data[i][4] = entry.get(column_arr[4]);
+                    }
+                    dtm = new DefaultTableModel(data, column_arr);
+                } else {
+                    col_count = cols.length;
+                    Object[][] data = new Object[results.size()][col_count];
+                    Object[] column_arr = cols;
+                    for (int i = 0; i < results.size(); i++) {
+                        Map entry = results.get(i);
+                        for (int j = 0; j < column_arr.length; j++) {
+                            data[i][j] = entry.get(column_arr[j].toString().trim());
+                        }
+                    }
+                    dtm = new DefaultTableModel(data, column_arr);
                 }
-                dtm = new DefaultTableModel(data, column_arr);
                 query_Table.setModel(dtm);
             } else if (db_table_name.equals(ParameterModel.TABLE_NAME.toLowerCase())) {
-                col_count = ParameterModel.COUNT_OF_COLUMNS;
-                Object[][] data = new Object[results.size()][col_count];
-                Object[] column_arr = {ParameterModel.COLUMN_PID,
-                    ParameterModel.COLUMN_IDENTIFIER,
-                    ParameterModel.COLUMN_SPLITTED_IDENTIFIER,
-                    ParameterModel.COLUMN_LEMMA,
-                    ParameterModel.COLUMN_POSTAG,
-                    ParameterModel.COLUMN_FK_DTID,
-                    ParameterModel.COLUMN_FK_MID};
-                for (int i = 0; i < results.size(); i++) {
-                    Map entry = results.get(i);
-                    data[i][0] = entry.get(column_arr[0]);
-                    data[i][1] = entry.get(column_arr[1]);
-                    data[i][2] = entry.get(column_arr[2]);
-                    data[i][3] = entry.get(column_arr[3]);
-                    data[i][4] = entry.get(column_arr[4]);
-                    data[i][5] = entry.get(column_arr[5]);
-                    data[i][6] = entry.get(column_arr[6]);
+                if (cols[0].equals("*")) {
+                    col_count = ParameterModel.COUNT_OF_COLUMNS;
+                    Object[][] data = new Object[results.size()][col_count];
+                    Object[] column_arr = {ParameterModel.COLUMN_PID,
+                        ParameterModel.COLUMN_IDENTIFIER,
+                        ParameterModel.COLUMN_SPLITTED_IDENTIFIER,
+                        ParameterModel.COLUMN_LEMMA,
+                        ParameterModel.COLUMN_POSTAG,
+                        ParameterModel.COLUMN_FK_DTID,
+                        ParameterModel.COLUMN_FK_MID};
+                    for (int i = 0; i < results.size(); i++) {
+                        Map entry = results.get(i);
+                        data[i][0] = entry.get(column_arr[0]);
+                        data[i][1] = entry.get(column_arr[1]);
+                        data[i][2] = entry.get(column_arr[2]);
+                        data[i][3] = entry.get(column_arr[3]);
+                        data[i][4] = entry.get(column_arr[4]);
+                        data[i][5] = entry.get(column_arr[5]);
+                        data[i][6] = entry.get(column_arr[6]);
+                    }
+
+                    dtm = new DefaultTableModel(data, column_arr);
+                } else {
+                    col_count = cols.length;
+                    Object[][] data = new Object[results.size()][col_count];
+                    Object[] column_arr = cols;
+                    for (int i = 0; i < results.size(); i++) {
+                        Map entry = results.get(i);
+                        for (int j = 0; j < column_arr.length; j++) {
+                            data[i][j] = entry.get(column_arr[j].toString().trim());
+                        }
+                    }
+                    dtm = new DefaultTableModel(data, column_arr);
                 }
-                
-                dtm = new DefaultTableModel(data, column_arr);
                 query_Table.setModel(dtm);
             } else {
                 System.out.println("Table name '" + db_table_name + "' not found in database");
             }
         } catch (FileNotSelected ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE,null, ex);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -606,7 +612,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
