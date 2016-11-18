@@ -7,15 +7,12 @@ import com.nerzid.autocomment.database.ParameterModel;
 import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.train.Trainer;
 import java.awt.event.KeyEvent;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.input.KeyCode;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -541,7 +538,8 @@ public class MainFrame extends javax.swing.JFrame {
                     ParameterModel.COLUMN_SPLITTED_IDENTIFIER,
                     ParameterModel.COLUMN_LEMMA,
                     ParameterModel.COLUMN_POSTAG,
-                    ParameterModel.COLUMN_FK_DTID};
+                    ParameterModel.COLUMN_FK_DTID,
+                    ParameterModel.COLUMN_FK_MID};
                 for (int i = 0; i < results.size(); i++) {
                     Map entry = results.get(i);
                     data[i][0] = entry.get(column_arr[0]);
@@ -550,6 +548,7 @@ public class MainFrame extends javax.swing.JFrame {
                     data[i][3] = entry.get(column_arr[3]);
                     data[i][4] = entry.get(column_arr[4]);
                     data[i][5] = entry.get(column_arr[5]);
+                    data[i][6] = entry.get(column_arr[6]);
                 }
                 
                 dtm = new DefaultTableModel(data, column_arr);
