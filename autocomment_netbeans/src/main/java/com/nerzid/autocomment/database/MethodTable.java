@@ -36,7 +36,6 @@ public class MethodTable {
     private String splittedIdentifier;
     private String lemma;
     private String postag;
-    // list param
     private List<ParameterTable> params_list;
     private int FK_dtid;
 

@@ -16,7 +16,6 @@
 package com.nerzid.autocomment.io;
 
 import com.nerzid.autocomment.exception.FileNotSelected;
-import com.nerzid.autocomment.log.ErrorMessage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;

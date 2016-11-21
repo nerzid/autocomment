@@ -85,14 +85,13 @@ public class Test {
             System.out.println("Waitin for file to be created");
         }
 
-        System.out.println("File created successfully.");;
+        System.out.println("File created successfully.");
 
         int valid_count = 0;
         int nvalid_count = 0;
 
         for (MethodModel m : m_list) {
             String s = m.getString(MethodModel.COLUMN_POSTAG);
-//            System.out.println(s);
             if (getCommentTitleType(s)) {
                 valid_count++;
                 x += s + "\n";

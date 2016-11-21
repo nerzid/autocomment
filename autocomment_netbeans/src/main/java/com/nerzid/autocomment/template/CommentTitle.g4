@@ -5,7 +5,11 @@ rule1
   : V NP PP? EOF
   ;
 NP
-  : 'NN'
+  : 'NN' ' ' NP
+  | 'NNS' ' ' NP
+  | 'NNP' ' ' NP
+  | 'NNPS' ' ' NP
+  | 'NN'
   | 'NNS'
   | 'NNP'
   | 'NNPS'
