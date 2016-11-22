@@ -84,7 +84,6 @@ public class Trainer {
         MethodModel mm = null;
 
         if (MethodTable.insert(m)) {
-            System.out.println("Insertion Success");
             mm = (MethodModel) MethodTable.findBySignature(signature);
         }
 
@@ -103,7 +102,7 @@ public class Trainer {
                 ParameterModel pm = (ParameterModel) ParameterTable.insert(p);
             }
         } else {
-            throw new NullPointerException();
+            throw new NullPointerException("Same method already exists in database.");
         }
     }
 

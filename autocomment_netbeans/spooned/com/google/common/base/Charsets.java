@@ -36,11 +36,6 @@ part of the set required to be supported by all Java platform implementations! A
 initialized here may cause unexpected delays when this class is loaded. See the Charset
 Javadocs for the list of built-in character encodings.
  */
-/* Please do not add new Charset references to this class, unless those character encodings are
-part of the set required to be supported by all Java platform implementations! Any Charsets
-initialized here may cause unexpected delays when this class is loaded. See the Charset
-Javadocs for the list of built-in character encodings.
- */
 @GwtCompatible(emulated = true)
 public final class Charsets {
     private Charsets() {

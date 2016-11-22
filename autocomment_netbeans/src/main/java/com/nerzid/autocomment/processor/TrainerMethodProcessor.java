@@ -69,7 +69,7 @@ public class TrainerMethodProcessor extends AbstractProcessor<CtMethod> {
     public boolean shouldBeExcluded(CtMethod e) {
         for (String name : Trainer.excluded_files) {
             if (name.equals(e.getSimpleName())) {
-                Trainer.errorlog.add(new com.nerzid.autocomment.log.Error(name + "excluded"));
+                Trainer.errorlog.add(new com.nerzid.autocomment.log.Error(name + " excluded"));
                 Trainer.errorlog.increaseExcludedCount();
                 return true;
             }

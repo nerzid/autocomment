@@ -28,6 +28,11 @@ import java.util.List;
  */
 public class NLPToolkit {
 
+    public static String[] mustVerbArr = {"sort", "fire", "copy", "swap", "check",
+        "process", "append", "dump", "print",
+        "println", "register", "resolve", "start",
+        "end", "visit", "fill", "search", "use", "clone"};
+
     /**
      * Gets the {@link com.nerzid.autocomment.database.MethodTable} instance.
      *
@@ -46,16 +51,23 @@ public class NLPToolkit {
         List<String> postags_list = sent.posTags();
 
         MethodTable m = new MethodTable();
-        for (int i = 1; i < lemmas_list.size() - 1; i++) {
-            m.addSplittedIdentifier(identifiers_list[i]);
-            m.addLemma(lemmas_list.get(i));
-            m.addPostag(postags_list.get(i));
+
+        if (lemmas_list.size() > 2) {
+            for (int i = 1; i < lemmas_list.size() - 1; i++) {
+                m.addSplittedIdentifier(identifiers_list[i]);
+                m.addLemma(lemmas_list.get(i));
+                if (i == 1 && doesNeedToBeConverted(identifiers_list[i])) {
+                    m.addPostag("VB");
+                } else {
+                    m.addPostag(postags_list.get(i));
+                }
+            }
         }
 
-        m.addLastSplittedIdentifier(identifiers_list[lemmas_list.size()-1]);
-        m.addLastLemma(lemmas_list.get(lemmas_list.size()-1));
-        m.addLastPostag(postags_list.get(lemmas_list.size()-1));
-        
+        m.addLastSplittedIdentifier(identifiers_list[lemmas_list.size() - 1]);
+        m.addLastLemma(lemmas_list.get(lemmas_list.size() - 1));
+        m.addLastPostag(postags_list.get(lemmas_list.size() - 1));
+
         m.setSignature(signature);
         m.setIdentifier(method_name);
         m.setFK_dtid(dtid);
@@ -73,16 +85,23 @@ public class NLPToolkit {
         List<String> postags_list = sent.posTags();
 
         ParameterTable p = new ParameterTable();
-        for (int i = 1; i < lemmas_list.size() - 1; i++) {
-            p.addSplittedIdentifier(identifiers_list[i]);
-            p.addLemma(lemmas_list.get(i));
-            p.addPostag(postags_list.get(i));
+
+        if (lemmas_list.size() > 2) {
+            for (int i = 1; i < lemmas_list.size() - 1; i++) {
+                p.addSplittedIdentifier(identifiers_list[i]);
+                p.addLemma(lemmas_list.get(i));
+                if (i == 1 && doesNeedToBeConverted(identifiers_list[i])) {
+                    p.addPostag("VB");
+                } else {
+                    p.addPostag(postags_list.get(i));
+                }
+            }
         }
-        
-        p.addLastSplittedIdentifier(identifiers_list[lemmas_list.size()-1]);
-        p.addLastLemma(lemmas_list.get(lemmas_list.size()-1));
-        p.addLastPostag(postags_list.get(lemmas_list.size()-1));
-        
+
+        p.addLastSplittedIdentifier(identifiers_list[lemmas_list.size() - 1]);
+        p.addLastLemma(lemmas_list.get(lemmas_list.size() - 1));
+        p.addLastPostag(postags_list.get(lemmas_list.size() - 1));
+
         p.setIdentifier(param_name);
         p.setFK_dtid(dtid);
 
@@ -99,19 +118,35 @@ public class NLPToolkit {
         List<String> postags_list = sent.posTags();
 
         DataTypeTable data_type = new DataTypeTable();
-        for (int i = 1; i < lemmas_list.size() - 1; i++) {
-            data_type.addSimplifiedIdentifier(identifiers_list[i]);
-            data_type.addLemma(lemmas_list.get(i));
-            data_type.addPostag(postags_list.get(i));
+
+        if (lemmas_list.size() > 2) {
+            for (int i = 1; i < lemmas_list.size() - 1; i++) {
+                data_type.addSimplifiedIdentifier(identifiers_list[i]);
+                data_type.addLemma(lemmas_list.get(i));
+                if (i == 1 && doesNeedToBeConverted(identifiers_list[i])) {
+                    data_type.addPostag("VB");
+                } else {
+                    data_type.addPostag(postags_list.get(i));
+                }
+            }
         }
-        
-        data_type.addLastSimplifiedIdentifier(identifiers_list[lemmas_list.size()-1]);
-        data_type.addLastLemma(lemmas_list.get(lemmas_list.size()-1));
-        data_type.addLastPostag(postags_list.get(lemmas_list.size()-1));
-        
+
+        data_type.addLastSimplifiedIdentifier(identifiers_list[lemmas_list.size() - 1]);
+        data_type.addLastLemma(lemmas_list.get(lemmas_list.size() - 1));
+        data_type.addLastPostag(postags_list.get(lemmas_list.size() - 1));
+
         data_type.setIdentifier(original);
 
         return data_type;
+    }
+
+    public static boolean doesNeedToBeConverted(String identifier) {
+        for (String s : mustVerbArr) {
+            if (s.equals(identifier)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void main(String[] args) {
