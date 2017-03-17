@@ -15,13 +15,10 @@
  */
 package com.nerzid.autocomment.template;
 
-import com.nerzid.autocomment.grammar.CommentTitleBaseVisitor;
-
 /**
  *
  * @author nerzid
  */
-public class PostagVisitor extends CommentTitleBaseVisitor<Object>{
-
+public class MethodCommentTemplate {
     
 }

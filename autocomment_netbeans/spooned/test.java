@@ -3,42 +3,20 @@
 // default package (CtPackage.TOP_LEVEL_PACKAGE_NAME in Spoon= unnamed package)
 
 
-import java.util.Scanner;
 
-public class test {
+public class Test {
     /**
-     * This javadoc is for main
+     * This method checks whether the given a is period or not.
      */
-    public static void main(String[] args) {
+    public boolean isPeriod(String a) {
+        return true;
     }
 
+    // public boolean isTaggedWith (Throwable throwme, Object myObj) {return true;}
     /**
-     * This javadoc is for hello
      */
-    public void hello() {
-        Scanner input = new Scanner(System.in);
-        String a = input.nextLine();
-    }
-
-    /**
-     * This javadoc is for foo
-     */
-    private int foo(int boo) {
-        return boo - 1;
-    }
-
-    /**
-     * This javadoc is for koo
-     */
-    public String koo() {
-        return "poo";
-    }
-
-    /**
-     * This javadoc is for moo
-     */
-    public void moo(boolean loo) {
-        System.out.println("Coo");
+    public boolean insert(Node newNode) {
+        return true;
     }
 }
 

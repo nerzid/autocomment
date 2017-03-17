@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -104,6 +105,7 @@ public class FilePicker {
     public static File chooseDBFile() throws FileNotSelected{
         setLookAndFeel();
         
+        JOptionPane.showMessageDialog(null, "Choose a database file with an extension of .db");
         File f = null;
         
         JFileChooser fc = new  JFileChooser();

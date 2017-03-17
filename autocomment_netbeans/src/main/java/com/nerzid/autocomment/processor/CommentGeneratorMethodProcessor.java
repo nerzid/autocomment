@@ -18,40 +18,78 @@ package com.nerzid.autocomment.processor;
 import com.nerzid.autocomment.database.MethodTable;
 import com.nerzid.autocomment.nlp.NLPToolkit;
 import com.nerzid.autocomment.template.Test;
+import java.util.ArrayList;
+import java.util.List;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtComment;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.declaration.CtParameter;
 
 /**
  *
  * @author nerzid
  */
-public class CommentGeneratorMethodProcessor extends AbstractProcessor<CtMethod>{
+public class CommentGeneratorMethodProcessor extends AbstractProcessor<CtMethod> {
 
     @Override
     public void process(CtMethod e) {
-        String commentStr = "This javadoc is for " + e.getSimpleName();
-        CtComment c = getFactory().Code().createComment(commentStr, CtComment.CommentType.JAVADOC);
-        e.addComment(c);
-        System.out.println("Method Name: " + e.getSimpleName());
-        System.out.println("Comments: " + e.getComments());
-        System.out.println("Body: " + e.toString());
 
+//        System.out.println("Method Name: " + e.getSimpleName());
+//        System.out.println("Comments: " + e.getComments());
+//        System.out.println("Body: " + e.toString());
         // Get method's simple name without any package extensions
         String method_name = e.getSimpleName();
         String signature = e.getSignature();
-        
+        String data_type = e.getType().getSimpleName();
+
         MethodTable mt = NLPToolkit.getMethodWithProperties(signature, method_name, 0);
-        
+
         String postag = mt.getPostag();
-        
+        String splitted_identifier = mt.getSplittedIdentifier();
+
         System.out.println("postag: " + postag);
+//        String template = Test.getCommentTitleType(postag);
+//        String commentStr = "This javadoc is for " + e.getSimpleName();
+        String commentStr = "This method ";
+        String[] postags = postag.split(" ");
+        String[] identifiers = splitted_identifier.split(" ");
         
-        if(Test.getCommentTitleType(postag)){
-            System.out.println("Its valid");
-            
-            
+        List<CtParameter> ctParams = e.getParameters();
+        List<String> params = new ArrayList<>();
+
+        for (CtParameter ctp : ctParams) {
+            params.add(ctp.getSimpleName());
         }
+        
+        commentStr = Test.getTemplateSentence(data_type, postag, splitted_identifier.split(" "), params);
+
+//        int ix = 0;
+//        if(!template.isEmpty()){
+//            String[] parts = template.split("\\|");
+//            
+//            int firstPart = parts[0].split(" ").length;
+//            
+//            for(int i = ix; i < firstPart; i++){
+//                commentStr += identifiers[i] + " ";
+//                ix++;
+//            }
+//            
+//            int secondPart = parts[1].split(" ").length;
+//            
+//            for(int i = ix; i < firstPart + secondPart; i++){
+//                commentStr += identifiers[i] + " ";
+//                ix++;
+//            }
+//            
+//            int thirdPart = parts[2].split(" ").length;
+//            
+//            for(int i = ix; i < firstPart+ secondPart +thirdPart; i++){
+//                commentStr += identifiers[i] + " ";
+//                ix++;
+//            }
+//        }
+        CtComment c = getFactory().Code().createComment(commentStr, CtComment.CommentType.JAVADOC);
+        e.addComment(c);
     }
-    
+
 }

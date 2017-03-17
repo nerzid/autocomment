@@ -6,6 +6,7 @@ import com.nerzid.autocomment.database.MethodModel;
 import com.nerzid.autocomment.database.ParameterModel;
 import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.train.Trainer;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,13 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import org.javalite.activejdbc.Base;
 
@@ -78,6 +83,8 @@ public class MainFrame extends javax.swing.JFrame {
         createDB_MenuItem = new javax.swing.JMenuItem();
         selectDB_MenuItem = new javax.swing.JMenuItem();
         exit_MenuItem = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         help_btn = new javax.swing.JMenu();
         about_btn = new javax.swing.JMenuItem();
 
@@ -143,9 +150,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(startTraining_btn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.CENTER, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
-                        .addComponent(status_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, 718, Short.MAX_VALUE)
+                    .addComponent(status_Panel, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -181,6 +187,7 @@ public class MainFrame extends javax.swing.JFrame {
 
             }
         ));
+        query_Table.setRowMargin(2);
         jScrollPane1.setViewportView(query_Table);
 
         search_btn.setText("SEARCH");
@@ -276,6 +283,18 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu1.add(exit_MenuItem);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Options");
+
+        jMenuItem1.setText("Font Size");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu2);
 
         help_btn.setText("Help");
 
@@ -400,6 +419,40 @@ public class MainFrame extends javax.swing.JFrame {
     private void limit_checkboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limit_checkboxActionPerformed
         updateJTableData();
     }//GEN-LAST:event_limit_checkboxActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        JOptionPane optionPane = new JOptionPane();
+        JSlider slider = new JSlider();
+        slider.setMajorTickSpacing(1);
+        slider.setMaximum(20);
+        slider.setMinimum(10);
+        
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.setPaintTrack(true);
+
+        ChangeListener changeListener = new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                JSlider theSlider = (JSlider) changeEvent.getSource();
+                if (!theSlider.getValueIsAdjusting()) {
+                    optionPane.setInputValue(theSlider.getValue());
+                    Font f = query_Table.getFont();
+                    String font_name = f.getFontName();
+                    query_Table.setFont(new Font(font_name, Font.PLAIN, theSlider.getValue()));
+                    query_Table.setRowHeight(theSlider.getValue() + 10);
+                }
+            }
+        };
+        slider.addChangeListener(changeListener);
+
+        optionPane.setMessage(new Object[]{"Select a value: ", slider});
+        optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
+        optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = optionPane.createDialog("My Slider");
+        dialog.setVisible(true);
+        System.out.println("Input: " + optionPane.getInputValue());
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -644,7 +697,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem exit_MenuItem;
     private javax.swing.JMenu help_btn;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;

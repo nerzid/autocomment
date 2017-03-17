@@ -15,20 +15,52 @@
  */
 package com.nerzid.autocomment.template;
 
+import com.nerzid.autocomment.grammar.CommentTitleParser;
+import com.nerzid.autocomment.grammar.CommentTitleBaseListener;
+
 /**
  *
  * @author nerzid
  */
-public class EvalCommentTitleListener extends CommentTitleBaseListener{
+public class EvalCommentTitleListener extends CommentTitleBaseListener {
 
-  
-    
+    private String postagSent = "";
+    private String result = "";
+
     @Override
     public void enterRule1(CommentTitleParser.Rule1Context ctx) {
         System.out.println("******");
-        System.out.println("V: " + ctx.V().getText());
-        System.out.println("NP: " + ctx.NP().getText());
-        System.out.println("PP?: " + ctx.PP().getText());
+
+        String v = ctx.V().getText();
+        String npr = ctx.NPR().getText();
+        String pp = "";
+        System.out.println("V: " + v);
+        System.out.println("NPR: " + npr);
+
+        if (ctx.PP() != null) {
+            pp = ctx.PP().getText();
+            System.out.println("PP?: " + pp);
+        }
+        postagSent = v + "|" + npr + "|" + pp;
         System.out.println("**********");
     }
+
+    @Override
+    public void enterBoolean_one_verb_rule(CommentTitleParser.Boolean_one_verb_ruleContext ctx) {
+        String v = ctx.V().getText();
+        String npr = ctx.NPR().getText();
+
+        System.out.println("V: " + v);
+        System.out.println("NPR: " + npr);
+        postagSent = v + "|" + npr;
+    }
+
+    public String getPostagSent() {
+        return postagSent;
+    }
+
+    public void setPostagSent(String postagSent) {
+        this.postagSent = postagSent;
+    }
+
 }

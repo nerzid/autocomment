@@ -86,7 +86,9 @@
                 <version>3.0.2</version>
                 <configuration>
                     <archive>
-                        <manifest>com.nerzid.autocomment.gui.MainFrame</manifest>
+                        <manifest>
+                            <mainClass>com.nerzid.autocomment.gui.MainFrame</mainClass>
+                        </manifest>
                     </archive>
                 </configuration>
             </plugin>

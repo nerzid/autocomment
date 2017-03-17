@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.commons.io.FileUtils;
 import org.javalite.activejdbc.Base;
 
 /**
@@ -54,7 +55,7 @@ public class Database {
     }
 
     /**
-     * 
+     *
      * @throws FileNotSelected
      * @deprecated Use openIfNot() instead
      */
@@ -65,7 +66,7 @@ public class Database {
                 Base.open("org.sqlite.JDBC", "jdbc:sqlite:" + DB_FILE_PATH, "", "");
                 conn = Base.connection();
                 isSet = true;
-            } 
+            }
             return;
         }
         Base.open("org.sqlite.JDBC", "jdbc:sqlite:" + DB_FILE_PATH, "", "");
@@ -144,19 +145,33 @@ public class Database {
         }
     }
 
+    private static boolean checkIfDatabaseIsInProject() {
+        return new File("../db/autocomment.db").exists();
+    }
+
     /**
-     * 
-     * @return
-     * @throws FileNotSelected
+     *
+     * @return @throws FileNotSelected
      * @deprecated Use openIfNot instead
      */
     @Deprecated
     public static boolean chooseDB() throws FileNotSelected {
-        JOptionPane.showMessageDialog(null, "Choose Database file with extension .db");
-        File f = FilePicker.chooseDBFile();
-        if (f == null) {
-            return false;
+        File f = null;
+        if (!checkIfDatabaseIsInProject()) {
+            f = FilePicker.chooseDBFile();
+            if (f == null) {
+                return false;
+            }
+        } else {
+            f = new File("../db/autocomment.db");
+            if (f == null) {
+                return false;
+            }
+            if (!f.exists()) {
+                return false;
+            }
         }
+
         DB_FILE_PATH = f.getPath();
         System.out.println(DB_FILE_PATH);
         System.out.println("Database choosen.");
