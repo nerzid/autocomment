@@ -35,6 +35,8 @@ import java.io.StringWriter;
 import org.junit.Test;
 import org.apache.commons.io.testtools.TestUtils;
 import java.io.Writer;
+import org.apache.commons.io.testtools.YellOnCloseInputStream;
+import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 
 // these are test cases for the deprecated CopyUtils
 /**
@@ -66,7 +68,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
     @Test
     public void copy_byteArrayToOutputStream() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         CopyUtils.copy(inData, out);
         Assert.assertEquals("Sizes differ", inData.length, baout.size());
         Assert.assertTrue("Content differs", Arrays.equals(inData, baout.toByteArray()));
@@ -75,7 +77,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
     @Test
     public void copy_byteArrayToWriter() throws Exception {
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new OutputStreamWriter(out, "US-ASCII");
         CopyUtils.copy(inData, writer);
         writer.flush();
@@ -97,9 +99,9 @@ public class CopyUtilsTest extends FileBasedTestCase {
     @Test
     public void testCopy_inputStreamToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final int count = CopyUtils.copy(in, out);
         Assert.assertEquals("Not all bytes were read", 0, in.available());
         Assert.assertEquals("Sizes differ", inData.length, baout.size());
@@ -112,9 +114,9 @@ public class CopyUtilsTest extends FileBasedTestCase {
     @Test
     public void copy_inputStreamToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new OutputStreamWriter(out, "US-ASCII");
         CopyUtils.copy(in, writer);
         writer.flush();
@@ -137,10 +139,10 @@ public class CopyUtilsTest extends FileBasedTestCase {
     @Test
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         CopyUtils.copy(reader, out);
         // Note: this method *does* flush. It is equivalent to:
         // OutputStreamWriter _out = new OutputStreamWriter(fout);
@@ -157,10 +159,10 @@ public class CopyUtilsTest extends FileBasedTestCase {
     @Test
     public void copy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new OutputStreamWriter(out, "US-ASCII");
         final int count = CopyUtils.copy(reader, writer);
         writer.flush();
@@ -173,7 +175,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
     public void copy_stringToOutputStream() throws Exception {
         final String str = new String(inData, "US-ASCII");
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         CopyUtils.copy(str, out);
         // Note: this method *does* flush. It is equivalent to:
         // OutputStreamWriter _out = new OutputStreamWriter(fout);
@@ -189,7 +191,7 @@ public class CopyUtilsTest extends FileBasedTestCase {
     public void copy_stringToWriter() throws Exception {
         final String str = new String(inData, "US-ASCII");
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
-        final OutputStream out = new org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream(baout, false, true);
+        final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final Writer writer = new OutputStreamWriter(out, "US-ASCII");
         CopyUtils.copy(str, writer);
         writer.flush();

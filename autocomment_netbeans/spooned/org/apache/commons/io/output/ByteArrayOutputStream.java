@@ -21,6 +21,7 @@ package org.apache.commons.io.output;
 import java.util.ArrayList;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.Charset;
+import org.apache.commons.io.input.ClosedInputStream;
 import java.util.Collections;
 import java.io.IOException;
 import org.apache.commons.io.IOUtils;
@@ -201,7 +202,7 @@ public class ByteArrayOutputStream extends OutputStream {
         int readCount = 0;
         int inBufferPos = (count) - (filledBufferSum);
         int n = in.read(currentBuffer, inBufferPos, ((currentBuffer.length) - inBufferPos));
-        while (n != (IOUtils.EOF)) {
+        while (n != (EOF)) {
             readCount += n;
             inBufferPos += n;
             count += n;

@@ -56,11 +56,11 @@ public abstract class ProxyReader extends FilterReader {
         try {
             beforeRead(1);
             final int c = in.read();
-            afterRead((c != (IOUtils.EOF) ? 1 : IOUtils.EOF));
+            afterRead((c != (EOF) ? 1 : EOF));
             return c;
         } catch (final IOException e) {
             handleIOException(e);
-            return IOUtils.EOF;
+            return EOF;
         }
     }
 
@@ -79,7 +79,7 @@ public abstract class ProxyReader extends FilterReader {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return IOUtils.EOF;
+            return EOF;
         }
     }
 
@@ -100,7 +100,7 @@ public abstract class ProxyReader extends FilterReader {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return IOUtils.EOF;
+            return EOF;
         }
     }
 
@@ -120,7 +120,7 @@ public abstract class ProxyReader extends FilterReader {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return IOUtils.EOF;
+            return EOF;
         }
     }
 

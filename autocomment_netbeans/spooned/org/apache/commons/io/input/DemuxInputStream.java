@@ -68,7 +68,7 @@ public class DemuxInputStream extends InputStream {
         if (null != input) {
             return input.read();
         } else {
-            return IOUtils.EOF;
+            return EOF;
         }
     }
 }

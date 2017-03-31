@@ -120,7 +120,7 @@ public class SwappedDataInputStream extends ProxyInputStream implements DataInpu
         while (remaining > 0) {
             final int location = (offset + length) - remaining;
             final int count = read(data, location, remaining);
-            if ((IOUtils.EOF) == count) {
+            if ((EOF) == count) {
                 throw new EOFException();
             } 
             remaining -= count;

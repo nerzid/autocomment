@@ -107,7 +107,7 @@ public class TeeInputStream extends ProxyInputStream {
     @Override
     public int read() throws IOException {
         final int ch = super.read();
-        if (ch != (IOUtils.EOF)) {
+        if (ch != (EOF)) {
             branch.write(ch);
         } 
         return ch;
@@ -143,7 +143,7 @@ public class TeeInputStream extends ProxyInputStream {
     @Override
     public int read(final byte[] bts) throws IOException {
         final int n = super.read(bts);
-        if (n != (IOUtils.EOF)) {
+        if (n != (EOF)) {
             branch.write(bts, 0, n);
         } 
         return n;

@@ -31,7 +31,6 @@ import com.nerzid.autocomment.gui.MainFrame;
 import com.nerzid.autocomment.processor.CtCommentProcessor;
 import com.nerzid.autocomment.processor.TrainerMethodProcessor;
 import com.nerzid.autocomment.nlp.NLPToolkit;
-import com.nerzid.autocomment.processor.S_UnitMethodProcessor;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

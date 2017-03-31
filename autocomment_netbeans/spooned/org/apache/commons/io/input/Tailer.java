@@ -506,7 +506,7 @@ public class Tailer implements Runnable {
         
         int num;
         boolean seenCR = false;
-        while ((getRun()) && ((num = reader.read(inbuf)) != (IOUtils.EOF))) {
+        while ((getRun()) && ((num = reader.read(inbuf)) != (EOF))) {
             for (int i = 0; i < num; i++) {
                 final byte ch = inbuf[i];
                 switch (ch) {

@@ -18,7 +18,6 @@
 
 package org.apache.commons.io.input;
 
-import org.junit.Assert;
 import org.junit.Assume;
 import java.io.ByteArrayInputStream;
 import org.apache.commons.io.ByteOrderMark;

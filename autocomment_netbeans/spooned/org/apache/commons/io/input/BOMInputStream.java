@@ -149,7 +149,7 @@ public class BOMInputStream extends ProxyInputStream {
             final int len1 = bom1.length();
             final int len2 = bom2.length();
             if (len1 > len2) {
-                return IOUtils.EOF;
+                return EOF;
             } 
             if (len2 > len1) {
                 return 1;
@@ -267,7 +267,7 @@ public class BOMInputStream extends ProxyInputStream {
      */
     private int readFirstBytes() throws IOException {
         getBOM();
-        return (fbIndex) < (fbLength) ? firstBytes[((fbIndex)++)] : IOUtils.EOF;
+        return (fbIndex) < (fbLength) ? firstBytes[((fbIndex)++)] : EOF;
     }
 
     /**
@@ -346,7 +346,7 @@ public class BOMInputStream extends ProxyInputStream {
             } 
         }
         final int secondCount = in.read(buf, off, len);
-        return secondCount < 0 ? firstCount > 0 ? firstCount : IOUtils.EOF : firstCount + secondCount;
+        return secondCount < 0 ? firstCount > 0 ? firstCount : EOF : firstCount + secondCount;
     }
 
     /**

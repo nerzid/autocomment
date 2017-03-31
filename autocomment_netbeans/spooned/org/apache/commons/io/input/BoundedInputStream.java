@@ -55,7 +55,7 @@ public class BoundedInputStream extends InputStream {
     /**
      * * the marked position
      */
-    private long mark = IOUtils.EOF;
+    private long mark = EOF;
 
     /**
      * * flag if close shoud be propagated
@@ -83,7 +83,7 @@ public class BoundedInputStream extends InputStream {
      * @param in The wrapped input stream
      */
     public BoundedInputStream(final InputStream in) {
-        this(in, IOUtils.EOF);
+        this(in, EOF);
     }
 
     /**
@@ -96,7 +96,7 @@ public class BoundedInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         if (((max) >= 0) && ((pos) >= (max))) {
-            return IOUtils.EOF;
+            return EOF;
         } 
         final int result = in.read();
         (pos)++;
@@ -127,12 +127,12 @@ public class BoundedInputStream extends InputStream {
     @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
         if (((max) >= 0) && ((pos) >= (max))) {
-            return IOUtils.EOF;
+            return EOF;
         } 
         final long maxRead = (max) >= 0 ? Math.min(len, ((max) - (pos))) : len;
         final int bytesRead = in.read(b, off, ((int) (maxRead)));
-        if (bytesRead == (IOUtils.EOF)) {
-            return IOUtils.EOF;
+        if (bytesRead == (EOF)) {
+            return EOF;
         } 
         pos += bytesRead;
         return bytesRead;

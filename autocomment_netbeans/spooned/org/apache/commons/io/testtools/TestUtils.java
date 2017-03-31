@@ -20,6 +20,7 @@ package org.apache.commons.io.testtools;
 
 import java.util.Arrays;
 import org.junit.Assert;
+import junit.framework.AssertionFailedError;
 import java.io.BufferedOutputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import java.io.File;
@@ -192,7 +193,7 @@ public abstract class TestUtils {
         try {
             new PrintStream(output).write(0);
         } catch (final Throwable t) {
-            throw new junit.framework.AssertionFailedError((("The copy() method closed the stream " + "when it shouldn't have. ") + (t.getMessage())));
+            throw new AssertionFailedError((("The copy() method closed the stream " + "when it shouldn't have. ") + (t.getMessage())));
         }
     }
 
@@ -200,7 +201,7 @@ public abstract class TestUtils {
         try {
             new PrintWriter(output).write('a');
         } catch (final Throwable t) {
-            throw new junit.framework.AssertionFailedError((("The copy() method closed the stream " + "when it shouldn't have. ") + (t.getMessage())));
+            throw new AssertionFailedError((("The copy() method closed the stream " + "when it shouldn't have. ") + (t.getMessage())));
         }
     }
 

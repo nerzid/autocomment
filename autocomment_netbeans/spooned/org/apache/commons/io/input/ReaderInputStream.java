@@ -199,7 +199,7 @@ public class ReaderInputStream extends InputStream {
             // to write directly to the underlying char array (the default implementation
             // copies data to a temporary char array).
             final int c = reader.read(encoderIn.array(), position, encoderIn.remaining());
-            if (c == (IOUtils.EOF)) {
+            if (c == (EOF)) {
                 endOfInput = true;
             } else {
                 encoderIn.position((position + c));
@@ -248,7 +248,7 @@ public class ReaderInputStream extends InputStream {
                 } 
             }
         }
-        return (read == 0) && (endOfInput) ? IOUtils.EOF : read;
+        return (read == 0) && (endOfInput) ? EOF : read;
     }
 
     /**
@@ -279,7 +279,7 @@ public class ReaderInputStream extends InputStream {
             } 
             fillBuffer();
             if ((endOfInput) && (!(encoderOut.hasRemaining()))) {
-                return IOUtils.EOF;
+                return EOF;
             } 
         }
     }

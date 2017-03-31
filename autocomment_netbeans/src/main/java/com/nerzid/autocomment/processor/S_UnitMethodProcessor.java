@@ -16,22 +16,26 @@
 package com.nerzid.autocomment.processor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtAssignment;
+import spoon.reflect.code.CtBinaryOperator;
+import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtCFlowBreak;
 import spoon.reflect.code.CtDo;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtFor;
-import spoon.reflect.code.CtForEach;
 import spoon.reflect.code.CtIf;
 import spoon.reflect.code.CtInvocation;
+import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtLoop;
 import spoon.reflect.code.CtReturn;
 import spoon.reflect.code.CtStatement;
 import spoon.reflect.code.CtSwitch;
+import spoon.reflect.code.CtUnaryOperator;
 import spoon.reflect.code.CtVariableAccess;
 import spoon.reflect.code.CtWhile;
 import spoon.reflect.declaration.CtElement;
@@ -51,10 +55,13 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
     List<CtInvocation> void_return_units;
     List<CtInvocation> same_action_units;
 
-    List<CtAssignment> data_facilitating_units;
+    List<CtStatement> data_facilitating_units;
     List<CtVariableAccess> data_args;
 
     List<CtExpression> controlling_units;
+
+    public static int totalIfCount = 0;
+    public static int totalIfDepth = 0;
 
     @Override
     public void process(CtMethod e) {
@@ -68,14 +75,17 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
 
         controlling_units = new ArrayList<>();
 
-        endingSUnits(e);
-        voidReturnSUnits(e);
-        sameActionSUnits(e);
-        dataFacilitatingSUnits(e);
-        controllingSUnits(e);
+//        endingSUnits(e);
+//        voidReturnSUnits(e);
+//        sameActionSUnits(e);
+//        dataFacilitatingSUnits(e);
+//        controllingSUnits(e);
+//
+//        print(e.getSignature());
+//        System.out.println();
+System.out.println("METHOD --------> " + e.getSimpleName());
+        getIfCount(e);
 
-        print(e.getSignature());
-        System.out.println();
     }
 
     public void endingSUnits(CtMethod e) {
@@ -89,6 +99,14 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
 
 //                    System.out.println("ending s_unit: " + returned_var);
                     ending_units.add(returnStmt);
+
+                    List<CtVariableAccess> vars = returnStmt.getElements(new TypeFilter(CtVariableAccess.class));
+                    for (CtVariableAccess var : vars) {
+                        if (!data_args.contains(var)) {
+                            data_args.add(var);
+                            System.out.println("DECLA: " + var.getVariable().getDeclaration());
+                        }
+                    }
                 }
             }
         }
@@ -118,7 +136,7 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
 
     public void sameActionSUnits(CtMethod e) {
         List<CtStatement> stmts = e.getBody().getStatements();
-        HashMap<String, Integer> same_stmts = new HashMap<>();        
+        HashMap<String, Integer> same_stmts = new HashMap<>();
 
         for (CtStatement stmt : stmts) {
             if (stmt instanceof CtInvocation) {
@@ -153,22 +171,32 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
     }
 
     public void dataFacilitatingSUnits(CtMethod e) {
-        List<CtStatement> stmts = e.getBody().getStatements();
+        CompositeFilter cf = new CompositeFilter(
+                FilteringOperator.UNION,
+                new TypeFilter(CtAssignment.class),
+                new TypeFilter(CtLocalVariable.class));
+        List<CtStatement> stmts = e.getElements(cf);
 
-        for (CtStatement stmt : stmts) {
-            if (stmt instanceof CtAssignment) {
-                CtAssignment assigment = (CtAssignment) stmt;
+        CtLocalVariable clv;
 
-                for (CtVariableAccess data_arg : data_args) {
-                    if (data_arg.toString().equals(assigment.getAssigned().toString())) {
-                        data_facilitating_units.add(assigment);
-//                        System.out.println("data-faciliting s_unit: " + stmt.toString());
+        stmts.forEach((stmt) -> {
+            for (CtVariableAccess data_arg : data_args) {
+                if (stmt instanceof CtAssignment) {
+                    if (data_arg.toString().equals(((CtAssignment) stmt).getAssigned().toString())) {
+                        if (!data_facilitating_units.contains(stmt)) {
+                            data_facilitating_units.add(stmt);
+                        }
                     }
-//                    System.out.println("Data: " + data_arg.toString());
-//                    System.out.println("Assign: " + assign.getAssigned().toString());
                 }
+//                else if (stmt instanceof CtLocalVariable) {
+//                    if (data_arg.toString().equals(((CtLocalVariable) stmt).getAssigned().toString())) {
+//                        if (!data_facilitating_units.contains(stmt)) {
+//                            data_facilitating_units.add(stmt);
+//                        }
+//                    }
+//                }
             }
-        }
+        });
     }
 
     public void controllingSUnits(CtMethod e) {
@@ -191,8 +219,10 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
                     for (CtVariableAccess data_arg : data_args) {
                         for (CtVariableAccess var : vars) {
                             if (data_arg.getVariable().equals(var.getVariable())) {
-                                controlling_units.add(e_for.getExpression());
-                                break;
+                                if (!controlling_units.contains(e_for.getExpression())) {
+                                    controlling_units.add(e_for.getExpression());
+                                    break;
+                                }
                             }
                         }
                     }
@@ -202,8 +232,10 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
                     for (CtVariableAccess data_arg : data_args) {
                         for (CtVariableAccess var : vars) {
                             if (data_arg.getVariable().equals(var.getVariable())) {
-                                controlling_units.add(e_while.getLoopingExpression());
-                                break;
+                                if (!controlling_units.contains(e_while.getLoopingExpression())) {
+                                    controlling_units.add(e_while.getLoopingExpression());
+                                    break;
+                                }
                             }
                         }
                     }
@@ -213,8 +245,10 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
                     for (CtVariableAccess data_arg : data_args) {
                         for (CtVariableAccess var : vars) {
                             if (data_arg.getVariable().equals(var.getVariable())) {
-                                controlling_units.add(e_do.getLoopingExpression());
-                                break;
+                                if (!controlling_units.contains(e_do.getLoopingExpression())) {
+                                    controlling_units.add(e_do.getLoopingExpression());
+                                    break;
+                                }
                             }
                         }
                     }
@@ -225,8 +259,10 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
                 for (CtVariableAccess data_arg : data_args) {
                     for (CtVariableAccess var : vars) {
                         if (data_arg.getVariable().equals(var.getVariable())) {
-                            controlling_units.add(e_switch.getSelector());
-                            break;
+                            if (!controlling_units.contains(e_switch.getSelector())) {
+                                controlling_units.add(e_switch.getSelector());
+                                break;
+                            }
                         }
                     }
                 }
@@ -236,14 +272,14 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
                 for (CtVariableAccess data_arg : data_args) {
                     for (CtVariableAccess var : vars) {
                         if (data_arg.getVariable().equals(var.getVariable())) {
-                            controlling_units.add(e_if.getCondition());
-                            break;
+                            if (!controlling_units.contains(e_if.getCondition())) {
+                                controlling_units.add(e_if.getCondition());
+                                break;
+                            }
                         }
                     }
                 }
-
             }
-
         }
     }
 
@@ -268,5 +304,90 @@ public class S_UnitMethodProcessor extends AbstractProcessor<CtMethod> {
             }
         }
         System.out.println();
+    }
+
+    public void getIfCount(CtMethod e) {
+        List<CtStatement> stmts = e.getBody().getStatements();
+
+        int if_depth;
+        int else_depth;
+        int max_depth;
+        for (CtStatement stmt : stmts) {
+            if (stmt instanceof CtIf) {
+                max_depth = 0;
+                if_depth = 0;
+                else_depth = 0;
+                totalIfCount++;
+                CtIf stmt_if = (CtIf) stmt;
+                CtExpression<Boolean> exp = stmt_if.getCondition();
+                List<CtBinaryOperator> ops = exp.getElements(new CompositeFilter(
+                        FilteringOperator.UNION,
+                        new TypeFilter(CtBinaryOperator.class), 
+                        new TypeFilter(CtUnaryOperator.class)));
+                
+                System.out.println("Exps: ");
+                System.out.println(Arrays.toString(exp.getElements(new TypeFilter(CtExpression.class)).toArray()));
+                System.out.println("");
+                System.out.println("Ops");
+                System.out.println(Arrays.toString(ops.toArray()));
+                if_depth = getIfCountRecursively(stmt_if.getThenStatement(), 1);
+                if (stmt_if.getElseStatement() != null) {
+                    else_depth = getIfCountRecursively(stmt_if.getElseStatement(), 1);
+                }
+                if (if_depth > else_depth) {
+                    max_depth = if_depth;
+                } else {
+                    max_depth = else_depth;
+                }
+                
+                // If there is not any inner if stmts, than depth should be 1
+                if (max_depth == 0)
+                    max_depth = 1;
+                totalIfDepth += max_depth;
+            }
+        }
+    }
+
+    private int getIfCountRecursively(CtStatement thenStatement, int depth) {
+        int max_depth = 0;
+        int if_depth = 0;
+        int else_depth = 0;
+        if (thenStatement instanceof CtIf) {
+            if_depth = getIfCountRecursively(((CtIf) thenStatement).getThenStatement(), depth) + 1;
+            if (((CtIf) thenStatement).getElseStatement() != null) {
+                else_depth = getIfCountRecursively(((CtIf) thenStatement).getElseStatement(), depth);
+            }
+            if (if_depth > else_depth) {
+                max_depth = if_depth;
+            } else {
+                max_depth = else_depth;
+            }
+            return max_depth;
+        } else if (thenStatement instanceof CtBlock) {
+            CtBlock stmt_block = (CtBlock) thenStatement;
+            for (CtStatement stmt : stmt_block.getStatements()) {
+                if (stmt instanceof CtIf) {
+                    if_depth = getIfCountRecursively(((CtIf) stmt).getThenStatement(), depth) + 1;
+                    if (((CtIf) stmt).getElseStatement() != null) {
+                        else_depth = getIfCountRecursively(((CtIf) stmt).getElseStatement(), depth) + 1;
+                    }
+                    if (if_depth > else_depth) {
+                        max_depth = if_depth;
+                    } else {
+                        max_depth = else_depth;
+                    }
+                }
+            }
+            return max_depth;
+        } else {
+            return depth;
+        }
+
+    }
+
+    public static double calculateAverageIfDepth() {
+        System.out.println("TotalCount: " + totalIfCount);
+        System.out.println("TotalDepth: " + totalIfDepth);
+        return totalIfDepth * 1.0 / totalIfCount;
     }
 }

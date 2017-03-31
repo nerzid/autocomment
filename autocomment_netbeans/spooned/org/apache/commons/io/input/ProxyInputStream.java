@@ -58,11 +58,11 @@ public abstract class ProxyInputStream extends FilterInputStream {
         try {
             beforeRead(1);
             final int b = in.read();
-            afterRead((b != (IOUtils.EOF) ? 1 : IOUtils.EOF));
+            afterRead((b != (EOF) ? 1 : EOF));
             return b;
         } catch (final IOException e) {
             handleIOException(e);
-            return IOUtils.EOF;
+            return EOF;
         }
     }
 
@@ -81,7 +81,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return IOUtils.EOF;
+            return EOF;
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class ProxyInputStream extends FilterInputStream {
             return n;
         } catch (final IOException e) {
             handleIOException(e);
-            return IOUtils.EOF;
+            return EOF;
         }
     }
 

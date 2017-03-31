@@ -19,7 +19,6 @@
 package org.apache.commons.io;
 
 import java.util.ArrayList;
-import org.junit.Assert;
 import java.util.Collection;
 import java.io.File;
 import java.io.FileFilter;

@@ -61,16 +61,16 @@ public class EndianUtilsTest {
         Assert.assertEquals(16777216, EndianUtils.swapInteger(1));
         Assert.assertEquals(1, EndianUtils.swapInteger(16777216));
         Assert.assertEquals(286331153, EndianUtils.swapInteger(286331153));
-        Assert.assertEquals(-1412567280, EndianUtils.swapInteger(284151211));
-        Assert.assertEquals(171, EndianUtils.swapInteger(-1426063360));
+        Assert.assertEquals((-1412567280), EndianUtils.swapInteger(284151211));
+        Assert.assertEquals(171, EndianUtils.swapInteger((-1426063360)));
     }
 
     @Test
     public void testSwapLong() {
         Assert.assertEquals(0, EndianUtils.swapLong(0));
         Assert.assertEquals(578437695752307201L, EndianUtils.swapLong(72623859790382856L));
-        Assert.assertEquals(-1L, EndianUtils.swapLong(-1L));
-        Assert.assertEquals(171, EndianUtils.swapLong(-6124895493223874560L));
+        Assert.assertEquals((-1L), EndianUtils.swapLong((-1L)));
+        Assert.assertEquals(171, EndianUtils.swapLong((-6124895493223874560L)));
     }
 
     @Test

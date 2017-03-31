@@ -76,7 +76,7 @@ public class AutoCloseInputStream extends ProxyInputStream {
      */
     @Override
     protected void afterRead(final int n) throws IOException {
-        if (n == (IOUtils.EOF)) {
+        if (n == (EOF)) {
             close();
         } 
     }

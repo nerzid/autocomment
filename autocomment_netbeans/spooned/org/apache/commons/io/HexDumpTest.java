@@ -99,7 +99,7 @@ public class HexDumpTest {
         }
         // verify proper behavior with negative offset
         stream = new ByteArrayOutputStream();
-        HexDump.dump(testArray, -16777216, stream, 0);
+        HexDump.dump(testArray, (-16777216), stream, 0);
         outputArray = new byte[16 * (73 + (HexDump.EOL.length()))];
         for (int j = 0; j < 16; j++) {
             int offset = (73 + (HexDump.EOL.length())) * j;

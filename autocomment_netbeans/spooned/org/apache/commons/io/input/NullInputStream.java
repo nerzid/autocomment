@@ -338,7 +338,7 @@ public class NullInputStream extends InputStream {
         if (throwEofException) {
             throw new EOFException();
         } 
-        return IOUtils.EOF;
+        return EOF;
     }
 }
 

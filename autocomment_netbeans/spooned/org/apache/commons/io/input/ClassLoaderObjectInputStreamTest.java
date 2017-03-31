@@ -24,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import org.junit.Test;
 
 /**
  * Tests the CountingInputStream.
@@ -36,7 +35,7 @@ public class ClassLoaderObjectInputStreamTest {
     ObjectInputStream.  IF we really wanted to test ClassLoaderObjectInputStream
     we would probably need to create a transient Class Loader. -TO
      */
-    @Test
+    @ClassLoaderObjectInputStreamTest.Test
     public void testExpected() throws Exception {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -49,7 +48,7 @@ public class ClassLoaderObjectInputStreamTest {
         clois.close();
     }
 
-    @Test
+    @ClassLoaderObjectInputStreamTest.Test
     public void testLong() throws Exception {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -62,7 +61,7 @@ public class ClassLoaderObjectInputStreamTest {
         clois.close();
     }
 
-    @Test
+    @ClassLoaderObjectInputStreamTest.Test
     public void testPrimitiveLong() throws Exception {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -117,7 +116,7 @@ A, B, C;    }
         }
     }
 
-    @Test
+    @ClassLoaderObjectInputStreamTest.Test
     public void testObject1() throws Exception {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -131,7 +130,7 @@ A, B, C;    }
         clois.close();
     }
 
-    @Test
+    @ClassLoaderObjectInputStreamTest.Test
     public void testObject2() throws Exception {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -145,7 +144,7 @@ A, B, C;    }
         clois.close();
     }
 
-    @Test
+    @ClassLoaderObjectInputStreamTest.Test
     public void testResolveProxyClass() throws Exception {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ObjectOutputStream oos = new ObjectOutputStream(baos);

@@ -35,6 +35,7 @@ import java.io.Reader;
 import org.junit.Test;
 import org.apache.commons.io.testtools.TestUtils;
 import java.io.Writer;
+import org.apache.commons.io.testtools.YellOnCloseInputStream;
 import org.apache.commons.io.testtools.YellOnFlushAndCloseOutputStream;
 
 /**
@@ -59,7 +60,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test
     public void testCopy_inputStreamToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final int count = IOUtils.copy(in, out);
@@ -92,7 +93,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @SuppressWarnings(value = "resource")
     private void testCopy_inputStreamToOutputStreamWithBufferSize(final int bufferSize) throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
         final long count = IOUtils.copy(in, out, bufferSize);
@@ -134,7 +135,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test
     public void testCopy_inputStreamToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
@@ -172,7 +173,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test
     public void testCopy_inputStreamToWriter_Encoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
@@ -204,7 +205,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test
     public void testCopy_inputStreamToWriter_Encoding_nullEncoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
         final Writer writer = new OutputStreamWriter(baout, "US-ASCII");
@@ -222,7 +223,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test
     public void testCopy_readerToOutputStream() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -252,7 +253,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test(expected = NullPointerException.class)
     public void testCopy_readerToOutputStream_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         IOUtils.copy(reader, ((OutputStream) (null)));// deliberately testing deprecated method
         
@@ -264,7 +265,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test
     public void testCopy_readerToOutputStream_Encoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -288,7 +289,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test(expected = NullPointerException.class)
     public void testCopy_readerToOutputStream_Encoding_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         IOUtils.copy(reader, null, "UTF16");
     }
@@ -298,7 +299,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test
     public void testCopy_readerToOutputStream_Encoding_nullEncoding() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final OutputStream out = new YellOnFlushAndCloseOutputStream(baout, false, true);
@@ -315,7 +316,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test
     public void testCopy_readerToWriter() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         final ByteArrayOutputStream baout = new ByteArrayOutputStream();
         final YellOnFlushAndCloseOutputStream out = new YellOnFlushAndCloseOutputStream(baout, true, true);
@@ -341,7 +342,7 @@ public class IOUtilsCopyTestCase extends FileBasedTestCase {
     @Test(expected = NullPointerException.class)
     public void testCopy_readerToWriter_nullOut() throws Exception {
         InputStream in = new ByteArrayInputStream(inData);
-        in = new org.apache.commons.io.testtools.YellOnCloseInputStream(in);
+        in = new YellOnCloseInputStream(in);
         final Reader reader = new InputStreamReader(in, "US-ASCII");
         IOUtils.copy(reader, ((Writer) (null)));
     }

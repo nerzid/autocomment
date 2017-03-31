@@ -18,6 +18,7 @@
 
 package org.apache.commons.io.testtools;
 
+import junit.framework.AssertionFailedError;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.input.ProxyInputStream;
@@ -38,7 +39,7 @@ public class YellOnCloseInputStream extends ProxyInputStream {
      */
     @Override
     public void close() throws IOException {
-        throw new junit.framework.AssertionFailedError("close() was called on OutputStream");
+        throw new AssertionFailedError("close() was called on OutputStream");
     }
 }
 

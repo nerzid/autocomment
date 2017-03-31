@@ -71,7 +71,7 @@ public class CountingInputStream extends ProxyInputStream {
      */
     @Override
     protected synchronized void afterRead(final int n) {
-        if (n != (IOUtils.EOF)) {
+        if (n != (EOF)) {
             CountingInputStream.this.count += n;
         } 
     }

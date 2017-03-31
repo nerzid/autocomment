@@ -321,7 +321,7 @@ public class NullReader extends Reader {
         if (throwEofException) {
             throw new EOFException();
         } 
-        return IOUtils.EOF;
+        return EOF;
     }
 }
 

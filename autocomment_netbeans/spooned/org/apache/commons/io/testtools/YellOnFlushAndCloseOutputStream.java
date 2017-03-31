@@ -18,6 +18,7 @@
 
 package org.apache.commons.io.testtools;
 
+import junit.framework.AssertionFailedError;
 import java.io.IOException;
 import java.io.OutputStream;
 import org.apache.commons.io.output.ProxyOutputStream;
@@ -47,7 +48,7 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
     @Override
     public void flush() throws IOException {
         if (yellForFlush) {
-            throw new junit.framework.AssertionFailedError("flush() was called on OutputStream");
+            throw new AssertionFailedError("flush() was called on OutputStream");
         } 
         super.flush();
     }
@@ -58,7 +59,7 @@ public class YellOnFlushAndCloseOutputStream extends ProxyOutputStream {
     @Override
     public void close() throws IOException {
         if (yellForClose) {
-            throw new junit.framework.AssertionFailedError("close() was called on OutputStream");
+            throw new AssertionFailedError("close() was called on OutputStream");
         } 
         super.close();
     }

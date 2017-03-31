@@ -141,7 +141,7 @@ public class CharSequenceInputStream extends InputStream {
             
         } 
         if ((!(CharSequenceInputStream.this.bbuf.hasRemaining())) && (!(CharSequenceInputStream.this.cbuf.hasRemaining()))) {
-            return IOUtils.EOF;
+            return EOF;
         } 
         int bytesRead = 0;
         while (len > 0) {
@@ -158,7 +158,7 @@ public class CharSequenceInputStream extends InputStream {
                 } 
             }
         }
-        return (bytesRead == 0) && (!(CharSequenceInputStream.this.cbuf.hasRemaining())) ? IOUtils.EOF : bytesRead;
+        return (bytesRead == 0) && (!(CharSequenceInputStream.this.cbuf.hasRemaining())) ? EOF : bytesRead;
     }
 
     @Override
@@ -169,7 +169,7 @@ public class CharSequenceInputStream extends InputStream {
             } 
             fillBuffer();
             if ((!(CharSequenceInputStream.this.bbuf.hasRemaining())) && (!(CharSequenceInputStream.this.cbuf.hasRemaining()))) {
-                return IOUtils.EOF;
+                return EOF;
             } 
         }
     }

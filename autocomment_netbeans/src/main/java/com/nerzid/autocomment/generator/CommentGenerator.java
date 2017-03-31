@@ -3,11 +3,7 @@ package com.nerzid.autocomment.generator;
 import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.io.FilePicker;
 import com.nerzid.autocomment.processor.CommentGeneratorMethodProcessor;
-import com.nerzid.autocomment.processor.CtCommentProcessor;
 import com.nerzid.autocomment.processor.S_UnitMethodProcessor;
-import com.nerzid.autocomment.processor.TrainerMethodProcessor;
-import static com.nerzid.autocomment.train.Trainer.currentFileNo;
-import static com.nerzid.autocomment.train.Trainer.errorlog;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,8 +55,7 @@ public class CommentGenerator {
         // WARNING: Priority is important DO NOT CHANGE
         // JavaOutputProcessor must be at LOWERMOST to get all differences
         // and write them
-//                l.addProcessor(new CommentGeneratorMethodProcessor());
-        l.addProcessor(new S_UnitMethodProcessor());
+        l.addProcessor(new CommentGeneratorMethodProcessor());
 
         // Uncomment this if you want to insert comment into code
 //                l.addProcessor(jop);
@@ -69,9 +64,11 @@ public class CommentGenerator {
         // Run the Launcher
         try {
             l.run();
+            System.out.println("Average Depth:" + S_UnitMethodProcessor.calculateAverageIfDepth());
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+
     }
 
 // Only avaliable for New spoon api

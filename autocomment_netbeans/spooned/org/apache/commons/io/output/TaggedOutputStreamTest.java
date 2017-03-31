@@ -21,6 +21,7 @@ package org.apache.commons.io.output;
 import org.junit.Assert;
 import java.io.IOException;
 import java.io.OutputStream;
+import org.apache.commons.io.TaggedIOException;
 import org.junit.Test;
 import java.util.UUID;
 
