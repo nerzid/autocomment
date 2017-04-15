@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="com.nerzid.autocomment.template.TemplateTest" time="0" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="com.nerzid.autocomment.template.TemplateTest" time="0.003" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_121\jre\bin"/>
@@ -30,7 +30,7 @@
     <property name="maven.ext.class.path" value="C:\Program Files\NetBeans 8.2\java\maven-nblib\netbeans-eventspy.jar"/>
     <property name="classworlds.conf" value="C:\Program Files\NetBeans 8.2\java\maven\bin\m2.conf"/>
     <property name="sun.jnu.encoding" value="Cp1254"/>
-    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\ImageMagick-7.0.5-Q8;C:\Program Files\ImageMagick-7.0.5-Q16;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\nodejs\;C:\RailsInstaller\Ruby2.3.0\bin;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\MySQL\MySQL Utilities 1.6\;C:\RailsInstaller\Git\cmd;C:\RailsInstaller\Ruby2.3.0\bin;C:\Users\nerzid\AppData\Roaming\npm;C:\cmder\vendor\git-for-windows\usr\bin;C:\Users\nerzid\AppData\Local\Microsoft\WindowsApps;C:\Program Files\ImageMagick-7.0.5-Q16;."/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\ImageMagick-7.0.5-Q8;C:\Program Files\ImageMagick-7.0.5-Q16;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\nodejs\;C:\RailsInstaller\Ruby2.3.0\bin;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\MySQL\MySQL Utilities 1.6\;C:\Users\nerzid\Documents\ANTLR4\antlr-4.6-complete.jar;C:\Users\nerzid\Documents\ANTLR4;C:\Users\nerzid\Documents\ANTLR4\antlr4.bat;C:\YoutubeDL;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\RailsInstaller\Git\cmd;C:\RailsInstaller\Ruby2.3.0\bin;C:\Users\nerzid\AppData\Roaming\npm;C:\cmder\vendor\git-for-windows\usr\bin;C:\Users\nerzid\AppData\Local\Microsoft\WindowsApps;C:\Program Files\ImageMagick-7.0.5-Q16;C:\Users\nerzid\Documents\ANTLR4;C:\Users\nerzid\Documents\ANTLR4\antlr-4.6-complete.jar;C:\Users\nerzid\Documents\ANTLR4\antlr4.bat;C:\YoutubeDL;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="52.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>

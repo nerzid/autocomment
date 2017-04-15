@@ -7,9 +7,9 @@
     <packaging>jar</packaging>
     <dependencies>  
         <dependency>
-            <groupId>fr.inria.gforge.spoon.labs</groupId>
-            <artifactId>gumtree-spoon-ast-diff</artifactId>
-            <version>1.0.0</version>
+            <groupId>fr.inria.gforge.spoon</groupId>
+            <artifactId>spoon-core</artifactId>
+            <version>5.6.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

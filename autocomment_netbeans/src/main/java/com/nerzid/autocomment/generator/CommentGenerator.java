@@ -3,7 +3,7 @@ package com.nerzid.autocomment.generator;
 import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.io.FilePicker;
 import com.nerzid.autocomment.processor.CommentGeneratorMethodProcessor;
-import com.nerzid.autocomment.processor.S_UnitMethodProcessor;
+import com.nerzid.autocomment.processor.SUnitMethodProcessor;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +64,7 @@ public class CommentGenerator {
         // Run the Launcher
         try {
             l.run();
-            System.out.println("Average Depth:" + S_UnitMethodProcessor.calculateAverageIfDepth());
+            System.out.println("Average Depth:" + SUnitMethodProcessor.calculateAverageIfDepth());
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }

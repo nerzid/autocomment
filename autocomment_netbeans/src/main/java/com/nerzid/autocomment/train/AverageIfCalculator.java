@@ -2,8 +2,7 @@ package com.nerzid.autocomment.train;
 
 import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.io.FilePicker;
-import com.nerzid.autocomment.processor.S_UnitMethodProcessor;
-import static com.nerzid.autocomment.train.Trainer.files_list;
+import com.nerzid.autocomment.processor.SUnitMethodProcessor;
 import java.io.File;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,9 +18,9 @@ import spoon.support.JavaOutputProcessor;
 public class AverageIfCalculator {
 
     public static List<File> files_list;
+    public static int count = 0;
 
     public static void main(String[] args) {
-
         try {
             files_list = FilePicker.chooseDirAndGetJavaFiles();
         } catch (FileNotSelected ex) {
@@ -60,20 +59,29 @@ public class AverageIfCalculator {
             // WARNING: Priority is important DO NOT CHANGE
             // JavaOutputProcessor must be at LOWERMOST to get all differences
             // and write them
-            l.addProcessor(new S_UnitMethodProcessor());
+            l.addProcessor(new SUnitMethodProcessor());
 
             // Uncomment this if you want to insert comment into code
-//                l.addProcessor(jop);
+            l.addProcessor(jop);
             // Debuglevel 
             // env.setLevel("0");
             // Run the Launcher
+
             try {
                 l.run();
-//                System.out.println("Average Depth:" + S_UnitMethodProcessor.calculateAverageIfDepth());
+                System.out.println("Average Depth:" + SUnitMethodProcessor.calculateAverageIfDepth());
+                System.out.println("Average Condition: " + SUnitMethodProcessor.calculateAverageOfIfConditions());
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
+                e.printStackTrace();
+                count++;
+            } finally {
+                System.out.println("Error Count: " + count);
+//                System.out.println(Arrays.toString(S_UnitMethodProcessor.actual_conditions.toArray()));
             }
+
         }
 
     }
+
 }
