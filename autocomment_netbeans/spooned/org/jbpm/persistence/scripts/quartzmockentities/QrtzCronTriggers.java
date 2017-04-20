@@ -18,7 +18,7 @@ public class QrtzCronTriggers {
     }
 
     public void setId(Long id) {
-        QrtzCronTriggers.this.id = id;
+        this.id = id;
     }
 }
 

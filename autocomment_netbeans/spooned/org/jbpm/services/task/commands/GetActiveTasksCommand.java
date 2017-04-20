@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,7 @@ public class GetActiveTasksCommand extends TaskCommand<List<TaskSummary>> {
     }
 
     public GetActiveTasksCommand(Date date) {
-        GetActiveTasksCommand.this.date = date;
+        this.date = date;
     }
 
     public Date getDate() {
@@ -45,14 +45,14 @@ public class GetActiveTasksCommand extends TaskCommand<List<TaskSummary>> {
     }
 
     public void setDate(Date date) {
-        GetActiveTasksCommand.this.date = date;
+        this.date = date;
     }
 
     public List<TaskSummary> execute(Context cntxt) {
         TaskContext context = ((TaskContext) (cntxt));
         if ((date) == null) {
             return context.getTaskAdminService().getActiveTasks();
-        } else {
+        }else {
             return context.getTaskAdminService().getActiveTasks(date);
         }
     }

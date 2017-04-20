@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,9 @@
 
 package org.jbpm.workflow.instance.node;
 
+import org.kie.api.runtime.process.NodeInstance;
 import org.jbpm.workflow.core.node.BoundaryEventNode;
 import java.util.Collection;
-import org.kie.api.runtime.process.NodeInstance;
 import org.jbpm.workflow.instance.NodeInstanceContainer;
 import org.jbpm.workflow.instance.impl.WorkflowProcessInstanceImpl;
 
@@ -35,13 +35,13 @@ public class BoundaryEventNodeInstance extends EventNodeInstance {
             // if not active && completed, signal
             if ((!(isAttachedToNodeActive(nodeInstances, attachedTo, type, event))) && (isAttachedToNodeCompleted(attachedTo))) {
                 super.signalEvent(type, event);
-            } else {
+            }else {
                 cancel();
             }
-        } else {
+        }else {
             if (isAttachedToNodeActive(nodeInstances, attachedTo, type, event)) {
                 super.signalEvent(type, event);
-            } else {
+            }else {
                 cancel();
             }
         }
@@ -57,19 +57,19 @@ public class BoundaryEventNodeInstance extends EventNodeInstance {
                     if (type.startsWith("Timer-")) {
                         if (Long.valueOf(nInstance.getId()).equals(event)) {
                             return true;
-                        } 
-                    } else {
+                        }
+                    }else {
                         return true;
                     }
-                } 
+                }
                 if (nInstance instanceof CompositeNodeInstance) {
                     boolean hasActive = isAttachedToNodeActive(((CompositeNodeInstance) (nInstance)).getNodeInstances(), attachedTo, type, event);
                     if (hasActive) {
                         return true;
-                    } 
-                } 
+                    }
+                }
             }
-        } 
+        }
         return false;
     }
 

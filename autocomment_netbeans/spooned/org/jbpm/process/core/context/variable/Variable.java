@@ -1,12 +1,12 @@
 /**
  * Copyright 2005 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,59 +40,60 @@ public class Variable implements Serializable , TypeObject , ValueObject {
     private Map<String, Object> metaData = new HashMap<String, Object>();
 
     public Variable() {
-        Variable.this.type = UndefinedDataType.getInstance();
+        this.type = UndefinedDataType.getInstance();
     }
 
     public String getName() {
-        return Variable.this.name;
+        return this.name;
     }
 
     public void setName(final String name) {
-        Variable.this.name = name;
+        this.name = name;
     }
 
     public DataType getType() {
-        return Variable.this.type;
+        return this.type;
     }
 
     public void setType(final DataType type) {
         if (type == null) {
             throw new IllegalArgumentException("type is null");
-        } 
-        Variable.this.type = type;
+        }
+        this.type = type;
     }
 
     public Object getValue() {
-        return Variable.this.value;
+        return this.value;
     }
 
     public void setValue(final Object value) {
-        if (Variable.this.type.verifyDataType(value)) {
-            Variable.this.value = value;
-        } else {
+        if (this.type.verifyDataType(value)) {
+            this.value = value;
+        }else {
             final StringBuilder sb = new StringBuilder();
             sb.append("Value <");
             sb.append(value);
             sb.append("> is not valid for datatype: ");
-            sb.append(Variable.this.type);
+            sb.append(this.type);
             throw new IllegalArgumentException(sb.toString());
         }
     }
 
     public void setMetaData(String name, Object value) {
-        Variable.this.metaData.put(name, value);
+        // put String{name} to Map{this.metaData}
+        this.metaData.put(name, value);
     }
 
     public Object getMetaData(String name) {
-        return Variable.this.metaData.get(name);
+        return this.metaData.get(name);
     }
 
     public Map<String, Object> getMetaData() {
-        return Variable.this.metaData;
+        return this.metaData;
     }
 
     public String toString() {
-        return Variable.this.name;
+        return this.name;
     }
 }
 

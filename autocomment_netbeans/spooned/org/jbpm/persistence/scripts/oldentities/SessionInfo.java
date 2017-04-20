@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,47 +46,47 @@ public class SessionInfo {
     private byte[] rulesByteArray;
 
     public SessionInfo() {
-        SessionInfo.this.startDate = new Date();
+        this.startDate = new Date();
     }
 
     public Integer getId() {
-        return SessionInfo.this.id;
+        return this.id;
     }
 
     public int getVersion() {
-        return SessionInfo.this.version;
+        return this.version;
     }
 
     public void setData(byte[] data) {
-        SessionInfo.this.rulesByteArray = data;
+        this.rulesByteArray = data;
     }
 
     public byte[] getData() {
-        return SessionInfo.this.rulesByteArray;
+        return this.rulesByteArray;
     }
 
     public Date getStartDate() {
-        return SessionInfo.this.startDate;
+        return this.startDate;
     }
 
     public Date getLastModificationDate() {
-        return SessionInfo.this.lastModificationDate;
+        return this.lastModificationDate;
     }
 
     public void setLastModificationDate(Date date) {
-        SessionInfo.this.lastModificationDate = date;
+        this.lastModificationDate = date;
     }
 
     public void setId(Integer ksessionId) {
-        SessionInfo.this.id = ksessionId;
+        this.id = ksessionId;
     }
 
     public void setVersion(int version) {
-        SessionInfo.this.version = version;
+        this.version = version;
     }
 
     public void setStartDate(Date startDate) {
-        SessionInfo.this.startDate = startDate;
+        this.startDate = startDate;
     }
 
     public byte[] getRulesByteArray() {

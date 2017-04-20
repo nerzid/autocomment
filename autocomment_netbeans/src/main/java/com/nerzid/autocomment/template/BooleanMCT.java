@@ -18,30 +18,31 @@ package com.nerzid.autocomment.template;
 import java.util.List;
 
 /**
- *
  * @author nerzid
  */
 public class BooleanMCT extends MethodCommentTemplate {
 
     // e.g. VBZ NN - isDirectory()
-    public String booleanMethodWithOneVerb(String verb, List<String> nouns) {
+    public String booleanMethodWithOneVerb(PostaggedWord postaggedWord, boolean prefix) {
         String res = "";
 
-        res += "This method checks whether " + "this instance ";
-        res += verb + " ";
-        for (String noun : nouns) {
-            res += noun + " ";
-        }
+        if (prefix)
+            res += "This method ";
+        res += "checks whether " + "this instance ";
+        res += postaggedWord.getVerb1().getText() + " ";
+        res += postaggedWord.getNounphrase1().getText() + " ";
         res += "or not.";
 
         return res;
     }
 
     // e.g. VBZ NN - isSeperator(char)
-    public String booleanMethodWithOneVerbAndParameters(String verb, List<String> nouns, List<String> params) {
+    public String booleanMethodWithOneVerbAndParameters(PostaggedWord postaggedWord, List<String> params, boolean prefix) {
         String res = "";
 
-        res += "This method checks whether " + "the given ";
+        if (prefix)
+            res += "This method ";
+        res += "checks whether " + "the given ";
         int ix = 0;
         for (String param : params) {
             if (ix + 1 == params.size()) {
@@ -52,25 +53,23 @@ public class BooleanMCT extends MethodCommentTemplate {
             ix++;
         }
 
-        res += verb + " ";
-        for (String noun : nouns) {
-            res += noun + " ";
-        }
+        res += postaggedWord.getVerb1().getText() + " ";
+        res += postaggedWord.getNounphrase1().getText() + " ";
         res += "or not.";
 
         return res;
     }
 
     // e.g. VBZ NN NN NN VBD - isGroupTargetEntityAllowed()
-    public String booleanMethodWithTwoVerb(String verb1, String verb2, List<String> nouns) {
+    public String booleanMethodWithTwoVerb(PostaggedWord postaggedWord, boolean prefix) {
         String res = "";
 
-        res += "This method checks whether the ";
-        for (String noun : nouns) {
-            res += noun + " ";
-        }
-        res += verb1 + " ";
-        res += verb2 + " ";
+        if (prefix)
+            res += "This method ";
+        res += "checks whether the ";
+        res += postaggedWord.getNounphrase1().getText() + " ";
+        res += postaggedWord.getVerb1().getText() + " ";
+        res += postaggedWord.getVerb2().getText() + " ";
         res += "or not.";
 
         return res;

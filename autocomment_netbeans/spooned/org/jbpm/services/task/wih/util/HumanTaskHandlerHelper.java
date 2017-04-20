@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,30 +18,30 @@ package org.jbpm.services.task.wih.util;
 
 import java.util.ArrayList;
 import org.jbpm.process.core.timer.BusinessCalendar;
+import org.kie.internal.task.api.model.Language;
+import org.drools.core.time.TimeUtils;
+import org.kie.internal.task.api.TaskModelProvider;
 import java.util.Date;
 import org.kie.internal.task.api.model.Deadline;
 import org.kie.internal.task.api.model.Deadlines;
 import org.kie.internal.task.api.model.EmailNotification;
 import org.kie.internal.task.api.model.EmailNotificationHeader;
 import org.kie.api.runtime.Environment;
-import org.kie.internal.task.api.model.Escalation;
-import org.kie.api.task.model.Group;
-import java.util.HashMap;
-import org.kie.api.task.model.I18NText;
-import org.kie.internal.task.api.model.InternalI18NText;
-import org.kie.internal.task.api.model.InternalOrganizationalEntity;
-import org.kie.internal.task.api.model.Language;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.Map;
-import org.kie.internal.task.api.model.Notification;
 import org.kie.api.task.model.OrganizationalEntity;
 import org.kie.internal.task.api.model.Reassignment;
-import org.kie.internal.task.api.TaskModelProvider;
-import org.drools.core.time.TimeUtils;
-import org.kie.api.task.model.User;
+import org.kie.api.task.model.I18NText;
+import org.kie.internal.task.api.model.InternalI18NText;
+import org.slf4j.LoggerFactory;
+import org.kie.internal.task.api.model.Notification;
+import org.kie.internal.task.api.model.Escalation;
+import org.kie.api.task.model.Group;
 import org.kie.api.runtime.process.WorkItem;
+import org.kie.internal.task.api.model.InternalOrganizationalEntity;
+import org.slf4j.Logger;
+import java.util.HashMap;
+import java.util.List;
+import org.kie.api.task.model.User;
 
 public class HumanTaskHandlerHelper {
     private static final Logger logger = LoggerFactory.getLogger(HumanTaskHandlerHelper.class);
@@ -65,30 +65,34 @@ public class HumanTaskHandlerHelper {
         String notCompletedNotify = ((String) (workItem.getParameter("NotCompletedNotify")));
         Deadlines deadlinesTotal = TaskModelProvider.getFactory().newDeadlines();
         List<Deadline> startDeadlines = new ArrayList<Deadline>();
+        // add all List{HumanTaskHandlerHelper.parseDeadlineString(notStartedNotify, businessAdministrators, environment)} to List{startDeadlines}
         startDeadlines.addAll(HumanTaskHandlerHelper.parseDeadlineString(notStartedNotify, businessAdministrators, environment));
+        // add all List{HumanTaskHandlerHelper.parseDeadlineString(notStartedReassign, businessAdministrators, environment)} to List{startDeadlines}
         startDeadlines.addAll(HumanTaskHandlerHelper.parseDeadlineString(notStartedReassign, businessAdministrators, environment));
         List<Deadline> endDeadlines = new ArrayList<Deadline>();
+        // add all List{HumanTaskHandlerHelper.parseDeadlineString(notCompletedNotify, businessAdministrators, environment)} to List{endDeadlines}
         endDeadlines.addAll(HumanTaskHandlerHelper.parseDeadlineString(notCompletedNotify, businessAdministrators, environment));
+        // add all List{HumanTaskHandlerHelper.parseDeadlineString(notCompletedReassign, businessAdministrators, environment)} to List{endDeadlines}
         endDeadlines.addAll(HumanTaskHandlerHelper.parseDeadlineString(notCompletedReassign, businessAdministrators, environment));
         if (!(startDeadlines.isEmpty())) {
             deadlinesTotal.setStartDeadlines(startDeadlines);
-        } 
+        }
         if (!(endDeadlines.isEmpty())) {
             deadlinesTotal.setEndDeadlines(endDeadlines);
-        } 
+        }
         return deadlinesTotal;
     }
 
     protected static List<Deadline> parseDeadlineString(String deadlineInfo, List<OrganizationalEntity> businessAdministrators, Environment environment) {
         if ((deadlineInfo == null) || ((deadlineInfo.length()) == 0)) {
             return new ArrayList<Deadline>();
-        } 
+        }
         List<Deadline> deadlines = new ArrayList<Deadline>();
         String[] allComponents = deadlineInfo.split(HumanTaskHandlerHelper.COMPONENT_SEPARATOR);
         BusinessCalendar businessCalendar = null;
         if ((environment != null) && ((environment.get("jbpm.business.calendar")) != null)) {
             businessCalendar = ((BusinessCalendar) (environment.get("jbpm.business.calendar")));
-        } 
+        }
         for (String component : allComponents) {
             String[] mainComponents = component.split(HumanTaskHandlerHelper.ELEMENT_SEPARATOR);
             if ((mainComponents != null) && ((mainComponents.length) == 2)) {
@@ -101,7 +105,7 @@ public class HumanTaskHandlerHelper {
                     taskDeadline = TaskModelProvider.getFactory().newDeadline();
                     if (businessCalendar != null) {
                         taskDeadline.setDate(businessCalendar.calculateBusinessTimeAsDate(expiresAt));
-                    } else {
+                    }else {
                         taskDeadline.setDate(new Date(((System.currentTimeMillis()) + (TimeUtils.parseTimeString(expiresAt)))));
                     }
                     HumanTaskHandlerHelper.logger.debug("Calculated date of execution is {} and current date {}", taskDeadline.getDate(), new Date());
@@ -114,7 +118,7 @@ public class HumanTaskHandlerHelper {
                     escalation.setNotifications(HumanTaskHandlerHelper.parseNotifications(actionComponent, businessAdministrators));
                     deadlines.add(taskDeadline);
                 }
-            } else {
+            }else {
                 HumanTaskHandlerHelper.logger.warn("Incorrect syntax of deadline property {}", deadlineInfo);
             }
         }
@@ -128,7 +132,7 @@ public class HumanTaskHandlerHelper {
             String locale = parameters.get("locale");
             if (locale == null) {
                 locale = "en-UK";
-            } 
+            }
             EmailNotification emailNotification = TaskModelProvider.getFactory().newEmialNotification();
             notifications.add(emailNotification);
             emailNotification.setBusinessAdministrators(businessAdministrators);
@@ -158,7 +162,7 @@ public class HumanTaskHandlerHelper {
                     ((InternalOrganizationalEntity) (user)).setId(id.trim());
                     notificationRecipients.add(user);
                 }
-            } 
+            }
             String groupRecipients = parameters.get("togroups");
             if ((groupRecipients != null) && ((groupRecipients.trim().length()) > 0)) {
                 String[] groupRecipientsIds = groupRecipients.split(HumanTaskHandlerHelper.ATTRIBUTES_ELEMENTS_SEPARATOR);
@@ -167,12 +171,12 @@ public class HumanTaskHandlerHelper {
                     ((InternalOrganizationalEntity) (group)).setId(id.trim());
                     notificationRecipients.add(group);
                 }
-            } 
+            }
             emailNotification.setEmailHeaders(emailHeaders);
             emailNotification.setNames(names);
             emailNotification.setRecipients(notificationRecipients);
             emailNotification.setSubjects(subjects);
-        } 
+        }
         return notifications;
     }
 
@@ -190,7 +194,7 @@ public class HumanTaskHandlerHelper {
                     ((InternalOrganizationalEntity) (user)).setId(id.trim());
                     reassignmentUsers.add(user);
                 }
-            } 
+            }
             recipients = parameters.get("groups");
             if ((recipients != null) && ((recipients.trim().length()) > 0)) {
                 String[] recipientsIds = recipients.split(HumanTaskHandlerHelper.ATTRIBUTES_ELEMENTS_SEPARATOR);
@@ -199,10 +203,10 @@ public class HumanTaskHandlerHelper {
                     ((InternalOrganizationalEntity) (group)).setId(id.trim());
                     reassignmentUsers.add(group);
                 }
-            } 
+            }
             reassignment.setPotentialOwners(reassignmentUsers);
             reassignments.add(reassignment);
-        } 
+        }
         return reassignments;
     }
 
@@ -217,7 +221,7 @@ public class HumanTaskHandlerHelper {
                     } catch (IndexOutOfBoundsException e) {
                         parameters.put(knownKey, "");
                     }
-                } 
+                }
             }
         }
         return parameters;

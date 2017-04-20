@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,25 +17,25 @@
 
 package org.jbpm.services.task.impl.model;
 
+import org.kie.internal.task.api.model.Escalation;
 import org.kie.internal.task.api.model.BooleanExpression;
+import java.io.ObjectOutput;
+import java.io.ObjectInput;
 import javax.persistence.CascadeType;
 import org.jbpm.services.task.utils.CollectionUtils;
 import java.util.Collections;
 import javax.persistence.Entity;
-import org.kie.internal.task.api.model.Escalation;
+import org.kie.internal.task.api.model.Notification;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import java.io.IOException;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import java.util.List;
-import org.kie.internal.task.api.model.Notification;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import javax.persistence.OneToMany;
 import org.kie.internal.task.api.model.Reassignment;
+import java.io.IOException;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import java.util.List;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name = "Escalation")
@@ -60,15 +60,19 @@ public class EscalationImpl implements Escalation {
     private List<Reassignment> reassignments = Collections.emptyList();
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long Long{id} to ObjectOutput{out}
         out.writeLong(id);
         if ((name) != null) {
             out.writeBoolean(true);
             out.writeUTF(name);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
+        // write boolean List{constraints} to void{CollectionUtils}
         CollectionUtils.writeBooleanExpressionList(constraints, out);
+        // write notification List{notifications} to void{CollectionUtils}
         CollectionUtils.writeNotificationList(notifications, out);
+        // write reassignment List{reassignments} to void{CollectionUtils}
         CollectionUtils.writeReassignmentList(reassignments, out);
     }
 
@@ -76,7 +80,7 @@ public class EscalationImpl implements Escalation {
         id = in.readLong();
         if (in.readBoolean()) {
             name = in.readUTF();
-        } 
+        }
         constraints = CollectionUtils.readBooleanExpressionList(in);
         notifications = CollectionUtils.readNotificationList(in);
         reassignments = CollectionUtils.readReassignmentList(in);
@@ -87,7 +91,7 @@ public class EscalationImpl implements Escalation {
     }
 
     public void setId(long id) {
-        EscalationImpl.this.id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -95,7 +99,7 @@ public class EscalationImpl implements Escalation {
     }
 
     public void setName(String name) {
-        EscalationImpl.this.name = name;
+        this.name = name;
     }
 
     public List<BooleanExpression> getConstraints() {
@@ -103,7 +107,7 @@ public class EscalationImpl implements Escalation {
     }
 
     public void setConstraints(List<BooleanExpression> constraints) {
-        EscalationImpl.this.constraints = constraints;
+        this.constraints = constraints;
     }
 
     public List<Notification> getNotifications() {
@@ -111,7 +115,7 @@ public class EscalationImpl implements Escalation {
     }
 
     public void setNotifications(List<Notification> notifications) {
-        EscalationImpl.this.notifications = notifications;
+        this.notifications = notifications;
     }
 
     public List<Reassignment> getReassignments() {
@@ -119,7 +123,7 @@ public class EscalationImpl implements Escalation {
     }
 
     public void setReassignments(List<Reassignment> reassignments) {
-        EscalationImpl.this.reassignments = reassignments;
+        this.reassignments = reassignments;
     }
 
     @Override
@@ -135,7 +139,7 @@ public class EscalationImpl implements Escalation {
 
     @Override
     public boolean equals(Object obj) {
-        if ((EscalationImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -149,8 +153,10 @@ public class EscalationImpl implements Escalation {
             if ((other.name) != null)
                 return false;
             
-        } else if (!(name.equals(other.name)))
-            return false;
+        }else
+            if (!(name.equals(other.name)))
+                return false;
+            
         
         return ((CollectionUtils.equals(constraints, other.constraints)) && (CollectionUtils.equals(notifications, other.notifications))) && (CollectionUtils.equals(reassignments, other.reassignments));
     }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 
 package org.jbpm.process.audit;
 
-import org.jbpm.process.audit.event.AuditEvent;
 import javax.persistence.Column;
+import org.jbpm.process.audit.event.AuditEvent;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +31,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @SequenceGenerator(allocationSize = 1, name = "processInstanceLogIdSeq", sequenceName = "PROC_INST_LOG_ID_SEQ")
-public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.api.runtime.manager.audit.ProcessInstanceLog {
+public class ProcessInstanceLog implements ProcessInstanceLog , Serializable , AuditEvent {
     private static final long serialVersionUID = 510L;
 
     @Id
@@ -97,7 +97,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     void setId(long id) {
-        ProcessInstanceLog.this.id = id;
+        this.id = id;
     }
 
     public Long getProcessInstanceId() {
@@ -105,7 +105,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setProcessInstanceId(long processInstanceId) {
-        ProcessInstanceLog.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public String getProcessId() {
@@ -113,7 +113,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setProcessId(String processId) {
-        ProcessInstanceLog.this.processId = processId;
+        this.processId = processId;
     }
 
     public Date getStart() {
@@ -121,7 +121,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setStart(Date start) {
-        ProcessInstanceLog.this.start = start;
+        this.start = start;
     }
 
     public Date getEnd() {
@@ -129,7 +129,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setEnd(Date end) {
-        ProcessInstanceLog.this.end = end;
+        this.end = end;
     }
 
     public String toString() {
@@ -159,7 +159,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
 
     @Override
     public boolean equals(Object obj) {
-        if ((ProcessInstanceLog.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -173,8 +173,10 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
             if ((other.end) != null)
                 return false;
             
-        } else if (!(end.equals(other.end)))
-            return false;
+        }else
+            if (!(end.equals(other.end)))
+                return false;
+            
         
         if ((id) != (other.id))
             return false;
@@ -183,8 +185,10 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
             if ((other.processId) != null)
                 return false;
             
-        } else if (!(processId.equals(other.processId)))
-            return false;
+        }else
+            if (!(processId.equals(other.processId)))
+                return false;
+            
         
         if ((processInstanceId) != (other.processInstanceId))
             return false;
@@ -193,71 +197,91 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
             if ((other.start) != null)
                 return false;
             
-        } else if (!(start.equals(other.start)))
-            return false;
+        }else
+            if (!(start.equals(other.start)))
+                return false;
+            
         
         if ((parentProcessInstanceId) == null) {
             if ((other.parentProcessInstanceId) != null)
                 return false;
             
-        } else if (!(parentProcessInstanceId.equals(other.parentProcessInstanceId)))
-            return false;
+        }else
+            if (!(parentProcessInstanceId.equals(other.parentProcessInstanceId)))
+                return false;
+            
         
         if ((status) == null) {
             if ((other.status) != null)
                 return false;
             
-        } else if (!(status.equals(other.status)))
-            return false;
+        }else
+            if (!(status.equals(other.status)))
+                return false;
+            
         
         if ((outcome) == null) {
             if ((other.outcome) != null)
                 return false;
             
-        } else if (!(outcome.equals(other.outcome)))
-            return false;
+        }else
+            if (!(outcome.equals(other.outcome)))
+                return false;
+            
         
         if ((duration) == null) {
             if ((other.duration) != null)
                 return false;
             
-        } else if (!(duration.equals(other.duration)))
-            return false;
+        }else
+            if (!(duration.equals(other.duration)))
+                return false;
+            
         
         if ((identity) == null) {
             if ((other.identity) != null)
                 return false;
             
-        } else if (!(identity.equals(other.identity)))
-            return false;
+        }else
+            if (!(identity.equals(other.identity)))
+                return false;
+            
         
         if ((externalId) == null) {
             if ((other.externalId) != null)
                 return false;
             
-        } else if (!(externalId.equals(other.externalId)))
-            return false;
+        }else
+            if (!(externalId.equals(other.externalId)))
+                return false;
+            
         
         if ((processVersion) == null) {
             if ((other.processVersion) != null)
                 return false;
             
-        } else if (!(processVersion.equals(other.processVersion)))
-            return false;
+        }else
+            if (!(processVersion.equals(other.processVersion)))
+                return false;
+            
         
         if ((processName) == null) {
             if ((other.processName) != null)
                 return false;
             
-        } else if (!(processName.equals(other.processName)))
-            return false;
+        }else
+            if (!(processName.equals(other.processName)))
+                return false;
+            
         
         if ((processInstanceDescription) == null) {
             if ((other.processInstanceDescription) != null)
                 return false;
             
-        } else if (!(processInstanceDescription.equals(other.processInstanceDescription)))
-            return false;
+        }else
+            if (!(processInstanceDescription.equals(other.processInstanceDescription)))
+                return false;
+            
         
         return true;
     }
@@ -267,7 +291,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setStatus(int status) {
-        ProcessInstanceLog.this.status = status;
+        this.status = status;
     }
 
     public Long getParentProcessInstanceId() {
@@ -275,7 +299,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setParentProcessInstanceId(long parentProcessInstanceId) {
-        ProcessInstanceLog.this.parentProcessInstanceId = parentProcessInstanceId;
+        this.parentProcessInstanceId = parentProcessInstanceId;
     }
 
     public String getOutcome() {
@@ -283,7 +307,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setOutcome(String errorCode) {
-        ProcessInstanceLog.this.outcome = errorCode;
+        this.outcome = errorCode;
     }
 
     public Long getDuration() {
@@ -291,7 +315,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setDuration(Long duration) {
-        ProcessInstanceLog.this.duration = duration;
+        this.duration = duration;
     }
 
     public String getIdentity() {
@@ -299,7 +323,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setIdentity(String identity) {
-        ProcessInstanceLog.this.identity = identity;
+        this.identity = identity;
     }
 
     public String getExternalId() {
@@ -307,7 +331,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setExternalId(String domainId) {
-        ProcessInstanceLog.this.externalId = domainId;
+        this.externalId = domainId;
     }
 
     public String getProcessVersion() {
@@ -315,7 +339,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setProcessVersion(String version) {
-        ProcessInstanceLog.this.processVersion = version;
+        this.processVersion = version;
     }
 
     public String getProcessName() {
@@ -323,7 +347,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setProcessName(String processName) {
-        ProcessInstanceLog.this.processName = processName;
+        this.processName = processName;
     }
 
     public String getProcessInstanceDescription() {
@@ -331,7 +355,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setProcessInstanceDescription(String processInstanceDescription) {
-        ProcessInstanceLog.this.processInstanceDescription = processInstanceDescription;
+        this.processInstanceDescription = processInstanceDescription;
     }
 
     public String getCorrelationKey() {
@@ -339,7 +363,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setCorrelationKey(String correlationKey) {
-        ProcessInstanceLog.this.correlationKey = correlationKey;
+        this.correlationKey = correlationKey;
     }
 
     public Integer getProcessType() {
@@ -347,7 +371,7 @@ public class ProcessInstanceLog implements Serializable , AuditEvent , org.kie.a
     }
 
     public void setProcessType(Integer processType) {
-        ProcessInstanceLog.this.processType = processType;
+        this.processType = processType;
     }
 }
 

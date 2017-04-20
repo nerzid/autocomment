@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,8 +33,8 @@ public class Interface implements Serializable {
     private Map<String, Interface.Operation> operations = new HashMap<String, Interface.Operation>();
 
     public Interface(String id, String name) {
-        Interface.this.id = id;
-        Interface.this.name = name;
+        this.id = id;
+        this.name = name;
     }
 
     public String getId() {
@@ -47,6 +47,7 @@ public class Interface implements Serializable {
 
     public Interface.Operation addOperation(String id, String name) {
         Interface.Operation operation = new Interface.Operation(id, name);
+        // put String{id} to Map{operations}
         operations.put(id, operation);
         return operation;
     }
@@ -56,7 +57,7 @@ public class Interface implements Serializable {
     }
 
     public void setImplementationRef(String implementationRef) {
-        Interface.this.implementationRef = implementationRef;
+        this.implementationRef = implementationRef;
     }
 
     public String getImplementationRef() {
@@ -73,8 +74,8 @@ public class Interface implements Serializable {
         private String implementationRef;
 
         public Operation(String id, String name) {
-            Interface.Operation.this.id = id;
-            Interface.Operation.this.name = name;
+            this.id = id;
+            this.name = name;
         }
 
         public String getId() {
@@ -82,7 +83,7 @@ public class Interface implements Serializable {
         }
 
         public void setId(String id) {
-            Interface.Operation.this.id = id;
+            this.id = id;
         }
 
         public String getName() {
@@ -90,7 +91,7 @@ public class Interface implements Serializable {
         }
 
         public void setName(String name) {
-            Interface.Operation.this.name = name;
+            this.name = name;
         }
 
         public Message getMessage() {
@@ -98,7 +99,7 @@ public class Interface implements Serializable {
         }
 
         public void setMessage(Message message) {
-            Interface.Operation.this.message = message;
+            this.message = message;
         }
 
         public Interface getInterface() {
@@ -106,7 +107,7 @@ public class Interface implements Serializable {
         }
 
         public void setImplementationRef(String implementationRef) {
-            Interface.Operation.this.implementationRef = implementationRef;
+            this.implementationRef = implementationRef;
         }
 
         public String getImplementationRef() {

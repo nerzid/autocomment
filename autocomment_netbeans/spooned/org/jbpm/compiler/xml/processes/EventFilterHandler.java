@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,8 +16,8 @@
 
 package org.jbpm.compiler.xml.processes;
 
-import org.xml.sax.Attributes;
 import org.drools.core.xml.BaseAbstractHandler;
+import org.xml.sax.Attributes;
 import org.w3c.dom.Element;
 import org.jbpm.process.core.event.EventFilter;
 import org.jbpm.workflow.core.node.EventNode;
@@ -30,17 +30,18 @@ import org.xml.sax.SAXException;
 
 public class EventFilterHandler extends BaseAbstractHandler implements Handler {
     public EventFilterHandler() {
-        if (((EventFilterHandler.this.validParents) == null) && ((EventFilterHandler.this.validPeers) == null)) {
+        if (((this.validParents) == null) && ((this.validPeers) == null)) {
             this.validParents = new HashSet<Class<?>>();
-            EventFilterHandler.this.validParents.add(EventNode.class);
-            EventFilterHandler.this.validParents.add(EventTrigger.class);
+            this.validParents.add(EventNode.class);
+            this.validParents.add(EventTrigger.class);
             this.validPeers = new HashSet<Class<?>>();
-            EventFilterHandler.this.validPeers.add(null);
+            this.validPeers.add(null);
             this.allowNesting = false;
-        } 
+        }
     }
 
     public Object start(final String uri, final String localName, final Attributes attrs, final ExtensibleXmlParser parser) throws SAXException {
+        // start element String{localName} to ExtensibleXmlParser{parser}
         parser.startElementBuilder(localName, attrs);
         return null;
     }
@@ -49,6 +50,7 @@ public class EventFilterHandler extends BaseAbstractHandler implements Handler {
         final Element element = parser.endElementBuilder();
         Object parent = parser.getParent();
         final String type = element.getAttribute("type");
+        // empty attribute String{localName} to EventFilterHandler{}
         emptyAttributeCheck(localName, "type", type, parser);
         if ("eventType".equals(type)) {
             final String eventType = element.getAttribute("eventType");
@@ -57,10 +59,12 @@ public class EventFilterHandler extends BaseAbstractHandler implements Handler {
             eventTypeFilter.setType(eventType);
             if (parent instanceof EventNode) {
                 ((EventNode) (parent)).addEventFilter(eventTypeFilter);
-            } else if (parent instanceof EventTrigger) {
-                ((EventTrigger) (parent)).addEventFilter(eventTypeFilter);
-            } 
-        } else {
+            }else
+                if (parent instanceof EventTrigger) {
+                    ((EventTrigger) (parent)).addEventFilter(eventTypeFilter);
+                }
+            
+        }else {
             throw new IllegalArgumentException(("Unknown event filter type: " + type));
         }
         return null;

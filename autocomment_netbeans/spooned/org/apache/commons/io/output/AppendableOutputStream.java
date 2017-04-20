@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import java.io.OutputStream;
  * <p>
  * For example, can be used with any {@link java.io.Writer} or a {@link java.lang.StringBuilder}
  * or {@link java.lang.StringBuffer}.
- * 
+ *
  * @since 2.5
  * @see java.lang.Appendable
  * @version $Id: AppendableOutputStream.java 1687815 2015-06-26 17:18:56Z krosenvold $
@@ -37,7 +37,7 @@ public class AppendableOutputStream<T extends Appendable> extends OutputStream {
 
     /**
      * Construct a new instance with the specified appendable.
-     * 
+     *
      * @param appendable the appendable to write to
      */
     public AppendableOutputStream(T appendable) {
@@ -46,18 +46,19 @@ public class AppendableOutputStream<T extends Appendable> extends OutputStream {
 
     /**
      * Write a character to the underlying appendable.
-     * 
+     *
      * @param b the character to write
      * @throws IOException upon error
      */
     @Override
     public void write(int b) throws IOException {
+        // append int{((char) (b))} to T{appendable}
         appendable.append(((char) (b)));
     }
 
     /**
      * Return the target appendable.
-     * 
+     *
      * @return the target appendable
      */
     public T getAppendable() {

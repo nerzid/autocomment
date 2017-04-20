@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,14 +36,14 @@ public class DynamicNode extends CompositeContextNode {
     }
 
     public void setAutoComplete(boolean autoComplete) {
-        DynamicNode.this.autoComplete = autoComplete;
+        this.autoComplete = autoComplete;
     }
 
     public boolean acceptsEvent(String type, Object event) {
         for (Node node : getNodes()) {
             if ((type.equals(node.getName())) && (node.getIncomingConnections().isEmpty())) {
                 return true;
-            } 
+            }
         }
         return super.acceptsEvent(type, event);
     }
@@ -61,7 +61,7 @@ public class DynamicNode extends CompositeContextNode {
     }
 
     public void setCompletionExpression(String expression) {
-        DynamicNode.this.completionExpression = expression;
+        this.completionExpression = expression;
     }
 
     public String getLanguage() {
@@ -69,7 +69,7 @@ public class DynamicNode extends CompositeContextNode {
     }
 
     public void setLanguage(String language) {
-        DynamicNode.this.language = language;
+        this.language = language;
     }
 
     public List<Node> getAutoStartNodes() {

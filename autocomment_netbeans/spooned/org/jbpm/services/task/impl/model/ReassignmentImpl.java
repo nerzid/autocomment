@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,26 +17,26 @@
 
 package org.jbpm.services.task.impl.model;
 
-import javax.persistence.CascadeType;
-import org.jbpm.services.task.utils.CollectionUtils;
-import java.util.Collections;
 import javax.persistence.Entity;
+import javax.persistence.CascadeType;
+import javax.persistence.Table;
+import org.jbpm.services.task.utils.CollectionUtils;
+import java.util.List;
+import javax.persistence.OneToMany;
+import java.util.Collections;
 import javax.persistence.GeneratedValue;
+import javax.persistence.ManyToMany;
 import javax.persistence.GenerationType;
+import java.io.ObjectInput;
+import javax.persistence.SequenceGenerator;
 import org.kie.api.task.model.I18NText;
+import java.io.ObjectOutput;
 import java.io.IOException;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import java.util.List;
-import javax.persistence.ManyToMany;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import javax.persistence.OneToMany;
 import org.kie.api.task.model.OrganizationalEntity;
 import org.kie.internal.task.api.model.Reassignment;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 
 @Entity
 @Table(name = "Reassignment")
@@ -57,8 +57,11 @@ public class ReassignmentImpl implements Reassignment {
     private List<OrganizationalEntity> potentialOwners = Collections.emptyList();
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long Long{id} to ObjectOutput{out}
         out.writeLong(id);
+        // write i18 List{documentation} to void{CollectionUtils}
         CollectionUtils.writeI18NTextList(documentation, out);
+        // write organizational List{potentialOwners} to void{CollectionUtils}
         CollectionUtils.writeOrganizationalEntityList(potentialOwners, out);
     }
 
@@ -73,7 +76,7 @@ public class ReassignmentImpl implements Reassignment {
     }
 
     public void setId(long id) {
-        ReassignmentImpl.this.id = id;
+        this.id = id;
     }
 
     public List<I18NText> getDocumentation() {
@@ -81,7 +84,7 @@ public class ReassignmentImpl implements Reassignment {
     }
 
     public void setDocumentation(List<I18NText> documentation) {
-        ReassignmentImpl.this.documentation = documentation;
+        this.documentation = documentation;
     }
 
     public List<OrganizationalEntity> getPotentialOwners() {
@@ -89,7 +92,7 @@ public class ReassignmentImpl implements Reassignment {
     }
 
     public void setPotentialOwners(List<OrganizationalEntity> potentialOwners) {
-        ReassignmentImpl.this.potentialOwners = potentialOwners;
+        this.potentialOwners = potentialOwners;
     }
 
     @Override
@@ -103,7 +106,7 @@ public class ReassignmentImpl implements Reassignment {
 
     @Override
     public boolean equals(Object obj) {
-        if ((ReassignmentImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)

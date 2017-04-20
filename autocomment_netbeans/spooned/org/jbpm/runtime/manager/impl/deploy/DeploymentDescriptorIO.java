@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,18 +17,18 @@
 
 package org.jbpm.runtime.manager.impl.deploy;
 
+import javax.xml.validation.SchemaFactory;
 import org.kie.internal.runtime.conf.DeploymentDescriptor;
 import java.io.InputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.XMLConstants;
 import javax.xml.bind.Marshaller;
 import org.xml.sax.SAXException;
 import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import java.io.StringWriter;
 import java.net.URL;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.XMLConstants;
 
 /**
  * XML based deployment descriptor IO manager to read and write descriptors.
@@ -86,7 +86,7 @@ public class DeploymentDescriptorIO {
             // load schema for validation
             URL schemaLocation = DeploymentDescriptorIO.class.getResource("/deployment-descriptor.xsd");
             DeploymentDescriptorIO.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(schemaLocation);
-        } 
+        }
         return DeploymentDescriptorIO.context;
     }
 }

@@ -1,6 +1,5 @@
+// Generated from CommentTitle.g4 by ANTLR 4.6
 package com.nerzid.autocomment.grammar;
-
-// Generated from CommentTitle.g4 by ANTLR 4.5.3
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -29,25 +28,25 @@ public class CommentTitleBaseListener implements CommentTitleListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolean_one_verb_rule(CommentTitleParser.Boolean_one_verb_ruleContext ctx) { }
+	@Override public void enterOne_verb_rule(CommentTitleParser.One_verb_ruleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoolean_one_verb_rule(CommentTitleParser.Boolean_one_verb_ruleContext ctx) { }
+	@Override public void exitOne_verb_rule(CommentTitleParser.One_verb_ruleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolean_two_verb_rule(CommentTitleParser.Boolean_two_verb_ruleContext ctx) { }
+	@Override public void enterTwo_verb_rule(CommentTitleParser.Two_verb_ruleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoolean_two_verb_rule(CommentTitleParser.Boolean_two_verb_ruleContext ctx) { }
+	@Override public void exitTwo_verb_rule(CommentTitleParser.Two_verb_ruleContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

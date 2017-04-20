@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,19 +20,19 @@ package org.jbpm.services.api;
 import org.kie.internal.task.api.AuditTask;
 import java.util.Collection;
 import org.kie.internal.process.CorrelationKey;
+import org.kie.internal.task.api.model.TaskEvent;
 import java.util.Date;
+import org.jbpm.services.api.model.UserTaskInstanceDesc;
 import java.util.List;
 import org.jbpm.services.api.model.NodeInstanceDesc;
 import org.jbpm.services.api.model.ProcessDefinition;
 import org.jbpm.services.api.model.ProcessInstanceDesc;
 import org.kie.api.runtime.query.QueryContext;
 import org.kie.internal.query.QueryFilter;
-import org.kie.api.task.model.Status;
-import org.kie.internal.task.api.model.TaskEvent;
-import org.kie.api.task.model.TaskSummary;
-import org.kie.internal.task.query.TaskSummaryQueryBuilder;
-import org.jbpm.services.api.model.UserTaskInstanceDesc;
 import org.jbpm.services.api.model.VariableDesc;
+import org.kie.api.task.model.TaskSummary;
+import org.kie.api.task.model.Status;
+import org.kie.internal.task.query.TaskSummaryQueryBuilder;
 
 /**
  * This service provides an interface to retrieve data about the runtime, including the following:
@@ -50,9 +50,11 @@ public interface RuntimeDataService {
     enum EntryType {
 START(0), END(1);
         private int value;
+
         private EntryType(int value) {
-            RuntimeDataService.EntryType.this.value = value;
+            this.value = value;
         }
+
         public int getValue() {
             return value;
         }
@@ -309,7 +311,7 @@ START(0), END(1);
      * @param processId The id of the process
      * @return A {@link ProcessAssetDesc} instance, representing the {@link Process}
      *         with the specified (process) id.
-     * 
+     *
      * @see RuntimeDataService#getProcessesById(String)
      * @deprecated will be removed in version 7
      */
@@ -336,7 +338,7 @@ START(0), END(1);
     // user task query operations
     /**
      * Return a task by its workItemId.
-     * 
+     *
      * @param workItemId
      * @return
      */
@@ -344,7 +346,7 @@ START(0), END(1);
 
     /**
      * Return a task by its taskId.
-     * 
+     *
      * @param taskId
      * @return
      */
@@ -356,7 +358,7 @@ START(0), END(1);
      * level. Therefore, business administrators can perform the exact same
      * operations as task stakeholders. Business administrators may also observe
      * the progress of notifications.
-     * 
+     *
      * @param userId
      * @param filter
      * @return
@@ -375,7 +377,7 @@ START(0), END(1);
 
     /**
      * Return a list of tasks the user is eligible for.
-     * 
+     *
      * @param userId
      * @param filter
      * @return
@@ -384,7 +386,7 @@ START(0), END(1);
 
     /**
      * Return a list of tasks the user or groups are eligible for.
-     * 
+     *
      * @param userId
      * @param groupIds
      * @param filter
@@ -395,7 +397,7 @@ START(0), END(1);
     /**
      * Return a list of tasks the user is eligible for with one of the listed
      * statuses.
-     * 
+     *
      * @param userId
      * @param status
      * @param filter
@@ -418,7 +420,7 @@ START(0), END(1);
      * Return a list of tasks the user is eligible for with one of the listed
      * statuses and expiration date starting at <code>from</code>. Tasks that do not have expiration date set
      * will also be included in the result set.
-     * 
+     *
      * @param userId
      * @param status
      * @param from
@@ -431,7 +433,7 @@ START(0), END(1);
      * Return a list of tasks the user has claimed with one of the listed
      * statuses and expiration date starting at <code>from</code>. Tasks that do not have expiration date set
      * will also be included in the result set.
-     * 
+     *
      * @param userId
      * @param status
      * @param from
@@ -442,7 +444,7 @@ START(0), END(1);
 
     /**
      * Return a list of tasks the user has claimed.
-     * 
+     *
      * @param userId
      * @param filter
      * @return
@@ -452,7 +454,7 @@ START(0), END(1);
     /**
      * Return a list of tasks the user has claimed with one of the listed
      * statuses.
-     * 
+     *
      * @param userId
      * @param status
      * @param filter
@@ -462,7 +464,7 @@ START(0), END(1);
 
     /**
      * Get a list of tasks the Process Instance is waiting on.
-     * 
+     *
      * @param processInstanceId
      * @return
      */
@@ -471,7 +473,7 @@ START(0), END(1);
     /**
      * Get a list of tasks the Process Instance is waiting on with one of the
      * listed statuses.
-     * 
+     *
      * @param processInstanceId
      * @param status
      * @param filter
@@ -482,7 +484,7 @@ START(0), END(1);
     /**
      * Get a list of tasks audit logs for the user provides applying the query filter
      * listed statuses.
-     * 
+     *
      * @param userId
      * @param filter
      * @return
@@ -492,7 +494,7 @@ START(0), END(1);
     /**
      * Get a list of all active tasks audit logs for the user provides applying the query filter
      * listed statuses.
-     * 
+     *
      * @param userId
      * @param filter
      * @return
@@ -502,7 +504,7 @@ START(0), END(1);
     /**
      * Get a list of group tasks (actualOwner == null) audit logs for the user provides applying the query filter
      * listed statuses.
-     * 
+     *
      * @param userId
      * @param filter
      * @return
@@ -512,7 +514,7 @@ START(0), END(1);
     /**
      * Get a list of tasks admin audit (user in businessAdministrators) logs for the user provides applying the query filter
      * listed statuses.
-     * 
+     *
      * @param userId
      * @param filter
      * @return

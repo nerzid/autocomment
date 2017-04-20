@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2012 Red Hat, Inc. and/or its affiliates
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 
 package org.jbpm.document.service.impl;
 
-import java.util.ArrayList;
 import org.apache.commons.lang3.ArrayUtils;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -26,18 +26,18 @@ import org.jbpm.document.Document;
 import org.jbpm.document.service.DocumentStorageService;
 import java.io.File;
 import org.apache.commons.io.FileUtils;
-import java.io.IOException;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 import java.util.UUID;
+import java.util.Map;
+import java.io.IOException;
+import org.apache.commons.lang3.StringUtils;
+import java.util.List;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * This a Sample Implementation of the DocumentStorageService saves the uploaded files on the File System on a folder (by default /docs)
  * and return the complete path to the file that will be stored in the form field property.
- * 
+ *
  * Check that the user that is running the app has write permissions on the storage folder.
  */
 public class DocumentStorageServiceImpl implements DocumentStorageService {
@@ -51,12 +51,12 @@ public class DocumentStorageServiceImpl implements DocumentStorageService {
     private File storageFile;
 
     public DocumentStorageServiceImpl(String storagePath) {
-        DocumentStorageServiceImpl.this.storagePath = storagePath;
-        DocumentStorageServiceImpl.this.storageFile = new File(storagePath);
+        this.storagePath = storagePath;
+        this.storageFile = new File(storagePath);
     }
 
     public DocumentStorageServiceImpl() {
-        DocumentStorageServiceImpl.this.storageFile = new File(DocumentStorageServiceImpl.this.storagePath);
+        this.storageFile = new File(this.storagePath);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class DocumentStorageServiceImpl implements DocumentStorageService {
     public Document saveDocument(Document document, byte[] content) {
         if (StringUtils.isEmpty(document.getIdentifier())) {
             document.setIdentifier(generateUniquePath());
-        } 
+        }
         File destination = getFileByPath((((document.getIdentifier()) + (File.separator)) + (document.getName())));
         try {
             FileUtils.writeByteArrayToFile(destination, content);
@@ -102,7 +102,7 @@ public class DocumentStorageServiceImpl implements DocumentStorageService {
             } catch (IOException e) {
                 log.error("Error loading document '{}': {}", id, e);
             }
-        } 
+        }
         return null;
     }
 
@@ -122,14 +122,14 @@ public class DocumentStorageServiceImpl implements DocumentStorageService {
                 return deleteFile(rootDoc.listFiles()[0]);
             
             return deleteFile(rootDoc);
-        } 
+        }
         return true;
     }
 
     public File getDocumentContent(Document doc) {
         if (doc != null) {
             return getFileByPath(doc.getIdentifier());
-        } 
+        }
         return null;
     }
 
@@ -139,16 +139,16 @@ public class DocumentStorageServiceImpl implements DocumentStorageService {
                 if (file.isFile()) {
                     file.delete();
                     return deleteFile(file.getParentFile());
-                } else {
+                }else {
                     if (!(file.getName().equals(storagePath))) {
                         String[] list = file.list();
                         if ((list == null) || ((list.length) == 0)) {
                             file.delete();
                             return deleteFile(file.getParentFile());
-                        } 
-                    } 
+                        }
+                    }
                 }
-            } 
+            }
         } catch (Exception e) {
             log.error("Error deleting file: ", e);
             return false;
@@ -183,7 +183,8 @@ public class DocumentStorageServiceImpl implements DocumentStorageService {
         // make sure the endIndex is not bigger then amount of files
         if ((documents.length) < endIndex) {
             endIndex = documents.length;
-        } 
+        }
+        // sort File[]{documents} to void{Arrays}
         Arrays.sort(documents, new Comparator<File>() {
             public int compare(File f1, File f2) {
                 return Long.compare(f1.lastModified(), f2.lastModified());

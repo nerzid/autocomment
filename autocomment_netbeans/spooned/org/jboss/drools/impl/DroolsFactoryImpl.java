@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * DroolsFactoryImpl
@@ -21,11 +22,27 @@
 
 package org.jboss.drools.impl;
 
-import java.math.BigInteger;
+import static DroolsPackage.DOCUMENT_ROOT;
 import org.eclipse.emf.ecore.EClass;
+import java.math.BigInteger;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import EPackage.Registry.INSTANCE;
+import XMLTypePackage.Literals.INTEGER;
+import XMLTypePackage.Literals.STRING;
+import XMLTypeFactory.eINSTANCE;
+import static DroolsPackage.GLOBAL_TYPE;
+import static DroolsPackage.ON_EXIT_SCRIPT_TYPE;
+import static DroolsPackage.PACKAGE_NAME_TYPE;
+import static DroolsPackage.RULE_FLOW_GROUP_TYPE;
+import static DroolsPackage.TASK_NAME_TYPE;
+import static DroolsPackage.ON_ENTRY_SCRIPT_TYPE;
+import static DroolsPackage.eINSTANCE;
+import static DroolsPackage.PRIORITY_TYPE;
+import static DroolsPackage.VERSION_TYPE;
+import static DroolsPackage.IMPORT_TYPE;
+import static DroolsPackage.META_DATA_TYPE;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,10 +59,10 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      */
     public static DroolsFactory init() {
         try {
-            DroolsFactory theDroolsFactory = ((DroolsFactory) (EPackage.Registry.INSTANCE.getEFactory("http://www.jboss.org/drools")));
+            DroolsFactory theDroolsFactory = ((DroolsFactory) (INSTANCE.getEFactory("http://www.jboss.org/drools")));
             if (theDroolsFactory != null) {
                 return theDroolsFactory;
-            } 
+            }
         } catch (Exception exception) {
             EcorePlugin.INSTANCE.log(exception);
         }
@@ -199,7 +216,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public String createPackageNameTypeFromString(EDataType eDataType, String initialValue) {
-        return ((String) (XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.STRING, initialValue)));
+        return ((String) (eINSTANCE.createFromString(STRING, initialValue)));
     }
 
     /**
@@ -208,7 +225,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public String convertPackageNameTypeToString(EDataType eDataType, Object instanceValue) {
-        return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.STRING, instanceValue);
+        return eINSTANCE.convertToString(STRING, instanceValue);
     }
 
     /**
@@ -217,7 +234,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public BigInteger createPriorityTypeFromString(EDataType eDataType, String initialValue) {
-        return ((BigInteger) (XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.INTEGER, initialValue)));
+        return ((BigInteger) (eINSTANCE.createFromString(INTEGER, initialValue)));
     }
 
     /**
@@ -226,7 +243,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public String convertPriorityTypeToString(EDataType eDataType, Object instanceValue) {
-        return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.INTEGER, instanceValue);
+        return eINSTANCE.convertToString(INTEGER, instanceValue);
     }
 
     /**
@@ -235,7 +252,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public String createRuleFlowGroupTypeFromString(EDataType eDataType, String initialValue) {
-        return ((String) (XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.STRING, initialValue)));
+        return ((String) (eINSTANCE.createFromString(STRING, initialValue)));
     }
 
     /**
@@ -244,7 +261,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public String convertRuleFlowGroupTypeToString(EDataType eDataType, Object instanceValue) {
-        return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.STRING, instanceValue);
+        return eINSTANCE.convertToString(STRING, instanceValue);
     }
 
     /**
@@ -253,7 +270,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public String createTaskNameTypeFromString(EDataType eDataType, String initialValue) {
-        return ((String) (XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.STRING, initialValue)));
+        return ((String) (eINSTANCE.createFromString(STRING, initialValue)));
     }
 
     /**
@@ -262,7 +279,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public String convertTaskNameTypeToString(EDataType eDataType, Object instanceValue) {
-        return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.STRING, instanceValue);
+        return eINSTANCE.convertToString(STRING, instanceValue);
     }
 
     /**
@@ -271,7 +288,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public String createVersionTypeFromString(EDataType eDataType, String initialValue) {
-        return ((String) (XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.STRING, initialValue)));
+        return ((String) (eINSTANCE.createFromString(STRING, initialValue)));
     }
 
     /**
@@ -280,7 +297,7 @@ public class DroolsFactoryImpl extends EFactoryImpl implements DroolsFactory {
      * @generated
      */
     public String convertVersionTypeToString(EDataType eDataType, Object instanceValue) {
-        return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.STRING, instanceValue);
+        return eINSTANCE.convertToString(STRING, instanceValue);
     }
 
     /**

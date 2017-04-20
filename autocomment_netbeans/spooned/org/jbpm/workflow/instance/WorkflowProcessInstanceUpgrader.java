@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,35 +24,35 @@ import java.util.Map;
 import org.kie.api.definition.process.Node;
 import org.kie.api.definition.process.NodeContainer;
 import org.jbpm.workflow.core.impl.NodeImpl;
+import org.kie.api.definition.process.WorkflowProcess;
 import org.kie.api.runtime.process.NodeInstance;
 import org.jbpm.workflow.instance.impl.NodeInstanceImpl;
-import org.jbpm.ruleflow.core.RuleFlowProcess;
-import java.util.Stack;
-import org.kie.api.definition.process.WorkflowProcess;
+import org.kie.api.definition.process.Process;
 import org.jbpm.workflow.instance.impl.WorkflowProcessInstanceImpl;
 import org.kie.api.runtime.process.org.jbpm.workflow.instance.NodeInstance;
+import java.util.Stack;
 
 public class WorkflowProcessInstanceUpgrader {
     public static void upgradeProcessInstance(KieRuntime kruntime, long processInstanceId, String processId, Map<String, Long> nodeMapping) {
         if (nodeMapping == null) {
             nodeMapping = new HashMap<String, Long>();
-        } 
+        }
         WorkflowProcessInstanceImpl processInstance = ((WorkflowProcessInstanceImpl) (kruntime.getProcessInstance(processInstanceId)));
         if (processInstance == null) {
             throw new IllegalArgumentException(("Could not find process instance " + processInstanceId));
-        } 
+        }
         if (processId == null) {
             throw new IllegalArgumentException("Null process id");
-        } 
+        }
         WorkflowProcess process = ((WorkflowProcess) (kruntime.getKieBase().getProcess(processId)));
         if (process == null) {
             throw new IllegalArgumentException(("Could not find process " + processId));
-        } 
+        }
         if (processInstance.getProcessId().equals(processId)) {
             return ;
-        } 
+        }
         synchronized(processInstance) {
-            org.kie.api.definition.process.Process oldProcess = processInstance.getProcess();
+            Process oldProcess = processInstance.getProcess();
             processInstance.disconnect();
             processInstance.setProcess(oldProcess);
             WorkflowProcessInstanceUpgrader.updateNodeInstances(processInstance, nodeMapping);
@@ -79,24 +79,33 @@ public class WorkflowProcessInstanceUpgrader {
             Long to = null;
             if (processFrom instanceof WorkflowProcess) {
                 from = WorkflowProcessInstanceUpgrader.getNodeId(((WorkflowProcess) (processFrom)).getNodes(), entry.getKey(), true);
-            } else if (processFrom instanceof RuleFlowProcess) {
-                from = WorkflowProcessInstanceUpgrader.getNodeId(((RuleFlowProcess) (processFrom)).getNodes(), entry.getKey(), true);
-            } else if (processFrom != null) {
-                throw new IllegalArgumentException(("Suported processes are WorkflowProcess and RuleFlowProcess, it was:" + (processFrom.getClass())));
-            } else {
-                throw new IllegalArgumentException(("Can not find process with id: " + fromProcessIdString));
-            }
+            }else
+                if (processFrom instanceof org.jbpm.ruleflow.core.RuleFlowProcess) {
+                    from = WorkflowProcessInstanceUpgrader.getNodeId(((org.jbpm.ruleflow.core.RuleFlowProcess) (processFrom)).getNodes(), entry.getKey(), true);
+                }else
+                    if (processFrom != null) {
+                        throw new IllegalArgumentException(("Suported processes are WorkflowProcess and RuleFlowProcess, it was:" + (processFrom.getClass())));
+                    }else {
+                        throw new IllegalArgumentException(("Can not find process with id: " + fromProcessIdString));
+                    }
+                
+            
             if (processTo instanceof WorkflowProcess) {
                 to = Long.valueOf(WorkflowProcessInstanceUpgrader.getNodeId(((WorkflowProcess) (processTo)).getNodes(), entry.getValue(), false));
-            } else if (processTo instanceof RuleFlowProcess) {
-                to = Long.valueOf(WorkflowProcessInstanceUpgrader.getNodeId(((RuleFlowProcess) (processTo)).getNodes(), entry.getValue(), false));
-            } else if (processTo != null) {
-                throw new IllegalArgumentException(("Suported processes are WorkflowProcess and RuleFlowProcess, it was:" + (processTo.getClass())));
-            } else {
-                throw new IllegalArgumentException(("Can not find process with id: " + toProcessId));
-            }
+            }else
+                if (processTo instanceof org.jbpm.ruleflow.core.RuleFlowProcess) {
+                    to = Long.valueOf(WorkflowProcessInstanceUpgrader.getNodeId(((org.jbpm.ruleflow.core.RuleFlowProcess) (processTo)).getNodes(), entry.getValue(), false));
+                }else
+                    if (processTo != null) {
+                        throw new IllegalArgumentException(("Suported processes are WorkflowProcess and RuleFlowProcess, it was:" + (processTo.getClass())));
+                    }else {
+                        throw new IllegalArgumentException(("Can not find process with id: " + toProcessId));
+                    }
+                
+            
             nodeIdMapping.put(from, to);
         }
+        // upgrade process KieRuntime{kruntime} to void{WorkflowProcessInstanceUpgrader}
         WorkflowProcessInstanceUpgrader.upgradeProcessInstance(kruntime, fromProcessId, toProcessId, nodeIdMapping);
     }
 
@@ -111,23 +120,23 @@ public class WorkflowProcessInstanceUpgrader {
             if ((topNode.getName().compareTo(nodeName)) == 0) {
                 match = topNode;
                 break;
-            } 
+            }
             if (topNode instanceof NodeContainer) {
                 for (Node node : ((NodeContainer) (topNode)).getNodes()) {
                     nodeStack.push(node);
                 }
-            } 
-        }
+            }
+        } 
         if (match == null) {
             throw new IllegalArgumentException(("No node with name " + nodeName));
-        } 
+        }
         String id = "";
         if (unique) {
             while (!((match.getNodeContainer()) instanceof Process)) {
                 id = (":" + (match.getId())) + id;
                 match = ((Node) (match.getNodeContainer()));
-            }
-        } 
+            } 
+        }
         id = (match.getId()) + id;
         return id;
     }
@@ -138,7 +147,7 @@ public class WorkflowProcessInstanceUpgrader {
             Long newNodeId = nodeMapping.get(oldNodeId);
             if (newNodeId == null) {
                 newNodeId = nodeInstance.getNodeId();
-            } 
+            }
             // clean up iteration levels for removed (old) nodes
             Map<String, Integer> iterLevels = ((WorkflowProcessInstanceImpl) (nodeInstance.getProcessInstance())).getIterationLevels();
             String uniqueId = ((String) (((NodeImpl) (nodeInstance.getNode())).getMetaData("UniqueId")));
@@ -147,7 +156,7 @@ public class WorkflowProcessInstanceUpgrader {
             ((NodeInstanceImpl) (nodeInstance)).setNodeId(newNodeId);
             if (nodeInstance instanceof NodeInstanceContainer) {
                 WorkflowProcessInstanceUpgrader.updateNodeInstances(((NodeInstanceContainer) (nodeInstance)), nodeMapping);
-            } 
+            }
         }
     }
 }

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * TimeUnit
@@ -51,6 +52,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
      * @ordered
      */
     public static final int MS_VALUE = 0;
+
     /**
      * The '<em><b>S</b></em>' literal value.
      * <!-- begin-user-doc -->
@@ -65,6 +67,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
      * @ordered
      */
     public static final int S_VALUE = 1;
+
     /**
      * The '<em><b>Min</b></em>' literal value.
      * <!-- begin-user-doc -->
@@ -79,6 +82,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
      * @ordered
      */
     public static final int MIN_VALUE = 2;
+
     /**
      * The '<em><b>Hour</b></em>' literal value.
      * <!-- begin-user-doc -->
@@ -93,6 +97,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
      * @ordered
      */
     public static final int HOUR_VALUE = 3;
+
     /**
      * The '<em><b>Day</b></em>' literal value.
      * <!-- begin-user-doc -->
@@ -107,6 +112,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
      * @ordered
      */
     public static final int DAY_VALUE = 4;
+
     /**
      * The '<em><b>Year</b></em>' literal value.
      * <!-- begin-user-doc -->
@@ -121,6 +127,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
      * @ordered
      */
     public static final int YEAR_VALUE = 5;
+
     /**
      * An array of all the '<em><b>Time Unit</b></em>' enumerators.
      * <!-- begin-user-doc -->
@@ -128,6 +135,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
      * @generated
      */
     private static final TimeUnit[] VALUES_ARRAY = new TimeUnit[]{ TimeUnit.MS , TimeUnit.S , TimeUnit.MIN , TimeUnit.HOUR , TimeUnit.DAY , TimeUnit.YEAR };
+
     /**
      * A public read-only list of all the '<em><b>Time Unit</b></em>' enumerators.
      * <!-- begin-user-doc -->
@@ -135,24 +143,28 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
      * @generated
      */
     public static final List<TimeUnit> VALUES = Collections.unmodifiableList(Arrays.asList(TimeUnit.VALUES_ARRAY));
+
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     private final int value;
+
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     private final String name;
+
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     private final String literal;
+
     /**
      * Only this class can construct instances.
      * <!-- begin-user-doc -->
@@ -164,6 +176,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
         this.name = name;
         this.literal = literal;
     }
+
     /**
      * Returns the '<em><b>Time Unit</b></em>' literal with the specified literal value.
      * <!-- begin-user-doc -->
@@ -175,7 +188,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
             TimeUnit result = TimeUnit.VALUES_ARRAY[i];
             if (result.toString().equals(literal)) {
                 return result;
-            } 
+            }
         }
         return null;
     }
@@ -191,7 +204,7 @@ MS(0,"ms","ms"), S(1,"s","s"), MIN(2,"min","min"), HOUR(3,"hour","hour"), DAY(4,
             TimeUnit result = TimeUnit.VALUES_ARRAY[i];
             if (result.getName().equals(name)) {
                 return result;
-            } 
+            }
         }
         return null;
     }

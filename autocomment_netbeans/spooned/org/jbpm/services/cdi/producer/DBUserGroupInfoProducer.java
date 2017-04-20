@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,9 +28,9 @@ import org.kie.internal.task.api.UserInfo;
 @Alternative
 @Selectable
 public class DBUserGroupInfoProducer implements UserGroupInfoProducer {
-    private UserGroupCallback callback = new org.jbpm.services.task.identity.DBUserGroupCallbackImpl(true);
+    private UserGroupCallback callback = new DBUserGroupCallbackImpl(true);
 
-    private UserInfo userInfo = new org.jbpm.services.task.identity.DBUserInfoImpl(true);
+    private UserInfo userInfo = new DBUserInfoImpl(true);
 
     @Override
     @Produces

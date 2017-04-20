@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,6 +18,9 @@
 package org.jbpm.services.task.rule.impl;
 
 import java.util.HashMap;
+import TaskRuleService.ADD_TASK_SCOPE;
+import TaskRuleService.COMPLETE_TASK_SCOPE;
+import ResourceType.DRL;
 import org.kie.api.KieBase;
 import org.kie.internal.builder.KnowledgeBuilder;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
@@ -49,15 +52,15 @@ public class RuleContextProviderImpl implements RuleContextProvider {
         try {
             Resource addTask = ResourceFactory.newClassPathResource(RuleContextProviderImpl.DEFAULT_ADD_TASK_RULES);
             KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-            kbuilder.add(addTask, ResourceType.DRL);
-            kieBases.put(TaskRuleService.ADD_TASK_SCOPE, kbuilder.newKnowledgeBase());
+            kbuilder.add(addTask, DRL);
+            kieBases.put(ADD_TASK_SCOPE, kbuilder.newKnowledgeBase());
         } catch (Exception e) {
         }
         try {
             Resource completeTask = ResourceFactory.newClassPathResource(RuleContextProviderImpl.DEFAULT_COMPLETE_TASK_RULES);
             KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-            kbuilder.add(completeTask, ResourceType.DRL);
-            kieBases.put(TaskRuleService.COMPLETE_TASK_SCOPE, kbuilder.newKnowledgeBase());
+            kbuilder.add(completeTask, DRL);
+            kieBases.put(COMPLETE_TASK_SCOPE, kbuilder.newKnowledgeBase());
         } catch (Exception e) {
         }
     }
@@ -73,12 +76,14 @@ public class RuleContextProviderImpl implements RuleContextProvider {
     }
 
     public void addGlobals(String scope, Map<String, Object> global) {
-        RuleContextProviderImpl.this.globals.put(scope, global);
+        // put String{scope} to Map{this.globals}
+        this.globals.put(scope, global);
     }
 
     @Override
     public void addKieBase(String scope, KieBase kbase) {
-        RuleContextProviderImpl.this.kieBases.put(scope, kbase);
+        // put String{scope} to Map{this.kieBases}
+        this.kieBases.put(scope, kbase);
     }
 }
 

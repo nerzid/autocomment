@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,11 +16,11 @@
 
 package org.jbpm.process.workitem;
 
+import org.kie.internal.runtime.StatefulKnowledgeSession;
+import org.kie.api.runtime.process.NodeInstanceContainer;
 import java.util.Collection;
 import org.kie.api.runtime.process.NodeInstance;
-import org.kie.api.runtime.process.NodeInstanceContainer;
 import org.kie.api.runtime.process.ProcessInstance;
-import org.kie.internal.runtime.StatefulKnowledgeSession;
 import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.drools.core.process.instance.impl.WorkItemImpl;
@@ -33,8 +33,8 @@ public abstract class AbstractWorkItemHandler implements WorkItemHandler {
     public AbstractWorkItemHandler(StatefulKnowledgeSession ksession) {
         if (ksession == null) {
             throw new IllegalArgumentException("ksession cannot be null");
-        } 
-        AbstractWorkItemHandler.this.ksession = ksession;
+        }
+        this.ksession = ksession;
     }
 
     public StatefulKnowledgeSession getSession() {
@@ -54,7 +54,7 @@ public abstract class AbstractWorkItemHandler implements WorkItemHandler {
         ProcessInstance processInstance = getProcessInstance(workItem);
         if (!(processInstance instanceof WorkflowProcessInstance)) {
             return null;
-        } 
+        }
         return findWorkItemNodeInstance(workItem.getId(), ((WorkflowProcessInstance) (processInstance)).getNodeInstances());
     }
 
@@ -65,14 +65,14 @@ public abstract class AbstractWorkItemHandler implements WorkItemHandler {
                 WorkItem workItem = workItemNodeInstance.getWorkItem();
                 if ((workItem != null) && (workItemId == (workItem.getId()))) {
                     return workItemNodeInstance;
-                } 
-            } 
+                }
+            }
             if (nodeInstance instanceof NodeInstanceContainer) {
                 WorkItemNodeInstance result = findWorkItemNodeInstance(workItemId, ((NodeInstanceContainer) (nodeInstance)).getNodeInstances());
                 if (result != null) {
                     return result;
-                } 
-            } 
+                }
+            }
         }
         return null;
     }

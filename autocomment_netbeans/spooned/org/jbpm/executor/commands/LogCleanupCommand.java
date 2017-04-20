@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,17 +16,22 @@
 
 package org.jbpm.executor.commands;
 
-import org.kie.api.executor.Command;
 import org.kie.api.executor.CommandContext;
+import STATUS.CANCELLED;
+import org.kie.api.executor.Command;
+import ProcessInstance.STATE_COMPLETED;
+import org.kie.api.executor.Reoccurring;
+import ProcessInstance.STATE_ABORTED;
+import STATUS.DONE;
 import java.util.Date;
 import org.jbpm.process.core.timer.DateTimeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import STATUS.ERROR;
 import javax.persistence.EntityManagerFactory;
 import org.jbpm.runtime.manager.impl.jpa.EntityManagerFactoryManager;
 import org.kie.api.executor.ExecutionResults;
 import org.jbpm.executor.impl.jpa.ExecutorJPAAuditService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.kie.api.executor.Reoccurring;
 import java.text.SimpleDateFormat;
 
 /**
@@ -65,37 +70,38 @@ public class LogCleanupCommand implements Command , Reoccurring {
     public Date getScheduleTime() {
         if ((nextScheduleTimeAdd) < 0) {
             return null;
-        } 
+        }
         long current = System.currentTimeMillis();
         Date nextSchedule = new Date((current + (nextScheduleTimeAdd)));
-        LogCleanupCommand.logger.debug("Next schedule for job {} is set to {}", LogCleanupCommand.this.getClass().getSimpleName(), nextSchedule);
+        // debug String{"Next schedule for job {} is set to {}"} to Logger{LogCleanupCommand.logger}
+        LogCleanupCommand.logger.debug("Next schedule for job {} is set to {}", this.getClass().getSimpleName(), nextSchedule);
         return nextSchedule;
     }
 
     @Override
     public ExecutionResults execute(CommandContext ctx) throws Exception {
-        boolean skipProcessLog = ctx.getData().containsKey("SkipProcessLog") ? Boolean.parseBoolean(((String) (ctx.getData("SkipProcessLog")))) : false;
-        boolean skipTaskLog = ctx.getData().containsKey("SkipTaskLog") ? Boolean.parseBoolean(((String) (ctx.getData("SkipTaskLog")))) : false;
-        boolean skipExecutorLog = ctx.getData().containsKey("SkipExecutorLog") ? Boolean.parseBoolean(((String) (ctx.getData("SkipExecutorLog")))) : false;
+        boolean skipProcessLog = (ctx.getData().containsKey("SkipProcessLog")) ? Boolean.parseBoolean(((String) (ctx.getData("SkipProcessLog")))) : false;
+        boolean skipTaskLog = (ctx.getData().containsKey("SkipTaskLog")) ? Boolean.parseBoolean(((String) (ctx.getData("SkipTaskLog")))) : false;
+        boolean skipExecutorLog = (ctx.getData().containsKey("SkipExecutorLog")) ? Boolean.parseBoolean(((String) (ctx.getData("SkipExecutorLog")))) : false;
         SimpleDateFormat formatToUse = LogCleanupCommand.DATE_FORMAT;
         String dataFormat = ((String) (ctx.getData("DateFormat")));
         if (dataFormat != null) {
             formatToUse = new SimpleDateFormat(dataFormat);
-        } 
+        }
         ExecutionResults executionResults = new ExecutionResults();
         String emfName = ((String) (ctx.getData("EmfName")));
         if (emfName == null) {
             emfName = "org.jbpm.domain";
-        } 
+        }
         String singleRun = ((String) (ctx.getData("SingleRun")));
         if ("true".equalsIgnoreCase(singleRun)) {
             // disable rescheduling
-            LogCleanupCommand.this.nextScheduleTimeAdd = -1;
-        } 
+            this.nextScheduleTimeAdd = -1;
+        }
         String nextRun = ((String) (ctx.getData("NextRun")));
         if (nextRun != null) {
             nextScheduleTimeAdd = DateTimeUtils.parseDateAsDuration(nextRun);
-        } 
+        }
         // get hold of persistence and create instance of audit service
         EntityManagerFactory emf = EntityManagerFactoryManager.get().getOrCreate(emfName);
         ExecutorJPAAuditService auditLogService = new ExecutorJPAAuditService(emf);
@@ -108,11 +114,11 @@ public class LogCleanupCommand implements Command , Reoccurring {
             long olderThanDuration = DateTimeUtils.parseDateAsDuration(olderThanPeriod);
             Date olderThanDate = new Date(((System.currentTimeMillis()) - olderThanDuration));
             olderThan = formatToUse.format(olderThanDate);
-        } 
+        }
         if (!skipProcessLog) {
             // process tables
             long piLogsRemoved = 0L;
-            piLogsRemoved = auditLogService.processInstanceLogDelete().processId(forProcess).status(ProcessInstance.STATE_COMPLETED, ProcessInstance.STATE_ABORTED).endDateRangeEnd((olderThan == null ? null : formatToUse.parse(olderThan))).externalId(forDeployment).build().execute();
+            piLogsRemoved = auditLogService.processInstanceLogDelete().processId(forProcess).status(STATE_COMPLETED, STATE_ABORTED).endDateRangeEnd((olderThan == null ? null : formatToUse.parse(olderThan))).externalId(forDeployment).build().execute();
             LogCleanupCommand.logger.info("ProcessInstanceLogRemoved {}", piLogsRemoved);
             executionResults.setData("ProcessInstanceLogRemoved", piLogsRemoved);
             long niLogsRemoved = 0L;
@@ -123,7 +129,7 @@ public class LogCleanupCommand implements Command , Reoccurring {
             viLogsRemoved = auditLogService.variableInstanceLogDelete().processId(forProcess).dateRangeEnd((olderThan == null ? null : formatToUse.parse(olderThan))).externalId(forDeployment).build().execute();
             LogCleanupCommand.logger.info("VariableInstanceLogRemoved {}", viLogsRemoved);
             executionResults.setData("VariableInstanceLogRemoved", viLogsRemoved);
-        } 
+        }
         if (!skipTaskLog) {
             // task tables
             long taLogsRemoved = 0L;
@@ -134,7 +140,7 @@ public class LogCleanupCommand implements Command , Reoccurring {
             teLogsRemoved = auditLogService.taskEventInstanceLogDelete().dateRangeEnd((olderThan == null ? null : formatToUse.parse(olderThan))).build().execute();
             LogCleanupCommand.logger.info("TaskEventLogRemoved {}", teLogsRemoved);
             executionResults.setData("TaskEventLogRemoved", teLogsRemoved);
-        } 
+        }
         if (!skipExecutorLog) {
             // executor tables
             long errorInfoLogsRemoved = 0L;
@@ -142,12 +148,13 @@ public class LogCleanupCommand implements Command , Reoccurring {
             LogCleanupCommand.logger.info("ErrorInfoLogsRemoved {}", errorInfoLogsRemoved);
             executionResults.setData("ErrorInfoLogsRemoved", errorInfoLogsRemoved);
             long requestInfoLogsRemoved = 0L;
-            requestInfoLogsRemoved = auditLogService.requestInfoLogDeleteBuilder().dateRangeEnd((olderThan == null ? null : formatToUse.parse(olderThan))).status(STATUS.CANCELLED, STATUS.DONE, STATUS.ERROR).build().execute();
+            requestInfoLogsRemoved = auditLogService.requestInfoLogDeleteBuilder().dateRangeEnd((olderThan == null ? null : formatToUse.parse(olderThan))).status(CANCELLED, DONE, ERROR).build().execute();
             LogCleanupCommand.logger.info("RequestInfoLogsRemoved {}", requestInfoLogsRemoved);
             executionResults.setData("RequestInfoLogsRemoved", requestInfoLogsRemoved);
-        } 
+        }
         // bam tables
         long bamLogsRemoved = 0L;
+        // set data String{"BAMLogRemoved"} to ExecutionResults{executionResults}
         executionResults.setData("BAMLogRemoved", bamLogsRemoved);
         return executionResults;
     }

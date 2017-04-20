@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,11 +16,15 @@
 
 package org.jbpm.process.audit.query;
 
+import org.kie.internal.runtime.manager.audit.query.NodeInstanceLogQueryBuilder;
 import org.kie.api.runtime.CommandExecutor;
 import org.jbpm.process.audit.JPAAuditLogService;
+import QueryParameterIdentifiers.NODE_ID_LIST;
+import QueryParameterIdentifiers.NODE_INSTANCE_ID_LIST;
+import QueryParameterIdentifiers.NODE_NAME_LIST;
 import org.kie.api.runtime.manager.audit.NodeInstanceLog;
-import org.kie.internal.runtime.manager.audit.query.NodeInstanceLogQueryBuilder;
-import org.kie.internal.query.QueryParameterIdentifiers;
+import QueryParameterIdentifiers.TYPE_LIST;
+import QueryParameterIdentifiers.WORK_ITEM_ID_LIST;
 import org.kie.api.runtime.manager.audit.org.jbpm.process.audit.NodeInstanceLog;
 
 public class NodeInstLogQueryBuilderImpl extends AbstractAuditQueryBuilderImpl<NodeInstanceLogQueryBuilder, NodeInstanceLog> implements NodeInstanceLogQueryBuilder {
@@ -34,32 +38,37 @@ public class NodeInstLogQueryBuilderImpl extends AbstractAuditQueryBuilderImpl<N
 
     @Override
     public NodeInstanceLogQueryBuilder nodeInstanceId(String... nodeInstanceId) {
-        addObjectParameter(QueryParameterIdentifiers.NODE_INSTANCE_ID_LIST, "node instance id", nodeInstanceId);
-        return NodeInstLogQueryBuilderImpl.this;
+        // add object void{NODE_INSTANCE_ID_LIST} to NodeInstLogQueryBuilderImpl{}
+        addObjectParameter(NODE_INSTANCE_ID_LIST, "node instance id", nodeInstanceId);
+        return this;
     }
 
     @Override
     public NodeInstanceLogQueryBuilder nodeId(String... nodeId) {
-        addObjectParameter(QueryParameterIdentifiers.NODE_ID_LIST, "node id", nodeId);
-        return NodeInstLogQueryBuilderImpl.this;
+        // add object void{NODE_ID_LIST} to NodeInstLogQueryBuilderImpl{}
+        addObjectParameter(NODE_ID_LIST, "node id", nodeId);
+        return this;
     }
 
     @Override
     public NodeInstanceLogQueryBuilder nodeName(String... name) {
-        addObjectParameter(QueryParameterIdentifiers.NODE_NAME_LIST, "node name", name);
-        return NodeInstLogQueryBuilderImpl.this;
+        // add object void{NODE_NAME_LIST} to NodeInstLogQueryBuilderImpl{}
+        addObjectParameter(NODE_NAME_LIST, "node name", name);
+        return this;
     }
 
     @Override
     public NodeInstanceLogQueryBuilder nodeType(String... type) {
-        addObjectParameter(QueryParameterIdentifiers.TYPE_LIST, "node type", type);
-        return NodeInstLogQueryBuilderImpl.this;
+        // add object void{TYPE_LIST} to NodeInstLogQueryBuilderImpl{}
+        addObjectParameter(TYPE_LIST, "node type", type);
+        return this;
     }
 
     @Override
     public NodeInstanceLogQueryBuilder workItemId(long... workItemId) {
-        addLongParameter(QueryParameterIdentifiers.WORK_ITEM_ID_LIST, "work item id", workItemId);
-        return NodeInstLogQueryBuilderImpl.this;
+        // add long void{WORK_ITEM_ID_LIST} to NodeInstLogQueryBuilderImpl{}
+        addLongParameter(WORK_ITEM_ID_LIST, "work item id", workItemId);
+        return this;
     }
 
     @Override

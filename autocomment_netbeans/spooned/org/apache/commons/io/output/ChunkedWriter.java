@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import java.io.Writer;
  * Writer which breaks larger output blocks into chunks.
  * Native code may need to copy the input array; if the write buffer
  * is very large this can cause OOME.
- * 
+ *
  * @since 2.5
  */
 public class ChunkedWriter extends FilterWriter {
@@ -42,7 +42,7 @@ public class ChunkedWriter extends FilterWriter {
 
     /**
      * Creates a new writer that uses the specified chunk size.
-     * 
+     *
      * @param writer the writer to wrap
      * @param chunkSize the chunk size to use; must be a positive number.
      * @throws IllegalArgumentException if the chunk size is &lt;= 0
@@ -51,7 +51,7 @@ public class ChunkedWriter extends FilterWriter {
         super(writer);
         if (chunkSize <= 0) {
             throw new IllegalArgumentException();
-        } 
+        }
         this.chunkSize = chunkSize;
     }
 
@@ -68,7 +68,7 @@ public class ChunkedWriter extends FilterWriter {
      * @param data The data
      * @param srcOffset the offset
      * @param length the number of bytes to write
-     * 
+     *
      * @throws IOException upon error
      */
     @Override
@@ -80,7 +80,7 @@ public class ChunkedWriter extends FilterWriter {
             out.write(data, dstOffset, chunk);
             bytes -= chunk;
             dstOffset += chunk;
-        }
+        } 
     }
 }
 

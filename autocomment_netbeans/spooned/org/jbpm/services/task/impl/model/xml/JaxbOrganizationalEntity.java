@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,24 +17,25 @@
 package org.jbpm.services.task.impl.model.xml;
 
 import java.util.ArrayList;
-import org.kie.api.task.model.Group;
 import java.io.IOException;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
 import java.util.List;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.kie.api.task.model.OrganizationalEntity;
 import org.kie.api.task.model.User;
 import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlType(name = "organizational-entity")
 @XmlAccessorType(value = XmlAccessType.FIELD)
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
+@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE)
 public class JaxbOrganizationalEntity implements OrganizationalEntity {
     @XmlElement
     @XmlSchemaType(name = "string")
@@ -52,16 +53,20 @@ USER, GROUP;    }
     }
 
     public JaxbOrganizationalEntity(OrganizationalEntity orgEntity) {
-        JaxbOrganizationalEntity.this.id = orgEntity.getId();
+        this.id = orgEntity.getId();
         if (orgEntity instanceof User) {
-            JaxbOrganizationalEntity.this.type = JaxbOrganizationalEntity.Type.USER;
-        } else if (orgEntity instanceof Group) {
-            JaxbOrganizationalEntity.this.type = JaxbOrganizationalEntity.Type.GROUP;
-        } else if (orgEntity instanceof JaxbOrganizationalEntity) {
-            JaxbOrganizationalEntity.this.type = ((JaxbOrganizationalEntity) (orgEntity)).type;
-        } else {
-            throw new IllegalArgumentException(("Unknown type of organizational entity: " + (orgEntity.getClass().getSimpleName())));
-        }
+            this.type = JaxbOrganizationalEntity.Type.USER;
+        }else
+            if (orgEntity instanceof org.kie.api.task.model.Group) {
+                this.type = JaxbOrganizationalEntity.Type.GROUP;
+            }else
+                if (orgEntity instanceof JaxbOrganizationalEntity) {
+                    this.type = ((JaxbOrganizationalEntity) (orgEntity)).type;
+                }else {
+                    throw new IllegalArgumentException(("Unknown type of organizational entity: " + (orgEntity.getClass().getSimpleName())));
+                }
+            
+        
     }
 
     public String getId() {
@@ -69,7 +74,7 @@ USER, GROUP;    }
     }
 
     public void setId(String id) {
-        JaxbOrganizationalEntity.this.id = id;
+        this.id = id;
     }
 
     public JaxbOrganizationalEntity.Type getType() {
@@ -77,7 +82,7 @@ USER, GROUP;    }
     }
 
     public void setType(JaxbOrganizationalEntity.Type type) {
-        JaxbOrganizationalEntity.this.type = type;
+        this.type = type;
     }
 
     public static List<OrganizationalEntity> convertListFromJaxbImplToInterface(List<JaxbOrganizationalEntity> jaxbList) {
@@ -87,7 +92,7 @@ USER, GROUP;    }
             for (JaxbOrganizationalEntity jaxb : jaxbList) {
                 orgEntList.add(jaxb.createImplInstance());
             }
-        } else {
+        }else {
             // it would be nice to use Collections.EMPTY_LIST here, but there's a possibility the list is being modified after this call
             orgEntList = new ArrayList<OrganizationalEntity>();
         }
@@ -97,9 +102,9 @@ USER, GROUP;    }
     private OrganizationalEntity createImplInstance() {
         switch (type) {
             case GROUP :
-                return new org.jbpm.services.task.impl.model.xml.InternalJaxbWrapper.GetterGroup(JaxbOrganizationalEntity.this.id);
+                return new InternalJaxbWrapper.GetterGroup(this.id);
             case USER :
-                return new org.jbpm.services.task.impl.model.xml.InternalJaxbWrapper.GetterUser(JaxbOrganizationalEntity.this.id);
+                return new InternalJaxbWrapper.GetterUser(this.id);
             default :
                 throw new IllegalStateException(("Unknown organizational type: " + (type)));
         }
@@ -107,11 +112,13 @@ USER, GROUP;    }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
+        // unsupported Class{JaxbOrganizationalEntity.class} to void{AbstractJaxbTaskObject}
         AbstractJaxbTaskObject.unsupported(JaxbOrganizationalEntity.class);
     }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        // unsupported Class{JaxbOrganizationalEntity.class} to void{AbstractJaxbTaskObject}
         AbstractJaxbTaskObject.unsupported(JaxbOrganizationalEntity.class);
     }
 }

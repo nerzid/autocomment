@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import java.io.Serializable;
  * An {@link IOException} decorator that adds a serializable tag to the
  * wrapped exception. Both the tag and the original exception can be used
  * to determine further processing when this exception is caught.
- * 
+ *
  * @since 2.0
  */
 // needs to extend deprecated IOExceptionWithCause to preserve binary compatibility
@@ -58,7 +58,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      *     }
      * }
      * </pre>
-     * 
+     *
      * @param throwable The Throwable object to check
      * @param tag tag object
      * @return {@code true} if the throwable has the specified tag,
@@ -85,7 +85,7 @@ public class TaggedIOException extends IOExceptionWithCause {
      *     // handle other kinds of exceptions
      * }
      * </pre>
-     * 
+     *
      * @param throwable an exception
      * @param tag tag object
      * @throws IOException original exception from the tagged decorator, if any
@@ -93,7 +93,7 @@ public class TaggedIOException extends IOExceptionWithCause {
     public static void throwCauseIfTaggedWith(final Throwable throwable, final Object tag) throws IOException {
         if (TaggedIOException.isTaggedWith(throwable, tag)) {
             throw ((TaggedIOException) (throwable)).getCause();
-        } 
+        }
     }
 
     /**
@@ -103,7 +103,7 @@ public class TaggedIOException extends IOExceptionWithCause {
 
     /**
      * Creates a tagged wrapper for the given exception.
-     * 
+     *
      * @param original the exception to be tagged
      * @param tag tag of this exception
      */
@@ -114,7 +114,7 @@ public class TaggedIOException extends IOExceptionWithCause {
 
     /**
      * Returns the serializable tag object.
-     * 
+     *
      * @return tag object
      */
     public Serializable getTag() {
@@ -124,7 +124,7 @@ public class TaggedIOException extends IOExceptionWithCause {
     /**
      * Returns the wrapped exception. The only difference to the overridden
      * {@link Throwable#getCause()} method is the narrower return type.
-     * 
+     *
      * @return wrapped exception
      */
     @Override

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,16 +31,17 @@ import org.w3c.dom.Text;
 
 public class ConstraintHandler extends BaseAbstractHandler implements Handler {
     public ConstraintHandler() {
-        if (((ConstraintHandler.this.validParents) == null) && ((ConstraintHandler.this.validPeers) == null)) {
+        if (((this.validParents) == null) && ((this.validPeers) == null)) {
             this.validParents = new HashSet<Class<?>>();
-            ConstraintHandler.this.validParents.add(Constrainable.class);
+            this.validParents.add(Constrainable.class);
             this.validPeers = new HashSet<Class<?>>();
-            ConstraintHandler.this.validPeers.add(null);
+            this.validPeers.add(null);
             this.allowNesting = false;
-        } 
+        }
     }
 
     public Object start(final String uri, final String localName, final Attributes attrs, final ExtensibleXmlParser parser) throws SAXException {
+        // start element String{localName} to ExtensibleXmlParser{parser}
         parser.startElementBuilder(localName, attrs);
         return null;
     }
@@ -48,7 +49,7 @@ public class ConstraintHandler extends BaseAbstractHandler implements Handler {
     public Object end(final String uri, final String localName, final ExtensibleXmlParser parser) throws SAXException {
         final Element element = parser.endElementBuilder();
         Constrainable parent = ((Constrainable) (parser.getParent()));
-        Constraint constraint = new org.jbpm.workflow.core.impl.ConstraintImpl();
+        Constraint constraint = new ConstraintImpl();
         final String toNodeIdString = element.getAttribute("toNodeId");
         String toType = element.getAttribute("toType");
         ConnectionRef connectionRef = null;
@@ -56,27 +57,32 @@ public class ConstraintHandler extends BaseAbstractHandler implements Handler {
             int toNodeId = new Integer(toNodeIdString);
             if ((toType == null) || ((toType.trim().length()) == 0)) {
                 toType = NodeImpl.CONNECTION_DEFAULT_TYPE;
-            } 
+            }
             connectionRef = new ConnectionRef(toNodeId, toType);
-        } 
+        }
         final String name = element.getAttribute("name");
+        // set name String{name} to Constraint{constraint}
         constraint.setName(name);
         final String priority = element.getAttribute("priority");
         if ((priority != null) && ((priority.length()) != 0)) {
             constraint.setPriority(new Integer(priority));
-        } 
+        }
         final String type = element.getAttribute("type");
+        // set type String{type} to Constraint{constraint}
         constraint.setType(type);
         final String dialect = element.getAttribute("dialect");
+        // set dialect String{dialect} to Constraint{constraint}
         constraint.setDialect(dialect);
         String text = ((Text) (element.getChildNodes().item(0))).getWholeText();
         if (text != null) {
             text = text.trim();
             if ("".equals(text)) {
                 text = null;
-            } 
-        } 
+            }
+        }
+        // set constraint String{text} to Constraint{constraint}
         constraint.setConstraint(text);
+        // add constraint ConnectionRef{connectionRef} to Constrainable{parent}
         parent.addConstraint(connectionRef, constraint);
         return null;
     }

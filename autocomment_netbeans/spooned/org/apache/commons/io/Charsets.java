@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import java.util.TreeMap;
 
 /**
  * Charsets required of every implementation of the Java platform.
- * 
+ *
  * From the Java documentation <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">
  * Standard charsets</a>:
  * <p>
@@ -33,7 +33,7 @@ import java.util.TreeMap;
  * the release documentation for your implementation to see if any other encodings are supported. Consult the release
  * documentation for your implementation to see if any other encodings are supported. </cite>
  * </p>
- * 
+ *
  * <ul>
  * <li><code>US-ASCII</code><br>
  * Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the Unicode character set.</li>
@@ -49,7 +49,7 @@ import java.util.TreeMap;
  * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial byte-order mark (either order
  * accepted on input, big-endian used on output.)</li>
  * </ul>
- * 
+ *
  * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
  * @since 2.3
  * @version $Id: Charsets.java 1686747 2015-06-21 18:44:49Z krosenvold $
@@ -66,7 +66,7 @@ public class Charsets {
      * From the Java documentation <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">
      * Standard charsets</a>:
      * </p>
-     * 
+     *
      * @return An immutable, case-insensitive map from canonical charset names to charset objects.
      * @see Charset#availableCharsets()
      * @since 2.5
@@ -75,18 +75,24 @@ public class Charsets {
         // maybe cache?
         // TODO Re-implement on Java 7 to use java.nio.charset.StandardCharsets
         final TreeMap<String, Charset> m = new TreeMap<String, Charset>(String.CASE_INSENSITIVE_ORDER);
+        // put String{Charsets.ISO_8859_1.name()} to TreeMap{m}
         m.put(Charsets.ISO_8859_1.name(), Charsets.ISO_8859_1);
+        // put String{Charsets.US_ASCII.name()} to TreeMap{m}
         m.put(Charsets.US_ASCII.name(), Charsets.US_ASCII);
+        // put String{Charsets.UTF_16.name()} to TreeMap{m}
         m.put(Charsets.UTF_16.name(), Charsets.UTF_16);
+        // put String{Charsets.UTF_16BE.name()} to TreeMap{m}
         m.put(Charsets.UTF_16BE.name(), Charsets.UTF_16BE);
+        // put String{Charsets.UTF_16LE.name()} to TreeMap{m}
         m.put(Charsets.UTF_16LE.name(), Charsets.UTF_16LE);
+        // put String{Charsets.UTF_8.name()} to TreeMap{m}
         m.put(Charsets.UTF_8.name(), Charsets.UTF_8);
         return Collections.unmodifiableSortedMap(m);
     }
 
     /**
      * Returns the given Charset or the default Charset if the given Charset is null.
-     * 
+     *
      * @param charset
      *            A charset or null.
      * @return the given Charset or the default Charset if the given Charset is null
@@ -97,7 +103,7 @@ public class Charsets {
 
     /**
      * Returns a Charset for the named charset. If the name is null, return the default Charset.
-     * 
+     *
      * @param charset
      *            The name of the requested charset, may be null.
      * @return a Charset for the named charset
@@ -113,7 +119,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     * 
+     *
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -127,7 +133,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     * 
+     *
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -142,7 +148,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     * 
+     *
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -156,7 +162,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     * 
+     *
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -170,7 +176,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     * 
+     *
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */
@@ -184,7 +190,7 @@ public class Charsets {
      * <p>
      * Every implementation of the Java platform is required to support this character encoding.
      * </p>
-     * 
+     *
      * @see <a href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html">Standard charsets</a>
      * @deprecated Use Java 7's {@link java.nio.charset.StandardCharsets}
      */

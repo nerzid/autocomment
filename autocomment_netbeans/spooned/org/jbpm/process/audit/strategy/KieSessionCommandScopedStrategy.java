@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 
 package org.jbpm.process.audit.strategy;
 
+import EnvironmentName.CMD_SCOPED_ENTITY_MANAGER;
 import javax.persistence.EntityManager;
 import org.kie.api.runtime.Environment;
 
@@ -29,15 +30,15 @@ public class KieSessionCommandScopedStrategy implements PersistenceStrategy {
     private Environment env;
 
     public KieSessionCommandScopedStrategy(Environment env) {
-        KieSessionCommandScopedStrategy.this.env = env;
+        this.env = env;
     }
 
     @Override
     public EntityManager getEntityManager() {
-        EntityManager em = ((EntityManager) (env.get(EnvironmentName.CMD_SCOPED_ENTITY_MANAGER)));
+        EntityManager em = ((EntityManager) (env.get(CMD_SCOPED_ENTITY_MANAGER)));
         if (em == null) {
             throw new IllegalStateException("The command scoped entity manager could not be found!");
-        } 
+        }
         return em;
     }
 

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,14 @@
 
 package org.jbpm.bpmn2;
 
-import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.Difference;
+import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.DifferenceListener;
+import XmlBPMNProcessDumper.INSTANCE;
 import org.kie.api.KieBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import XmlBPMNProcessDumper.META_DATA_USING_DI;
 import org.w3c.dom.Node;
 import org.jbpm.ruleflow.core.RuleFlowProcess;
 import org.junit.Test;
@@ -44,23 +46,40 @@ public class XMLBPMNProcessDumperTest extends JbpmBpmn2TestCase {
         String original = BPMN2XMLTest.slurp(XMLBPMNProcessDumperTest.class.getResourceAsStream(("/" + filename)));
         KieBase kbase = createKnowledgeBase(filename);
         RuleFlowProcess process = ((RuleFlowProcess) (kbase.getProcess("GatewayTest")));
-        String result = XmlBPMNProcessDumper.INSTANCE.dump(process, XmlBPMNProcessDumper.META_DATA_USING_DI);
+        String result = INSTANCE.dump(process, META_DATA_USING_DI);
         // Compare original with result using XMLUnit
         Diff diff = new Diff(original, result);
+        // override difference DifferenceListener{new DifferenceListener() {
+    public int differenceFound(Difference diff) {
+        String nodeName = diff.getTestNodeDetail().getNode().getNodeName();
+        if ((nodeName.equals("conditionExpression")) || (nodeName.equals("language"))) {
+            XMLBPMNProcessDumperTest.logger.info(diff.toString());
+            return RETURN_ACCEPT_DIFFERENCE;
+        }
+        return RETURN_IGNORE_DIFFERENCE_NODES_IDENTICAL;
+    }
+
+    public void skippedComparison(Node one, Node two) {
+        // info String{"{} : {}"} to Logger{XMLBPMNProcessDumperTest.logger}
+        XMLBPMNProcessDumperTest.logger.info("{} : {}", one.getLocalName(), two.getLocalName());
+    }
+}} to Diff{diff}
         diff.overrideDifferenceListener(new DifferenceListener() {
             public int differenceFound(Difference diff) {
                 String nodeName = diff.getTestNodeDetail().getNode().getNodeName();
                 if ((nodeName.equals("conditionExpression")) || (nodeName.equals("language"))) {
                     XMLBPMNProcessDumperTest.logger.info(diff.toString());
                     return RETURN_ACCEPT_DIFFERENCE;
-                } 
+                }
                 return RETURN_IGNORE_DIFFERENCE_NODES_IDENTICAL;
             }
 
             public void skippedComparison(Node one, Node two) {
+                // info String{"{} : {}"} to Logger{XMLBPMNProcessDumperTest.logger}
                 XMLBPMNProcessDumperTest.logger.info("{} : {}", one.getLocalName(), two.getLocalName());
             }
         });
+        // assert true String{"Original and generated output is not the same."} to XMLBPMNProcessDumperTest{}
         assertTrue("Original and generated output is not the same.", diff.identical());
     }
 }

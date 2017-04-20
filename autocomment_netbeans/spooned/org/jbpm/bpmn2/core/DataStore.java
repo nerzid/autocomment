@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Intalio Inc
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,35 +35,35 @@ public class DataStore implements Serializable {
     private String itemSubjectRef;
 
     public void setId(String id) {
-        DataStore.this.id = id;
+        this.id = id;
     }
 
     public void setName(String name) {
-        DataStore.this.name = name;
+        this.name = name;
     }
 
     public void setType(DataType dataType) {
-        DataStore.this.type = dataType;
+        this.type = dataType;
     }
 
     public String getId() {
-        return DataStore.this.id;
+        return this.id;
     }
 
     public String getName() {
-        return DataStore.this.name;
+        return this.name;
     }
 
     public DataType getType() {
-        return DataStore.this.type;
+        return this.type;
     }
 
     public void setItemSubjectRef(String itemSubjectRef) {
-        DataStore.this.itemSubjectRef = itemSubjectRef;
+        this.itemSubjectRef = itemSubjectRef;
     }
 
     public String getItemSubjectRef() {
-        return DataStore.this.itemSubjectRef;
+        return this.itemSubjectRef;
     }
 }
 

@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -32,12 +32,12 @@ import java.util.regex.Pattern;
 /**
  * An <code>ObjectInputStream</code> that's restricted to deserialize
  * a limited set of classes.
- * 
+ *
  * <p>
  * Various accept/reject methods allow for specifying which classes
  * can be deserialized.
  * </p>
- * 
+ *
  * <p>
  * Design inspired by <a
  * href="http://www.ibm.com/developerworks/library/se-lookahead/">IBM
@@ -54,7 +54,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
      * At least one accept method needs to be called to specify which
      * classes can be deserialized, as by default no classes are
      * accepted.
-     * 
+     *
      * @param input an input stream
      * @throws IOException if an I/O error occurs while reading stream header
      */
@@ -72,25 +72,25 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         for (ClassNameMatcher m : rejectMatchers) {
             if (m.matches(name)) {
                 invalidClassNameFound(name);
-            } 
+            }
         }
         boolean ok = false;
         for (ClassNameMatcher m : acceptMatchers) {
             if (m.matches(name)) {
                 ok = true;
                 break;
-            } 
+            }
         }
         if (!ok) {
             invalidClassNameFound(name);
-        } 
+        }
     }
 
     /**
      * Called to throw <code>InvalidClassException</code> if an invalid
      * class name is found during deserialization. Can be overridden, for example
      * to log those class names.
-     * 
+     *
      * @param className name of the invalid class
      * @throws InvalidClassException if the specified class is not allowed
      */
@@ -100,6 +100,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
 
     @Override
     protected Class<?> resolveClass(ObjectStreamClass osc) throws IOException, ClassNotFoundException {
+        // validate class String{osc.getName()} to ValidatingObjectInputStream{}
         validateClassName(osc.getName());
         return super.resolveClass(osc);
     }
@@ -107,7 +108,7 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
     /**
      * Accept the specified classes for deserialization, unless they
      * are otherwise rejected.
-     * 
+     *
      * @param classes Classes to accept
      * @return this object
      */
@@ -115,13 +116,13 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         for (Class<?> c : classes) {
             acceptMatchers.add(new FullClassNameMatcher(c.getName()));
         }
-        return ValidatingObjectInputStream.this;
+        return this;
     }
 
     /**
      * Reject the specified classes for deserialization, even if they
      * are otherwise accepted.
-     * 
+     *
      * @param classes Classes to reject
      * @return this object
      */
@@ -129,13 +130,13 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         for (Class<?> c : classes) {
             rejectMatchers.add(new FullClassNameMatcher(c.getName()));
         }
-        return ValidatingObjectInputStream.this;
+        return this;
     }
 
     /**
      * Accept the wildcard specified classes for deserialization,
      * unless they are otherwise rejected.
-     * 
+     *
      * @param patterns Wildcard filename patterns as defined by
      *                  {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String) FilenameUtils.wildcardMatch}
      * @return this object
@@ -144,13 +145,13 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         for (String pattern : patterns) {
             acceptMatchers.add(new WildcardClassNameMatcher(pattern));
         }
-        return ValidatingObjectInputStream.this;
+        return this;
     }
 
     /**
      * Reject the wildcard specified classes for deserialization,
      * even if they are otherwise accepted.
-     * 
+     *
      * @param patterns Wildcard filename patterns as defined by
      *                  {@link org.apache.commons.io.FilenameUtils#wildcardMatch(String, String) FilenameUtils.wildcardMatch}
      * @return this object
@@ -159,55 +160,59 @@ public class ValidatingObjectInputStream extends ObjectInputStream {
         for (String pattern : patterns) {
             rejectMatchers.add(new WildcardClassNameMatcher(pattern));
         }
-        return ValidatingObjectInputStream.this;
+        return this;
     }
 
     /**
      * Accept class names that match the supplied pattern for
      * deserialization, unless they are otherwise rejected.
-     * 
+     *
      * @param pattern standard Java regexp
      * @return this object
      */
     public ValidatingObjectInputStream accept(Pattern pattern) {
+        // add RegexpClassNameMatcher{new RegexpClassNameMatcher(pattern)} to List{acceptMatchers}
         acceptMatchers.add(new RegexpClassNameMatcher(pattern));
-        return ValidatingObjectInputStream.this;
+        return this;
     }
 
     /**
      * Reject class names that match the supplied pattern for
      * deserialization, even if they are otherwise accepted.
-     * 
+     *
      * @param pattern standard Java regexp
      * @return this object
      */
     public ValidatingObjectInputStream reject(Pattern pattern) {
+        // add RegexpClassNameMatcher{new RegexpClassNameMatcher(pattern)} to List{rejectMatchers}
         rejectMatchers.add(new RegexpClassNameMatcher(pattern));
-        return ValidatingObjectInputStream.this;
+        return this;
     }
 
     /**
      * Accept class names where the supplied ClassNameMatcher matches for
      * deserialization, unless they are otherwise rejected.
-     * 
+     *
      * @param m the matcher to use
      * @return this object
      */
     public ValidatingObjectInputStream accept(ClassNameMatcher m) {
+        // add ClassNameMatcher{m} to List{acceptMatchers}
         acceptMatchers.add(m);
-        return ValidatingObjectInputStream.this;
+        return this;
     }
 
     /**
      * Reject class names where the supplied ClassNameMatcher matches for
      * deserialization, even if they are otherwise accepted.
-     * 
+     *
      * @param m the matcher to use
      * @return this object
      */
     public ValidatingObjectInputStream reject(ClassNameMatcher m) {
+        // add ClassNameMatcher{m} to List{rejectMatchers}
         rejectMatchers.add(m);
-        return ValidatingObjectInputStream.this;
+        return this;
     }
 }
 

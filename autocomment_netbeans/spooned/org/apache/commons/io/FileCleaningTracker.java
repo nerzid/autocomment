@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@ import java.lang.ref.ReferenceQueue;
  * longer needed. This is done by invoking the method
  * {@link #exitWhenFinished}, typically in
  * {@code javax.servlet.ServletContextListener.contextDestroyed(javax.servlet.ServletContextEvent)} or similar.
- * 
+ *
  * @version $Id: FileCleaningTracker.java 1686747 2015-06-21 18:44:49Z krosenvold $
  */
 public class FileCleaningTracker {
@@ -76,12 +76,13 @@ public class FileCleaningTracker {
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
      * The {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
-     * 
+     *
      * @param file  the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @throws NullPointerException if the file is null
      */
     public void track(final File file, final Object marker) {
+        // track File{file} to FileCleaningTracker{}
         track(file, marker, null);
     }
 
@@ -89,7 +90,7 @@ public class FileCleaningTracker {
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
      * The speified deletion strategy is used.
-     * 
+     *
      * @param file  the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
@@ -98,7 +99,8 @@ public class FileCleaningTracker {
     public void track(final File file, final Object marker, final FileDeleteStrategy deleteStrategy) {
         if (file == null) {
             throw new NullPointerException("The file must not be null");
-        } 
+        }
+        // add tracker String{file.getPath()} to FileCleaningTracker{}
         addTracker(file.getPath(), marker, deleteStrategy);
     }
 
@@ -106,12 +108,13 @@ public class FileCleaningTracker {
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
      * The {@link FileDeleteStrategy#NORMAL normal} deletion strategy will be used.
-     * 
+     *
      * @param path  the full path to the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @throws NullPointerException if the path is null
      */
     public void track(final String path, final Object marker) {
+        // track String{path} to FileCleaningTracker{}
         track(path, marker, null);
     }
 
@@ -119,7 +122,7 @@ public class FileCleaningTracker {
      * Track the specified file, using the provided marker, deleting the file
      * when the marker instance is garbage collected.
      * The speified deletion strategy is used.
-     * 
+     *
      * @param path  the full path to the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
@@ -128,13 +131,14 @@ public class FileCleaningTracker {
     public void track(final String path, final Object marker, final FileDeleteStrategy deleteStrategy) {
         if (path == null) {
             throw new NullPointerException("The path must not be null");
-        } 
+        }
+        // add tracker String{path} to FileCleaningTracker{}
         addTracker(path, marker, deleteStrategy);
     }
 
     /**
      * Adds a tracker to the list of trackers.
-     * 
+     *
      * @param path  the full path to the file to be tracked, not null
      * @param marker  the marker object used to track the file, not null
      * @param deleteStrategy  the strategy to delete the file, null means normal
@@ -143,11 +147,12 @@ public class FileCleaningTracker {
         // synchronized block protects reaper
         if (exitWhenFinished) {
             throw new IllegalStateException("No new trackers can be added once exitWhenFinished() is called");
-        } 
+        }
         if ((reaper) == null) {
             reaper = new FileCleaningTracker.Reaper();
             reaper.start();
-        } 
+        }
+        // add Tracker{new FileCleaningTracker.Tracker(path, deleteStrategy, marker, q)} to Collection{trackers}
         trackers.add(new FileCleaningTracker.Tracker(path, deleteStrategy, marker, q));
     }
 
@@ -155,7 +160,7 @@ public class FileCleaningTracker {
     /**
      * Retrieve the number of files currently being tracked, and therefore
      * awaiting deletion.
-     * 
+     *
      * @return the number of files being tracked
      */
     public int getTrackCount() {
@@ -164,7 +169,7 @@ public class FileCleaningTracker {
 
     /**
      * Return the file paths that failed to delete.
-     * 
+     *
      * @return the file paths that failed to delete
      * @since 2.0
      */
@@ -201,7 +206,7 @@ public class FileCleaningTracker {
             synchronized(reaper) {
                 reaper.interrupt();
             }
-        } 
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -233,12 +238,12 @@ public class FileCleaningTracker {
                     trackers.remove(tracker);
                     if (!(tracker.delete())) {
                         deleteFailures.add(tracker.getPath());
-                    } 
+                    }
                     tracker.clear();
                 } catch (final InterruptedException e) {
                     continue;
                 }
-            }
+            } 
         }
     }
 
@@ -259,7 +264,7 @@ public class FileCleaningTracker {
 
         /**
          * Constructs an instance of this class from the supplied parameters.
-         * 
+         *
          * @param path  the full path to the file to be tracked, not null
          * @param deleteStrategy  the strategy to delete the file, null means normal
          * @param marker  the marker object used to track the file, not null
@@ -273,7 +278,7 @@ public class FileCleaningTracker {
 
         /**
          * Return the path.
-         * 
+         *
          * @return the path
          */
         public String getPath() {
@@ -282,7 +287,7 @@ public class FileCleaningTracker {
 
         /**
          * Deletes the file associated with this tracker instance.
-         * 
+         *
          * @return {@code true} if the file was deleted successfully;
          *         {@code false} otherwise.
          */

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,10 +16,10 @@
 
 package org.jbpm.bpmn2.handler;
 
+import java.util.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ import java.util.Queue;
 /**
  * This class is a {@link WorkItemHandler} implementation that is meant to wrap
  * <i>other</i> {@link WorkItemHandler} implementations.
- * 
+ *
  * </p>When an exception is thrown by the wrapped {@link WorkItemHandler}
  * instance, it's added to a list of {@link WorkItemExceptionInfo} instances
  * that contain as much information as possible about the exception, the
@@ -41,13 +41,13 @@ import java.util.Queue;
  * <li>The list of {@link WorkItemExceptionInfo} classes is available via the
  * {@link LoggingTaskHandlerDecorator#getWorkItemExceptionInfoList()} method.</li>
  * </ul>
- * 
+ *
  * </p>After the exception info has been saved, this class then logs a message
  * the appropriate information via {@link Logger#warn(String)}. The message
  * logged is configurable: see
  * {@link LoggingTaskHandlerDecorator#setLoggedMessageFormat(String)} for more
  * information.
- * 
+ *
  * </p>This class is thread-safe, although it does not take any responsibility
  * for the {@link WorkItemHandler} that it wraps. If you are using this with
  * multiple threads, please make sure the the {@link WorkItemHandler} instance
@@ -71,7 +71,7 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
      * created instance of the {@link WorkItemHandler} class given. This
      * instance will only keep the given number of {@link WorkItemExceptionInfo}
      * instances instead of the default 100.
-     * 
+     *
      * @param originalTaskHandlerClass
      * @param logLimit
      */
@@ -86,7 +86,7 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
      * information about the last 100 exceptions will be held in the list
      * available from
      * {@link LoggingTaskHandlerDecorator#getWorkItemExceptionInfoList()};
-     * 
+     *
      * @param originalTaskHandlerClass
      */
     public LoggingTaskHandlerDecorator(Class<? extends WorkItemHandler> originalTaskHandlerClass) {
@@ -97,7 +97,7 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
      * Constructs a {@link LoggingTaskHandlerDecorator} instance that wraps the
      * given {@link WorkItemHandler} instance. This instance will only keep a
      * refere
-     * 
+     *
      * @param originalTaskHandler
      */
     public LoggingTaskHandlerDecorator(WorkItemHandler originalTaskHandler) {
@@ -108,10 +108,10 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
      * Sets the {@link MessageFormat} string to be used to format the log
      * messages. If this method is used, it's a good idea to also use the
      * {@link LoggingTaskHandlerDecorator#setLoggedMessageInput(List)} method.
-     * 
+     *
      * </p>The default {@link MessageFormat} string used is one of the
      * following:
-     * 
+     *
      * </p>If the {@link WorkItemHandler} is a {@link ServiceTaskHandler} (that
      * is used with <code>&lt;serviceTask&gt;</code> nodes), then the format is:
      * <ul>
@@ -125,7 +125,7 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
      * <li>The work item id</li>
      * <li>The process instance id</li>
      * </ol>
-     * 
+     *
      * </p>For all other {@link WorkItemHandler} implementations, the format is:
      * <ul>
      * <code>{0} thrown when work item {1} ({2}) was {3}ed in process instance {4}.</code>
@@ -138,42 +138,44 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
      * <li>"excut" or "abort" depending on the WorkItemHandler method called</li>
      * <li>The process instance id</li>
      * </ol>
-     * 
+     *
      * @param logMessageFormat
      *            The format to use for logged messages.
      */
     public synchronized void setLoggedMessageFormat(String logMessageFormat) {
-        LoggingTaskHandlerDecorator.this.configuredMessage = logMessageFormat;
+        this.configuredMessage = logMessageFormat;
     }
 
     /**
      * Sets the list of parameter types used for the log message format that is set in
      * {@link LoggingTaskHandlerDecorator#setLoggedMessageFormat(String)}.
-     * 
+     *
      * </p>The order of the {@link InputParameter} value in the list corresponds to the {@link MessageFormat} number
      * used in the String given to {@link LoggingTaskHandlerDecorator#setLoggedMessageFormat(String)}.
-     * 
+     *
      * </p>See {@link InputParameter} for more information.
-     * 
+     *
      * @param inputParameterList
      */
     public synchronized void setLoggedMessageInput(List<LoggingTaskHandlerDecorator.InputParameter> inputParameterList) {
-        LoggingTaskHandlerDecorator.this.configuredInputList = inputParameterList;
+        this.configuredInputList = inputParameterList;
     }
 
     public synchronized void setLoggedExceptionInfoListSize(int loggedExceptionInfoListSize) {
+        // initialize exception int{loggedExceptionInfoListSize} to LoggingTaskHandlerDecorator{}
         initializeExceptionInfoList(loggedExceptionInfoListSize);
     }
 
     public synchronized void setPrintStackTrace(boolean printStackTrace) {
-        LoggingTaskHandlerDecorator.this.printStackTrace = printStackTrace;
+        this.printStackTrace = printStackTrace;
     }
 
     private void initializeExceptionInfoList(int listSize) {
-        LoggingTaskHandlerDecorator.this.loggedExceptionsLimit = listSize;
+        this.loggedExceptionsLimit = listSize;
         Queue<LoggingTaskHandlerDecorator.WorkItemExceptionInfo> newExceptionInfoList = new ArrayDeque<LoggingTaskHandlerDecorator.WorkItemExceptionInfo>(((loggedExceptionsLimit) + 1));
+        // add all Queue{exceptionInfoList} to Queue{newExceptionInfoList}
         newExceptionInfoList.addAll(exceptionInfoList);
-        LoggingTaskHandlerDecorator.this.exceptionInfoList = newExceptionInfoList;
+        this.exceptionInfoList = newExceptionInfoList;
     }
 
     public synchronized List<LoggingTaskHandlerDecorator.WorkItemExceptionInfo> getWorkItemExceptionInfoList() {
@@ -182,19 +184,23 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
 
     @Override
     public synchronized void handleExecuteException(Throwable cause, WorkItem workItem, WorkItemManager manager) {
-        if ((exceptionInfoList.size()) == (LoggingTaskHandlerDecorator.this.loggedExceptionsLimit)) {
+        if ((exceptionInfoList.size()) == (this.loggedExceptionsLimit)) {
             exceptionInfoList.poll();
-        } 
+        }
+        // add WorkItemExceptionInfo{new LoggingTaskHandlerDecorator.WorkItemExceptionInfo(workItem, cause, true)} to Queue{exceptionInfoList}
         exceptionInfoList.add(new LoggingTaskHandlerDecorator.WorkItemExceptionInfo(workItem, cause, true));
+        // log message boolean{true} to LoggingTaskHandlerDecorator{}
         logMessage(true, workItem, cause);
     }
 
     @Override
     public synchronized void handleAbortException(Throwable cause, WorkItem workItem, WorkItemManager manager) {
-        if ((exceptionInfoList.size()) == (LoggingTaskHandlerDecorator.this.loggedExceptionsLimit)) {
+        if ((exceptionInfoList.size()) == (this.loggedExceptionsLimit)) {
             exceptionInfoList.poll();
-        } 
+        }
+        // add WorkItemExceptionInfo{new LoggingTaskHandlerDecorator.WorkItemExceptionInfo(workItem, cause, false)} to Queue{exceptionInfoList}
         exceptionInfoList.add(new LoggingTaskHandlerDecorator.WorkItemExceptionInfo(workItem, cause, false));
+        // log message boolean{false} to LoggingTaskHandlerDecorator{}
         logMessage(false, workItem, cause);
     }
 
@@ -202,10 +208,10 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
         String handlerMethodStem = "execut";
         if (!onExecute) {
             handlerMethodStem = "abort";
-        } 
+        }
         if (cause instanceof WorkItemHandlerRuntimeException) {
             cause = cause.getCause();
-        } 
+        }
         List<String> inputList = new ArrayList<String>();
         if (configuredInputList.isEmpty()) {
             if ((workItem.getParameter("Interface")) != null) {
@@ -216,7 +222,7 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
                 inputList.add(handlerMethodStem);
                 inputList.add(String.valueOf(workItem.getId()));
                 inputList.add(String.valueOf(workItem.getProcessInstanceId()));
-            } else {
+            }else {
                 // {0} thrown when work item {1} ({2}) was {3}ed in process instance {4}.
                 inputList.add(cause.getClass().getSimpleName());
                 inputList.add(String.valueOf(workItem.getId()));
@@ -224,7 +230,7 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
                 inputList.add(handlerMethodStem);
                 inputList.add(String.valueOf(workItem.getProcessInstanceId()));
             }
-        } else {
+        }else {
             for (LoggingTaskHandlerDecorator.InputParameter inputType : configuredInputList) {
                 switch (inputType) {
                     case EXCEPTION_CLASS :
@@ -264,7 +270,7 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
         String message = MessageFormat.format(configuredMessage, inputList.toArray());
         if (printStackTrace) {
             LoggingTaskHandlerDecorator.logger.warn(message, cause);
-        } else {
+        }else {
             LoggingTaskHandlerDecorator.logger.warn(message);
         }
     }
@@ -326,7 +332,7 @@ public class LoggingTaskHandlerDecorator extends AbstractExceptionHandlingTaskHa
     /**
      * Type of input parameter that will be used in the {@link MessageFormat} string set in
      * {@link LoggingTaskHandlerDecorator#setLoggedMessageFormat(String)}.
-     * 
+     *
      * <p>Work items are referred to in the following table, are {@link WorkItem} instances
      * that were being processed when the exception was thrown.
      * </p>The following values can be used:<table valign='top'>

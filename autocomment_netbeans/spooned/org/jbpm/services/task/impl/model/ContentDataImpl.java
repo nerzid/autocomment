@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,7 +35,7 @@ public class ContentDataImpl implements ContentData {
     }
 
     public void setAccessType(AccessType accessType) {
-        ContentDataImpl.this.accessType = accessType;
+        this.accessType = accessType;
     }
 
     public String getType() {
@@ -43,7 +43,7 @@ public class ContentDataImpl implements ContentData {
     }
 
     public void setType(String type) {
-        ContentDataImpl.this.type = type;
+        this.type = type;
     }
 
     public byte[] getContent() {
@@ -51,27 +51,27 @@ public class ContentDataImpl implements ContentData {
     }
 
     public void setContent(byte[] content) {
-        ContentDataImpl.this.content = content;
+        this.content = content;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
         if ((accessType) != null) {
             out.writeBoolean(true);
             out.writeUTF(accessType.toString());
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((type) != null) {
             out.writeBoolean(true);
             out.writeUTF(type);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((content) != null) {
             out.writeBoolean(true);
             out.writeInt(content.length);
             out.write(content);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
     }
@@ -79,14 +79,14 @@ public class ContentDataImpl implements ContentData {
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         if (in.readBoolean()) {
             accessType = AccessType.valueOf(in.readUTF());
-        } 
+        }
         if (in.readBoolean()) {
             type = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             content = new byte[in.readInt()];
             in.readFully(content);
-        } 
+        }
     }
 }
 

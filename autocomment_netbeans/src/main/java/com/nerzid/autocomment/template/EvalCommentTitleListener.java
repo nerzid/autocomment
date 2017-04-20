@@ -25,42 +25,53 @@ import com.nerzid.autocomment.grammar.CommentTitleBaseListener;
 public class EvalCommentTitleListener extends CommentTitleBaseListener {
 
     private String postagSent = "";
-    private String result = "";
+    private PostaggedWord postaggedWord;
 
     @Override
     public void enterRule1(CommentTitleParser.Rule1Context ctx) {
         System.out.println("******");
+        postaggedWord = new PostaggedWord();
+        Word verb1 = new Word();
+        verb1.setPostag(ctx.V().getText());
+        postaggedWord.setVerb1(verb1);
+        Word npr1 = new Word();
+        npr1.setPostag(ctx.NPR().getText());
+        postaggedWord.setNounphrase1(npr1);
 
-        String v = ctx.V().getText();
-        String npr = ctx.NPR().getText();
-        String pp = "";
-        System.out.println("V: " + v);
-        System.out.println("NPR: " + npr);
+        Word pp = new Word();
 
         if (ctx.PP() != null) {
-            pp = ctx.PP().getText();
+            pp.setPostag(ctx.PP().getText());
             System.out.println("PP?: " + pp);
+            postaggedWord.setPreposition(pp);
         }
-        postagSent = v + "|" + npr + "|" + pp;
         System.out.println("**********");
     }
 
     @Override
-    public void enterBoolean_one_verb_rule(CommentTitleParser.Boolean_one_verb_ruleContext ctx) {
-        String v = ctx.V().getText();
-        String npr = ctx.NPR().getText();
+    public void enterOne_verb_rule(CommentTitleParser.One_verb_ruleContext ctx) {
+        postaggedWord = new PostaggedWord();
+        Word verb1 = new Word();
+        verb1.setPostag(ctx.V().getText());
+        postaggedWord.setVerb1(verb1);
+        if (ctx.NPR() != null) {
+            Word npr1 = new Word();
+            npr1.setPostag(ctx.NPR().getText());
+            postaggedWord.setNounphrase1(npr1);
+        }
+    }
 
-        System.out.println("V: " + v);
-        System.out.println("NPR: " + npr);
-        postagSent = v + "|" + npr;
+    @Override
+    public void enterTwo_verb_rule(CommentTitleParser.Two_verb_ruleContext ctx) {
+        // TO DO
     }
 
     public String getPostagSent() {
         return postagSent;
     }
 
-    public void setPostagSent(String postagSent) {
-        this.postagSent = postagSent;
+    public PostaggedWord getPostaggedWord() {
+        return postaggedWord;
     }
 
 }

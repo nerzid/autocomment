@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import org.kie.api.task.model.User;
 
 /**
  * This class is used to produce Task API objects.
- * 
+ *
  * The class (and all subclasses) are deliberately package-scoped because there are interfaces for these objects.
  */
 class InternalJaxbWrapper {
@@ -38,16 +38,18 @@ class InternalJaxbWrapper {
 
         @Override
         public String getId() {
-            return InternalJaxbWrapper.GetterUser.this.id;
+            return this.id;
         }
 
         @Override
         public void writeExternal(ObjectOutput out) throws IOException {
+            // unsupported Class{User.class} to void{AbstractJaxbTaskObject}
             AbstractJaxbTaskObject.unsupported(User.class);
         }
 
         @Override
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+            // unsupported Class{User.class} to void{AbstractJaxbTaskObject}
             AbstractJaxbTaskObject.unsupported(User.class);
         }
     }
@@ -61,16 +63,18 @@ class InternalJaxbWrapper {
 
         @Override
         public String getId() {
-            return InternalJaxbWrapper.GetterGroup.this.id;
+            return this.id;
         }
 
         @Override
         public void writeExternal(ObjectOutput out) throws IOException {
+            // unsupported Class{Group.class} to void{AbstractJaxbTaskObject}
             AbstractJaxbTaskObject.unsupported(Group.class);
         }
 
         @Override
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+            // unsupported Class{Group.class} to void{AbstractJaxbTaskObject}
             AbstractJaxbTaskObject.unsupported(Group.class);
         }
     }
@@ -90,26 +94,28 @@ class InternalJaxbWrapper {
 
         @Override
         public Long getId() {
-            return InternalJaxbWrapper.GetterI18NText.this.id;
+            return this.id;
         }
 
         @Override
         public String getLanguage() {
-            return InternalJaxbWrapper.GetterI18NText.this.lang;
+            return this.lang;
         }
 
         @Override
         public String getText() {
-            return InternalJaxbWrapper.GetterI18NText.this.text;
+            return this.text;
         }
 
         @Override
         public void writeExternal(ObjectOutput out) throws IOException {
+            // unsupported Class{I18NText.class} to void{AbstractJaxbTaskObject}
             AbstractJaxbTaskObject.unsupported(I18NText.class);
         }
 
         @Override
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+            // unsupported Class{I18NText.class} to void{AbstractJaxbTaskObject}
             AbstractJaxbTaskObject.unsupported(I18NText.class);
         }
     }

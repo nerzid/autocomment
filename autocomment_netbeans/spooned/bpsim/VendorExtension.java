@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * VendorExtension
@@ -28,7 +29,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Vendor Extension</b></em>'.
  * <!-- end-user-doc -->
- * 
+ *
  * <p>
  * The following features are supported:
  * <ul>
@@ -37,7 +38,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  *   <li>{@link bpsim.VendorExtension#getAnyAttribute <em>Any Attribute</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see bpsim.BpsimPackage#getVendorExtension()
  * @model extendedMetaData="name='VendorExtension' kind='elementOnly'"
  * @generated

@@ -12,8 +12,8 @@ public class Person {
 
     public Person(String name, int age) {
         super();
-        Person.this.name = name;
-        Person.this.age = age;
+        this.name = name;
+        this.age = age;
     }
 
     public Person() {
@@ -24,7 +24,7 @@ public class Person {
     }
 
     public void setName(String name) {
-        Person.this.name = name;
+        this.name = name;
     }
 
     public int getAge() {
@@ -32,7 +32,7 @@ public class Person {
     }
 
     public void setAge(int age) {
-        Person.this.age = age;
+        this.age = age;
     }
 }
 

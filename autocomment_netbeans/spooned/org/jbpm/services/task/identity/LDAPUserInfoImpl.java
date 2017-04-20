@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 
 package org.jbpm.services.task.identity;
 
-import java.util.stream.Collectors;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.kie.api.task.model.Group;
 import java.util.Iterator;
 import java.util.List;
@@ -131,33 +131,37 @@ public class LDAPUserInfoImpl extends AbstractLDAPUserGroupInfo implements UserI
     private String getConfigPropertyByEntity(OrganizationalEntity entity, String userKey, String roleKey) {
         if (entity instanceof User) {
             return getConfigProperty(userKey);
-        } else if (entity instanceof Group) {
-            return getConfigProperty(roleKey);
-        } else {
-            throw new IllegalArgumentException(("Unknown organizational entity: " + entity));
-        }
+        }else
+            if (entity instanceof Group) {
+                return getConfigProperty(roleKey);
+            }else {
+                throw new IllegalArgumentException(("Unknown organizational entity: " + entity));
+            }
+        
     }
 
     private String extractEntityId(OrganizationalEntity entity) {
         if (!(isEntityIdDn())) {
             return entity.getId();
-        } 
+        }
         String entityDN = entity.getId();
         String[] attributes = entityDN.split(",");
         if ((attributes.length) == 1) {
             return entityDN;
-        } 
+        }
         String entityAttrId = null;
         if (entity instanceof User) {
             entityAttrId = getConfigProperty(LDAPUserInfoImpl.USER_ATTR_ID, DEFAULT_USER_ATTR_ID);
-        } else if (entity instanceof Group) {
-            entityAttrId = getConfigProperty(LDAPUserInfoImpl.ROLE_ATTR_ID, DEFAULT_ROLE_ATTR_ID);
-        } 
+        }else
+            if (entity instanceof Group) {
+                entityAttrId = getConfigProperty(LDAPUserInfoImpl.ROLE_ATTR_ID, DEFAULT_ROLE_ATTR_ID);
+            }
+        
         for (String attribute : attributes) {
             String[] keyValue = attribute.split("=");
             if (keyValue[0].equalsIgnoreCase(entityAttrId)) {
                 return keyValue[1];
-            } 
+            }
         }
         throw new RuntimeException((((("Cannot parse '" + entityAttrId) + "' attribute from entity DN '") + entityDN) + "'"));
     }

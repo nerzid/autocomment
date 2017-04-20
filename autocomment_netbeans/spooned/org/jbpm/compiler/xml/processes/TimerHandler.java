@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,10 +16,10 @@
 
 package org.jbpm.compiler.xml.processes;
 
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.drools.core.xml.BaseAbstractHandler;
 import org.jbpm.workflow.core.DroolsAction;
-import org.w3c.dom.Element;
 import org.drools.core.xml.ExtensibleXmlParser;
 import org.drools.core.xml.Handler;
 import java.util.HashSet;
@@ -30,16 +30,17 @@ import org.jbpm.process.core.timer.Timer;
 
 public class TimerHandler extends BaseAbstractHandler implements Handler {
     public TimerHandler() {
-        if (((TimerHandler.this.validParents) == null) && ((TimerHandler.this.validPeers) == null)) {
+        if (((this.validParents) == null) && ((this.validPeers) == null)) {
             this.validParents = new HashSet<Class<?>>();
-            TimerHandler.this.validParents.add(StateBasedNode.class);
+            this.validParents.add(StateBasedNode.class);
             this.validPeers = new HashSet<Class<?>>();
-            TimerHandler.this.validPeers.add(null);
+            this.validPeers.add(null);
             this.allowNesting = false;
-        } 
+        }
     }
 
     public Object start(final String uri, final String localName, final Attributes attrs, final ExtensibleXmlParser parser) throws SAXException {
+        // start element String{localName} to ExtensibleXmlParser{parser}
         parser.startElementBuilder(localName, attrs);
         return null;
     }
@@ -48,23 +49,26 @@ public class TimerHandler extends BaseAbstractHandler implements Handler {
         Element element = parser.endElementBuilder();
         StateBasedNode parent = ((StateBasedNode) (parser.getParent()));
         String id = element.getAttribute("id");
+        // empty attribute String{localName} to TimerHandler{}
         emptyAttributeCheck(localName, "id", id, parser);
         String delay = element.getAttribute("delay");
         String period = element.getAttribute("period");
         Timer timer = new Timer();
+        // set id Long{new Long(id)} to Timer{timer}
         timer.setId(new Long(id));
         if ((delay != null) && ((delay.length()) != 0)) {
             timer.setDelay(delay);
-        } 
+        }
         if ((period != null) && ((period.length()) != 0)) {
             timer.setPeriod(period);
-        } 
+        }
         Node xmlNode = element.getFirstChild();
         DroolsAction action = null;
         if (xmlNode instanceof Element) {
             Element actionXml = ((Element) (xmlNode));
             action = AbstractNodeHandler.extractAction(actionXml);
-        } 
+        }
+        // add timer Timer{timer} to StateBasedNode{parent}
         parent.addTimer(timer, action);
         return null;
     }

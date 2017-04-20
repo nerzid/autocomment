@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,28 +17,28 @@
 
 package org.jbpm.services.task.impl.model;
 
-import javax.persistence.CascadeType;
-import org.jbpm.services.task.utils.CollectionUtils;
 import java.util.Collections;
+import javax.persistence.CascadeType;
+import org.kie.internal.task.api.model.NotificationType;
+import org.jbpm.services.task.utils.CollectionUtils;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
+import java.io.ObjectInput;
+import org.kie.api.task.model.OrganizationalEntity;
 import javax.persistence.GeneratedValue;
+import java.util.List;
 import javax.persistence.GenerationType;
 import org.kie.api.task.model.I18NText;
 import java.io.IOException;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import java.util.List;
 import javax.persistence.ManyToMany;
-import org.kie.internal.task.api.model.Notification;
-import org.kie.internal.task.api.model.NotificationType;
-import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import javax.persistence.OneToMany;
-import org.kie.api.task.model.OrganizationalEntity;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import javax.persistence.JoinTable;
+import org.kie.internal.task.api.model.Notification;
 
 @Entity
 @Table(name = "Notification")
@@ -80,13 +80,21 @@ public class NotificationImpl implements Notification {
     private List<I18NText> descriptions = Collections.emptyList();
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long Long{id} to ObjectOutput{out}
         out.writeLong(id);
+        // write int int{priority} to ObjectOutput{out}
         out.writeInt(priority);
+        // write organizational List{recipients} to void{CollectionUtils}
         CollectionUtils.writeOrganizationalEntityList(recipients, out);
+        // write organizational List{businessAdministrators} to void{CollectionUtils}
         CollectionUtils.writeOrganizationalEntityList(businessAdministrators, out);
+        // write i18 List{documentation} to void{CollectionUtils}
         CollectionUtils.writeI18NTextList(documentation, out);
+        // write i18 List{names} to void{CollectionUtils}
         CollectionUtils.writeI18NTextList(names, out);
+        // write i18 List{subjects} to void{CollectionUtils}
         CollectionUtils.writeI18NTextList(subjects, out);
+        // write i18 List{descriptions} to void{CollectionUtils}
         CollectionUtils.writeI18NTextList(descriptions, out);
     }
 
@@ -106,7 +114,7 @@ public class NotificationImpl implements Notification {
     }
 
     public void setId(long id) {
-        NotificationImpl.this.id = id;
+        this.id = id;
     }
 
     public NotificationType getNotificationType() {
@@ -118,7 +126,7 @@ public class NotificationImpl implements Notification {
     }
 
     public void setDocumentation(List<I18NText> documentation) {
-        NotificationImpl.this.documentation = documentation;
+        this.documentation = documentation;
     }
 
     public int getPriority() {
@@ -126,7 +134,7 @@ public class NotificationImpl implements Notification {
     }
 
     public void setPriority(int priority) {
-        NotificationImpl.this.priority = priority;
+        this.priority = priority;
     }
 
     public List<OrganizationalEntity> getRecipients() {
@@ -134,7 +142,7 @@ public class NotificationImpl implements Notification {
     }
 
     public void setRecipients(List<OrganizationalEntity> recipients) {
-        NotificationImpl.this.recipients = recipients;
+        this.recipients = recipients;
     }
 
     public List<OrganizationalEntity> getBusinessAdministrators() {
@@ -142,7 +150,7 @@ public class NotificationImpl implements Notification {
     }
 
     public void setBusinessAdministrators(List<OrganizationalEntity> businessAdministrators) {
-        NotificationImpl.this.businessAdministrators = businessAdministrators;
+        this.businessAdministrators = businessAdministrators;
     }
 
     public List<I18NText> getNames() {
@@ -150,7 +158,7 @@ public class NotificationImpl implements Notification {
     }
 
     public void setNames(List<I18NText> names) {
-        NotificationImpl.this.names = names;
+        this.names = names;
     }
 
     public List<I18NText> getSubjects() {
@@ -158,7 +166,7 @@ public class NotificationImpl implements Notification {
     }
 
     public void setSubjects(List<I18NText> subjects) {
-        NotificationImpl.this.subjects = subjects;
+        this.subjects = subjects;
     }
 
     public List<I18NText> getDescriptions() {
@@ -166,7 +174,7 @@ public class NotificationImpl implements Notification {
     }
 
     public void setDescriptions(List<I18NText> descriptions) {
-        NotificationImpl.this.descriptions = descriptions;
+        this.descriptions = descriptions;
     }
 
     @Override
@@ -185,7 +193,7 @@ public class NotificationImpl implements Notification {
 
     @Override
     public boolean equals(Object obj) {
-        if ((NotificationImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         final File olderFile = new File(dir, "older.txt");
         if (!(olderFile.getParentFile().exists())) {
             throw new IOException((("Cannot create file " + olderFile) + " as the parent directory does not exist"));
-        } 
+        }
         final BufferedOutputStream output2 = new BufferedOutputStream(new FileOutputStream(olderFile));
         try {
             TestUtils.generateTestData(output2, ((long) (0)));
@@ -48,7 +48,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         final File equalFile = new File(dir, "equal.txt");
         if (!(equalFile.getParentFile().exists())) {
             throw new IOException((("Cannot create file " + equalFile) + " as the parent directory does not exist"));
-        } 
+        }
         final BufferedOutputStream output1 = new BufferedOutputStream(new FileOutputStream(equalFile));
         try {
             TestUtils.generateTestData(output1, ((long) (0)));
@@ -62,7 +62,7 @@ public class LastModifiedFileComparatorTest extends ComparatorAbstractTestCase {
         final File newerFile = new File(dir, "newer.txt");
         if (!(newerFile.getParentFile().exists())) {
             throw new IOException((("Cannot create file " + newerFile) + " as the parent directory does not exist"));
-        } 
+        }
         final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(newerFile));
         try {
             TestUtils.generateTestData(output, ((long) (0)));

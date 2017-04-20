@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * DroolsPackage
@@ -21,6 +22,7 @@
 
 package org.jboss.drools;
 
+import org.jboss.drools.impl.DroolsPackageImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -73,7 +75,7 @@ public interface DroolsPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    DroolsPackage eINSTANCE = org.jboss.drools.impl.DroolsPackageImpl.init();
+    DroolsPackage eINSTANCE = DroolsPackageImpl.init();
 
     /**
      * The meta object id for the '{@link org.jboss.drools.impl.DocumentRootImpl <em>Document Root</em>}' class.

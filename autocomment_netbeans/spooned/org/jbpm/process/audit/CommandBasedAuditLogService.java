@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,117 +30,122 @@ public class CommandBasedAuditLogService implements AuditLogService {
     private CommandExecutor executor;
 
     public CommandBasedAuditLogService(CommandExecutor executor) {
-        CommandBasedAuditLogService.this.executor = executor;
+        this.executor = executor;
     }
 
     @Override
     public List<ProcessInstanceLog> findProcessInstances() {
-        return executor.execute(new org.jbpm.process.audit.command.FindProcessInstancesCommand());
+        return executor.execute(new FindProcessInstancesCommand());
     }
 
     @Override
     public List<ProcessInstanceLog> findActiveProcessInstances() {
-        return executor.execute(new org.jbpm.process.audit.command.FindActiveProcessInstancesCommand());
+        return executor.execute(new FindActiveProcessInstancesCommand());
     }
 
     @Override
     public List<ProcessInstanceLog> findProcessInstances(String processId) {
-        return executor.execute(new org.jbpm.process.audit.command.FindProcessInstancesCommand(processId));
+        return executor.execute(new FindProcessInstancesCommand(processId));
     }
 
     @Override
     public List<ProcessInstanceLog> findActiveProcessInstances(String processId) {
-        return executor.execute(new org.jbpm.process.audit.command.FindActiveProcessInstancesCommand(processId));
+        return executor.execute(new FindActiveProcessInstancesCommand(processId));
     }
 
     @Override
     public ProcessInstanceLog findProcessInstance(long processInstanceId) {
-        return executor.execute(new org.jbpm.process.audit.command.FindProcessInstanceCommand(processInstanceId));
+        return executor.execute(new FindProcessInstanceCommand(processInstanceId));
     }
 
     @Override
     public List<ProcessInstanceLog> findSubProcessInstances(long processInstanceId) {
-        return executor.execute(new org.jbpm.process.audit.command.FindSubProcessInstancesCommand(processInstanceId));
+        return executor.execute(new FindSubProcessInstancesCommand(processInstanceId));
     }
 
     @Override
     public List<NodeInstanceLog> findNodeInstances(long processInstanceId) {
-        return executor.execute(new org.jbpm.process.audit.command.FindNodeInstancesCommand(processInstanceId));
+        return executor.execute(new FindNodeInstancesCommand(processInstanceId));
     }
 
     @Override
     public List<NodeInstanceLog> findNodeInstances(long processInstanceId, String nodeId) {
-        return executor.execute(new org.jbpm.process.audit.command.FindNodeInstancesCommand(processInstanceId, nodeId));
+        return executor.execute(new FindNodeInstancesCommand(processInstanceId, nodeId));
     }
 
     @Override
     public List<VariableInstanceLog> findVariableInstances(long processInstanceId) {
-        return executor.execute(new org.jbpm.process.audit.command.FindVariableInstancesCommand(processInstanceId));
+        return executor.execute(new FindVariableInstancesCommand(processInstanceId));
     }
 
     @Override
     public List<VariableInstanceLog> findVariableInstances(long processInstanceId, String variableId) {
-        return executor.execute(new org.jbpm.process.audit.command.FindVariableInstancesCommand(processInstanceId, variableId));
+        return executor.execute(new FindVariableInstancesCommand(processInstanceId, variableId));
     }
 
     @Override
     public List<VariableInstanceLog> findVariableInstancesByName(String variableId, boolean activeProcesses) {
-        return executor.execute(new org.jbpm.process.audit.command.FindVariableInstancesByNameCommand(variableId, activeProcesses));
+        return executor.execute(new FindVariableInstancesByNameCommand(variableId, activeProcesses));
     }
 
     @Override
     public List<VariableInstanceLog> findVariableInstancesByNameAndValue(String variableId, String value, boolean activeProcesses) {
-        return executor.execute(new org.jbpm.process.audit.command.FindVariableInstancesByNameCommand(variableId, value, activeProcesses));
+        return executor.execute(new FindVariableInstancesByNameCommand(variableId, value, activeProcesses));
     }
 
     @Override
     public NodeInstanceLogQueryBuilder nodeInstanceLogQuery() {
-        return new org.jbpm.process.audit.query.NodeInstLogQueryBuilderImpl(executor);
+        return new NodeInstLogQueryBuilderImpl(executor);
     }
 
     @Override
     public VariableInstanceLogQueryBuilder variableInstanceLogQuery() {
-        return new org.jbpm.process.audit.query.VarInstLogQueryBuilderImpl(executor);
+        return new VarInstLogQueryBuilderImpl(executor);
     }
 
     @Override
     public ProcessInstanceLogQueryBuilder processInstanceLogQuery() {
-        return new org.jbpm.process.audit.query.ProcInstLogQueryBuilderImpl(executor);
+        return new ProcInstLogQueryBuilderImpl(executor);
     }
 
     @Override
     public ProcessInstanceLogDeleteBuilder processInstanceLogDelete() {
-        return new org.jbpm.process.audit.query.ProcessInstanceLogDeleteBuilderImpl(executor);
+        return new ProcessInstanceLogDeleteBuilderImpl(executor);
     }
 
     @Override
     public NodeInstanceLogDeleteBuilder nodeInstanceLogDelete() {
-        return new org.jbpm.process.audit.query.NodeInstanceLogDeleteBuilderImpl(executor);
+        return new NodeInstanceLogDeleteBuilderImpl(executor);
     }
 
     @Override
     public VariableInstanceLogDeleteBuilder variableInstanceLogDelete() {
-        return new org.jbpm.process.audit.query.VarInstanceLogDeleteBuilderImpl(executor);
+        return new VarInstanceLogDeleteBuilderImpl(executor);
     }
 
     @Override
     @SuppressWarnings(value = "unchecked")
     public <T, R> List<R> queryLogs(QueryWhere queryWhere, Class<T> queryClass, Class<R> resultClass) {
         if (queryClass.equals(NodeInstanceLog.class)) {
-            return ((List<R>) (executor.execute(new org.jbpm.process.audit.command.AuditNodeInstanceLogQueryCommand(queryWhere))));
-        } else if (queryClass.equals(ProcessInstanceLog.class)) {
-            return ((List<R>) (executor.execute(new org.jbpm.process.audit.command.AuditProcessInstanceLogQueryCommand(queryWhere))));
-        } else if (queryClass.equals(VariableInstanceLog.class)) {
-            return ((List<R>) (executor.execute(new org.jbpm.process.audit.command.AuditVariableInstanceLogQueryCommand(queryWhere))));
-        } else {
-            String type = queryClass == null ? "null" : queryClass.getName();
-            throw new IllegalArgumentException(("Unknown type for query:" + type));
-        }
+            return ((List<R>) (executor.execute(new AuditNodeInstanceLogQueryCommand(queryWhere))));
+        }else
+            if (queryClass.equals(ProcessInstanceLog.class)) {
+                return ((List<R>) (executor.execute(new AuditProcessInstanceLogQueryCommand(queryWhere))));
+            }else
+                if (queryClass.equals(VariableInstanceLog.class)) {
+                    return ((List<R>) (executor.execute(new AuditVariableInstanceLogQueryCommand(queryWhere))));
+                }else {
+                    String type = (queryClass == null) ? "null" : queryClass.getName();
+                    throw new IllegalArgumentException(("Unknown type for query:" + type));
+                }
+            
+        
     }
 
     @Override
     public void clear() {
-        executor.execute(new org.jbpm.process.audit.command.ClearHistoryLogsCommand());
+        // execute ClearHistoryLogsCommand{new ClearHistoryLogsCommand()} to CommandExecutor{executor}
+        executor.execute(new ClearHistoryLogsCommand());
     }
 
     @Override

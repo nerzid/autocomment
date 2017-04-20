@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,50 +56,50 @@ public class RuntimeEngineImpl implements RuntimeEngine , Disposable {
     private List<DisposeListener> listeners = new CopyOnWriteArrayList<DisposeListener>();
 
     public RuntimeEngineImpl(KieSession ksession, TaskService taskService) {
-        RuntimeEngineImpl.this.ksession = ksession;
-        RuntimeEngineImpl.this.kieSessionId = ksession.getIdentifier();
-        RuntimeEngineImpl.this.taskService = taskService;
+        this.ksession = ksession;
+        this.kieSessionId = ksession.getIdentifier();
+        this.taskService = taskService;
     }
 
     public RuntimeEngineImpl(Context<?> context, RuntimeEngineInitlializer initializer) {
-        RuntimeEngineImpl.this.context = context;
-        RuntimeEngineImpl.this.initializer = initializer;
+        this.context = context;
+        this.initializer = initializer;
     }
 
     @Override
     public KieSession getKieSession() {
-        if (RuntimeEngineImpl.this.disposed) {
+        if (this.disposed) {
             throw new IllegalStateException("This runtime is already diposed");
-        } 
+        }
         if (((ksession) == null) && ((initializer) != null)) {
-            ksession = initializer.initKieSession(context, ((InternalRuntimeManager) (manager)), RuntimeEngineImpl.this);
-            RuntimeEngineImpl.this.kieSessionId = ksession.getIdentifier();
-        } 
-        return RuntimeEngineImpl.this.ksession;
+            ksession = initializer.initKieSession(context, ((InternalRuntimeManager) (manager)), this);
+            this.kieSessionId = ksession.getIdentifier();
+        }
+        return this.ksession;
     }
 
     @Override
     public TaskService getTaskService() {
-        if (RuntimeEngineImpl.this.disposed) {
+        if (this.disposed) {
             throw new IllegalStateException("This runtime is already diposed");
-        } 
+        }
         if ((taskService) == null) {
             if ((initializer) != null) {
-                taskService = initializer.initTaskService(context, ((InternalRuntimeManager) (manager)), RuntimeEngineImpl.this);
-            } 
+                taskService = initializer.initTaskService(context, ((InternalRuntimeManager) (manager)), this);
+            }
             if ((taskService) == null) {
                 throw new UnsupportedOperationException("TaskService was not configured");
-            } 
-        } 
-        return RuntimeEngineImpl.this.taskService;
+            }
+        }
+        return this.taskService;
     }
 
     @Override
     public void dispose() {
-        if (!(RuntimeEngineImpl.this.disposed)) {
+        if (!(this.disposed)) {
             // first call listeners and then dispose itself
             for (DisposeListener listener : listeners) {
-                listener.onDispose(RuntimeEngineImpl.this);
+                listener.onDispose(this);
             }
             if ((ksession) != null) {
                 try {
@@ -109,20 +109,21 @@ public class RuntimeEngineImpl implements RuntimeEngine , Disposable {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } 
+            }
             if ((auditService) != null) {
                 auditService.dispose();
-            } 
-            RuntimeEngineImpl.this.disposed = true;
-        } 
+            }
+            this.disposed = true;
+        }
     }
 
     @Override
     public void addDisposeListener(DisposeListener listener) {
-        if (RuntimeEngineImpl.this.disposed) {
+        if (this.disposed) {
             throw new IllegalStateException("This runtime is already diposed");
-        } 
-        RuntimeEngineImpl.this.listeners.add(listener);
+        }
+        // add DisposeListener{listener} to List{this.listeners}
+        this.listeners.add(listener);
     }
 
     public RuntimeManager getManager() {
@@ -130,7 +131,7 @@ public class RuntimeEngineImpl implements RuntimeEngine , Disposable {
     }
 
     public void setManager(RuntimeManager manager) {
-        RuntimeEngineImpl.this.manager = manager;
+        this.manager = manager;
     }
 
     public boolean isDisposed() {
@@ -142,11 +143,11 @@ public class RuntimeEngineImpl implements RuntimeEngine , Disposable {
         if ((auditService) == null) {
             boolean usePersistence = ((InternalRuntimeManager) (manager)).getEnvironment().usePersistence();
             if (usePersistence) {
-                auditService = new org.jbpm.process.audit.JPAAuditLogService(getKieSession().getEnvironment());
-            } else {
+                auditService = new JPAAuditLogService(getKieSession().getEnvironment());
+            }else {
                 throw new UnsupportedOperationException("AuditService was not configured, supported only with persistence");
             }
-        } 
+        }
         return auditService;
     }
 
@@ -155,8 +156,8 @@ public class RuntimeEngineImpl implements RuntimeEngine , Disposable {
     }
 
     public void internalSetKieSession(KieSession ksession) {
-        RuntimeEngineImpl.this.ksession = ksession;
-        RuntimeEngineImpl.this.kieSessionId = ksession.getIdentifier();
+        this.ksession = ksession;
+        this.kieSessionId = ksession.getIdentifier();
     }
 
     public boolean isAfterCompletion() {
@@ -164,7 +165,7 @@ public class RuntimeEngineImpl implements RuntimeEngine , Disposable {
     }
 
     public void setAfterCompletion(boolean completing) {
-        RuntimeEngineImpl.this.afterCompletion = completing;
+        this.afterCompletion = completing;
     }
 
     public Context<?> getContext() {
@@ -172,7 +173,7 @@ public class RuntimeEngineImpl implements RuntimeEngine , Disposable {
     }
 
     public void setContext(Context<?> context) {
-        RuntimeEngineImpl.this.context = context;
+        this.context = context;
     }
 
     public Long getKieSessionId() {

@@ -1,6 +1,6 @@
+// Generated from CommentTitle.g4 by ANTLR 4.6
 package com.nerzid.autocomment.grammar;
 
-// Generated from CommentTitle.g4 by ANTLR 4.5.3
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -19,23 +19,23 @@ public interface CommentTitleListener extends ParseTreeListener {
 	 */
 	void exitRule1(CommentTitleParser.Rule1Context ctx);
 	/**
-	 * Enter a parse tree produced by {@link CommentTitleParser#boolean_one_verb_rule}.
+	 * Enter a parse tree produced by {@link CommentTitleParser#one_verb_rule}.
 	 * @param ctx the parse tree
 	 */
-	void enterBoolean_one_verb_rule(CommentTitleParser.Boolean_one_verb_ruleContext ctx);
+	void enterOne_verb_rule(CommentTitleParser.One_verb_ruleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CommentTitleParser#boolean_one_verb_rule}.
+	 * Exit a parse tree produced by {@link CommentTitleParser#one_verb_rule}.
 	 * @param ctx the parse tree
 	 */
-	void exitBoolean_one_verb_rule(CommentTitleParser.Boolean_one_verb_ruleContext ctx);
+	void exitOne_verb_rule(CommentTitleParser.One_verb_ruleContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CommentTitleParser#boolean_two_verb_rule}.
+	 * Enter a parse tree produced by {@link CommentTitleParser#two_verb_rule}.
 	 * @param ctx the parse tree
 	 */
-	void enterBoolean_two_verb_rule(CommentTitleParser.Boolean_two_verb_ruleContext ctx);
+	void enterTwo_verb_rule(CommentTitleParser.Two_verb_ruleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CommentTitleParser#boolean_two_verb_rule}.
+	 * Exit a parse tree produced by {@link CommentTitleParser#two_verb_rule}.
 	 * @param ctx the parse tree
 	 */
-	void exitBoolean_two_verb_rule(CommentTitleParser.Boolean_two_verb_ruleContext ctx);
+	void exitTwo_verb_rule(CommentTitleParser.Two_verb_ruleContext ctx);
 }

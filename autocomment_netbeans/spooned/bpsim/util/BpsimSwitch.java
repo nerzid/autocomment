@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * BpsimSwitch
@@ -21,9 +22,52 @@
 
 package bpsim.util;
 
+import static BpsimPackage.BP_SIM_DATA_TYPE;
+import static BpsimPackage.CALENDAR;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import java.util.List;
+import static BpsimPackage.BETA_DISTRIBUTION_TYPE;
+import static BpsimPackage.BINOMIAL_DISTRIBUTION_TYPE;
+import static BpsimPackage.BOOLEAN_PARAMETER_TYPE;
+import static BpsimPackage.POISSON_DISTRIBUTION_TYPE;
+import static BpsimPackage.ERLANG_DISTRIBUTION_TYPE;
+import static BpsimPackage.USER_DISTRIBUTION_DATA_POINT_TYPE;
+import static BpsimPackage.eINSTANCE;
+import static BpsimPackage.WEIBULL_DISTRIBUTION_TYPE;
+import static BpsimPackage.GAMMA_DISTRIBUTION_TYPE;
+import static BpsimPackage.NEGATIVE_EXPONENTIAL_DISTRIBUTION_TYPE;
+import static BpsimPackage.STRING_PARAMETER_TYPE;
+import static BpsimPackage.EXPRESSION_PARAMETER_TYPE;
+import static BpsimPackage.PRIORITY_PARAMETERS;
+import static BpsimPackage.DOCUMENT_ROOT;
+import static BpsimPackage.ELEMENT_PARAMETERS;
+import static BpsimPackage.RESOURCE_PARAMETERS;
+import static BpsimPackage.TIME_PARAMETERS;
+import static BpsimPackage.ENUM_PARAMETER_TYPE;
+import static BpsimPackage.NUMERIC_PARAMETER_TYPE;
+import static BpsimPackage.LOG_NORMAL_DISTRIBUTION_TYPE;
+import static BpsimPackage.CONSTANT_PARAMETER;
+import static BpsimPackage.CONTROL_PARAMETERS;
+import static BpsimPackage.PARAMETER_VALUE;
+import static BpsimPackage.TRUNCATED_NORMAL_DISTRIBUTION_TYPE;
+import static BpsimPackage.USER_DISTRIBUTION_TYPE;
+import static BpsimPackage.VENDOR_EXTENSION;
+import static BpsimPackage.PROPERTY_TYPE;
+import static BpsimPackage.PARAMETER;
+import static BpsimPackage.SCENARIO_PARAMETERS;
+import static BpsimPackage.TRIANGULAR_DISTRIBUTION_TYPE;
+import static BpsimPackage.NORMAL_DISTRIBUTION_TYPE;
+import static BpsimPackage.COST_PARAMETERS;
+import static BpsimPackage.ELEMENT_PARAMETERS_TYPE;
+import static BpsimPackage.DISTRIBUTION_PARAMETER;
+import static BpsimPackage.DURATION_PARAMETER_TYPE;
+import static BpsimPackage.FLOATING_PARAMETER_TYPE;
+import static BpsimPackage.UNIFORM_DISTRIBUTION_TYPE;
+import static BpsimPackage.SCENARIO;
+import static BpsimPackage.SCENARIO_PARAMETERS_TYPE;
+import static BpsimPackage.PROPERTY_PARAMETERS;
+import static BpsimPackage.DATE_TIME_PARAMETER_TYPE;
 
 /**
  * <!-- begin-user-doc -->
@@ -56,7 +100,7 @@ public class BpsimSwitch<T> {
     public BpsimSwitch() {
         if ((BpsimSwitch.modelPackage) == null) {
             BpsimSwitch.modelPackage = BpsimPackage.eINSTANCE;
-        } 
+        }
     }
 
     /**
@@ -80,7 +124,7 @@ public class BpsimSwitch<T> {
     protected T doSwitch(EClass theEClass, EObject theEObject) {
         if ((theEClass.eContainer()) == (BpsimSwitch.modelPackage)) {
             return doSwitch(theEClass.getClassifierID(), theEObject);
-        } else {
+        }else {
             List<EClass> eSuperTypes = theEClass.getESuperTypes();
             return eSuperTypes.isEmpty() ? defaultCase(theEObject) : doSwitch(eSuperTypes.get(0), theEObject);
         }

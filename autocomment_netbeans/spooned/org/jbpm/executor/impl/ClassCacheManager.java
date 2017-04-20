@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,8 @@
 
 package org.jbpm.executor.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import org.kie.internal.runtime.Cacheable;
+import java.util.ArrayList;
 import org.kie.internal.runtime.Closeable;
 import org.kie.api.executor.Command;
 import org.kie.api.executor.CommandCallback;
@@ -55,7 +54,7 @@ public class ClassCacheManager {
                 } catch (Exception ex) {
                     throw new IllegalArgumentException((("Unknown Command implementation with name '" + name) + "'"));
                 }
-            } else {
+            }else {
                 Command cmd = commandCache.get(name);
                 if (!(cmd.getClass().getClassLoader().equals(cl))) {
                     commandCache.remove(name);
@@ -65,7 +64,7 @@ public class ClassCacheManager {
                     } catch (Exception ex) {
                         throw new IllegalArgumentException((("Unknown Command implementation with name '" + name) + "'"));
                     }
-                } 
+                }
             }
         }
         return commandCache.get(name);
@@ -87,7 +86,7 @@ public class ClassCacheManager {
                 } catch (Exception ex) {
                     throw new IllegalArgumentException((("Unknown Command implementation with name '" + name) + "'"));
                 }
-            } else {
+            }else {
                 CommandCallback cmdCallback = callbackCache.get(name);
                 if (!(cmdCallback.getClass().getClassLoader().equals(cl))) {
                     callbackCache.remove(name);
@@ -97,7 +96,7 @@ public class ClassCacheManager {
                     } catch (Exception ex) {
                         throw new IllegalArgumentException((("Unknown Command implementation with name '" + name) + "'"));
                     }
-                } 
+                }
             }
         }
         return callbackCache.get(name);
@@ -118,19 +117,21 @@ public class ClassCacheManager {
                 CommandCallback handler = findCommandCallback(callbackName.trim(), cl);
                 callbackList.add(handler);
             }
-        } 
+        }
         return callbackList;
     }
 
     protected void closeInstance(Object instance) {
         if (instance == null) {
             return ;
-        } 
+        }
         if (instance instanceof Closeable) {
             ((Closeable) (instance)).close();
-        } else if (instance instanceof Cacheable) {
-            ((Cacheable) (instance)).close();
-        } 
+        }else
+            if (instance instanceof org.kie.internal.runtime.Cacheable) {
+                ((org.kie.internal.runtime.Cacheable) (instance)).close();
+            }
+        
     }
 
     public void dispose() {
@@ -138,12 +139,12 @@ public class ClassCacheManager {
             for (Object command : commandCache.values()) {
                 closeInstance(command);
             }
-        } 
+        }
         if ((callbackCache) != null) {
             for (Object callback : callbackCache.values()) {
                 closeInstance(callback);
             }
-        } 
+        }
     }
 }
 

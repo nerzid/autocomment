@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,31 +17,31 @@
 
 package org.jbpm.process.workitem.bpmn2;
 
-import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
 import org.jbpm.bpmn2.core.Bpmn2Import;
+import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
 import org.kie.internal.runtime.Cacheable;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.ClientCallback;
+import org.slf4j.Logger;
+import javax.xml.namespace.QName;
+import org.kie.internal.runtime.manager.RuntimeManagerRegistry;
+import org.kie.api.runtime.manager.RuntimeManager;
+import org.slf4j.LoggerFactory;
+import org.kie.api.runtime.manager.RuntimeEngine;
+import org.jbpm.workflow.core.impl.WorkflowProcessImpl;
+import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
 import org.kie.api.runtime.KieSession;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Map;
-import java.lang.reflect.Method;
-import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
-import javax.xml.namespace.QName;
-import org.kie.api.runtime.manager.RuntimeEngine;
-import org.kie.api.runtime.manager.RuntimeManager;
-import org.kie.internal.runtime.manager.RuntimeManagerRegistry;
-import java.util.concurrent.TimeUnit;
 import org.kie.api.runtime.process.WorkItem;
+import java.util.concurrent.TimeUnit;
 import org.drools.core.process.instance.impl.WorkItemImpl;
 import org.kie.api.runtime.process.WorkItemManager;
-import org.jbpm.workflow.core.impl.WorkflowProcessImpl;
 
 public class ServiceTaskHandler extends AbstractLogOrThrowWorkItemHandler implements Cacheable {
     public static final String WSDL_IMPORT_TYPE = "http://schemas.xmlsoap.org/wsdl/";
@@ -62,24 +62,24 @@ public class ServiceTaskHandler extends AbstractLogOrThrowWorkItemHandler implem
 SYNC, ASYNC, ONEWAY;    }
 
     public ServiceTaskHandler() {
-        ServiceTaskHandler.this.dcf = JaxWsDynamicClientFactory.newInstance();
+        this.dcf = JaxWsDynamicClientFactory.newInstance();
     }
 
     public ServiceTaskHandler(KieSession ksession) {
-        ServiceTaskHandler.this.dcf = JaxWsDynamicClientFactory.newInstance();
-        ServiceTaskHandler.this.ksession = ksession;
+        this.dcf = JaxWsDynamicClientFactory.newInstance();
+        this.ksession = ksession;
     }
 
     public ServiceTaskHandler(KieSession ksession, ClassLoader classloader) {
-        ServiceTaskHandler.this.dcf = JaxWsDynamicClientFactory.newInstance();
-        ServiceTaskHandler.this.ksession = ksession;
-        ServiceTaskHandler.this.classLoader = classloader;
+        this.dcf = JaxWsDynamicClientFactory.newInstance();
+        this.ksession = ksession;
+        this.classLoader = classloader;
     }
 
     public ServiceTaskHandler(KieSession ksession, int timeout) {
-        ServiceTaskHandler.this.dcf = JaxWsDynamicClientFactory.newInstance();
-        ServiceTaskHandler.this.ksession = ksession;
-        ServiceTaskHandler.this.asyncTimeout = timeout;
+        this.dcf = JaxWsDynamicClientFactory.newInstance();
+        this.ksession = ksession;
+        this.asyncTimeout = timeout;
     }
 
     public void executeWorkItem(WorkItem workItem, final WorkItemManager manager) {
@@ -95,14 +95,14 @@ SYNC, ASYNC, ONEWAY;    }
                 Client client = getWSClient(workItem, interfaceRef);
                 if (client == null) {
                     throw new IllegalStateException(((("Unable to create client for web service " + interfaceRef) + " - ") + operationRef));
-                } 
+                }
                 switch (mode) {
                     case SYNC :
                         Object[] result = client.invoke(operationRef, parameter);
                         Map<String, Object> output = new HashMap<String, Object>();
                         if ((result == null) || ((result.length) == 0)) {
                             output.put("Result", null);
-                        } else {
+                        }else {
                             output.put("Result", result[0]);
                         }
                         manager.completeWorkItem(workItem.getId(), output);
@@ -121,16 +121,16 @@ SYNC, ASYNC, ONEWAY;    }
                                     if (callback.isDone()) {
                                         if (result == null) {
                                             output.put("Result", null);
-                                        } else {
+                                        }else {
                                             output.put("Result", result[0]);
                                         }
-                                    } 
+                                    }
                                     RuntimeManager manager = RuntimeManagerRegistry.get().getManager(deploymentId);
                                     if (manager != null) {
                                         RuntimeEngine engine = manager.getRuntimeEngine(ProcessInstanceIdContext.get(processInstanceId));
                                         engine.getKieSession().getWorkItemManager().completeWorkItem(workItemId, output);
                                         manager.disposeRuntimeEngine(engine);
-                                    } else {
+                                    }else {
                                         ksession.getWorkItemManager().completeWorkItem(workItemId, output);
                                     }
                                 } catch (Exception e) {
@@ -154,7 +154,7 @@ SYNC, ASYNC, ONEWAY;    }
             } finally {
                 Thread.currentThread().setContextClassLoader(origClassloader);
             }
-        } else {
+        }else {
             executeJavaWorkItem(workItem, manager);
         }
     }
@@ -163,7 +163,7 @@ SYNC, ASYNC, ONEWAY;    }
     protected synchronized Client getWSClient(WorkItem workItem, String interfaceRef) {
         if (clients.containsKey(interfaceRef)) {
             return clients.get(interfaceRef);
-        } 
+        }
         long processInstanceId = ((WorkItemImpl) (workItem)).getProcessInstanceId();
         WorkflowProcessImpl process = ((WorkflowProcessImpl) (ksession.getProcessInstance(processInstanceId).getProcess()));
         List<Bpmn2Import> typedImports = ((List<Bpmn2Import>) (process.getMetaData("Bpmn2Imports")));
@@ -180,16 +180,16 @@ SYNC, ASYNC, ONEWAY;    }
                         ServiceTaskHandler.logger.info("Error when creating WS Client. You can ignore this error as long as a client is eventually created", e);
                         continue;
                     }
-                } 
+                }
             }
-        } 
+        }
         return null;
     }
 
     private ClassLoader getInternalClassLoader() {
-        if ((ServiceTaskHandler.this.classLoader) != null) {
-            return ServiceTaskHandler.this.classLoader;
-        } 
+        if ((this.classLoader) != null) {
+            return this.classLoader;
+        }
         return Thread.currentThread().getContextClassLoader();
     }
 
@@ -208,7 +208,7 @@ SYNC, ASYNC, ONEWAY;    }
             } catch (ClassNotFoundException cnfe) {
                 if ((interf.compareTo(interfaces[((interfaces.length) - 1)])) == 0) {
                     handleException(cnfe, i, iImplementationRef, operation, parameterType, parameter);
-                } 
+                }
             }
         }
         try {
@@ -218,7 +218,7 @@ SYNC, ASYNC, ONEWAY;    }
             if (parameterType != null) {
                 classes = new Class<?>[]{ Class.forName(parameterType, true, getInternalClassLoader()) };
                 params = new Object[]{ parameter };
-            } 
+            }
             Method method = c.getMethod(operation, classes);
             Object result = method.invoke(instance, params);
             Map<String, Object> results = new HashMap<String, Object>();
@@ -238,13 +238,20 @@ SYNC, ASYNC, ONEWAY;    }
     }
 
     private void handleException(Throwable cause, String service, String iImplementationRef, String operation, String paramType, Object param) {
+        // debug String{"Handling exception {} inside service {} or {} and operation {} with param type {} and value {}"} to Logger{ServiceTaskHandler.logger}
         ServiceTaskHandler.logger.debug("Handling exception {} inside service {} or {} and operation {} with param type {} and value {}", cause.getMessage(), service, operation, paramType, param);
         Map<String, Object> data = new HashMap<String, Object>();
+        // put String{"Interface"} to Map{data}
         data.put("Interface", service);
+        // put String{"InterfaceImplementationRef"} to Map{data}
         data.put("InterfaceImplementationRef", iImplementationRef);
+        // put String{"Operation"} to Map{data}
         data.put("Operation", operation);
+        // put String{"ParameterType"} to Map{data}
         data.put("ParameterType", paramType);
+        // put String{"Parameter"} to Map{data}
         data.put("Parameter", param);
+        // handle exception Throwable{cause} to ServiceTaskHandler{}
         handleException(cause, data);
     }
 
@@ -257,13 +264,13 @@ SYNC, ASYNC, ONEWAY;    }
     }
 
     public void setClassLoader(ClassLoader classLoader) {
-        ServiceTaskHandler.this.classLoader = classLoader;
+        this.classLoader = classLoader;
     }
 
     protected String nonNull(String value) {
         if (value == null) {
             return "";
-        } 
+        }
         return value;
     }
 
@@ -273,7 +280,7 @@ SYNC, ASYNC, ONEWAY;    }
             for (Client client : clients.values()) {
                 client.destroy();
             }
-        } 
+        }
     }
 }
 

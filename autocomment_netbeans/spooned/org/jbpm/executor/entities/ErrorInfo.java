@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,25 +17,25 @@
 
 package org.jbpm.executor.entities;
 
-import javax.persistence.Column;
-import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.Column;
+import javax.persistence.Transient;
+import javax.persistence.Temporal;
+import java.util.Date;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.persistence.TemporalType;
+import java.io.Serializable;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import java.io.Serializable;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 @SequenceGenerator(name = "errorInfoIdSeq", sequenceName = "ERROR_INFO_ID_SEQ")
-public class ErrorInfo implements Serializable , org.kie.internal.executor.api.ErrorInfo {
+public class ErrorInfo implements ErrorInfo , Serializable {
     private static final Logger logger = LoggerFactory.getLogger(ErrorInfo.class);
 
     private static final long serialVersionUID = 1548071325967795108L;
@@ -67,9 +67,9 @@ public class ErrorInfo implements Serializable , org.kie.internal.executor.api.E
     }
 
     public ErrorInfo(String message, String stacktrace) {
-        ErrorInfo.this.message = message;
-        ErrorInfo.this.stacktrace = stacktrace;
-        ErrorInfo.this.time = new Date();
+        this.message = message;
+        this.stacktrace = stacktrace;
+        this.time = new Date();
         trimToSize();
     }
 
@@ -78,7 +78,7 @@ public class ErrorInfo implements Serializable , org.kie.internal.executor.api.E
     }
 
     public void setId(Long id) {
-        ErrorInfo.this.id = id;
+        this.id = id;
     }
 
     public String getMessage() {
@@ -86,7 +86,7 @@ public class ErrorInfo implements Serializable , org.kie.internal.executor.api.E
     }
 
     public void setMessage(String message) {
-        ErrorInfo.this.message = message;
+        this.message = message;
     }
 
     public String getStacktrace() {
@@ -94,7 +94,7 @@ public class ErrorInfo implements Serializable , org.kie.internal.executor.api.E
     }
 
     public void setStacktrace(String stacktrace) {
-        ErrorInfo.this.stacktrace = stacktrace;
+        this.stacktrace = stacktrace;
     }
 
     public Date getTime() {
@@ -102,7 +102,7 @@ public class ErrorInfo implements Serializable , org.kie.internal.executor.api.E
     }
 
     public void setTime(Date time) {
-        ErrorInfo.this.time = time;
+        this.time = time;
     }
 
     public RequestInfo getRequestInfo() {
@@ -110,7 +110,7 @@ public class ErrorInfo implements Serializable , org.kie.internal.executor.api.E
     }
 
     public void setRequestInfo(RequestInfo requestInfo) {
-        ErrorInfo.this.requestInfo = requestInfo;
+        this.requestInfo = requestInfo;
     }
 
     @Override
@@ -122,49 +122,49 @@ public class ErrorInfo implements Serializable , org.kie.internal.executor.api.E
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        } 
+        }
         if ((getClass()) != (obj.getClass())) {
             return false;
-        } 
+        }
         final ErrorInfo other = ((ErrorInfo) (obj));
-        if (((ErrorInfo.this.id) != (other.id)) && (((ErrorInfo.this.id) == null) || (!(ErrorInfo.this.id.equals(other.id))))) {
+        if (((this.id) != (other.id)) && (((this.id) == null) || (!(this.id.equals(other.id))))) {
             return false;
-        } 
-        if (((ErrorInfo.this.time) != (other.time)) && (((ErrorInfo.this.time) == null) || (!(ErrorInfo.this.time.equals(other.time))))) {
+        }
+        if (((this.time) != (other.time)) && (((this.time) == null) || (!(this.time.equals(other.time))))) {
             return false;
-        } 
-        if ((ErrorInfo.this.message) == null ? (other.message) != null : !(ErrorInfo.this.message.equals(other.message))) {
+        }
+        if ((this.message) == null ? (other.message) != null : !(this.message.equals(other.message))) {
             return false;
-        } 
-        if ((ErrorInfo.this.stacktrace) == null ? (other.stacktrace) != null : !(ErrorInfo.this.stacktrace.equals(other.stacktrace))) {
+        }
+        if ((this.stacktrace) == null ? (other.stacktrace) != null : !(this.stacktrace.equals(other.stacktrace))) {
             return false;
-        } 
-        if (((ErrorInfo.this.requestInfo) != (other.requestInfo)) && (((ErrorInfo.this.requestInfo) == null) || (!(ErrorInfo.this.requestInfo.equals(other.requestInfo))))) {
+        }
+        if (((this.requestInfo) != (other.requestInfo)) && (((this.requestInfo) == null) || (!(this.requestInfo.equals(other.requestInfo))))) {
             return false;
-        } 
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = (37 * hash) + ((ErrorInfo.this.id) != null ? ErrorInfo.this.id.hashCode() : 0);
-        hash = (37 * hash) + ((ErrorInfo.this.time) != null ? ErrorInfo.this.time.hashCode() : 0);
-        hash = (37 * hash) + ((ErrorInfo.this.message) != null ? ErrorInfo.this.message.hashCode() : 0);
-        hash = (37 * hash) + ((ErrorInfo.this.stacktrace) != null ? ErrorInfo.this.stacktrace.hashCode() : 0);
-        hash = (37 * hash) + ((ErrorInfo.this.requestInfo) != null ? ErrorInfo.this.requestInfo.hashCode() : 0);
+        hash = (37 * hash) + ((this.id) != null ? this.id.hashCode() : 0);
+        hash = (37 * hash) + ((this.time) != null ? this.time.hashCode() : 0);
+        hash = (37 * hash) + ((this.message) != null ? this.message.hashCode() : 0);
+        hash = (37 * hash) + ((this.stacktrace) != null ? this.stacktrace.hashCode() : 0);
+        hash = (37 * hash) + ((this.requestInfo) != null ? this.requestInfo.hashCode() : 0);
         return hash;
     }
 
     protected void trimToSize() {
-        if (((ErrorInfo.this.message) != null) && ((ErrorInfo.this.message.length()) > (MESSAGE_LOG_LENGTH))) {
-            ErrorInfo.logger.warn("trimming message as it's too long : {}", ErrorInfo.this.message.length());
-            ErrorInfo.this.message = message.substring(0, MESSAGE_LOG_LENGTH);
-        } 
-        if (((ErrorInfo.this.stacktrace) != null) && ((ErrorInfo.this.stacktrace.length()) > (STACKTRACE_LOG_LENGTH))) {
-            ErrorInfo.logger.warn("trimming stacktrace as it's too long : {}", ErrorInfo.this.stacktrace.length());
-            ErrorInfo.this.stacktrace = stacktrace.substring(0, STACKTRACE_LOG_LENGTH);
-        } 
+        if (((this.message) != null) && ((this.message.length()) > (MESSAGE_LOG_LENGTH))) {
+            ErrorInfo.logger.warn("trimming message as it's too long : {}", this.message.length());
+            this.message = message.substring(0, MESSAGE_LOG_LENGTH);
+        }
+        if (((this.stacktrace) != null) && ((this.stacktrace.length()) > (STACKTRACE_LOG_LENGTH))) {
+            ErrorInfo.logger.warn("trimming stacktrace as it's too long : {}", this.stacktrace.length());
+            this.stacktrace = stacktrace.substring(0, STACKTRACE_LOG_LENGTH);
+        }
     }
 }
 

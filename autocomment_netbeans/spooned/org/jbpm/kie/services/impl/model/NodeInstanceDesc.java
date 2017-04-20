@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@ package org.jbpm.kie.services.impl.model;
 import java.util.Date;
 import java.io.Serializable;
 
-public class NodeInstanceDesc implements Serializable , org.jbpm.services.api.model.NodeInstanceDesc {
+public class NodeInstanceDesc implements NodeInstanceDesc , Serializable {
     private static final long serialVersionUID = -5724814793988493958L;
 
     private long id;
@@ -48,16 +48,16 @@ public class NodeInstanceDesc implements Serializable , org.jbpm.services.api.mo
     }
 
     public NodeInstanceDesc(String id, String nodeId, String name, String nodeType, String deploymentId, long processInstanceId, Date date, String connection, int type, Long workItemId) {
-        NodeInstanceDesc.this.id = Long.parseLong(id);
-        NodeInstanceDesc.this.name = name;
-        NodeInstanceDesc.this.nodeId = nodeId;
-        NodeInstanceDesc.this.nodeType = nodeType;
-        NodeInstanceDesc.this.deploymentId = deploymentId;
-        NodeInstanceDesc.this.processInstanceId = processInstanceId;
-        NodeInstanceDesc.this.dataTimeStamp = date;
-        NodeInstanceDesc.this.connection = connection;
-        NodeInstanceDesc.this.type = type;
-        NodeInstanceDesc.this.workItemId = workItemId;
+        this.id = Long.parseLong(id);
+        this.name = name;
+        this.nodeId = nodeId;
+        this.nodeType = nodeType;
+        this.deploymentId = deploymentId;
+        this.processInstanceId = processInstanceId;
+        this.dataTimeStamp = date;
+        this.connection = connection;
+        this.type = type;
+        this.workItemId = workItemId;
     }
 
     public Long getId() {
@@ -89,11 +89,11 @@ public class NodeInstanceDesc implements Serializable , org.jbpm.services.api.mo
     }
 
     public void setNodeId(String nodeUniqueId) {
-        NodeInstanceDesc.this.nodeId = nodeUniqueId;
+        this.nodeId = nodeUniqueId;
     }
 
     public boolean isCompleted() {
-        return (NodeInstanceDesc.this.type) == 1;
+        return (this.type) == 1;
     }
 
     @Override
@@ -106,7 +106,7 @@ public class NodeInstanceDesc implements Serializable , org.jbpm.services.api.mo
     }
 
     public void setConnection(String incomingConnection) {
-        NodeInstanceDesc.this.connection = incomingConnection;
+        this.connection = incomingConnection;
     }
 
     public int getType() {
@@ -118,7 +118,7 @@ public class NodeInstanceDesc implements Serializable , org.jbpm.services.api.mo
     }
 
     public void setWorkItemId(Long workItemId) {
-        NodeInstanceDesc.this.workItemId = workItemId;
+        this.workItemId = workItemId;
     }
 }
 

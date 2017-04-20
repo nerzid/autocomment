@@ -32,7 +32,7 @@ public class SerializableUtil {
             try {
                 if (out != null) {
                     out.close();
-                } 
+                }
             } catch (IOException ex) {
                 // ignore close exception
             }
@@ -51,6 +51,7 @@ public class SerializableUtil {
 
     public static Serializable deserialize(byte[] byteArray, ClassLoader classLoader) throws IOException, ClassNotFoundException {
         ClassLoader originalClassLoader = Thread.currentThread().getContextClassLoader();
+        // set context ClassLoader{classLoader} to Thread{Thread.currentThread()}
         Thread.currentThread().setContextClassLoader(classLoader);
         ByteArrayInputStream byteArrayIn = new ByteArrayInputStream(byteArray);
         ObjectInput objectIn = null;
@@ -67,7 +68,7 @@ public class SerializableUtil {
             try {
                 if (objectIn != null) {
                     objectIn.close();
-                } 
+                }
             } catch (IOException ex) {
                 // ignore close exception
             }

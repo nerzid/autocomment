@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 
 package org.jbpm.test.container.archive;
 
+import KieServices.Factory;
 import java.io.File;
 import org.jbpm.test.container.tools.IntegrationMavenResolver;
 import org.slf4j.Logger;
@@ -47,9 +48,11 @@ public class HelloWebService {
     private WebArchive war;
 
     public WebArchive buildArchive() {
+        // println String{(("### Building archive '" + (HelloWebService.ARCHIVE_NAME)) + ".war'")} to PrintStream{System.out}
         System.out.println((("### Building archive '" + (HelloWebService.ARCHIVE_NAME)) + ".war'"));
         PomEquippedResolveStage resolver = IntegrationMavenResolver.get();
         File[] dependencies = resolver.importCompileAndRuntimeDependencies().resolve().withTransitivity().asFile();
+        // debug String{"Archive dependencies:"} to Logger{HelloWebService.LOGGER}
         HelloWebService.LOGGER.debug("Archive dependencies:");
         for (File d : dependencies) {
             HelloWebService.LOGGER.debug(d.getName());
@@ -59,7 +62,7 @@ public class HelloWebService {
     }
 
     public Resource getResource(String resourceName) {
-        return KieServices.Factory.get().getResources().newClassPathResource(((HelloWebService.HELLO_WEB_SERVICE_PATH) + resourceName));
+        return Factory.get().getResources().newClassPathResource(((HelloWebService.HELLO_WEB_SERVICE_PATH) + resourceName));
     }
 
     public WebArchive getWar() {
@@ -71,7 +74,7 @@ public class HelloWebService {
     }
 
     public void setWar(WebArchive war) {
-        HelloWebService.this.war = war;
+        this.war = war;
     }
 }
 

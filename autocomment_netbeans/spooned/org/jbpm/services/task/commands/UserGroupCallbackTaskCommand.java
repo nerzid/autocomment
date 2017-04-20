@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,40 +16,41 @@
 
 package org.jbpm.services.task.commands;
 
+import org.kie.api.task.model.Group;
 import java.util.ArrayList;
+import org.kie.internal.task.api.model.InternalOrganizationalEntity;
 import org.kie.api.task.model.Attachment;
 import org.kie.api.task.model.Comment;
 import org.kie.internal.command.Context;
+import javax.xml.bind.annotation.XmlAccessorType;
+import java.util.Map;
+import org.kie.internal.task.api.TaskPersistenceContext;
+import org.kie.internal.task.api.model.InternalComment;
+import java.util.Set;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.kie.internal.task.api.model.Deadline;
 import org.kie.internal.task.api.model.Deadlines;
+import org.kie.internal.task.api.model.Reassignment;
+import org.kie.internal.task.api.model.Notification;
+import org.kie.api.task.model.User;
 import org.kie.internal.task.api.model.Escalation;
-import org.kie.api.task.model.Group;
+import org.kie.internal.task.api.model.InternalPeopleAssignments;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.HashMap;
+import org.kie.internal.task.api.TaskModelProvider;
+import javax.xml.bind.annotation.XmlAccessType;
+import org.kie.internal.task.api.model.InternalTaskData;
+import java.util.Properties;
+import org.kie.api.task.model.OrganizationalEntity;
 import java.util.HashSet;
+import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.InputStream;
 import org.kie.internal.task.api.model.InternalAttachment;
-import org.kie.internal.task.api.model.InternalComment;
-import org.kie.internal.task.api.model.InternalOrganizationalEntity;
-import org.kie.internal.task.api.model.InternalPeopleAssignments;
-import org.kie.internal.task.api.model.InternalTaskData;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Map;
-import org.kie.internal.task.api.model.Notification;
-import org.kie.api.task.model.OrganizationalEntity;
-import java.util.Properties;
-import org.kie.internal.task.api.model.Reassignment;
-import java.util.Set;
 import org.drools.core.util.StringUtils;
 import org.kie.internal.task.api.TaskContext;
-import org.kie.internal.task.api.TaskModelProvider;
-import org.kie.internal.task.api.TaskPersistenceContext;
-import org.kie.api.task.model.User;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import Status.Ready;
 
 @XmlTransient
 @XmlRootElement(name = "user-group-callback-task-command")
@@ -73,7 +74,7 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                 Properties props = new Properties();
                 props.load(in);
                 UserGroupCallbackTaskCommand.restrictedGroups.addAll(props.stringPropertyNames());
-            } 
+            }
         } catch (Exception e) {
             UserGroupCallbackTaskCommand.logger.warn("Error when loading restricted groups for human task service {}", e.getMessage());
         }
@@ -88,14 +89,14 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
         if ((userId != null) && (context.getUserGroupCallback().existsUser(userId))) {
             addUserFromCallbackOperation(userId, context);
             return true;
-        } 
+        }
         return false;
     }
 
     protected User doCallbackAndReturnUserOperation(String userId, TaskContext context) {
         if ((userId != null) && (context.getUserGroupCallback().existsUser(userId))) {
             return addUserFromCallbackOperation(userId, context);
-        } 
+        }
         return null;
     }
 
@@ -103,7 +104,7 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
         if (((groupId != null) && (context.getUserGroupCallback().existsGroup(groupId))) && (!(UserGroupCallbackTaskCommand.restrictedGroups.contains(groupId)))) {
             addGroupFromCallbackOperation(groupId, context);
             return true;
-        } 
+        }
         return false;
     }
 
@@ -114,7 +115,7 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
             user = TaskModelProvider.getFactory().newUser();
             ((InternalOrganizationalEntity) (user)).setId(userId);
             persistIfNotExists(user, context);
-        } 
+        }
         return user;
     }
 
@@ -123,7 +124,7 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
         OrganizationalEntity orgEntity = tpc.findOrgEntity(entity.getId());
         if (((orgEntity == null) || ((orgEntity instanceof Group) && (entity instanceof User))) || ((orgEntity instanceof User) && (entity instanceof Group))) {
             tpc.persistOrgEntity(entity);
-        } 
+        }
     }
 
     protected List<String> doCallbackGroupsOperation(String userId, List<String> groupIds, TaskContext context) {
@@ -133,9 +134,9 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                 for (String groupId : groupIds) {
                     if (((context.getUserGroupCallback().existsGroup(groupId)) && (userGroups != null)) && (userGroups.contains(groupId))) {
                         addGroupFromCallbackOperation(groupId, context);
-                    } 
+                    }
                 }
-            } else {
+            }else {
                 if (!((userGroupsMap.containsKey(userId)) && (userGroupsMap.get(userId).booleanValue()))) {
                     List<String> userGroups = filterGroups(context.getUserGroupCallback().getGroupsForUser(userId, null, null));
                     if ((userGroups != null) && ((userGroups.size()) > 0)) {
@@ -144,15 +145,15 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                         }
                         userGroupsMap.put(userId, true);
                         groupIds = userGroups;
-                    } 
-                } 
+                    }
+                }
             }
-        } else {
+        }else {
             if (groupIds != null) {
                 for (String groupId : groupIds) {
                     addGroupFromCallbackOperation(groupId, context);
                 }
-            } 
+            }
         }
         return groupIds;
     }
@@ -164,7 +165,7 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
             group = TaskModelProvider.getFactory().newGroup();
             ((InternalOrganizationalEntity) (group)).setId(groupId);
             persistIfNotExists(group, context);
-        } 
+        }
     }
 
     protected void doCallbackOperationForTaskData(InternalTaskData data, TaskContext context) {
@@ -173,16 +174,16 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
             if (!userExists) {
                 // remove it from the task to avoid foreign key constraint exception
                 data.setActualOwner(null);
-                data.setStatus(Status.Ready);
-            } 
-        } 
+                data.setStatus(Ready);
+            }
+        }
         if ((data.getCreatedBy()) != null) {
             boolean userExists = doCallbackUserOperation(data.getCreatedBy().getId(), context);
             if (!userExists) {
                 // remove it from the task to avoid foreign key constraint exception
                 data.setCreatedBy(null);
-            } 
-        } 
+            }
+        }
     }
 
     protected void doCallbackOperationForPotentialOwners(List<OrganizationalEntity> potentialOwners, TaskContext context) {
@@ -192,18 +193,18 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                 boolean userExists = doCallbackUserOperation(orgEntity.getId(), context);
                 if (!userExists) {
                     nonExistingEntities.add(orgEntity);
-                } 
-            } 
+                }
+            }
             if (orgEntity instanceof Group) {
                 boolean groupExists = doCallbackGroupOperation(orgEntity.getId(), context);
                 if (!groupExists) {
                     nonExistingEntities.add(orgEntity);
-                } 
-            } 
+                }
+            }
         }
         if (!(nonExistingEntities.isEmpty())) {
             potentialOwners.removeAll(nonExistingEntities);
-        } 
+        }
     }
 
     protected void doCallbackOperationForPeopleAssignments(InternalPeopleAssignments assignments, TaskContext context) {
@@ -216,24 +217,24 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                         boolean userExists = doCallbackUserOperation(admin.getId(), context);
                         if (!userExists) {
                             nonExistingEntities.add(admin);
-                        } 
-                    } 
+                        }
+                    }
                     if (admin instanceof Group) {
                         boolean groupExists = doCallbackGroupOperation(admin.getId(), context);
                         if (!groupExists) {
                             nonExistingEntities.add(admin);
-                        } 
-                    } 
+                        }
+                    }
                 }
                 if (!(nonExistingEntities.isEmpty())) {
                     businessAdmins.removeAll(nonExistingEntities);
                     nonExistingEntities.clear();
-                } 
-            } 
+                }
+            }
             if ((businessAdmins == null) || (businessAdmins.isEmpty())) {
                 // throw an exception as it should not be allowed to create task without administrator
-                throw new org.jbpm.services.task.exception.CannotAddTaskException("There are no known Business Administrators, task cannot be created according to WS-HT specification");
-            } 
+                throw new CannotAddTaskException("There are no known Business Administrators, task cannot be created according to WS-HT specification");
+            }
             List<? extends OrganizationalEntity> potentialOwners = assignments.getPotentialOwners();
             if (potentialOwners != null) {
                 for (OrganizationalEntity powner : potentialOwners) {
@@ -241,23 +242,23 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                         boolean userExists = doCallbackUserOperation(powner.getId(), context);
                         if (!userExists) {
                             nonExistingEntities.add(powner);
-                        } 
-                    } 
+                        }
+                    }
                     if (powner instanceof Group) {
                         boolean groupExists = doCallbackGroupOperation(powner.getId(), context);
                         if (!groupExists) {
                             nonExistingEntities.add(powner);
-                        } 
-                    } 
+                        }
+                    }
                 }
                 if (!(nonExistingEntities.isEmpty())) {
                     potentialOwners.removeAll(nonExistingEntities);
                     nonExistingEntities.clear();
-                } 
-            } 
+                }
+            }
             if (((assignments.getTaskInitiator()) != null) && ((assignments.getTaskInitiator().getId()) != null)) {
                 doCallbackUserOperation(assignments.getTaskInitiator().getId(), context);
-            } 
+            }
             List<? extends OrganizationalEntity> excludedOwners = assignments.getExcludedOwners();
             if (excludedOwners != null) {
                 for (OrganizationalEntity exowner : excludedOwners) {
@@ -265,20 +266,20 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                         boolean userExists = doCallbackUserOperation(exowner.getId(), context);
                         if (!userExists) {
                             nonExistingEntities.add(exowner);
-                        } 
-                    } 
+                        }
+                    }
                     if (exowner instanceof Group) {
                         boolean groupExists = doCallbackGroupOperation(exowner.getId(), context);
                         if (!groupExists) {
                             nonExistingEntities.add(exowner);
-                        } 
-                    } 
+                        }
+                    }
                 }
                 if (!(nonExistingEntities.isEmpty())) {
                     excludedOwners.removeAll(nonExistingEntities);
                     nonExistingEntities.clear();
-                } 
-            } 
+                }
+            }
             List<? extends OrganizationalEntity> recipients = assignments.getRecipients();
             if (recipients != null) {
                 for (OrganizationalEntity recipient : recipients) {
@@ -286,20 +287,20 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                         boolean userExists = doCallbackUserOperation(recipient.getId(), context);
                         if (!userExists) {
                             nonExistingEntities.add(recipient);
-                        } 
-                    } 
+                        }
+                    }
                     if (recipient instanceof Group) {
                         boolean groupExists = doCallbackGroupOperation(recipient.getId(), context);
                         if (!groupExists) {
                             nonExistingEntities.add(recipient);
-                        } 
-                    } 
+                        }
+                    }
                 }
                 if (!(nonExistingEntities.isEmpty())) {
                     recipients.removeAll(nonExistingEntities);
                     nonExistingEntities.clear();
-                } 
-            } 
+                }
+            }
             List<? extends OrganizationalEntity> stakeholders = assignments.getTaskStakeholders();
             if (stakeholders != null) {
                 for (OrganizationalEntity stakeholder : stakeholders) {
@@ -307,21 +308,21 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                         boolean userExists = doCallbackUserOperation(stakeholder.getId(), context);
                         if (!userExists) {
                             nonExistingEntities.add(stakeholder);
-                        } 
-                    } 
+                        }
+                    }
                     if (stakeholder instanceof Group) {
                         boolean groupExists = doCallbackGroupOperation(stakeholder.getId(), context);
                         if (!groupExists) {
                             nonExistingEntities.add(stakeholder);
-                        } 
-                    } 
+                        }
+                    }
                 }
                 if (!(nonExistingEntities.isEmpty())) {
                     stakeholders.removeAll(nonExistingEntities);
                     nonExistingEntities.clear();
-                } 
-            } 
-        } 
+                }
+            }
+        }
     }
 
     protected void doCallbackOperationForTaskDeadlines(Deadlines deadlines, TaskContext context) {
@@ -341,25 +342,25 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                                         for (OrganizationalEntity recipient : recipients) {
                                             if (recipient instanceof User) {
                                                 doCallbackUserOperation(recipient.getId(), context);
-                                            } 
+                                            }
                                             if (recipient instanceof Group) {
                                                 doCallbackGroupOperation(recipient.getId(), context);
-                                            } 
+                                            }
                                         }
-                                    } 
+                                    }
                                     List<? extends OrganizationalEntity> administrators = notification.getBusinessAdministrators();
                                     if (administrators != null) {
                                         for (OrganizationalEntity administrator : administrators) {
                                             if (administrator instanceof User) {
                                                 doCallbackUserOperation(administrator.getId(), context);
-                                            } 
+                                            }
                                             if (administrator instanceof Group) {
                                                 doCallbackGroupOperation(administrator.getId(), context);
-                                            } 
+                                            }
                                         }
-                                    } 
+                                    }
                                 }
-                            } 
+                            }
                             if (ressignments != null) {
                                 for (Reassignment reassignment : ressignments) {
                                     List<? extends OrganizationalEntity> potentialOwners = reassignment.getPotentialOwners();
@@ -367,18 +368,18 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                                         for (OrganizationalEntity potentialOwner : potentialOwners) {
                                             if (potentialOwner instanceof User) {
                                                 doCallbackUserOperation(potentialOwner.getId(), context);
-                                            } 
+                                            }
                                             if (potentialOwner instanceof Group) {
                                                 doCallbackGroupOperation(potentialOwner.getId(), context);
-                                            } 
+                                            }
                                         }
-                                    } 
+                                    }
                                 }
-                            } 
+                            }
                         }
-                    } 
+                    }
                 }
-            } 
+            }
             if ((deadlines.getEndDeadlines()) != null) {
                 List<? extends Deadline> endDeadlines = deadlines.getEndDeadlines();
                 for (Deadline endDeadline : endDeadlines) {
@@ -394,25 +395,25 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                                         for (OrganizationalEntity recipient : recipients) {
                                             if (recipient instanceof User) {
                                                 doCallbackUserOperation(recipient.getId(), context);
-                                            } 
+                                            }
                                             if (recipient instanceof Group) {
                                                 doCallbackGroupOperation(recipient.getId(), context);
-                                            } 
+                                            }
                                         }
-                                    } 
+                                    }
                                     List<? extends OrganizationalEntity> administrators = notification.getBusinessAdministrators();
                                     if (administrators != null) {
                                         for (OrganizationalEntity administrator : administrators) {
                                             if (administrator instanceof User) {
                                                 doCallbackUserOperation(administrator.getId(), context);
-                                            } 
+                                            }
                                             if (administrator instanceof Group) {
                                                 doCallbackGroupOperation(administrator.getId(), context);
-                                            } 
+                                            }
                                         }
-                                    } 
+                                    }
                                 }
-                            } 
+                            }
                             if (ressignments != null) {
                                 for (Reassignment reassignment : ressignments) {
                                     List<? extends OrganizationalEntity> potentialOwners = reassignment.getPotentialOwners();
@@ -420,19 +421,19 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                                         for (OrganizationalEntity potentialOwner : potentialOwners) {
                                             if (potentialOwner instanceof User) {
                                                 doCallbackUserOperation(potentialOwner.getId(), context);
-                                            } 
+                                            }
                                             if (potentialOwner instanceof Group) {
                                                 doCallbackGroupOperation(potentialOwner.getId(), context);
-                                            } 
+                                            }
                                         }
-                                    } 
+                                    }
                                 }
-                            } 
+                            }
                         }
-                    } 
+                    }
                 }
-            } 
-        } 
+            }
+        }
     }
 
     protected void doCallbackOperationForComment(Comment comment, TaskContext context) {
@@ -441,9 +442,9 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                 User entity = doCallbackAndReturnUserOperation(comment.getAddedBy().getId(), context);
                 if (entity != null) {
                     ((InternalComment) (comment)).setAddedBy(entity);
-                } 
-            } 
-        } 
+                }
+            }
+        }
     }
 
     protected void doCallbackOperationForAttachment(Attachment attachment, TaskContext context) {
@@ -452,15 +453,15 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
                 User entity = doCallbackAndReturnUserOperation(attachment.getAttachedBy().getId(), context);
                 if (entity != null) {
                     ((InternalAttachment) (attachment)).setAttachedBy(entity);
-                } 
-            } 
-        } 
+                }
+            }
+        }
     }
 
     protected List<String> filterGroups(List<String> groups) {
         if (groups != null) {
             groups.removeAll(UserGroupCallbackTaskCommand.restrictedGroups);
-        } else {
+        }else {
             groups = new ArrayList<String>();
         }
         return groups;
@@ -468,7 +469,7 @@ public class UserGroupCallbackTaskCommand<T> extends TaskCommand<T> {
 
     @Override
     public T execute(Context context) {
-        throw new UnsupportedOperationException((("The " + (UserGroupCallbackTaskCommand.this.getClass().getSimpleName())) + " is not a standalone command that can be executed."));
+        throw new UnsupportedOperationException((("The " + (this.getClass().getSimpleName())) + " is not a standalone command that can be executed."));
     }
 }
 

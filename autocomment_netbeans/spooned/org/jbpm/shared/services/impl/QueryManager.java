@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@ public class QueryManager {
     public static QueryManager get() {
         if ((QueryManager.instance) == null) {
             QueryManager.instance = new QueryManager();
-        } 
+        }
         return QueryManager.instance;
     }
 
@@ -59,25 +59,27 @@ public class QueryManager {
         StringBuffer query = null;
         if (!(queries.containsKey(name))) {
             return null;
-        } 
+        }
         String operand = " and ";
         StringBuffer buf = new StringBuffer(queries.get(name));
         if ((buf.indexOf("where")) == (-1)) {
             operand = " where ";
-        } 
+        }
         if ((params != null) && (params.containsKey(QueryManager.FILTER))) {
             buf.append((operand + (params.get(QueryManager.FILTER))));
             query = buf;
-        } 
+        }
         if ((params != null) && (params.containsKey(QueryManager.ORDER_BY_KEY))) {
             buf.append((" \n ORDER BY " + (adaptOrderBy(((String) (params.get("orderby")))))));
             if (params.containsKey(QueryManager.ASCENDING_KEY)) {
                 buf.append(" ASC");
-            } else if (params.containsKey(QueryManager.DESCENDING_KEY)) {
-                buf.append(" DESC");
-            } 
+            }else
+                if (params.containsKey(QueryManager.DESCENDING_KEY)) {
+                    buf.append(" DESC");
+                }
+            
             query = buf;
-        } 
+        }
         return query == null ? null : query.toString();
     }
 
@@ -92,12 +94,12 @@ public class QueryManager {
                 case XMLStreamConstants.START_ELEMENT :
                     if ("named-query".equals(reader.getLocalName())) {
                         name = reader.getAttributeValue(0);
-                    } 
+                    }
                     break;
                 case XMLStreamConstants.CHARACTERS :
                     if (name != null) {
                         tagContent.append(reader.getText());
-                    } 
+                    }
                     break;
                 case XMLStreamConstants.END_ELEMENT :
                     if ("named-query".equals(reader.getLocalName())) {
@@ -106,33 +108,43 @@ public class QueryManager {
                         int orderByIndex = origQuery.toLowerCase().indexOf("order by");
                         if (orderByIndex != (-1)) {
                             alteredQuery = origQuery.substring(0, orderByIndex);
-                        } 
+                        }
                         queries.put(name, alteredQuery);
                         name = null;
                         tagContent = new StringBuffer();
-                    } 
+                    }
                     // remove order by clause as it will be provided on request
                     break;
             }
-        }
+        } 
     }
 
     private String adaptOrderBy(String orderBy) {
         if (orderBy != null) {
             if (orderBy.equals("ProcessInstanceId")) {
                 return "log.processInstanceId";
-            } else if (orderBy.equals("ProcessName")) {
-                return "log.processName";
-            } else if (orderBy.equals("Initiator")) {
-                return "log.identity";
-            } else if (orderBy.equals("ProcessVersion")) {
-                return "log.processVersion";
-            } else if (orderBy.equals("Status")) {
-                return "log.status";
-            } else if (orderBy.equals("StartDate")) {
-                return "log.start";
-            } 
-        } 
+            }else
+                if (orderBy.equals("ProcessName")) {
+                    return "log.processName";
+                }else
+                    if (orderBy.equals("Initiator")) {
+                        return "log.identity";
+                    }else
+                        if (orderBy.equals("ProcessVersion")) {
+                            return "log.processVersion";
+                        }else
+                            if (orderBy.equals("Status")) {
+                                return "log.status";
+                            }else
+                                if (orderBy.equals("StartDate")) {
+                                    return "log.start";
+                                }
+                            
+                        
+                    
+                
+            
+        }
         return orderBy;
     }
 }

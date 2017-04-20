@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,8 +27,8 @@ public class EjbGlobalJobHandle extends GlobalJobHandle {
 
     public EjbGlobalJobHandle(long id, String uuid, String deploymentId) {
         super(id);
-        EjbGlobalJobHandle.this.uuid = uuid;
-        EjbGlobalJobHandle.this.deploymentId = deploymentId;
+        this.uuid = uuid;
+        this.deploymentId = deploymentId;
     }
 
     public String getUuid() {
@@ -36,7 +36,7 @@ public class EjbGlobalJobHandle extends GlobalJobHandle {
     }
 
     public void setUuid(String uuid) {
-        EjbGlobalJobHandle.this.uuid = uuid;
+        this.uuid = uuid;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class EjbGlobalJobHandle extends GlobalJobHandle {
     }
 
     public void setDeploymentId(String deploymentId) {
-        EjbGlobalJobHandle.this.deploymentId = deploymentId;
+        this.deploymentId = deploymentId;
     }
 }
 

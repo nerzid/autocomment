@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,20 +16,20 @@
 
 package org.jbpm.process.workitem;
 
+import org.drools.core.util.ConfFileUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.drools.core.util.ConfFileUtils;
 import org.drools.core.process.core.datatype.DataType;
 import java.util.HashMap;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.drools.core.util.MVELSafeHelper;
-import java.util.Map;
 import org.drools.core.process.core.ParameterDefinition;
 import java.util.Set;
-import java.net.URL;
+import java.util.Map;
 
 public class WorkItemRepository {
     private static final Logger logger = LoggerFactory.getLogger(WorkItemRepository.class);
@@ -56,44 +56,44 @@ public class WorkItemRepository {
                 Map<String, DataType> parameterMap = ((Map<String, DataType>) (workDefinitionMap.get("parameters")));
                 if (parameterMap != null) {
                     for (Map.Entry<String, DataType> entry : parameterMap.entrySet()) {
-                        parameters.add(new org.drools.core.process.core.impl.ParameterDefinitionImpl(entry.getKey(), entry.getValue()));
+                        parameters.add(new ParameterDefinitionImpl(entry.getKey(), entry.getValue()));
                     }
-                } 
+                }
                 workDefinition.setParameters(parameters);
                 Set<ParameterDefinition> results = new HashSet<ParameterDefinition>();
                 Map<String, DataType> resultMap = ((Map<String, DataType>) (workDefinitionMap.get("results")));
                 if (resultMap != null) {
                     for (Map.Entry<String, DataType> entry : resultMap.entrySet()) {
-                        results.add(new org.drools.core.process.core.impl.ParameterDefinitionImpl(entry.getKey(), entry.getValue()));
+                        results.add(new ParameterDefinitionImpl(entry.getKey(), entry.getValue()));
                     }
-                } 
+                }
                 workDefinition.setResults(results);
                 workDefinition.setDefaultHandler(((String) (workDefinitionMap.get("defaultHandler"))));
                 if ((workDefinitionMap.get("dependencies")) != null) {
                     workDefinition.setDependencies(((List<String>) (workDefinitionMap.get("dependencies"))).toArray(new String[0]));
-                } 
+                }
                 if ((workDefinitionMap.get("mavenDependencies")) != null) {
                     workDefinition.setMavenDependencies(((List<String>) (workDefinitionMap.get("mavenDependencies"))).toArray(new String[0]));
-                } 
+                }
                 if ((workDefinitionMap.get("version")) != null) {
                     workDefinition.setVersion(((String) (workDefinitionMap.get("version"))));
-                } 
+                }
                 if ((workDefinitionMap.get("description")) != null) {
                     workDefinition.setDescription(((String) (workDefinitionMap.get("description"))));
-                } 
+                }
                 if ((workDefinitionMap.get("widType")) != null) {
                     workDefinition.setWidType(((String) (workDefinitionMap.get("widType"))));
-                } 
+                }
                 workDefinitions.put(workDefinition.getName(), workDefinition);
-            } 
+            }
         }
         if (definitionNames != null) {
             if ((definitionNames.length) > 0) {
                 workDefinitions.keySet().retainAll(new HashSet(Arrays.asList(definitionNames)));
-            } else {
+            }else {
                 return new HashMap<String, WorkDefinitionImpl>();
             }
-        } 
+        }
         return workDefinitions;
     }
 
@@ -119,7 +119,7 @@ public class WorkItemRepository {
         }
         if (content == null) {
             return new String[0];
-        } 
+        }
         return content.split("\n");
     }
 
@@ -133,7 +133,7 @@ public class WorkItemRepository {
         }
         if (content == null) {
             return new ArrayList();
-        } 
+        }
         try {
             List<Map<String, Object>> result = ((List<Map<String, Object>>) (MVELSafeHelper.getEvaluator().eval(content, new HashMap())));
             for (Map<String, Object> wid : result) {

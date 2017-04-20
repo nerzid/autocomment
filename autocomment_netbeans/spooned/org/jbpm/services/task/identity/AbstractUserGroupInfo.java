@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,22 +32,23 @@ public abstract class AbstractUserGroupInfo {
         URL locationUrl = null;
         if (propertiesLocation == null) {
             propertiesLocation = defaultProperties;
-        } 
+        }
+        // debug String{"Callback properties will be loaded from {}"} to Logger{AbstractUserGroupInfo.logger}
         AbstractUserGroupInfo.logger.debug("Callback properties will be loaded from {}", propertiesLocation);
         if (propertiesLocation.startsWith("classpath:")) {
             String stripedLocation = propertiesLocation.replaceFirst("classpath:", "");
-            locationUrl = AbstractUserGroupInfo.this.getClass().getResource(stripedLocation);
+            locationUrl = this.getClass().getResource(stripedLocation);
             if (locationUrl == null) {
                 locationUrl = Thread.currentThread().getContextClassLoader().getResource(stripedLocation);
-            } 
-        } else {
+            }
+        }else {
             try {
                 locationUrl = new URL(propertiesLocation);
             } catch (MalformedURLException e) {
-                locationUrl = AbstractUserGroupInfo.this.getClass().getResource(propertiesLocation);
+                locationUrl = this.getClass().getResource(propertiesLocation);
                 if (locationUrl == null) {
                     locationUrl = Thread.currentThread().getContextClassLoader().getResource(propertiesLocation);
-                } 
+                }
             }
         }
         if (locationUrl != null) {
@@ -58,7 +59,7 @@ public abstract class AbstractUserGroupInfo {
                 AbstractUserGroupInfo.logger.error("Error when loading properties for DB user group callback", e);
                 config = null;
             }
-        } 
+        }
         return config;
     }
 }

@@ -12,7 +12,7 @@ public class House implements Building {
     public Integer doors;
 
     public void setDoors(Integer doors) {
-        House.this.doors = doors;
+        this.doors = doors;
     }
 
     @Override

@@ -40,7 +40,7 @@ public class AverageIfCalculator {
             // This is necessary, if you want to see "nice" result
             Environment env = l.getEnvironment();
 
-            // To use uncompiliable java files, this needs to be enabled
+            // To use uncompilable java files, this needs to be enabled
             env.setNoClasspath(true);
 
             // This processor handles output file.

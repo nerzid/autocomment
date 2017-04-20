@@ -15,17 +15,22 @@
  */
 package com.nerzid.autocomment.processor;
 
+import com.nerzid.autocomment.database.MethodTable;
 import com.nerzid.autocomment.nlp.NLPToolkit;
 import com.nerzid.autocomment.nlp.Tokenizer;
 import com.nerzid.autocomment.sunit.*;
+
 import java.util.*;
+
+import com.nerzid.autocomment.template.SUnitCommentTemplate;
+import com.nerzid.autocomment.template.Test;
+import com.nerzid.autocomment.template.VoidReturnSUnitCT;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
 import spoon.reflect.visitor.filter.*;
 import spoon.processing.AbstractProcessor;
 
 /**
- *
  * @author nerzid
  */
 public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
@@ -45,9 +50,10 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
             // Clear lists for every method.
             SUnit.clearAndInitSUnitLists();
 
+            sameActionSUnits(e);
             endingSUnits(e);
             voidReturnSUnits(e);
-            sameActionSUnits(e);
+
             controllingSUnits(e);
             dataFacilitatingSUnits(e);
 
@@ -79,12 +85,14 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
                 }
             }
         } else {
-            CtStatement lastStatement = e.getBody().getLastStatement();
-            FunctionSUnit sunit = new EndingSUnit(lastStatement);
+            if (e.getBody().getStatements().size() > 0) {
+                CtStatement lastStatement = e.getBody().getLastStatement();
+                FunctionSUnit sunit = new EndingSUnit(lastStatement);
 
-            List<CtVariableAccess> vars = lastStatement.getElements(new TypeFilter(CtVariableAccess.class));
-            for (CtVariableAccess var : vars) {
-                sunit.addDataVar(var);
+                List<CtVariableAccess> vars = lastStatement.getElements(new TypeFilter(CtVariableAccess.class));
+                for (CtVariableAccess var : vars) {
+                    sunit.addDataVar(var);
+                }
             }
         }
     }
@@ -93,21 +101,23 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
         List<CtStatement> stmts = e.getBody().getStatements();
         for (CtStatement stmt : stmts) {
             if (stmt instanceof CtInvocation) {
-                FunctionSUnit sunit = new VoidReturnSUnit(stmt);
-                List<CtExpression> args = ((CtInvocation) stmt).getArguments();
-                for (CtExpression arg : args) {
-                    if (arg instanceof CtVariableAccess) {
-                        sunit.addDataVar((CtVariableAccess) arg);
+                if (!SUnit.isElementExists(stmt, SUnitType.SAME_ACTION_SEQUENCE)) {
+                    FunctionSUnit sunit = new VoidReturnSUnit(stmt);
+                    List<CtExpression> args = ((CtInvocation) stmt).getArguments();
+                    for (CtExpression arg : args) {
+                        if (arg instanceof CtVariableAccess) {
+                            sunit.addDataVar((CtVariableAccess) arg);
 //                        data_args.add((CtVariableAccess) arg);
-                    } else if (arg instanceof CtAssignment) {
-                        CtAssignment assignment = (CtAssignment) arg;
-                        if (assignment.getAssigned() instanceof CtVariableAccess) {
-                            sunit.addDataVar((CtVariableAccess) assignment.getAssigned());
+                        } else if (arg instanceof CtAssignment) {
+                            CtAssignment assignment = (CtAssignment) arg;
+                            if (assignment.getAssigned() instanceof CtVariableAccess) {
+                                sunit.addDataVar((CtVariableAccess) assignment.getAssigned());
 //                            data_args.add((CtVariableAccess) (assignment.getAssigned()));
+                            }
                         }
                     }
-                }
 //                void_return_units.add((CtInvocation) stmt);
+                }
             }
         }
     }
@@ -117,19 +127,36 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
     public void sameActionSUnits(CtMethod e) {
         List<CtStatement> stmts = e.getBody().getStatements();
         HashMap<String, Integer> same_stmts = new HashMap<>();
-
+        List<CtInvocation> invocs = new ArrayList<>();
         for (CtStatement stmt : stmts) {
             if (stmt instanceof CtInvocation) {
                 CtInvocation invoc = (CtInvocation) stmt;
                 String invoc_str = invoc.toString();
-//                System.out.println("Target Expression: " + invoc_str);
-//                System.out.println("After regex: " + invoc_str.replaceFirst("\\(.*$", ""));
+
+                // get only the invoked method
                 invoc_str = invoc_str.replaceFirst("\\(.*$", "");
+                invocs.add(invoc);
                 if (same_stmts.containsKey(invoc_str)) {
                     same_stmts.put(invoc_str, same_stmts.get(invoc_str) + 1);
-                    if (same_stmts.get(invoc_str) == 2) {
-                        new SameActionSequenceSUnit(invoc);
-//                        same_action_units.add(invoc);
+                    if (same_stmts.get(invoc_str) >= 2) {
+                        for (CtInvocation invocation : invocs) {
+                            String invocation_str = invocation.toString().replaceFirst("\\(.*$", "");
+                            if (invocation_str.equals(invoc_str)) {
+                                if (!SUnit.isElementExists(invocation, SUnitType.SAME_ACTION_SEQUENCE)) {
+                                    SameActionSequenceSUnit sunit = new SameActionSequenceSUnit(invocation);
+                                    sunit.addDataVars();
+                                    sunit.addDataVars(invoc);
+                                } else {
+                                    for (SameActionSequenceSUnit sunit : SUnit.getSameActionSequenceSUnits()) {
+                                        System.out.println();
+                                        if (sunit.getElement().toString().replaceFirst("\\(.*$", "").equals(invoc_str)) {
+                                            sunit.addDataVars(invoc);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 } else {
                     same_stmts.put(invoc_str, 1);
@@ -260,7 +287,7 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
     private List<CtIf> getIfStmtsFromBlock(CtBodyHolder body_holder) {
         List<CtIf> ifs_from_body_list = new ArrayList<>();
         List<CtBodyHolder> trys_from_body_list = new ArrayList<>();
-        if (body_holder instanceof CtBodyHolder) {
+        if (body_holder != null) {
 
             List<CtStatement> stmts = ((CtBlock) body_holder.getBody()).getStatements();
             boolean foundIfStmt = false;
@@ -297,8 +324,6 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
     }
 
     public void getIfCount(CtMethod e) {
-        List<CtStatement> stmts = e.getBody().getStatements();
-
         List<CtIf> if_stmts = new ArrayList<>();
         if_stmts.addAll(prepareIfStmtsList(Collections.singletonList(e)));
         for (CtIf if_stmt : if_stmts) {
@@ -427,19 +452,56 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
             CtElement element = voidReturnSUnit.getElement();
             if (element instanceof CtInvocation) {
                 CtInvocation invoc = (CtInvocation) element;
-                String verb = invoc.getExecutable().getSimpleName();
-                String target = invoc.getTarget().getType().getSimpleName();
-                List<CtExpression> params = invoc.getArguments();
-                
-                List<String> verbs = Tokenizer.split(verb);
-                verb = verbs.get(0);
-                if (verbs.size() > 1) {
-                    verb += " " + verbs.get(1);
-                }
+                String method_name = invoc.getExecutable().getSimpleName();
+                CtExpression target = invoc.getTarget();
 
-                String commentStr = verb + " " + params.get(0).getType().getSimpleName() + "{" +
-                        params.get(0).toString()+ "}"
-                        + " to " + target + "{" + invoc.getTarget().toString() + "}";
+                List<CtExpression> params = invoc.getArguments();
+//
+//                List<String> verbs = Tokenizer.split(verb);
+//                verb = verbs.get(0);
+//                if (verbs.size() > 1) {
+//                    verb += " " + verbs.get(1);
+//                }
+//
+//                String commentStr = verb + " " + params.get(0).getType().getSimpleName() + "{" +
+//                        params.get(0).toString() + "}"
+//                        + " to " + target + "{" + invoc.getTarget().toString() + "}";
+                MethodTable mt = NLPToolkit.getMethodWithProperties("", method_name, 0);
+
+                String postag = mt.getPostag();
+                String splitted_identifier = mt.getSplittedIdentifier();
+                SUnitCommentTemplate sunit_ct = new VoidReturnSUnitCT(voidReturnSUnit);
+                String commentStr = sunit_ct.prepareThenGetComment(SUnitType.VOID_RETURN, target, postag, splitted_identifier.split(" "), params);
+
+                CtComment c = getFactory().Code().createComment(commentStr, CtComment.CommentType.INLINE);
+                invoc.addComment(c);
+            }
+        }
+
+        for (SameActionSequenceSUnit sunit : FunctionSUnit.getSameActionSequenceSUnits()) {
+            CtElement element = sunit.getElement();
+            if (element instanceof CtInvocation) {
+                CtInvocation invoc = (CtInvocation) element;
+                String method_name = invoc.getExecutable().getSimpleName();
+                CtExpression target = invoc.getTarget();
+
+                List<CtExpression> params = invoc.getArguments();
+//
+//                List<String> verbs = Tokenizer.split(verb);
+//                verb = verbs.get(0);
+//                if (verbs.size() > 1) {
+//                    verb += " " + verbs.get(1);
+//                }
+//
+//                String commentStr = verb + " " + params.get(0).getType().getSimpleName() + "{" +
+//                        params.get(0).toString() + "}"
+//                        + " to " + target + "{" + invoc.getTarget().toString() + "}";
+                MethodTable mt = NLPToolkit.getMethodWithProperties("", method_name, 0);
+
+                String postag = mt.getPostag();
+                String splitted_identifier = mt.getSplittedIdentifier();
+                SUnitCommentTemplate sunit_ct = new VoidReturnSUnitCT(sunit);
+                String commentStr = sunit_ct.prepareThenGetComment(SUnitType.VOID_RETURN, target, postag, splitted_identifier.split(" "), params);
 
                 CtComment c = getFactory().Code().createComment(commentStr, CtComment.CommentType.INLINE);
                 invoc.addComment(c);

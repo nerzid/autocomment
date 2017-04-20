@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * BpsimXMLProcessor
@@ -21,8 +22,10 @@
 
 package bpsim.util;
 
+import EPackage.Registry.INSTANCE;
 import java.util.Map;
 import org.eclipse.emf.ecore.xmi.util.XMLProcessor;
+import BpsimPackage.eINSTANCE;
 
 /**
  * This class contains helper methods to serialize and deserialize XML documents
@@ -38,8 +41,8 @@ public class BpsimXMLProcessor extends XMLProcessor {
      * @generated
      */
     public BpsimXMLProcessor() {
-        super(EPackage.Registry.INSTANCE);
-        BpsimPackage.eINSTANCE.eClass();
+        super(INSTANCE);
+        eINSTANCE.eClass();
     }
 
     /**
@@ -54,7 +57,7 @@ public class BpsimXMLProcessor extends XMLProcessor {
             super.getRegistrations();
             registrations.put(XML_EXTENSION, new BpsimResourceFactoryImpl());
             registrations.put(STAR_EXTENSION, new BpsimResourceFactoryImpl());
-        } 
+        }
         return registrations;
     }
 }

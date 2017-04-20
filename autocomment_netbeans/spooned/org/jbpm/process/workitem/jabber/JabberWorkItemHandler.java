@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,20 +17,20 @@
 
 package org.jbpm.process.workitem.jabber;
 
-import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
 import java.util.ArrayList;
+import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
+import org.kie.api.runtime.process.WorkItemManager;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import java.util.List;
 import org.slf4j.Logger;
+import org.jivesoftware.smack.XMPPConnection;
 import org.slf4j.LoggerFactory;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import Presence.Type;
 import org.kie.api.runtime.process.WorkItem;
-import org.kie.api.runtime.process.WorkItemManager;
-import org.jivesoftware.smack.XMPPConnection;
 
 /**
  * @author salaboy
@@ -53,30 +53,30 @@ public class JabberWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
     private List<String> toUsers = new ArrayList<String>();
 
     public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
-        JabberWorkItemHandler.this.user = ((String) (workItem.getParameter("User")));
-        JabberWorkItemHandler.this.password = ((String) (workItem.getParameter("Password")));
-        JabberWorkItemHandler.this.server = ((String) (workItem.getParameter("Server")));
+        this.user = ((String) (workItem.getParameter("User")));
+        this.password = ((String) (workItem.getParameter("Password")));
+        this.server = ((String) (workItem.getParameter("Server")));
         String portString = ((String) (workItem.getParameter("Port")));
         if ((portString != null) && (!(portString.equals("")))) {
-            JabberWorkItemHandler.this.port = Integer.valueOf(((String) (workItem.getParameter("Port"))));
-        } 
-        JabberWorkItemHandler.this.service = ((String) (workItem.getParameter("Service")));
-        JabberWorkItemHandler.this.text = ((String) (workItem.getParameter("Text")));
+            this.port = Integer.valueOf(((String) (workItem.getParameter("Port"))));
+        }
+        this.service = ((String) (workItem.getParameter("Service")));
+        this.text = ((String) (workItem.getParameter("Text")));
         String to = ((String) (workItem.getParameter("To")));
         if ((to == null) || ((to.trim().length()) == 0)) {
             throw new RuntimeException("IM must have one or more to adresses");
-        } 
+        }
         for (String s : to.split(";")) {
             if ((s != null) && (!("".equals(s)))) {
-                JabberWorkItemHandler.this.toUsers.add(s);
-            } 
+                this.toUsers.add(s);
+            }
         }
         ConnectionConfiguration conf = new ConnectionConfiguration(server, port, service);
         XMPPConnection connection = null;
         try {
             if ((((server) != null) && (!(server.equals("")))) && ((port) != 0)) {
                 connection = new XMPPConnection(conf);
-            } else {
+            }else {
                 connection = new XMPPConnection(service);
             }
             connection.connect();
@@ -89,7 +89,7 @@ public class JabberWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
                 ChatManager chatmanager = connection.getChatManager();
                 Chat chat = chatmanager.createChat(toUser, null);
                 // google bounces back the default message types, you must use chat
-                Message msg = new Message(toUser, Message.Type.chat);
+                Message msg = new Message(toUser, Type.chat);
                 msg.setBody(text);
                 chat.sendMessage(msg);
                 JabberWorkItemHandler.logger.info("Message Sent {}", msg);

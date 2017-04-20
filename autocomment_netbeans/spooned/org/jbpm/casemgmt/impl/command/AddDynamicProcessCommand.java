@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,13 +40,13 @@ public class AddDynamicProcessCommand extends CaseCommand<Void> {
     private Map<String, Object> parameters;
 
     public AddDynamicProcessCommand(String caseId, Long processInstanceId, String processId, Map<String, Object> parameters) {
-        AddDynamicProcessCommand.this.caseId = caseId;
-        AddDynamicProcessCommand.this.processInstanceId = processInstanceId;
-        AddDynamicProcessCommand.this.processId = processId;
-        AddDynamicProcessCommand.this.parameters = parameters;
+        this.caseId = caseId;
+        this.processInstanceId = processInstanceId;
+        this.processId = processId;
+        this.parameters = parameters;
         if ((processInstanceId == null) || (processId == null)) {
             throw new IllegalArgumentException("Mandatory parameters are missing - process instance id and process id");
-        } 
+        }
     }
 
     @Override
@@ -54,11 +54,13 @@ public class AddDynamicProcessCommand extends CaseCommand<Void> {
         KieSession ksession = ((KnowledgeCommandContext) (context)).getKieSession();
         ProcessInstance processInstance = ksession.getProcessInstance(processInstanceId);
         if (processInstance == null) {
-            throw new org.jbpm.services.api.ProcessInstanceNotFoundException(("No process instance found with id " + (processInstanceId)));
-        } 
+            throw new ProcessInstanceNotFoundException(("No process instance found with id " + (processInstanceId)));
+        }
         CaseEventSupport caseEventSupport = getCaseEventSupport(context);
+        // fire before String{caseId} to CaseEventSupport{caseEventSupport}
         caseEventSupport.fireBeforeDynamicProcessAdded(caseId, processInstanceId, processId, parameters);
         long subProcessInstanceId = DynamicUtils.addDynamicSubProcess(processInstance, ksession, processId, parameters);
+        // fire after String{caseId} to CaseEventSupport{caseEventSupport}
         caseEventSupport.fireAfterDynamicProcessAdded(caseId, processInstanceId, processId, parameters, subProcessInstanceId);
         return null;
     }

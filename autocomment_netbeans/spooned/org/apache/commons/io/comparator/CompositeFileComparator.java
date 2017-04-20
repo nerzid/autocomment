@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@ import java.io.Serializable;
  *       List&lt;File&gt; list = ...
  *       comparator.sort(list);
  * </pre>
- * 
+ *
  * @version $Id: CompositeFileComparator.java 1642757 2014-12-01 21:09:30Z sebb $
  * @since 2.0
  */
@@ -53,7 +53,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
 
     /**
      * Create a composite comparator for the set of delegate comparators.
-     * 
+     *
      * @param delegates The delegate file comparators
      */
     // casts 1 & 2 must be OK because types are already correct
@@ -62,16 +62,16 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
         if (delegates == null) {
             this.delegates = ((Comparator<File>[]) (CompositeFileComparator.NO_COMPARATORS));// 1
             
-        } else {
+        }else {
             this.delegates = ((Comparator<File>[]) (new Comparator<?>[delegates.length]));// 2
             
-            System.arraycopy(delegates, 0, CompositeFileComparator.this.delegates, 0, delegates.length);
+            System.arraycopy(delegates, 0, this.delegates, 0, delegates.length);
         }
     }
 
     /**
      * Create a composite comparator for the set of delegate comparators.
-     * 
+     *
      * @param delegates The delegate file comparators
      */
     // casts 1 & 2 must be OK because types are already correct
@@ -80,7 +80,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
         if (delegates == null) {
             this.delegates = ((Comparator<File>[]) (CompositeFileComparator.NO_COMPARATORS));// 1
             
-        } else {
+        }else {
             final List<Comparator<File>> list = new ArrayList<Comparator<File>>();
             for (final Comparator<File> comparator : delegates) {
                 list.add(comparator);
@@ -92,7 +92,7 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
 
     /**
      * Compare the two files using delegate comparators.
-     * 
+     *
      * @param file1 The first file to compare
      * @param file2 The second file to compare
      * @return the first non-zero result returned from
@@ -104,27 +104,30 @@ public class CompositeFileComparator extends AbstractFileComparator implements S
             result = delegate.compare(file1, file2);
             if (result != 0) {
                 break;
-            } 
+            }
         }
         return result;
     }
 
     /**
      * String representation of this file comparator.
-     * 
+     *
      * @return String representation of this file comparator
      */
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
+        // append String{super.toString()} to StringBuilder{builder}
         builder.append(super.toString());
+        // append char{'{'} to StringBuilder{builder}
         builder.append('{');
         for (int i = 0; i < (delegates.length); i++) {
             if (i > 0) {
                 builder.append(',');
-            } 
+            }
             builder.append(delegates[i]);
         }
+        // append char{'}'} to StringBuilder{builder}
         builder.append('}');
         return builder.toString();
     }

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ import java.io.Serializable;
  * <p>
  * Wherever possible, you should use the <code>check</code> methods in this
  * class to compare filenames.
- * 
+ *
  * @version $Id: IOCase.java 1483915 2013-05-17 17:02:35Z sebb $
  * @since 1.3
  */
@@ -42,18 +42,21 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
      * * Serialization version.
      */
     private static final long serialVersionUID = -6343169151696340687L;
+
     /**
      * * The enumeration name.
      */
     private final String name;
+
     /**
      * * The sensitivity flag.
      */
     private final transient boolean sensitive;
+
     // -----------------------------------------------------------------------
     /**
      * Private constructor.
-     * 
+     *
      * @param name  the name
      * @param sensitive  the sensitivity
      */
@@ -61,10 +64,11 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
         this.name = name;
         this.sensitive = sensitive;
     }
+
     // -----------------------------------------------------------------------
     /**
      * Factory method to create an IOCase from a name.
-     * 
+     *
      * @param name  the name to find
      * @return the IOCase object
      * @throws IllegalArgumentException if the name is invalid
@@ -73,7 +77,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
         for (IOCase ioCase : IOCase.values()) {
             if (ioCase.getName().equals(name)) {
                 return ioCase;
-            } 
+            }
         }
         throw new IllegalArgumentException(("Invalid IOCase name: " + name));
     }
@@ -81,7 +85,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
     /**
      * Replaces the enumeration from the stream with a real one.
      * This ensures that the correct flag is set for SYSTEM.
-     * 
+     *
      * @return the resolved object
      */
     private Object readResolve() {
@@ -91,7 +95,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
     // -----------------------------------------------------------------------
     /**
      * Gets the name of the constant.
-     * 
+     *
      * @return the name of the constant
      */
     public String getName() {
@@ -100,7 +104,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
 
     /**
      * Does the object represent case sensitive comparison.
-     * 
+     *
      * @return true if case sensitive
      */
     public boolean isCaseSensitive() {
@@ -113,7 +117,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
      * <p>
      * This method mimics {@link String#compareTo} but takes case-sensitivity
      * into account.
-     * 
+     *
      * @param str1  the first string to compare, not null
      * @param str2  the second string to compare, not null
      * @return true if equal using the case rules
@@ -122,7 +126,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
     public int checkCompareTo(final String str1, final String str2) {
         if ((str1 == null) || (str2 == null)) {
             throw new NullPointerException("The strings must not be null");
-        } 
+        }
         return sensitive ? str1.compareTo(str2) : str1.compareToIgnoreCase(str2);
     }
 
@@ -131,7 +135,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
      * <p>
      * This method mimics {@link String#equals} but takes case-sensitivity
      * into account.
-     * 
+     *
      * @param str1  the first string to compare, not null
      * @param str2  the second string to compare, not null
      * @return true if equal using the case rules
@@ -140,7 +144,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
     public boolean checkEquals(final String str1, final String str2) {
         if ((str1 == null) || (str2 == null)) {
             throw new NullPointerException("The strings must not be null");
-        } 
+        }
         return sensitive ? str1.equals(str2) : str1.equalsIgnoreCase(str2);
     }
 
@@ -149,7 +153,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
      * <p>
      * This method mimics {@link String#startsWith(String)} but takes case-sensitivity
      * into account.
-     * 
+     *
      * @param str  the string to check, not null
      * @param start  the start to compare against, not null
      * @return true if equal using the case rules
@@ -164,7 +168,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
      * <p>
      * This method mimics {@link String#endsWith} but takes case-sensitivity
      * into account.
-     * 
+     *
      * @param str  the string to check, not null
      * @param end  the end to compare against, not null
      * @return true if equal using the case rules
@@ -181,7 +185,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
      * <p>
      * This method mimics parts of {@link String#indexOf(String, int)}
      * but takes case-sensitivity into account.
-     * 
+     *
      * @param str  the string to check, not null
      * @param strStartIndex  the index to start at in str
      * @param search  the start to search for, not null
@@ -196,9 +200,9 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
             for (int i = strStartIndex; i <= endIndex; i++) {
                 if (checkRegionMatches(str, i, search)) {
                     return i;
-                } 
+                }
             }
-        } 
+        }
         return -1;
     }
 
@@ -207,7 +211,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
      * <p>
      * This method mimics parts of {@link String#regionMatches(boolean, int, String, int, int)}
      * but takes case-sensitivity into account.
-     * 
+     *
      * @param str  the string to check, not null
      * @param strStartIndex  the index to start at in str
      * @param search  the start to search for, not null
@@ -221,7 +225,7 @@ SENSITIVE("Sensitive",true), INSENSITIVE("Insensitive",false), SYSTEM("System",(
     // -----------------------------------------------------------------------
     /**
      * Gets a string describing the sensitivity.
-     * 
+     *
      * @return a string describing the sensitivity
      */
     @Override

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,8 +16,8 @@
 
 package org.jbpm.bpmn2.xml;
 
-import org.xml.sax.Attributes;
 import org.drools.core.xml.BaseAbstractHandler;
+import org.xml.sax.Attributes;
 import org.drools.core.process.core.datatype.DataType;
 import org.w3c.dom.Element;
 import org.drools.core.xml.ExtensibleXmlParser;
@@ -30,16 +30,17 @@ import org.jbpm.process.core.ValueObject;
 
 public class MetaValueHandler extends BaseAbstractHandler implements Handler {
     public MetaValueHandler() {
-        if (((MetaValueHandler.this.validParents) == null) && ((MetaValueHandler.this.validPeers) == null)) {
+        if (((this.validParents) == null) && ((this.validPeers) == null)) {
             this.validParents = new HashSet<Class<?>>();
-            MetaValueHandler.this.validParents.add(ValueObject.class);
+            this.validParents.add(ValueObject.class);
             this.validPeers = new HashSet<Class<?>>();
-            MetaValueHandler.this.validPeers.add(null);
+            this.validPeers.add(null);
             this.allowNesting = false;
-        } 
+        }
     }
 
     public Object start(final String uri, final String localName, final Attributes attrs, final ExtensibleXmlParser parser) throws SAXException {
+        // start element String{localName} to ExtensibleXmlParser{parser}
         parser.startElementBuilder(localName, attrs);
         return null;
     }
@@ -52,9 +53,10 @@ public class MetaValueHandler extends BaseAbstractHandler implements Handler {
             text = text.trim();
             if ("".equals(text)) {
                 text = null;
-            } 
-        } 
+            }
+        }
         Object value = restoreValue(text, valueObject.getType(), parser);
+        // set value Object{value} to ValueObject{valueObject}
         valueObject.setValue(value);
         return null;
     }
@@ -62,10 +64,10 @@ public class MetaValueHandler extends BaseAbstractHandler implements Handler {
     private Object restoreValue(String text, DataType dataType, ExtensibleXmlParser parser) throws SAXException {
         if ((text == null) || ("".equals(text))) {
             return null;
-        } 
+        }
         if (dataType == null) {
             throw new SAXParseException("Null datatype", parser.getLocator());
-        } 
+        }
         return dataType.readValue(text);
     }
 

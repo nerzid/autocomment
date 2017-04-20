@@ -1,12 +1,12 @@
 /**
  * Copyright 2005 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import org.kie.api.definition.process.org.jbpm.workflow.core.NodeContainer;
 /**
  * Default implementation of a RuleFlow process.
  */
-public class WorkflowProcessImpl extends org.jbpm.process.core.impl.ProcessImpl implements WorkflowProcess , org.jbpm.workflow.core.NodeContainer {
+public class WorkflowProcessImpl extends ProcessImpl implements WorkflowProcess , org.jbpm.workflow.core.NodeContainer {
     private static final long serialVersionUID = 510L;
 
     private boolean autoComplete = false;
@@ -57,20 +57,24 @@ public class WorkflowProcessImpl extends org.jbpm.process.core.impl.ProcessImpl 
         } catch (IllegalArgumentException e) {
             if (dynamic) {
                 return null;
-            } else {
+            }else {
                 throw e;
             }
         }
     }
 
     public void removeNode(final Node node) {
+        // remove node Node{node} to NodeContainer{nodeContainer}
         nodeContainer.removeNode(node);
+        // set node <nulltype>{null} to Node{((org.jbpm.workflow.core.Node) (node))}
         ((org.jbpm.workflow.core.Node) (node)).setNodeContainer(null);
     }
 
     public void addNode(final Node node) {
+        // add node Node{node} to NodeContainer{nodeContainer}
         nodeContainer.addNode(node);
-        ((org.jbpm.workflow.core.Node) (node)).setNodeContainer(WorkflowProcessImpl.this);
+        // set node WorkflowProcessImpl{this} to Node{((org.jbpm.workflow.core.Node) (node))}
+        ((org.jbpm.workflow.core.Node) (node)).setNodeContainer(this);
     }
 
     public boolean isAutoComplete() {
@@ -78,7 +82,7 @@ public class WorkflowProcessImpl extends org.jbpm.process.core.impl.ProcessImpl 
     }
 
     public void setAutoComplete(boolean autoComplete) {
-        WorkflowProcessImpl.this.autoComplete = autoComplete;
+        this.autoComplete = autoComplete;
     }
 
     public boolean isDynamic() {
@@ -86,14 +90,14 @@ public class WorkflowProcessImpl extends org.jbpm.process.core.impl.ProcessImpl 
     }
 
     public void setDynamic(boolean dynamic) {
-        WorkflowProcessImpl.this.dynamic = dynamic;
+        this.dynamic = dynamic;
     }
 
     @Override
     public Integer getProcessType() {
         if (dynamic) {
             return CASE_TYPE;
-        } 
+        }
         return PROCESS_TYPE;
     }
 }

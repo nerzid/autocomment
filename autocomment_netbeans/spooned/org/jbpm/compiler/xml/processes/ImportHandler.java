@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,25 +28,28 @@ import org.jbpm.workflow.core.impl.WorkflowProcessImpl;
 
 public class ImportHandler extends BaseAbstractHandler implements Handler {
     public ImportHandler() {
-        if (((ImportHandler.this.validParents) == null) && ((ImportHandler.this.validPeers) == null)) {
+        if (((this.validParents) == null) && ((this.validPeers) == null)) {
             this.validParents = new HashSet();
-            ImportHandler.this.validParents.add(Process.class);
+            this.validParents.add(Process.class);
             this.validPeers = new HashSet();
-            ImportHandler.this.validPeers.add(null);
+            this.validPeers.add(null);
             this.allowNesting = false;
-        } 
+        }
     }
 
     public Object start(final String uri, final String localName, final Attributes attrs, final ExtensibleXmlParser parser) throws SAXException {
+        // start element String{localName} to ExtensibleXmlParser{parser}
         parser.startElementBuilder(localName, attrs);
         WorkflowProcessImpl process = ((WorkflowProcessImpl) (parser.getParent()));
         final String name = attrs.getValue("name");
+        // empty attribute String{localName} to ImportHandler{}
         emptyAttributeCheck(localName, "name", name, parser);
         Set<String> list = process.getImports();
         if (list == null) {
             list = new HashSet<String>();
             process.setImports(list);
-        } 
+        }
+        // add String{name} to Set{list}
         list.add(name);
         return null;
     }

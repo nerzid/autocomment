@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,7 +52,7 @@ public class ContainerManagedTransactionManager implements TransactionManager {
     protected TransactionSynchronizationRegistry txSyncRegistry;
 
     public ContainerManagedTransactionManager() {
-        ContainerManagedTransactionManager.this.txSyncRegistry = ((TransactionSynchronizationRegistry) (findTransactionSynchronizationRegistry()));
+        this.txSyncRegistry = ((TransactionSynchronizationRegistry) (findTransactionSynchronizationRegistry()));
     }
 
     public boolean begin() {
@@ -71,7 +71,7 @@ public class ContainerManagedTransactionManager implements TransactionManager {
     public void registerTransactionSynchronization(TransactionSynchronization arg0) {
         if ((txSyncRegistry) != null) {
             TransactionSynchronizationRegistryHelper.registerTransactionSynchronization(txSyncRegistry, arg0);
-        } 
+        }
     }
 
     public void rollback(boolean arg0) {
@@ -100,12 +100,13 @@ public class ContainerManagedTransactionManager implements TransactionManager {
 
     @Override
     public void putResource(Object key, Object resource) {
-        TransactionSynchronizationRegistryHelper.putResource(ContainerManagedTransactionManager.this.txSyncRegistry, key, resource);
+        // put resource TransactionSynchronizationRegistry{this.txSyncRegistry} to void{TransactionSynchronizationRegistryHelper}
+        TransactionSynchronizationRegistryHelper.putResource(this.txSyncRegistry, key, resource);
     }
 
     @Override
     public Object getResource(Object key) {
-        return TransactionSynchronizationRegistryHelper.getResource(ContainerManagedTransactionManager.this.txSyncRegistry, key);
+        return TransactionSynchronizationRegistryHelper.getResource(this.txSyncRegistry, key);
     }
 }
 

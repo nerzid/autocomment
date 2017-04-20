@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -72,12 +72,12 @@ public class DataTransformerRegistry {
     private Map<String, DataTransformer> registry;
 
     protected DataTransformerRegistry() {
-        DataTransformerRegistry.this.registry = new ConcurrentHashMap<String, DataTransformer>();
-        DataTransformerRegistry.this.registry.put("http://www.mvel.org/2.0", new org.jbpm.process.core.transformation.MVELDataTransformer());
+        this.registry = new ConcurrentHashMap<String, DataTransformer>();
+        this.registry.put("http://www.mvel.org/2.0", new MVELDataTransformer());
         ScriptEngineManager manager = new ScriptEngineManager();
         List<ScriptEngineFactory> factories = manager.getEngineFactories();
         for (ScriptEngineFactory factory : factories) {
-            DataTransformer transformer = new org.jbpm.process.core.transformation.JavaScriptingDataTransformer(factory);
+            DataTransformer transformer = new JavaScriptingDataTransformer(factory);
             for (String name : factory.getNames()) {
                 String key = "http://www.java.com/" + name;
                 registry.put(key, transformer);
@@ -91,12 +91,14 @@ public class DataTransformerRegistry {
     }
 
     public synchronized void register(String language, DataTransformer transformer) {
-        DataTransformerRegistry.this.registry.put(language, transformer);
+        // put String{language} to Map{this.registry}
+        this.registry.put(language, transformer);
+        // debug String{"Manual registration of scripting language {} with instance {}"} to Logger{DataTransformerRegistry.logger}
         DataTransformerRegistry.logger.debug("Manual registration of scripting language {} with instance {}", language, transformer);
     }
 
     public DataTransformer find(String languge) {
-        return DataTransformerRegistry.this.registry.get(languge);
+        return this.registry.get(languge);
     }
 }
 

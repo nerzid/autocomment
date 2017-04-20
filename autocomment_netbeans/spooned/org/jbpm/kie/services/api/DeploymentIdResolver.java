@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,19 +17,18 @@
 
 package org.jbpm.kie.services.api;
 
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.commons.collections.CollectionUtils;
 import java.util.Collections;
 import org.apache.maven.artifact.versioning.ComparableVersion;
-import org.jbpm.services.api.model.DeployedUnit;
-import java.util.HashMap;
+import org.kie.internal.runtime.manager.RuntimeManagerIdFilter;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
 import org.apache.commons.collections.Predicate;
-import org.kie.internal.runtime.manager.RuntimeManagerIdFilter;
 
 /**
  * Deployment id resolver that allows to find out latest version of given deployment id. To be able
@@ -51,8 +50,8 @@ public class DeploymentIdResolver implements RuntimeManagerIdFilter {
                 Collection<String> matched = DeploymentIdResolver.matchDeployments(deploymentId, availableDeployments);
                 if ((matched != null) && (!(matched.isEmpty()))) {
                     return DeploymentIdResolver.findLatest(matched);
-                } 
-            } 
+                }
+            }
         } catch (Exception e) {
             DeploymentIdResolver.logger.debug("Unable to resolve latest version of deployment {} due to {}", deploymentId, e.getMessage());
         }
@@ -83,8 +82,8 @@ public class DeploymentIdResolver implements RuntimeManagerIdFilter {
         private String groupArtifact;
 
         private GroupAndArtifactMatchPredicate(String deploymentId) {
-            DeploymentIdResolver.GroupAndArtifactMatchPredicate.this.gavInfo = new DeploymentIdResolver.GAVInfo(deploymentId);
-            DeploymentIdResolver.GroupAndArtifactMatchPredicate.this.groupArtifact = ((gavInfo.getGroupId()) + ":") + (gavInfo.getArtifactId());
+            this.gavInfo = new DeploymentIdResolver.GAVInfo(deploymentId);
+            this.groupArtifact = ((gavInfo.getGroupId()) + ":") + (gavInfo.getArtifactId());
         }
 
         @Override
@@ -92,13 +91,15 @@ public class DeploymentIdResolver implements RuntimeManagerIdFilter {
             if (object instanceof String) {
                 if (((String) (object)).startsWith(groupArtifact)) {
                     return true;
-                } 
-            } else if (object instanceof DeployedUnit) {
-                String identifier = ((DeployedUnit) (object)).getDeploymentUnit().getIdentifier();
-                if (identifier.startsWith(groupArtifact)) {
-                    return true;
-                } 
-            } 
+                }
+            }else
+                if (object instanceof org.jbpm.services.api.model.DeployedUnit) {
+                    String identifier = ((org.jbpm.services.api.model.DeployedUnit) (object)).getDeploymentUnit().getIdentifier();
+                    if (identifier.startsWith(groupArtifact)) {
+                        return true;
+                    }
+                }
+            
             return false;
         }
     }
@@ -112,9 +113,9 @@ public class DeploymentIdResolver implements RuntimeManagerIdFilter {
 
         GAVInfo(String deploymentId) {
             String[] details = deploymentId.split(":");
-            DeploymentIdResolver.GAVInfo.this.groupId = details[0];
-            DeploymentIdResolver.GAVInfo.this.artifactId = details[1];
-            DeploymentIdResolver.GAVInfo.this.version = details[2];
+            this.groupId = details[0];
+            this.artifactId = details[1];
+            this.version = details[2];
         }
 
         public String getGroupId() {
@@ -136,7 +137,7 @@ public class DeploymentIdResolver implements RuntimeManagerIdFilter {
         String found = DeploymentIdResolver.matchAndReturnLatest(pattern, identifiers);
         if ((found != null) && (!(found.equals(pattern)))) {
             filtered.add(found);
-        } 
+        }
         return filtered;
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +42,7 @@ public class QueryMapperRegistry {
     private ConcurrentMap<String, QueryResultMapper<?>> knownMappers = new ConcurrentHashMap<String, QueryResultMapper<?>>();
 
     protected QueryMapperRegistry() {
-        discoverAndAddMappers(QueryMapperRegistry.this.getClass().getClassLoader());
+        discoverAndAddMappers(this.getClass().getClassLoader());
     }
 
     /**
@@ -64,10 +64,10 @@ public class QueryMapperRegistry {
     public QueryResultMapper<?> mapperFor(String name, Map<String, String> columnMapping) {
         if (!(knownMappers.containsKey(name))) {
             throw new IllegalArgumentException(("No mapper found with name " + name));
-        } 
+        }
         if (columnMapping == null) {
             return knownMappers.get(name);
-        } else {
+        }else {
             return knownMappers.get(name).forColumnMapping(columnMapping);
         }
     }
@@ -86,7 +86,7 @@ public class QueryMapperRegistry {
             if (existed == null) {
                 added.add(mapper.getName());
                 QueryMapperRegistry.logger.debug("Added mapper {} to the registry", mapper.getName());
-            } else {
+            }else {
                 QueryMapperRegistry.logger.debug("Mapper {} already existing in the registry", mapper.getName());
             }
         }
@@ -97,7 +97,7 @@ public class QueryMapperRegistry {
         QueryResultMapper<?> existed = knownMappers.putIfAbsent(mapper.getName(), mapper);
         if (existed == null) {
             QueryMapperRegistry.logger.debug("Added mapper {} to the registry", mapper.getName());
-        } else {
+        }else {
             QueryMapperRegistry.logger.debug("Mapper {} already existing in the registry", mapper.getName());
         }
     }
@@ -106,7 +106,7 @@ public class QueryMapperRegistry {
         QueryResultMapper<?> existed = knownMappers.remove(mapperName);
         if (existed != null) {
             QueryMapperRegistry.logger.debug("Removed mapper {} from the registry", mapperName);
-        } else {
+        }else {
             QueryMapperRegistry.logger.debug("Mapper {} not found in the registry", mapperName);
         }
     }

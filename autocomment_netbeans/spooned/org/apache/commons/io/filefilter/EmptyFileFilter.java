@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ import java.io.Serializable;
  * <p>
  * Example, showing how to print out a list of the
  * current directory's empty files/directories:
- * 
+ *
  * <pre>
  * File dir = new File(".");
  * String[] files = dir.list( EmptyFileFilter.EMPTY );
@@ -37,11 +37,11 @@ import java.io.Serializable;
  *     System.out.println(files[i]);
  * }
  * </pre>
- * 
+ *
  * <p>
  * Example, showing how to print out a list of the
  * current directory's non-empty files/directories:
- * 
+ *
  * <pre>
  * File dir = new File(".");
  * String[] files = dir.list( EmptyFileFilter.NOT_EMPTY );
@@ -49,7 +49,7 @@ import java.io.Serializable;
  *     System.out.println(files[i]);
  * }
  * </pre>
- * 
+ *
  * @since 1.3
  * @version $Id: EmptyFileFilter.java 1642757 2014-12-01 21:09:30Z sebb $
  */
@@ -74,7 +74,7 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
 
     /**
      * Checks to see if the file is empty.
-     * 
+     *
      * @param file  the file or directory to check
      * @return {@code true} if the file or directory
      *  is <i>empty</i>, otherwise {@code false}.
@@ -84,7 +84,7 @@ public class EmptyFileFilter extends AbstractFileFilter implements Serializable 
         if (file.isDirectory()) {
             final File[] files = file.listFiles();
             return (files == null) || ((files.length) == 0);
-        } else {
+        }else {
             return (file.length()) == 0;
         }
     }

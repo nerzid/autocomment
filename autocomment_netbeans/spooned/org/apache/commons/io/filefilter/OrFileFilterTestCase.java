@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -63,27 +63,27 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
 
     @Override
     protected List<boolean[]> getFalseResults() {
-        return OrFileFilterTestCase.this.testFalseResults;
+        return this.testFalseResults;
     }
 
     @Override
     protected List<Boolean> getFileResults() {
-        return OrFileFilterTestCase.this.testFileResults;
+        return this.testFileResults;
     }
 
     @Override
     protected List<Boolean> getFilenameResults() {
-        return OrFileFilterTestCase.this.testFilenameResults;
+        return this.testFilenameResults;
     }
 
     @Override
     protected List<List<IOFileFilter>> getTestFilters() {
-        return OrFileFilterTestCase.this.testFilters;
+        return this.testFilters;
     }
 
     @Override
     protected List<boolean[]> getTrueResults() {
-        return OrFileFilterTestCase.this.testTrueResults;
+        return this.testTrueResults;
     }
 
     @Override
@@ -95,11 +95,11 @@ public class OrFileFilterTestCase extends ConditionalFileFilterAbstractTestCase 
     public void setUpTestFilters() {
         // filters
         // tests
-        OrFileFilterTestCase.this.testFilters = new ArrayList<List<IOFileFilter>>();
-        OrFileFilterTestCase.this.testTrueResults = new ArrayList<boolean[]>();
-        OrFileFilterTestCase.this.testFalseResults = new ArrayList<boolean[]>();
-        OrFileFilterTestCase.this.testFileResults = new ArrayList<Boolean>();
-        OrFileFilterTestCase.this.testFilenameResults = new ArrayList<Boolean>();
+        this.testFilters = new ArrayList<List<IOFileFilter>>();
+        this.testTrueResults = new ArrayList<boolean[]>();
+        this.testFalseResults = new ArrayList<boolean[]>();
+        this.testFileResults = new ArrayList<Boolean>();
+        this.testFilenameResults = new ArrayList<Boolean>();
         // test 0 - add empty elements
         {
             testFilters.add(0, null);

@@ -28,6 +28,8 @@ import java.util.List;
  */
 public class NLPToolkit {
 
+    // Below are the MUST BE VERB words. Those are indeed verbs, but Stanford NLP toolkit
+    // assumes that they'r not verbs. So we hard-coded them.
     public static String[] mustVerbArr = {"sort", "fire", "copy", "swap", "check",
         "process", "append", "dump", "print",
         "println", "register", "resolve", "start",
@@ -66,8 +68,10 @@ public class NLPToolkit {
 
         m.addLastSplittedIdentifier(identifiers_list[lemmas_list.size() - 1]);
         m.addLastLemma(lemmas_list.get(lemmas_list.size() - 1));
-        m.addLastPostag(postags_list.get(lemmas_list.size() - 1));
-
+        if (doesNeedToBeConverted(identifiers_list[identifiers_list.length-1]))
+            m.addLastPostag("VB");
+        else
+            m.addLastPostag(postags_list.get(lemmas_list.size() - 1));
         m.setSignature(signature);
         m.setIdentifier(method_name);
         m.setFK_dtid(dtid);
@@ -100,7 +104,10 @@ public class NLPToolkit {
 
         p.addLastSplittedIdentifier(identifiers_list[lemmas_list.size() - 1]);
         p.addLastLemma(lemmas_list.get(lemmas_list.size() - 1));
-        p.addLastPostag(postags_list.get(lemmas_list.size() - 1));
+        if (doesNeedToBeConverted(identifiers_list[identifiers_list.length-1]))
+            p.addLastPostag("VB");
+        else
+            p.addLastPostag(postags_list.get(lemmas_list.size() - 1));
 
         p.setIdentifier(param_name);
         p.setFK_dtid(dtid);

@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
 
 package org.jbpm.runtime.manager.impl.deploy;
 
+import org.mvel2.ParserConfiguration;
 import org.kie.internal.runtime.Cacheable;
 import org.kie.internal.runtime.manager.InternalRuntimeManager;
 import org.slf4j.Logger;
@@ -26,7 +27,6 @@ import org.drools.core.util.MVELSafeHelper;
 import java.util.Map;
 import org.kie.internal.runtime.conf.ObjectModel;
 import org.kie.internal.runtime.conf.ObjectModelResolver;
-import org.mvel2.ParserConfiguration;
 import org.mvel2.ParserContext;
 
 public class MVELObjectModelResolver implements ObjectModelResolver {
@@ -43,21 +43,22 @@ public class MVELObjectModelResolver implements ObjectModelResolver {
             instance = manager.getCacheManager().get(model.getIdentifier());
             if (instance != null) {
                 return instance;
-            } 
-        } 
+            }
+        }
         ParserConfiguration config = new ParserConfiguration();
+        // set class ClassLoader{cl} to ParserConfiguration{config}
         config.setClassLoader(cl);
         ParserContext ctx = new ParserContext(config);
         if (contextParams != null) {
             for (Map.Entry<String, Object> entry : contextParams.entrySet()) {
                 ctx.addVariable(entry.getKey(), entry.getValue().getClass());
             }
-        } 
+        }
         Object compiledExpression = MVEL.compileExpression(model.getIdentifier(), ctx);
         instance = MVELSafeHelper.getEvaluator().executeExpression(compiledExpression, contextParams);
         if ((manager != null) && (instance instanceof Cacheable)) {
             manager.getCacheManager().add(model.getIdentifier(), instance);
-        } 
+        }
         return instance;
     }
 
@@ -65,8 +66,9 @@ public class MVELObjectModelResolver implements ObjectModelResolver {
     public boolean accept(String resolverId) {
         if (MVELObjectModelResolver.ID.equals(resolverId)) {
             return true;
-        } 
-        MVELObjectModelResolver.logger.debug("Resolver id {} is not accepted by {}", resolverId, MVELObjectModelResolver.this.getClass());
+        }
+        // debug String{"Resolver id {} is not accepted by {}"} to Logger{MVELObjectModelResolver.logger}
+        MVELObjectModelResolver.logger.debug("Resolver id {} is not accepted by {}", resolverId, this.getClass());
         return false;
     }
 }

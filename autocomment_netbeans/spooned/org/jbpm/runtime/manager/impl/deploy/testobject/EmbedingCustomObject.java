@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,8 +26,8 @@ public class EmbedingCustomObject {
     }
 
     public EmbedingCustomObject(SimpleCustomObject customObject, String description) {
-        EmbedingCustomObject.this.setCustomObject(customObject);
-        EmbedingCustomObject.this.setDescription(description);
+        this.setCustomObject(customObject);
+        this.setDescription(description);
     }
 
     public SimpleCustomObject getCustomObject() {
@@ -35,7 +35,7 @@ public class EmbedingCustomObject {
     }
 
     public void setCustomObject(SimpleCustomObject customObject) {
-        EmbedingCustomObject.this.customObject = customObject;
+        this.customObject = customObject;
     }
 
     public String getDescription() {
@@ -43,7 +43,7 @@ public class EmbedingCustomObject {
     }
 
     public void setDescription(String description) {
-        EmbedingCustomObject.this.description = description;
+        this.description = description;
     }
 }
 

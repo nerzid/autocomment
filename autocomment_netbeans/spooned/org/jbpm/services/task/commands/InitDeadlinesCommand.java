@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,17 +16,19 @@
 
 package org.jbpm.services.task.commands;
 
-import org.jbpm.services.task.utils.ClassUtil;
 import org.kie.internal.command.Context;
+import org.jbpm.services.task.utils.ClassUtil;
 import org.kie.internal.task.api.model.DeadlineSummary;
+import DeadlineType.END;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.xml.bind.annotation.XmlRootElement;
+import DeadlineType.START;
 import org.kie.internal.task.api.TaskDeadlinesService;
 import org.kie.internal.task.api.TaskPersistenceContext;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "init-deadlines-command")
 @XmlAccessorType(value = XmlAccessType.NONE)
@@ -48,12 +50,12 @@ public class InitDeadlinesCommand extends TaskCommand<Void> {
             List<DeadlineSummary> resultList = persistenceContext.queryInTransaction("UnescalatedStartDeadlines", ClassUtil.<List<DeadlineSummary>>castClass(List.class));
             for (DeadlineSummary summary : resultList) {
                 long delay = (summary.getDate().getTime()) - now;
-                deadlineService.schedule(summary.getTaskId(), summary.getDeadlineId(), delay, DeadlineType.START);
+                deadlineService.schedule(summary.getTaskId(), summary.getDeadlineId(), delay, START);
             }
             resultList = persistenceContext.queryInTransaction("UnescalatedEndDeadlines", ClassUtil.<List<DeadlineSummary>>castClass(List.class));
             for (DeadlineSummary summary : resultList) {
                 long delay = (summary.getDate().getTime()) - now;
-                deadlineService.schedule(summary.getTaskId(), summary.getDeadlineId(), delay, DeadlineType.END);
+                deadlineService.schedule(summary.getTaskId(), summary.getDeadlineId(), delay, END);
             }
         } catch (Exception e) {
             InitDeadlinesCommand.logger.error("Error when executing deadlines", e);

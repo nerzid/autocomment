@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 
 package org.jbpm.shared.services.impl;
 
+import EnvironmentName.CMD_SCOPED_ENTITY_MANAGER;
 import org.drools.core.command.CommandService;
 import org.kie.internal.command.Context;
 import javax.persistence.EntityManager;
@@ -36,8 +37,8 @@ public class TransactionalCommandService implements CommandService {
     private TransactionManager txm;
 
     public TransactionalCommandService(EntityManagerFactory emf, TransactionManager txm) {
-        TransactionalCommandService.this.emf = emf;
-        TransactionalCommandService.this.txm = txm;
+        this.emf = emf;
+        this.txm = txm;
     }
 
     public TransactionalCommandService(EntityManagerFactory emf) {
@@ -49,7 +50,7 @@ public class TransactionalCommandService implements CommandService {
     }
 
     protected void setEmf(EntityManagerFactory emf) {
-        TransactionalCommandService.this.emf = emf;
+        this.emf = emf;
     }
 
     public <T> T execute(Command<T> command) {
@@ -62,7 +63,7 @@ public class TransactionalCommandService implements CommandService {
             if (em == null) {
                 em = emf.createEntityManager();
                 emOwner = true;
-            } 
+            }
             JpaPersistenceContext context = new JpaPersistenceContext(em);
             context.joinTransaction();
             result = ((GenericCommand<T>) (command)).execute(context);
@@ -89,10 +90,10 @@ public class TransactionalCommandService implements CommandService {
     }
 
     protected EntityManager getEntityManager(Command<?> command) {
-        EntityManager em = ((EntityManager) (txm.getResource(EnvironmentName.CMD_SCOPED_ENTITY_MANAGER)));
+        EntityManager em = ((EntityManager) (txm.getResource(CMD_SCOPED_ENTITY_MANAGER)));
         if (((em != null) && (em.isOpen())) && (em.getEntityManagerFactory().equals(emf))) {
             return em;
-        } 
+        }
         return null;
     }
 }

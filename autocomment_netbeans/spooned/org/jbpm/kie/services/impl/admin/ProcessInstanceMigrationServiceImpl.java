@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,7 +37,7 @@ public class ProcessInstanceMigrationServiceImpl implements ProcessInstanceMigra
     public MigrationReport migrate(String sourceDeploymentId, Long processInstanceId, String targetDeploymentId, String targetProcessId) {
         MigrationSpec migrationSpec = new MigrationSpec(sourceDeploymentId, processInstanceId, targetDeploymentId, targetProcessId);
         MigrationManager migrationManager = new MigrationManager(migrationSpec);
-        org.jbpm.runtime.manager.impl.migration.MigrationReport report = null;
+        MigrationReport report = null;
         try {
             report = migrationManager.migrate();
         } catch (MigrationException e) {
@@ -50,7 +50,7 @@ public class ProcessInstanceMigrationServiceImpl implements ProcessInstanceMigra
     public MigrationReport migrate(String sourceDeploymentId, Long processInstanceId, String targetDeploymentId, String targetProcessId, Map<String, String> nodeMapping) {
         MigrationSpec migrationSpec = new MigrationSpec(sourceDeploymentId, processInstanceId, targetDeploymentId, targetProcessId);
         MigrationManager migrationManager = new MigrationManager(migrationSpec);
-        org.jbpm.runtime.manager.impl.migration.MigrationReport report = null;
+        MigrationReport report = null;
         try {
             report = migrationManager.migrate(nodeMapping);
         } catch (MigrationException e) {
@@ -77,7 +77,7 @@ public class ProcessInstanceMigrationServiceImpl implements ProcessInstanceMigra
     /* Helper methods */
     protected MigrationReport convert(MigrationReport report) {
         List<MigrationEntry> logs = new ArrayList<MigrationEntry>();
-        for (org.jbpm.runtime.manager.impl.migration.MigrationEntry orig : report.getEntries()) {
+        for (MigrationEntry orig : report.getEntries()) {
             logs.add(new MigrationEntryImpl(orig.getTimestamp(), orig.getMessage(), orig.getType().toString()));
         }
         return new MigrationReportImpl(report.isSuccessful(), report.getStartDate(), report.getEndDate(), logs);

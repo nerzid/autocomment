@@ -16,7 +16,7 @@ public class GreatGrandChild {
     }
 
     private void setSong(String song) {
-        GreatGrandChild.this.song = song;
+        this.song = song;
     }
 }
 

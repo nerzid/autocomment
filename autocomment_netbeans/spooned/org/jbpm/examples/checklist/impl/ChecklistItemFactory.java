@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,25 +16,26 @@
 
 package org.jbpm.examples.checklist.impl;
 
+import Status.InProgress;
 import java.util.ArrayList;
+import org.jbpm.examples.checklist.ChecklistItem.Status;
 import org.jbpm.examples.checklist.ChecklistItem;
 import java.util.Collection;
+import Status.Completed;
 import java.util.HashMap;
-import org.jbpm.workflow.core.node.HumanTaskNode;
-import org.kie.api.task.model.I18NText;
-import java.util.List;
-import java.util.Map;
-import org.kie.api.definition.process.Node;
-import org.kie.api.definition.process.NodeContainer;
-import org.jbpm.workflow.core.impl.NodeImpl;
+import org.kie.api.task.model.User;
+import org.kie.api.definition.process.WorkflowProcess;
 import org.kie.api.runtime.manager.audit.NodeInstanceLog;
 import org.kie.api.task.model.OrganizationalEntity;
-import org.jbpm.workflow.core.node.StartNode;
-import org.jbpm.examples.checklist.ChecklistItem.Status;
+import org.jbpm.workflow.core.node.HumanTaskNode;
+import org.kie.api.task.model.I18NText;
 import org.kie.api.task.model.Task;
-import org.kie.api.task.model.User;
+import java.util.List;
+import java.util.Map;
+import org.jbpm.workflow.core.impl.NodeImpl;
+import org.kie.api.definition.process.NodeContainer;
 import org.drools.core.process.core.Work;
-import org.kie.api.definition.process.WorkflowProcess;
+import org.kie.api.definition.process.Node;
 
 public final class ChecklistItemFactory {
     public static ChecklistItem createChecklistItem(Task task) {
@@ -44,11 +45,11 @@ public final class ChecklistItemFactory {
     private static String getText(List<I18NText> texts) {
         if (texts == null) {
             return null;
-        } 
+        }
         for (I18NText text : texts) {
             if ("en-UK".equals(text.getLanguage())) {
                 return text.getText();
-            } 
+            }
         }
         return null;
     }
@@ -79,12 +80,12 @@ public final class ChecklistItemFactory {
         User actualOwner = task.getTaskData().getActualOwner();
         if (actualOwner != null) {
             return actualOwner.getId();
-        } else {
+        }else {
             String result = "";
             for (OrganizationalEntity o : task.getPeopleAssignments().getPotentialOwners()) {
                 if ((result.length()) != 0) {
                     result += ",";
-                } 
+                }
                 result += o.getId();
             }
             return result;
@@ -93,6 +94,7 @@ public final class ChecklistItemFactory {
 
     public static Collection<ChecklistItem> getPendingChecklistItems(WorkflowProcess process) {
         List<ChecklistItem> result = new ArrayList<ChecklistItem>();
+        // get pending WorkflowProcess{process} to void{ChecklistItemFactory}
         ChecklistItemFactory.getPendingChecklistItems(process, result, process.getId());
         return result;
     }
@@ -109,69 +111,72 @@ public final class ChecklistItemFactory {
                     } catch (NumberFormatException e) {
                         // Do nothing
                     }
-                } 
+                }
                 String actorId = ((String) (workItem.getParameter("ActorId")));
                 if ((actorId != null) && ((actorId.trim().length()) == 0)) {
                     actorId = null;
-                } 
+                }
                 String groupId = ((String) (workItem.getParameter("GroupId")));
                 if ((groupId != null) && ((groupId.trim().length()) == 0)) {
                     groupId = null;
-                } 
+                }
                 String actors = null;
                 if (actorId == null) {
                     if (groupId == null) {
                         actors = "";
-                    } else {
+                    }else {
                         actors = groupId;
                     }
-                } else {
+                }else {
                     if (groupId == null) {
                         actors = actorId;
-                    } else {
+                    }else {
                         actors = (actorId + ",") + groupId;
                     }
                 }
                 Status status = Status.Pending;
                 if ((((HumanTaskNode) (node)).getDefaultIncomingConnections().size()) == 0) {
                     status = Status.Optional;
-                } 
+                }
                 result.add(ChecklistItemFactory.createChecklistItem(((String) (workItem.getParameter("TaskName"))), "HumanTaskNode", actors, ((String) (workItem.getParameter("Comment"))), priority, processId, status));
-            } else if (node instanceof NodeContainer) {
-                ChecklistItemFactory.getPendingChecklistItems(((NodeContainer) (node)), result, processId);
-            } else {
-                String docs = ((String) (node.getMetaData().get("Documentation")));
-                if (docs != null) {
-                    int position = docs.indexOf("OrderingNb=");
-                    if (position >= 0) {
-                        int end = docs.indexOf(";", (position + 1));
-                        String orderingNumber = docs.substring((position + 11), end);
-                        Status status = Status.Pending;
-                        if (((((NodeImpl) (node)).getDefaultIncomingConnections().size()) == 0) && (!(node instanceof StartNode))) {
-                            status = Status.Optional;
-                        } 
-                        result.add(ChecklistItemFactory.createChecklistItem(node.getName(), node.getClass().getSimpleName(), "", orderingNumber, 0, processId, status));
-                    } 
-                } 
-            }
+            }else
+                if (node instanceof NodeContainer) {
+                    ChecklistItemFactory.getPendingChecklistItems(((NodeContainer) (node)), result, processId);
+                }else {
+                    String docs = ((String) (node.getMetaData().get("Documentation")));
+                    if (docs != null) {
+                        int position = docs.indexOf("OrderingNb=");
+                        if (position >= 0) {
+                            int end = docs.indexOf(";", (position + 1));
+                            String orderingNumber = docs.substring((position + 11), end);
+                            Status status = Status.Pending;
+                            if (((((NodeImpl) (node)).getDefaultIncomingConnections().size()) == 0) && (!(node instanceof org.jbpm.workflow.core.node.StartNode))) {
+                                status = Status.Optional;
+                            }
+                            result.add(ChecklistItemFactory.createChecklistItem(node.getName(), node.getClass().getSimpleName(), "", orderingNumber, 0, processId, status));
+                        }
+                    }
+                }
+            
         }
     }
 
     public static Collection<ChecklistItem> getLoggedChecklistItems(WorkflowProcess process, List<NodeInstanceLog> nodeInstances) {
         Map<String, ChecklistItem> result = new HashMap<String, ChecklistItem>();
         Map<String, String> relevantNodes = new HashMap<String, String>();
+        // get relevant WorkflowProcess{process} to void{ChecklistItemFactory}
         ChecklistItemFactory.getRelevantNodes(process, relevantNodes);
         for (NodeInstanceLog log : nodeInstances) {
             String orderingNb = relevantNodes.get(log.getNodeId());
             if (orderingNb != null) {
                 if ((log.getType()) == (NodeInstanceLog.TYPE_EXIT)) {
-                    result.put(orderingNb, ChecklistItemFactory.createChecklistItem(log.getNodeName(), log.getNodeType(), "", orderingNb, 0, log.getProcessId(), Status.Completed));
-                } else {
+                    result.put(orderingNb, ChecklistItemFactory.createChecklistItem(log.getNodeName(), log.getNodeType(), "", orderingNb, 0, log.getProcessId(), Completed));
+                }else {
                     if ((result.get(orderingNb)) == null) {
-                        result.put(orderingNb, ChecklistItemFactory.createChecklistItem(log.getNodeName(), log.getNodeType(), "", orderingNb, 0, log.getProcessId(), Status.InProgress));
-                    } 
+                        result.put(orderingNb, ChecklistItemFactory.createChecklistItem(log.getNodeName(), log.getNodeType(), "", orderingNb, 0, log.getProcessId(), InProgress));
+                    }
                 }
-            } 
+            }
         }
         return result.values();
     }
@@ -180,7 +185,7 @@ public final class ChecklistItemFactory {
         for (Node node : container.getNodes()) {
             if (node instanceof NodeContainer) {
                 ChecklistItemFactory.getRelevantNodes(((NodeContainer) (node)), result);
-            } 
+            }
             String docs = ((String) (node.getMetaData().get("Documentation")));
             if (docs != null) {
                 int position = docs.indexOf("OrderingNb=");
@@ -190,10 +195,10 @@ public final class ChecklistItemFactory {
                     String nodeId = ((String) (node.getMetaData().get("UniqueId")));
                     if (nodeId == null) {
                         nodeId = ((NodeImpl) (node)).getUniqueId();
-                    } 
+                    }
                     result.put(nodeId, orderingNumber);
-                } 
-            } 
+                }
+            }
         }
     }
 

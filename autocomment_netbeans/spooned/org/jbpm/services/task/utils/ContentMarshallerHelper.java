@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,27 +22,29 @@ import java.io.ByteArrayOutputStream;
 import org.drools.core.marshalling.impl.ClassObjectMarshallingStrategyAcceptor;
 import org.kie.internal.task.api.model.ContentData;
 import org.kie.api.runtime.Environment;
+import org.kie.api.task.model.Task;
 import com.google.protobuf.ExtensionRegistry;
-import org.kie.internal.task.api.model.FaultData;
-import java.util.HashMap;
-import org.drools.core.marshalling.impl.ProtobufMessages.Header;
-import java.io.IOException;
-import org.slf4j.Logger;
+import org.kie.api.marshalling.ObjectMarshallingStrategy;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
-import org.drools.core.marshalling.impl.MarshallerReaderContext;
+import org.kie.internal.task.api.model.FaultData;
 import org.drools.core.marshalling.impl.MarshallingConfigurationImpl;
-import com.google.protobuf.Message;
-import org.kie.api.marshalling.ObjectMarshallingStrategy;
-import org.kie.api.marshalling.ObjectMarshallingStrategyStore;
+import EnvironmentName.OBJECT_MARSHALLING_STRATEGIES;
 import org.drools.core.marshalling.impl.PersisterHelper;
-import org.drools.core.marshalling.impl.ProcessMarshallerWriteContext;
-import org.jbpm.marshalling.impl.ProtobufProcessMarshaller;
 import org.kie.api.task.model.Status;
-import org.kie.api.task.model.Task;
+import org.slf4j.Logger;
+import java.util.HashMap;
+import org.drools.core.marshalling.impl.ProcessMarshallerWriteContext;
+import com.google.protobuf.Message;
+import org.jbpm.marshalling.impl.JBPMMessages.VariableContainer;
 import org.kie.internal.task.api.TaskModelProvider;
 import org.jbpm.marshalling.impl.JBPMMessages.Variable;
-import org.jbpm.marshalling.impl.JBPMMessages.VariableContainer;
+import org.drools.core.marshalling.impl.ProtobufMessages.Header;
+import java.io.IOException;
+import org.jbpm.marshalling.impl.ProtobufProcessMarshaller;
+import org.drools.core.marshalling.impl.MarshallerReaderContext;
+import AccessType.Inline;
+import org.kie.api.marshalling.ObjectMarshallingStrategyStore;
 
 public class ContentMarshallerHelper {
     private static final Logger logger = LoggerFactory.getLogger(ContentMarshallerHelper.class);
@@ -56,13 +58,16 @@ public class ContentMarshallerHelper {
     public static ContentData marshal(Task task, Object o, Environment env) {
         if (o == null) {
             return null;
-        } 
+        }
         ContentData content = null;
         byte[] toByteArray = ContentMarshallerHelper.marshallContent(task, o, env);
         content = TaskModelProvider.getFactory().newContentData();
+        // set content byte[]{toByteArray} to ContentData{content}
         content.setContent(toByteArray);
+        // set type String{o.getClass().getCanonicalName()} to ContentData{content}
         content.setType(o.getClass().getCanonicalName());
-        content.setAccessType(AccessType.Inline);
+        // set access void{Inline} to ContentData{content}
+        content.setAccessType(Inline);
         return content;
     }
 
@@ -74,10 +79,15 @@ public class ContentMarshallerHelper {
         FaultData content = null;
         byte[] toByteArray = ContentMarshallerHelper.marshallContent(task, fault, env);
         content = TaskModelProvider.getFactory().newFaultData();
+        // set content byte[]{toByteArray} to FaultData{content}
         content.setContent(toByteArray);
+        // set type String{fault.getClass().getCanonicalName()} to FaultData{content}
         content.setType(fault.getClass().getCanonicalName());
-        content.setAccessType(AccessType.Inline);
+        // set access void{Inline} to FaultData{content}
+        content.setAccessType(Inline);
+        // set fault Object{((String) (fault.get("faultName")))} to FaultData{content}
         content.setFaultName(((String) (fault.get("faultName"))));
+        // set type Object{((String) (fault.get("faultType")))} to FaultData{content}
         content.setType(((String) (fault.get("faultType"))));
         return content;
     }
@@ -92,15 +102,15 @@ public class ContentMarshallerHelper {
             ByteArrayInputStream stream = new ByteArrayInputStream(content);
             MarshallingConfigurationImpl marshallingConfigurationImpl = null;
             if (env != null) {
-                marshallingConfigurationImpl = new MarshallingConfigurationImpl(((ObjectMarshallingStrategy[]) (env.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES))), false, false);
-            } else {
-                marshallingConfigurationImpl = new MarshallingConfigurationImpl(new ObjectMarshallingStrategy[]{ new org.drools.core.marshalling.impl.SerializablePlaceholderResolverStrategy(ClassObjectMarshallingStrategyAcceptor.DEFAULT) }, false, false);
+                marshallingConfigurationImpl = new MarshallingConfigurationImpl(((ObjectMarshallingStrategy[]) (env.get(OBJECT_MARSHALLING_STRATEGIES))), false, false);
+            }else {
+                marshallingConfigurationImpl = new MarshallingConfigurationImpl(new ObjectMarshallingStrategy[]{ new SerializablePlaceholderResolverStrategy(ClassObjectMarshallingStrategyAcceptor.DEFAULT) }, false, false);
             }
             ObjectMarshallingStrategyStore objectMarshallingStrategyStore = marshallingConfigurationImpl.getObjectMarshallingStrategyStore();
             context = new MarshallerReaderContext(stream, null, null, objectMarshallingStrategyStore, null, env);
             if (classloader != null) {
                 context = classloader;
-            } else {
+            }else {
                 context = ContentMarshallerHelper.class.getClassLoader();
             }
             ExtensionRegistry registry = PersisterHelper.buildRegistry(context, null);
@@ -111,7 +121,7 @@ public class ContentMarshallerHelper {
                 // in case there was single variable stored return only that variable and not map
                 if ((value.containsKey(ContentMarshallerHelper.SINGLE_VAR_KEY)) && ((value.size()) == 1)) {
                     return value.get(ContentMarshallerHelper.SINGLE_VAR_KEY);
-                } 
+                }
                 return value;
             } catch (Exception e) {
                 // backward compatible fallback mechanism to ensure existing data can be read properly
@@ -133,9 +143,9 @@ public class ContentMarshallerHelper {
         try {
             MarshallingConfigurationImpl marshallingConfigurationImpl = null;
             if (env != null) {
-                marshallingConfigurationImpl = new MarshallingConfigurationImpl(((ObjectMarshallingStrategy[]) (env.get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES))), false, false);
-            } else {
-                marshallingConfigurationImpl = new MarshallingConfigurationImpl(new ObjectMarshallingStrategy[]{ new org.drools.core.marshalling.impl.SerializablePlaceholderResolverStrategy(ClassObjectMarshallingStrategyAcceptor.DEFAULT) }, false, false);
+                marshallingConfigurationImpl = new MarshallingConfigurationImpl(((ObjectMarshallingStrategy[]) (env.get(OBJECT_MARSHALLING_STRATEGIES))), false, false);
+            }else {
+                marshallingConfigurationImpl = new MarshallingConfigurationImpl(new ObjectMarshallingStrategy[]{ new SerializablePlaceholderResolverStrategy(ClassObjectMarshallingStrategyAcceptor.DEFAULT) }, false, false);
             }
             ObjectMarshallingStrategyStore objectMarshallingStrategyStore = marshallingConfigurationImpl.getObjectMarshallingStrategyStore();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -148,13 +158,13 @@ public class ContentMarshallerHelper {
                 int taskState = ProcessMarshallerWriteContext.STATE_ACTIVE;
                 if ((((((task.getTaskData().getStatus()) == (Status.Completed)) || ((task.getTaskData().getStatus()) == (Status.Error))) || ((task.getTaskData().getStatus()) == (Status.Exited))) || ((task.getTaskData().getStatus()) == (Status.Failed))) || ((task.getTaskData().getStatus()) == (Status.Obsolete))) {
                     taskState = ProcessMarshallerWriteContext.STATE_COMPLETED;
-                } 
+                }
                 context.setState(taskState);
-            } 
+            }
             Map<String, Object> input = null;
             if (o instanceof Map) {
                 input = ((Map<String, Object>) (o));
-            } else {
+            }else {
                 // in case there is only single variable to be stored place it into a map under special key
                 input = new HashMap<String, Object>();
                 input.put(ContentMarshallerHelper.SINGLE_VAR_KEY, o);
@@ -180,7 +190,7 @@ public class ContentMarshallerHelper {
                 result.put(key, ProtobufProcessMarshaller.unmarshallVariableValue(context, variablesMap.get(key)));
             }
             return result;
-        } 
+        }
         return value;
     }
 }

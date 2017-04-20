@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,7 @@ import java.io.Serializable;
  *       ((AbstractFileComparator) LastModifiedFileComparator.LASTMODIFIED_REVERSE).sort(array);
  * </pre>
  * <p>
- * 
+ *
  * @version $Id: LastModifiedFileComparator.java 1642757 2014-12-01 21:09:30Z sebb $
  * @since 1.4
  */
@@ -62,7 +62,7 @@ public class LastModifiedFileComparator extends AbstractFileComparator implement
 
     /**
      * Compare the last the last modified date/time of two files.
-     * 
+     *
      * @param file1 The first file to compare
      * @param file2 The second file to compare
      * @return a negative value if the first file's lastmodified date/time
@@ -74,11 +74,13 @@ public class LastModifiedFileComparator extends AbstractFileComparator implement
         final long result = (file1.lastModified()) - (file2.lastModified());
         if (result < 0) {
             return -1;
-        } else if (result > 0) {
-            return 1;
-        } else {
-            return 0;
-        }
+        }else
+            if (result > 0) {
+                return 1;
+            }else {
+                return 0;
+            }
+        
     }
 }
 

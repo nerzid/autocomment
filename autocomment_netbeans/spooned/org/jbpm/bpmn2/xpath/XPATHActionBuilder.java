@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Intalio Inc
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -112,12 +112,13 @@ public class XPATHActionBuilder implements ActionBuilder {
             // 
             // expr.compile( context.getPackageBuilder().getRootClassLoader() );
         } catch (final Exception e) {
-            context.getErrors().add(new org.drools.compiler.compiler.DescrBuildError(context.getParentDescr(), actionDescr, null, ((("Unable to build expression for action '" + (actionDescr.getText())) + "' :") + e)));
+            context.getErrors().add(new DescrBuildError(context.getParentDescr(), actionDescr, null, ((("Unable to build expression for action '" + (actionDescr.getText())) + "' :") + e)));
         }
     }
 
     public static String processMacros(String consequence) {
         MacroProcessor macroProcessor = new MacroProcessor();
+        // set macros Map{XPATHActionBuilder.macros} to MacroProcessor{macroProcessor}
         macroProcessor.setMacros(XPATHActionBuilder.macros);
         return macroProcessor.parse(XPATHActionBuilder.delimitExpressions(consequence));
     }
@@ -164,10 +165,12 @@ public class XPATHActionBuilder implements ActionBuilder {
                 if (lastNonWhite != ';') {
                     result.append(';');
                     lastNonWhite = ';';
-                } 
-            } else if (!(Character.isWhitespace(c))) {
-                lastNonWhite = c;
-            } 
+                }
+            }else
+                if (!(Character.isWhitespace(c))) {
+                    lastNonWhite = c;
+                }
+            
             result.append(c);
         }
         return result.toString();

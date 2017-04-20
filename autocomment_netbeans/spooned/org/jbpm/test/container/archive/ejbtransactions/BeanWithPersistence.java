@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 
 package org.jbpm.test.container.archive.ejbtransactions;
 
+import EnvironmentName.ENTITY_MANAGER_FACTORY;
 import javax.persistence.EntityManagerFactory;
 import org.kie.api.runtime.Environment;
 import org.kie.internal.KnowledgeBaseFactory;
@@ -30,12 +31,13 @@ public abstract class BeanWithPersistence implements ProcessEJB {
     protected EntityManagerFactory emf;
 
     public EntityManagerFactory getEmf() {
-        return BeanWithPersistence.this.emf;
+        return this.emf;
     }
 
     protected Environment getEnvironment() {
         Environment env = KnowledgeBaseFactory.newEnvironment();
-        env.set(EnvironmentName.ENTITY_MANAGER_FACTORY, emf);
+        // set void{ENTITY_MANAGER_FACTORY} to Environment{env}
+        env.set(ENTITY_MANAGER_FACTORY, emf);
         return env;
     }
 }

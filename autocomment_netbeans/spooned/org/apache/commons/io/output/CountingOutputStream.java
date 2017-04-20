@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import java.io.OutputStream;
  * <p>
  * A typical use case would be during debugging, to ensure that data is being
  * written as expected.
- * 
+ *
  * @version $Id: CountingOutputStream.java 1415850 2012-11-30 20:51:39Z ggregory $
  */
 public class CountingOutputStream extends ProxyOutputStream {
@@ -37,7 +37,7 @@ public class CountingOutputStream extends ProxyOutputStream {
 
     /**
      * Constructs a new CountingOutputStream.
-     * 
+     *
      * @param out  the OutputStream to write to
      */
     public CountingOutputStream(final OutputStream out) {
@@ -47,7 +47,7 @@ public class CountingOutputStream extends ProxyOutputStream {
     // -----------------------------------------------------------------------
     /**
      * Updates the count with the number of bytes that are being written.
-     * 
+     *
      * @param n number of bytes to be written to the stream
      * @since 2.0
      */
@@ -63,7 +63,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * NOTE: From v1.3 this method throws an ArithmeticException if the
      * count is greater than can be expressed by an <code>int</code>.
      * See {@link #getByteCount()} for a method using a <code>long</code>.
-     * 
+     *
      * @return the number of bytes accumulated
      * @throws ArithmeticException if the byte count is too large
      */
@@ -71,7 +71,7 @@ public class CountingOutputStream extends ProxyOutputStream {
         final long result = getByteCount();
         if (result > (Integer.MAX_VALUE)) {
             throw new ArithmeticException((("The byte count " + result) + " is too large to be converted to an int"));
-        } 
+        }
         return ((int) (result));
     }
 
@@ -81,7 +81,7 @@ public class CountingOutputStream extends ProxyOutputStream {
      * NOTE: From v1.3 this method throws an ArithmeticException if the
      * count is greater than can be expressed by an <code>int</code>.
      * See {@link #resetByteCount()} for a method using a <code>long</code>.
-     * 
+     *
      * @return the count previous to resetting
      * @throws ArithmeticException if the byte count is too large
      */
@@ -89,7 +89,7 @@ public class CountingOutputStream extends ProxyOutputStream {
         final long result = resetByteCount();
         if (result > (Integer.MAX_VALUE)) {
             throw new ArithmeticException((("The byte count " + result) + " is too large to be converted to an int"));
-        } 
+        }
         return ((int) (result));
     }
 
@@ -99,12 +99,12 @@ public class CountingOutputStream extends ProxyOutputStream {
      * NOTE: This method is an alternative for <code>getCount()</code>.
      * It was added because that method returns an integer which will
      * result in incorrect count for files over 2GB.
-     * 
+     *
      * @return the number of bytes accumulated
      * @since 1.3
      */
     public synchronized long getByteCount() {
-        return CountingOutputStream.this.count;
+        return this.count;
     }
 
     /**
@@ -113,13 +113,13 @@ public class CountingOutputStream extends ProxyOutputStream {
      * NOTE: This method is an alternative for <code>resetCount()</code>.
      * It was added because that method returns an integer which will
      * result in incorrect count for files over 2GB.
-     * 
+     *
      * @return the count previous to resetting
      * @since 1.3
      */
     public synchronized long resetByteCount() {
-        final long tmp = CountingOutputStream.this.count;
-        CountingOutputStream.this.count = 0;
+        final long tmp = this.count;
+        this.count = 0;
         return tmp;
     }
 }

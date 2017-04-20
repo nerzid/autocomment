@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import java.io.InputStream;
  * This class is typically used in cases where an input stream needs to be
  * passed to a component that wants to explicitly close the stream even if
  * more input would still be available to other components.
- * 
+ *
  * @version $Id: CloseShieldInputStream.java 1415850 2012-11-30 20:51:39Z ggregory $
  * @since 1.4
  */
@@ -35,7 +35,7 @@ public class CloseShieldInputStream extends ProxyInputStream {
     /**
      * Creates a proxy that shields the given input stream from being
      * closed.
-     * 
+     *
      * @param in underlying input stream
      */
     public CloseShieldInputStream(final InputStream in) {

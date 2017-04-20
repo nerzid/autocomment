@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,19 +30,19 @@ public class Recipients {
     }
 
     public boolean addRecipient(Recipient recipient) {
-        if (!(Recipients.this.list.contains(recipient))) {
-            Recipients.this.list.add(recipient);
+        if (!(this.list.contains(recipient))) {
+            this.list.add(recipient);
             return true;
-        } 
+        }
         return false;
     }
 
     public boolean removeRecipient(Recipient recipient) {
-        return Recipients.this.list.remove(recipient);
+        return this.list.remove(recipient);
     }
 
     public List<Recipient> getRecipients() {
-        return Recipients.this.list;
+        return this.list;
     }
 
     public Recipient[] toArray() {
@@ -57,7 +57,7 @@ public class Recipients {
     }
 
     public boolean equals(Object obj) {
-        if ((Recipients.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -71,8 +71,10 @@ public class Recipients {
             if ((other.list) != null)
                 return false;
             
-        } else if (!(list.equals(other.list)))
-            return false;
+        }else
+            if (!(list.equals(other.list)))
+                return false;
+            
         
         return true;
     }

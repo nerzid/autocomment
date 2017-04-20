@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,17 +20,17 @@ package org.jbpm.kie.services.impl.store;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Date;
+import org.slf4j.LoggerFactory;
 import org.jbpm.services.api.model.DeployedUnit;
 import org.jbpm.services.api.DeploymentEvent;
 import org.jbpm.services.api.DeploymentEventListener;
 import org.jbpm.services.api.DeploymentService;
+import java.util.Map;
 import org.jbpm.services.api.model.DeploymentUnit;
 import java.util.HashSet;
 import org.jbpm.services.api.ListenerSupport;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Map;
 import java.sql.SQLIntegrityConstraintViolationException;
+import org.slf4j.Logger;
 
 public class DeploymentSynchronizer implements DeploymentEventListener {
     private static final Logger logger = LoggerFactory.getLogger(DeploymentSynchronizer.class);
@@ -63,12 +63,13 @@ public class DeploymentSynchronizer implements DeploymentEventListener {
     }
 
     public void setDeploymentStore(DeploymentStore deploymentStore) {
-        DeploymentSynchronizer.this.deploymentStore = deploymentStore;
+        this.deploymentStore = deploymentStore;
     }
 
     public void setDeploymentService(DeploymentService deploymentService) {
-        DeploymentSynchronizer.this.deploymentService = deploymentService;
-        ((ListenerSupport) (DeploymentSynchronizer.this.deploymentService)).addListener(DeploymentSynchronizer.this);
+        this.deploymentService = deploymentService;
+        // add listener DeploymentSynchronizer{this} to DeploymentService{((ListenerSupport) (this.deploymentService))}
+        ((ListenerSupport) (this.deploymentService)).addListener(this);
     }
 
     public synchronized void synchronize() {
@@ -82,11 +83,11 @@ public class DeploymentSynchronizer implements DeploymentEventListener {
                 // initial load
                 enabledSet = deploymentStore.getEnabledDeploymentUnits();
                 deactivatedSet = deploymentStore.getDeactivatedDeploymentUnits();
-            } else {
+            }else {
                 deploymentStore.getDeploymentUnitsByDate(lastSync, enabledSet, disabledSet, activatedSet, deactivatedSet);
             }
             // update last sync date with time taken just before the query time
-            DeploymentSynchronizer.this.lastSync = timeOfSync;
+            this.lastSync = timeOfSync;
             DeploymentSynchronizer.logger.debug("About to synchronize deployment units, found new enabled {}, found new disabled {}", enabledSet, disabledSet);
             if (enabledSet != null) {
                 for (DeploymentUnit unit : enabledSet) {
@@ -99,9 +100,9 @@ public class DeploymentSynchronizer implements DeploymentEventListener {
                             entries.remove(unit.getIdentifier());
                             DeploymentSynchronizer.logger.warn("Deployment unit {} failed to deploy: {}", unit.getIdentifier(), e.getMessage());
                         }
-                    } 
+                    }
                 }
-            } 
+            }
             if (disabledSet != null) {
                 for (DeploymentUnit unit : disabledSet) {
                     if ((entries.containsKey(unit.getIdentifier())) && ((deploymentService.getDeployedUnit(unit.getIdentifier())) != null)) {
@@ -114,26 +115,26 @@ public class DeploymentSynchronizer implements DeploymentEventListener {
                             entries.put(unit.getIdentifier(), unit);
                             deploymentStore.markDeploymentUnitAsObsolete(unit);
                         }
-                    } 
+                    }
                 }
-            } 
+            }
             DeploymentSynchronizer.logger.debug("About to synchronize deployment units, found new activated {}, found new deactivated {}", activatedSet, deactivatedSet);
             if (activatedSet != null) {
                 for (DeploymentUnit unit : activatedSet) {
                     DeployedUnit deployed = deploymentService.getDeployedUnit(unit.getIdentifier());
                     if ((deployed != null) && (!(deployed.isActive()))) {
                         deploymentService.activate(unit.getIdentifier());
-                    } 
+                    }
                 }
-            } 
+            }
             if (deactivatedSet != null) {
                 for (DeploymentUnit unit : deactivatedSet) {
                     DeployedUnit deployed = deploymentService.getDeployedUnit(unit.getIdentifier());
                     if ((deployed != null) && (deployed.isActive())) {
                         deploymentService.deactivate(unit.getIdentifier());
-                    } 
+                    }
                 }
-            } 
+            }
         } catch (Throwable e) {
             DeploymentSynchronizer.logger.error("Error while synchronizing deployments: {}", e.getMessage(), e);
         }
@@ -143,7 +144,7 @@ public class DeploymentSynchronizer implements DeploymentEventListener {
     public void onDeploy(DeploymentEvent event) {
         if ((event == null) || ((event.getDeployedUnit()) == null)) {
             return ;
-        } 
+        }
         DeploymentUnit unit = event.getDeployedUnit().getDeploymentUnit();
         if (!(entries.containsKey(unit.getIdentifier()))) {
             try {
@@ -154,11 +155,11 @@ public class DeploymentSynchronizer implements DeploymentEventListener {
             } catch (Exception e) {
                 if (isCausedByConstraintViolation(e)) {
                     DeploymentSynchronizer.logger.info("Deployment {} already stored in deployment store", unit);
-                } else {
+                }else {
                     DeploymentSynchronizer.logger.error("Unable to store deployment {} in deployment store due to {}", unit, e.getMessage());
                 }
             }
-        } 
+        }
     }
 
     @Override
@@ -168,7 +169,7 @@ public class DeploymentSynchronizer implements DeploymentEventListener {
             deploymentStore.disableDeploymentUnit(unit);
             entries.remove(unit.getIdentifier());
             DeploymentSynchronizer.logger.info("Deployment unit {} removed successfully", unit.getIdentifier());
-        } 
+        }
     }
 
     @Override
@@ -177,7 +178,7 @@ public class DeploymentSynchronizer implements DeploymentEventListener {
             DeploymentUnit unit = event.getDeployedUnit().getDeploymentUnit();
             deploymentStore.activateDeploymentUnit(unit);
             DeploymentSynchronizer.logger.info("Deployment unit {} activated successfully", unit.getIdentifier());
-        } 
+        }
     }
 
     @Override
@@ -186,20 +187,20 @@ public class DeploymentSynchronizer implements DeploymentEventListener {
             DeploymentUnit unit = event.getDeployedUnit().getDeploymentUnit();
             deploymentStore.deactivateDeploymentUnit(unit);
             DeploymentSynchronizer.logger.info("Deployment unit {} deactivated successfully", unit.getIdentifier());
-        } 
+        }
     }
 
     protected boolean isCausedByConstraintViolation(Throwable throwable) {
         if ((targetExceptionClass) == null) {
             return false;
-        } 
+        }
         while (throwable != null) {
             if ((targetExceptionClass.isAssignableFrom(throwable.getClass())) || (SQLIntegrityConstraintViolationException.class.isAssignableFrom(throwable.getClass()))) {
                 return true;
-            } else {
+            }else {
                 throwable = throwable.getCause();
             }
-        }
+        } 
         return false;
     }
 }

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,24 +19,24 @@ package org.jbpm.process.builder;
 import org.jbpm.workflow.core.node.ActionNode;
 import org.jbpm.workflow.core.node.BoundaryEventNode;
 import org.jbpm.workflow.core.node.CompositeContextNode;
+import org.jbpm.workflow.core.node.SubProcessNode;
+import org.jbpm.workflow.core.node.RuleSetNode;
+import org.jbpm.workflow.core.node.TimerNode;
+import org.jbpm.workflow.core.node.StateNode;
 import org.jbpm.workflow.core.node.DynamicNode;
 import org.jbpm.workflow.core.node.EndNode;
+import org.kie.api.definition.process.Node;
 import org.jbpm.workflow.core.node.EventNode;
 import org.jbpm.workflow.core.node.EventSubProcessNode;
 import org.jbpm.workflow.core.node.FaultNode;
+import org.jbpm.workflow.core.impl.NodeImpl;
+import org.jbpm.workflow.core.node.Split;
 import org.jbpm.workflow.core.node.ForEachNode;
 import java.util.HashMap;
-import org.jbpm.workflow.core.node.HumanTaskNode;
 import java.util.Map;
-import org.jbpm.workflow.core.node.MilestoneNode;
-import org.kie.api.definition.process.Node;
-import org.jbpm.workflow.core.impl.NodeImpl;
-import org.jbpm.workflow.core.node.RuleSetNode;
-import org.jbpm.workflow.core.node.Split;
+import org.jbpm.workflow.core.node.HumanTaskNode;
 import org.jbpm.workflow.core.node.StartNode;
-import org.jbpm.workflow.core.node.StateNode;
-import org.jbpm.workflow.core.node.SubProcessNode;
-import org.jbpm.workflow.core.node.TimerNode;
+import org.jbpm.workflow.core.node.MilestoneNode;
 import org.jbpm.workflow.core.node.WorkItemNode;
 
 // Marco: extend this and extend the ActionNodeBuilder to also collection info..
@@ -46,7 +46,7 @@ public class ProcessNodeBuilderRegistry {
     private Map<Class<? extends Node>, ProcessNodeBuilder> registry;
 
     public ProcessNodeBuilderRegistry() {
-        ProcessNodeBuilderRegistry.this.registry = new HashMap<Class<? extends Node>, ProcessNodeBuilder>();
+        this.registry = new HashMap<Class<? extends Node>, ProcessNodeBuilder>();
         register(StartNode.class, new StartNodeBuilder());
         register(EndNode.class, new ExtendedNodeBuilder());
         register(MilestoneNode.class, new EventBasedNodeBuilder());
@@ -69,15 +69,16 @@ public class ProcessNodeBuilderRegistry {
     }
 
     public void register(Class<? extends Node> cls, ProcessNodeBuilder builder) {
-        ProcessNodeBuilderRegistry.this.registry.put(cls, builder);
+        // put Class{cls} to Map{this.registry}
+        this.registry.put(cls, builder);
     }
 
     public ProcessNodeBuilder getNodeBuilder(Node node) {
-        return ProcessNodeBuilderRegistry.this.registry.get(node.getClass());
+        return this.registry.get(node.getClass());
     }
 
     public ProcessNodeBuilder getNodeBuilder(Class<? extends Node> cls) {
-        return ProcessNodeBuilderRegistry.this.registry.get(cls);
+        return this.registry.get(cls);
     }
 }
 

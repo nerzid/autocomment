@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,12 @@
 
 package org.jbpm.services.ejb.client;
 
+import org.jbpm.kie.services.test.UserTaskServiceImplTest;
 import org.jbpm.services.ejb.api.DefinitionServiceEJBRemote;
 import org.jbpm.services.ejb.api.DeploymentServiceEJBRemote;
 import org.jbpm.services.ejb.api.ProcessServiceEJBRemote;
 import org.jbpm.services.ejb.api.RuntimeDataServiceEJBRemote;
 import org.jbpm.services.ejb.api.UserTaskServiceEJBRemote;
-import org.jbpm.kie.services.test.UserTaskServiceImplTest;
 
 public class ClientUserTaskServiceEJBTest extends UserTaskServiceImplTest {
     private static final String application = "sample-war-ejb-app";
@@ -45,7 +45,7 @@ public class ClientUserTaskServiceEJBTest extends UserTaskServiceImplTest {
             setProcessService(processService);
             setRuntimeDataService(runtimeDataService);
             setUserTaskService(userTaskService);
-            setDeploymentService(new org.jbpm.services.ejb.client.helper.DeploymentServiceWrapper(deploymentService));
+            setDeploymentService(new DeploymentServiceWrapper(deploymentService));
         } catch (Exception e) {
             throw new RuntimeException("Unable to configure services");
         }

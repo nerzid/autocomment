@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,11 +18,11 @@
 
 package org.apache.commons.io;
 
+import java.io.FileFilter;
 import java.util.ArrayList;
 import org.junit.Assert;
 import java.util.Collection;
 import java.io.File;
-import java.io.FileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import java.io.IOException;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -33,7 +33,7 @@ import org.junit.Test;
 
 /**
  * This is used to test DirectoryWalker for correctness when using Java4 (i.e. no generics).
- * 
+ *
  * @version $Id: DirectoryWalkerTestCaseJava4.java 1718944 2015-12-09 19:50:30Z krosenvold $
  * @see DirectoryWalker
  */
@@ -91,10 +91,15 @@ public class DirectoryWalkerTestCaseJava4 {
     @Test
     public void testFilter() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(DirectoryWalkerTestCaseJava4.dirsAndFilesFilter, (-1)).find(DirectoryWalkerTestCaseJava4.javaDir);
+        // assert equals String{"Result Size"} to void{Assert}
         Assert.assertEquals("Result Size", (((1 + (DirectoryWalkerTestCaseJava4.dirs.length)) + (DirectoryWalkerTestCaseJava4.ioFiles.length)) + (DirectoryWalkerTestCaseJava4.outputFiles.length)), results.size());
+        // assert true String{"Start Dir"} to void{Assert}
         Assert.assertTrue("Start Dir", results.contains(DirectoryWalkerTestCaseJava4.javaDir));
+        // check contains String{"Dir"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("Dir", DirectoryWalkerTestCaseJava4.dirs, results);
+        // check contains String{"IO File"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("IO File", DirectoryWalkerTestCaseJava4.ioFiles, results);
+        // check contains String{"Output File"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("Output File", DirectoryWalkerTestCaseJava4.outputFiles, results);
     }
 
@@ -104,7 +109,9 @@ public class DirectoryWalkerTestCaseJava4 {
     @Test
     public void testFilterAndLimitA() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(DirectoryWalkerTestCaseJava4.NOT_SVN, 0).find(DirectoryWalkerTestCaseJava4.javaDir);
+        // assert equals String{"[A] Result Size"} to void{Assert}
         Assert.assertEquals("[A] Result Size", 1, results.size());
+        // assert true String{"[A] Start Dir"} to void{Assert}
         Assert.assertTrue("[A] Start Dir", results.contains(DirectoryWalkerTestCaseJava4.javaDir));
     }
 
@@ -114,8 +121,11 @@ public class DirectoryWalkerTestCaseJava4 {
     @Test
     public void testFilterAndLimitB() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(DirectoryWalkerTestCaseJava4.NOT_SVN, 1).find(DirectoryWalkerTestCaseJava4.javaDir);
+        // assert equals String{"[B] Result Size"} to void{Assert}
         Assert.assertEquals("[B] Result Size", 2, results.size());
+        // assert true String{"[B] Start Dir"} to void{Assert}
         Assert.assertTrue("[B] Start Dir", results.contains(DirectoryWalkerTestCaseJava4.javaDir));
+        // assert true String{"[B] Org Dir"} to void{Assert}
         Assert.assertTrue("[B] Org Dir", results.contains(DirectoryWalkerTestCaseJava4.orgDir));
     }
 
@@ -125,10 +135,15 @@ public class DirectoryWalkerTestCaseJava4 {
     @Test
     public void testFilterAndLimitC() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(DirectoryWalkerTestCaseJava4.NOT_SVN, 3).find(DirectoryWalkerTestCaseJava4.javaDir);
+        // assert equals String{"[C] Result Size"} to void{Assert}
         Assert.assertEquals("[C] Result Size", 4, results.size());
+        // assert true String{"[C] Start Dir"} to void{Assert}
         Assert.assertTrue("[C] Start Dir", results.contains(DirectoryWalkerTestCaseJava4.javaDir));
+        // assert true String{"[C] Org Dir"} to void{Assert}
         Assert.assertTrue("[C] Org Dir", results.contains(DirectoryWalkerTestCaseJava4.orgDir));
+        // assert true String{"[C] Apache Dir"} to void{Assert}
         Assert.assertTrue("[C] Apache Dir", results.contains(DirectoryWalkerTestCaseJava4.apacheDir));
+        // assert true String{"[C] Commons Dir"} to void{Assert}
         Assert.assertTrue("[C] Commons Dir", results.contains(DirectoryWalkerTestCaseJava4.commonsDir));
     }
 
@@ -138,9 +153,13 @@ public class DirectoryWalkerTestCaseJava4 {
     @Test
     public void testFilterAndLimitD() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(DirectoryWalkerTestCaseJava4.dirsAndFilesFilter, 5).find(DirectoryWalkerTestCaseJava4.javaDir);
+        // assert equals String{"[D] Result Size"} to void{Assert}
         Assert.assertEquals("[D] Result Size", ((1 + (DirectoryWalkerTestCaseJava4.dirs.length)) + (DirectoryWalkerTestCaseJava4.ioFiles.length)), results.size());
+        // assert true String{"[D] Start Dir"} to void{Assert}
         Assert.assertTrue("[D] Start Dir", results.contains(DirectoryWalkerTestCaseJava4.javaDir));
+        // check contains String{"[D] Dir"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("[D] Dir", DirectoryWalkerTestCaseJava4.dirs, results);
+        // check contains String{"[D] File"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("[D] File", DirectoryWalkerTestCaseJava4.ioFiles, results);
     }
 
@@ -150,9 +169,13 @@ public class DirectoryWalkerTestCaseJava4 {
     @Test
     public void testFilterDirAndFile1() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(DirectoryWalkerTestCaseJava4.dirsFilter, DirectoryWalkerTestCaseJava4.iofilesFilter, (-1)).find(DirectoryWalkerTestCaseJava4.javaDir);
+        // assert equals String{"[DirAndFile1] Result Size"} to void{Assert}
         Assert.assertEquals("[DirAndFile1] Result Size", ((1 + (DirectoryWalkerTestCaseJava4.dirs.length)) + (DirectoryWalkerTestCaseJava4.ioFiles.length)), results.size());
+        // assert true String{"[DirAndFile1] Start Dir"} to void{Assert}
         Assert.assertTrue("[DirAndFile1] Start Dir", results.contains(DirectoryWalkerTestCaseJava4.javaDir));
+        // check contains String{"[DirAndFile1] Dir"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("[DirAndFile1] Dir", DirectoryWalkerTestCaseJava4.dirs, results);
+        // check contains String{"[DirAndFile1] File"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("[DirAndFile1] File", DirectoryWalkerTestCaseJava4.ioFiles, results);
     }
 
@@ -162,9 +185,13 @@ public class DirectoryWalkerTestCaseJava4 {
     @Test
     public void testFilterDirAndFile2() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(null, null, (-1)).find(DirectoryWalkerTestCaseJava4.javaDir);
+        // assert true String{"[DirAndFile2] Result Size"} to void{Assert}
         Assert.assertTrue("[DirAndFile2] Result Size", ((results.size()) > ((1 + (DirectoryWalkerTestCaseJava4.dirs.length)) + (DirectoryWalkerTestCaseJava4.ioFiles.length))));
+        // assert true String{"[DirAndFile2] Start Dir"} to void{Assert}
         Assert.assertTrue("[DirAndFile2] Start Dir", results.contains(DirectoryWalkerTestCaseJava4.javaDir));
+        // check contains String{"[DirAndFile2] Dir"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("[DirAndFile2] Dir", DirectoryWalkerTestCaseJava4.dirs, results);
+        // check contains String{"[DirAndFile2] File"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("[DirAndFile2] File", DirectoryWalkerTestCaseJava4.ioFiles, results);
     }
 
@@ -175,8 +202,11 @@ public class DirectoryWalkerTestCaseJava4 {
     public void testFilterDirAndFile3() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(DirectoryWalkerTestCaseJava4.dirsFilter, null, (-1)).find(DirectoryWalkerTestCaseJava4.javaDir);
         final List resultDirs = directoriesOnly(results);
+        // assert equals String{"[DirAndFile3] Result Size"} to void{Assert}
         Assert.assertEquals("[DirAndFile3] Result Size", (1 + (DirectoryWalkerTestCaseJava4.dirs.length)), resultDirs.size());
+        // assert true String{"[DirAndFile3] Start Dir"} to void{Assert}
         Assert.assertTrue("[DirAndFile3] Start Dir", results.contains(DirectoryWalkerTestCaseJava4.javaDir));
+        // check contains String{"[DirAndFile3] Dir"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("[DirAndFile3] Dir", DirectoryWalkerTestCaseJava4.dirs, resultDirs);
     }
 
@@ -187,8 +217,11 @@ public class DirectoryWalkerTestCaseJava4 {
     public void testFilterDirAndFile4() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(null, DirectoryWalkerTestCaseJava4.iofilesFilter, (-1)).find(DirectoryWalkerTestCaseJava4.javaDir);
         final List resultFiles = filesOnly(results);
+        // assert equals String{"[DirAndFile4] Result Size"} to void{Assert}
         Assert.assertEquals("[DirAndFile4] Result Size", DirectoryWalkerTestCaseJava4.ioFiles.length, resultFiles.size());
+        // assert true String{"[DirAndFile4] Start Dir"} to void{Assert}
         Assert.assertTrue("[DirAndFile4] Start Dir", results.contains(DirectoryWalkerTestCaseJava4.javaDir));
+        // check contains String{"[DirAndFile4] File"} to DirectoryWalkerTestCaseJava4{}
         checkContainsFiles("[DirAndFile4] File", DirectoryWalkerTestCaseJava4.ioFiles, resultFiles);
     }
 
@@ -198,7 +231,9 @@ public class DirectoryWalkerTestCaseJava4 {
     @Test
     public void testLimitToCurrent() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(null, 0).find(DirectoryWalkerTestCaseJava4.current);
+        // assert equals String{"Result Size"} to void{Assert}
         Assert.assertEquals("Result Size", 1, results.size());
+        // assert true String{"Current Dir"} to void{Assert}
         Assert.assertTrue("Current Dir", results.contains(new File(".")));
     }
 
@@ -210,7 +245,9 @@ public class DirectoryWalkerTestCaseJava4 {
         // TODO is this what we want with invalid directory?
         final File invalidDir = new File("invalid-dir");
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFileFinder(null, (-1)).find(invalidDir);
+        // assert equals String{"Result Size"} to void{Assert}
         Assert.assertEquals("Result Size", 1, results.size());
+        // assert true String{"Current Dir"} to void{Assert}
         Assert.assertTrue("Current Dir", results.contains(invalidDir));
         try {
             new DirectoryWalkerTestCaseJava4.TestFileFinder(null, (-1)).find(null);
@@ -226,6 +263,7 @@ public class DirectoryWalkerTestCaseJava4 {
     @Test
     public void testHandleStartDirectoryFalse() {
         final List<File> results = new DirectoryWalkerTestCaseJava4.TestFalseFileFinder(null, (-1)).find(DirectoryWalkerTestCaseJava4.current);
+        // assert equals String{"Result Size"} to void{Assert}
         Assert.assertEquals("Result Size", 0, results.size());
     }
 
@@ -247,7 +285,7 @@ public class DirectoryWalkerTestCaseJava4 {
         for (File file : results) {
             if (file.isDirectory()) {
                 list.add(file);
-            } 
+            }
         }
         return list;
     }
@@ -260,7 +298,7 @@ public class DirectoryWalkerTestCaseJava4 {
         for (File file : results) {
             if (file.isFile()) {
                 list.add(file);
-            } 
+            }
         }
         return list;
     }
@@ -388,6 +426,7 @@ public class DirectoryWalkerTestCaseJava4 {
          */
         @Override
         protected void handleDirectoryEnd(final File directory, final int depth, final Collection results) {
+            // add File{directory} to Collection{results}
             results.add(directory);
         }
 
@@ -396,6 +435,7 @@ public class DirectoryWalkerTestCaseJava4 {
          */
         @Override
         protected void handleFile(final File file, final int depth, final Collection results) {
+            // add File{file} to Collection{results}
             results.add(file);
         }
     }
@@ -440,6 +480,7 @@ public class DirectoryWalkerTestCaseJava4 {
          */
         protected List find(final File startDirectory) throws IOException {
             final List results = new ArrayList();
+            // walk File{startDirectory} to TestCancelWalker{}
             walk(startDirectory, results);
             return results;
         }
@@ -449,10 +490,11 @@ public class DirectoryWalkerTestCaseJava4 {
          */
         @Override
         protected void handleDirectoryEnd(final File directory, final int depth, final Collection results) throws IOException {
+            // add File{directory} to Collection{results}
             results.add(directory);
             if (cancelFileName.equals(directory.getName())) {
                 throw new DirectoryWalker.CancelException(directory, depth);
-            } 
+            }
         }
 
         /**
@@ -460,10 +502,11 @@ public class DirectoryWalkerTestCaseJava4 {
          */
         @Override
         protected void handleFile(final File file, final int depth, final Collection results) throws IOException {
+            // add File{file} to Collection{results}
             results.add(file);
             if (cancelFileName.equals(file.getName())) {
                 throw new DirectoryWalker.CancelException(file, depth);
-            } 
+            }
         }
 
         /**
@@ -473,7 +516,7 @@ public class DirectoryWalkerTestCaseJava4 {
         protected void handleCancelled(final File startDirectory, final Collection results, final DirectoryWalker.CancelException cancel) throws IOException {
             if (!(suppressCancel)) {
                 super.handleCancelled(startDirectory, results, cancel);
-            } 
+            }
         }
     }
 
@@ -501,6 +544,7 @@ public class DirectoryWalkerTestCaseJava4 {
          */
         protected List find(final File startDirectory) throws IOException {
             results = new ArrayList();
+            // walk File{startDirectory} to TestMultiThreadCancelWalker{}
             walk(startDirectory, results);
             return results;
         }
@@ -510,11 +554,13 @@ public class DirectoryWalkerTestCaseJava4 {
          */
         @Override
         protected void handleDirectoryEnd(final File directory, final int depth, final Collection results) throws IOException {
+            // add File{directory} to Collection{results}
             results.add(directory);
+            // assert false boolean{cancelled} to void{Assert}
             Assert.assertFalse(cancelled);
             if (cancelFileName.equals(directory.getName())) {
                 cancelled = true;
-            } 
+            }
         }
 
         /**
@@ -522,11 +568,13 @@ public class DirectoryWalkerTestCaseJava4 {
          */
         @Override
         protected void handleFile(final File file, final int depth, final Collection results) throws IOException {
+            // add File{file} to Collection{results}
             results.add(file);
+            // assert false boolean{cancelled} to void{Assert}
             Assert.assertFalse(cancelled);
             if (cancelFileName.equals(file.getName())) {
                 cancelled = true;
-            } 
+            }
         }
 
         /**
@@ -544,7 +592,7 @@ public class DirectoryWalkerTestCaseJava4 {
         protected void handleCancelled(final File startDirectory, final Collection results, final DirectoryWalker.CancelException cancel) throws IOException {
             if (!(suppressCancel)) {
                 super.handleCancelled(startDirectory, results, cancel);
-            } 
+            }
         }
     }
 }

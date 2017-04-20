@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,6 +44,7 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
     @Test
     public void testDefaultConstructor() {
         final FileAlterationMonitor monitor = new FileAlterationMonitor();
+        // assert equals String{"Interval"} to void{Assert}
         Assert.assertEquals("Interval", 10000, monitor.getInterval());
     }
 
@@ -56,26 +57,38 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
         FileAlterationMonitor monitor = null;
         // Null Observers
         monitor = new FileAlterationMonitor(123, observers);
+        // assert equals String{"Interval"} to void{Assert}
         Assert.assertEquals("Interval", 123, monitor.getInterval());
+        // assert false String{"Observers[1]"} to void{Assert}
         Assert.assertFalse("Observers[1]", monitor.getObservers().iterator().hasNext());
         // Null Observer
         observers = new FileAlterationObserver[1];// observer is null
         
         monitor = new FileAlterationMonitor(456, observers);
+        // assert false String{"Observers[2]"} to void{Assert}
         Assert.assertFalse("Observers[2]", monitor.getObservers().iterator().hasNext());
         // Null Observer
+        // add observer <nulltype>{null} to FileAlterationMonitor{monitor}
         monitor.addObserver(null);
+        // assert false String{"Observers[3]"} to void{Assert}
         Assert.assertFalse("Observers[3]", monitor.getObservers().iterator().hasNext());
+        // remove observer <nulltype>{null} to FileAlterationMonitor{monitor}
         monitor.removeObserver(null);
         // Add Observer
         final FileAlterationObserver observer = new FileAlterationObserver("foo");
+        // add observer FileAlterationObserver{observer} to FileAlterationMonitor{monitor}
         monitor.addObserver(observer);
         final Iterator<FileAlterationObserver> it = monitor.getObservers().iterator();
+        // assert true String{"Observers[4]"} to void{Assert}
         Assert.assertTrue("Observers[4]", it.hasNext());
+        // assert equals String{"Added"} to void{Assert}
         Assert.assertEquals("Added", observer, it.next());
+        // assert false String{"Observers[5]"} to void{Assert}
         Assert.assertFalse("Observers[5]", it.hasNext());
         // Remove Observer
+        // remove observer FileAlterationObserver{observer} to FileAlterationMonitor{monitor}
         monitor.removeObserver(observer);
+        // assert false String{"Observers[6]"} to void{Assert}
         Assert.assertFalse("Observers[6]", monitor.getObservers().iterator().hasNext());
     }
 
@@ -163,9 +176,10 @@ public class FileAlterationMonitorTestCase extends AbstractMonitorTestCase {
             if (files.contains(file)) {
                 return ;// found, test passes
                 
-            } 
+            }
             TestUtils.sleepQuietly(pauseTime);
         }
+        // fail String{(((label + " ") + file) + " not found")} to void{Assert}
         Assert.fail((((label + " ") + file) + " not found"));
     }
 }

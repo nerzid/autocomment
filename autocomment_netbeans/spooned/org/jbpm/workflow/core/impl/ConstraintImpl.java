@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,31 +43,31 @@ public class ConstraintImpl implements Serializable , Constraint {
     private boolean isDefault = false;
 
     public String getConstraint() {
-        return ConstraintImpl.this.constraint;
+        return this.constraint;
     }
 
     public void setConstraint(final String constraint) {
-        ConstraintImpl.this.constraint = constraint;
+        this.constraint = constraint;
     }
 
     public String getName() {
-        return ConstraintImpl.this.name;
+        return this.name;
     }
 
     public void setName(final String name) {
-        ConstraintImpl.this.name = name;
+        this.name = name;
     }
 
     public String toString() {
-        return ConstraintImpl.this.name;
+        return this.name;
     }
 
     public int getPriority() {
-        return ConstraintImpl.this.priority;
+        return this.priority;
     }
 
     public void setPriority(final int priority) {
-        ConstraintImpl.this.priority = priority;
+        this.priority = priority;
     }
 
     public String getDialect() {
@@ -75,7 +75,7 @@ public class ConstraintImpl implements Serializable , Constraint {
     }
 
     public void setDialect(String dialect) {
-        ConstraintImpl.this.dialect = dialect;
+        this.dialect = dialect;
     }
 
     public String getType() {
@@ -83,7 +83,7 @@ public class ConstraintImpl implements Serializable , Constraint {
     }
 
     public void setType(String type) {
-        ConstraintImpl.this.type = type;
+        this.type = type;
     }
 
     public boolean isDefault() {
@@ -91,15 +91,16 @@ public class ConstraintImpl implements Serializable , Constraint {
     }
 
     public void setDefault(boolean isDefault) {
-        ConstraintImpl.this.isDefault = isDefault;
+        this.isDefault = isDefault;
     }
 
     public void setMetaData(String name, Object value) {
-        ConstraintImpl.this.metaData.put(name, value);
+        // put String{name} to Map{this.metaData}
+        this.metaData.put(name, value);
     }
 
     public Object getMetaData(String name) {
-        return ConstraintImpl.this.metaData.get(name);
+        return this.metaData.get(name);
     }
 }
 

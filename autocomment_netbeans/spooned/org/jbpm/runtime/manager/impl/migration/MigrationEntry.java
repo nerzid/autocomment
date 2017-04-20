@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,9 +42,9 @@ INFO, WARN, ERROR;    }
     private MigrationEntry.Type type;
 
     public MigrationEntry(MigrationEntry.Type type, String message) {
-        MigrationEntry.this.timestamp = new Date();
-        MigrationEntry.this.type = type;
-        MigrationEntry.this.message = message;
+        this.timestamp = new Date();
+        this.type = type;
+        this.message = message;
     }
 
     public Date getTimestamp() {
@@ -52,7 +52,7 @@ INFO, WARN, ERROR;    }
     }
 
     public void setTimestamp(Date timestamp) {
-        MigrationEntry.this.timestamp = timestamp;
+        this.timestamp = timestamp;
     }
 
     public String getMessage() {
@@ -60,7 +60,7 @@ INFO, WARN, ERROR;    }
     }
 
     public void setMessage(String message) {
-        MigrationEntry.this.message = message;
+        this.message = message;
     }
 
     @Override
@@ -73,7 +73,7 @@ INFO, WARN, ERROR;    }
     }
 
     public void setType(MigrationEntry.Type type) {
-        MigrationEntry.this.type = type;
+        this.type = type;
     }
 }
 

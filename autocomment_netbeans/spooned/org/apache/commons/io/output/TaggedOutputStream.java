@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -58,7 +58,7 @@ import java.util.UUID;
  *     // ... or process the exception that was caused by something else
  * }
  * </pre>
- * 
+ *
  * @see TaggedIOException
  * @since 2.0
  */
@@ -70,7 +70,7 @@ public class TaggedOutputStream extends ProxyOutputStream {
 
     /**
      * Creates a tagging decorator for the given output stream.
-     * 
+     *
      * @param proxy output stream to be decorated
      */
     public TaggedOutputStream(final OutputStream proxy) {
@@ -79,7 +79,7 @@ public class TaggedOutputStream extends ProxyOutputStream {
 
     /**
      * Tests if the given exception was caused by this stream.
-     * 
+     *
      * @param exception an exception
      * @return {@code true} if the exception was thrown by this stream,
      *         {@code false} otherwise
@@ -94,17 +94,18 @@ public class TaggedOutputStream extends ProxyOutputStream {
      * wrapper created by this decorator, and then unwraps and throws the
      * original wrapped exception. Returns normally if the exception was
      * not thrown by this stream.
-     * 
+     *
      * @param exception an exception
      * @throws IOException original exception, if any, thrown by this stream
      */
     public void throwIfCauseOf(final Exception exception) throws IOException {
+        // throw cause Exception{exception} to void{TaggedIOException}
         TaggedIOException.throwCauseIfTaggedWith(exception, tag);
     }
 
     /**
      * Tags any IOExceptions thrown, wrapping and re-throwing.
-     * 
+     *
      * @param e The IOException thrown
      * @throws IOException if an I/O error occurs
      */

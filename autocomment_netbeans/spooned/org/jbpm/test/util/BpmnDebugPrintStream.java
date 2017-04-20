@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,17 +29,19 @@ public class BpmnDebugPrintStream extends LoggingPrintStream {
         boolean debug = trace[4].getMethodName().matches("(action|invoke)\\d+");
         if (isError) {
             logger.error(s);
-        } else {
+        }else {
             if (debug) {
                 logger.debug(s);
-            } else {
+            }else {
                 logger.info(s);
             }
         }
     }
 
     public static void interceptSysOutSysErr() {
+        // set out BpmnDebugPrintStream{new BpmnDebugPrintStream(System.out, false)} to void{System}
         System.setOut(new BpmnDebugPrintStream(System.out, false));
+        // set err BpmnDebugPrintStream{new BpmnDebugPrintStream(System.err, true)} to void{System}
         System.setErr(new BpmnDebugPrintStream(System.err, true));
     }
 }

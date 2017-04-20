@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ public class IntegrationMavenResolver {
         String localRepositoryPath = System.getProperty("settings.localRepository");
         String version = System.getProperty("project.version");
         File pom = new File(localRepositoryPath, (((("org/jbpm/shrinkwrap-war-profiles/" + version) + "/shrinkwrap-war-profiles-") + version) + ".pom"));
-        final MavenResolverSystem resolver = Boolean.getBoolean(System.getProperty("MAVEN_USE_LOCAL_REPO", "false")) ? Maven.configureResolver().fromFile("settings.xml") : Maven.resolver();
+        final MavenResolverSystem resolver = (Boolean.getBoolean(System.getProperty("MAVEN_USE_LOCAL_REPO", "false"))) ? Maven.configureResolver().fromFile("settings.xml") : Maven.resolver();
         return resolver.loadPomFromFile(pom, profiles);
     }
 }

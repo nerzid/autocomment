@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,20 +17,20 @@
 
 package org.jbpm.runtime.manager.impl;
 
+import org.kie.api.builder.model.KieSessionModel;
 import org.kie.api.event.rule.AgendaEventListener;
+import org.kie.api.runtime.manager.RuntimeEngine;
+import org.drools.core.util.StringUtils;
 import org.jbpm.process.audit.event.AuditEventBuilder;
 import org.drools.compiler.kie.util.CDIHelper;
 import java.util.HashMap;
 import org.kie.api.runtime.KieContainer;
 import org.drools.compiler.kie.builder.impl.KieContainerImpl;
-import org.kie.api.builder.model.KieSessionModel;
 import java.util.List;
 import java.util.Map;
 import org.kie.api.event.process.ProcessEventListener;
-import org.kie.api.event.rule.RuleRuntimeEventListener;
-import org.kie.api.runtime.manager.RuntimeEngine;
-import org.drools.core.util.StringUtils;
 import org.kie.api.runtime.process.WorkItemHandler;
+import org.kie.api.event.rule.RuleRuntimeEventListener;
 
 /**
  * This implementation extends the DefaultRegisterableItemsFactory
@@ -48,14 +48,14 @@ public class KModuleRegisterableItemsFactory extends DefaultRegisterableItemsFac
 
     public KModuleRegisterableItemsFactory(KieContainer kieContainer, String ksessionName) {
         super();
-        KModuleRegisterableItemsFactory.this.kieContainer = kieContainer;
-        KModuleRegisterableItemsFactory.this.ksessionName = ksessionName;
+        this.kieContainer = kieContainer;
+        this.ksessionName = ksessionName;
     }
 
     public KModuleRegisterableItemsFactory(KieContainer kieContainer, String ksessionName, AuditEventBuilder auditBuilder) {
         super();
-        KModuleRegisterableItemsFactory.this.kieContainer = kieContainer;
-        KModuleRegisterableItemsFactory.this.ksessionName = ksessionName;
+        this.kieContainer = kieContainer;
+        this.ksessionName = ksessionName;
         setAuditBuilder(auditBuilder);
     }
 
@@ -67,20 +67,24 @@ public class KModuleRegisterableItemsFactory extends DefaultRegisterableItemsFac
             if (ksessionModel == null) {
                 ksessionName = KModuleRegisterableItemsFactory.DEFAULT_KIE_SESSION;
                 ksessionModel = ((KieContainerImpl) (kieContainer)).getKieSessionModel(ksessionName);
-            } 
-        } else {
+            }
+        }else {
             ksessionModel = ((KieContainerImpl) (kieContainer)).getKieSessionModel(ksessionName);
         }
         if (ksessionModel == null) {
             throw new IllegalStateException("Cannot find ksession, either it does not exist or there are multiple default ksession in kmodule.xml");
-        } 
+        }
         Map<String, Object> parameters = new HashMap<String, Object>();
+        // put String{"ksession"} to Map{parameters}
         parameters.put("ksession", runtime.getKieSession());
+        // put String{"taskService"} to Map{parameters}
         parameters.put("taskService", runtime.getTaskService());
+        // put String{"runtimeManager"} to Map{parameters}
         parameters.put("runtimeManager", ((RuntimeEngineImpl) (runtime)).getManager());
         if ((getRuntimeManager().getKieContainer()) != null) {
             parameters.put("kieContainer", getRuntimeManager().getKieContainer());
-        } 
+        }
+        // put String{"classLoader"} to Map{parameters}
         parameters.put("classLoader", getRuntimeManager().getEnvironment().getClassLoader());
         try {
             CDIHelper.wireListnersAndWIHs(ksessionModel, runtime.getKieSession(), parameters);

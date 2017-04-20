@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,18 +19,18 @@ package org.jbpm.services.task.identity;
 import java.util.ArrayList;
 import org.kie.api.task.model.Group;
 import java.util.HashMap;
+import java.util.Properties;
+import org.kie.internal.task.api.TaskModelProvider;
 import java.io.InputStream;
 import org.kie.internal.task.api.model.InternalOrganizationalEntity;
 import java.util.Iterator;
 import java.util.List;
+import org.kie.api.task.model.User;
+import org.kie.internal.task.api.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
 import org.kie.api.task.model.OrganizationalEntity;
-import java.util.Properties;
-import org.kie.internal.task.api.TaskModelProvider;
-import org.kie.api.task.model.User;
-import org.kie.internal.task.api.UserInfo;
 
 public class DefaultUserInfo extends AbstractUserGroupInfo implements UserInfo {
     private static final Logger logger = LoggerFactory.getLogger(DefaultUserInfo.class);
@@ -43,14 +43,14 @@ public class DefaultUserInfo extends AbstractUserGroupInfo implements UserInfo {
             Properties registryProps = new Properties();
             // BZ-1037445: Obtain the properties file from the webapp classload (current thread classloader).
             // If not, when deploying the app into EAP static modules will fail.
-            InputStream in = DefaultUserInfo.this.getClass().getResourceAsStream("/userinfo.properties");
+            InputStream in = this.getClass().getResourceAsStream("/userinfo.properties");
             if (in == null) {
                 in = Thread.currentThread().getContextClassLoader().getResourceAsStream("/userinfo.properties");
-            } 
+            }
             if (in != null) {
                 registryProps.load(in);
                 buildRegistry(registryProps);
-            } 
+            }
         } catch (Exception e) {
             DefaultUserInfo.logger.warn("Problem loading userinfo properties {}", e.getMessage(), e);
         }
@@ -71,7 +71,7 @@ public class DefaultUserInfo extends AbstractUserGroupInfo implements UserInfo {
         Map<String, Object> entityInfo = registry.get(entity.getId());
         if (entityInfo != null) {
             return ((String) (entityInfo.get("name")));
-        } 
+        }
         return null;
     }
 
@@ -80,7 +80,7 @@ public class DefaultUserInfo extends AbstractUserGroupInfo implements UserInfo {
         Map<String, Object> entityInfo = registry.get(group.getId());
         if ((entityInfo != null) && ((entityInfo.get("members")) != null)) {
             return ((List<OrganizationalEntity>) (entityInfo.get("members"))).iterator();
-        } 
+        }
         return null;
     }
 
@@ -88,7 +88,7 @@ public class DefaultUserInfo extends AbstractUserGroupInfo implements UserInfo {
         Map<String, Object> entityInfo = registry.get(group.getId());
         if (entityInfo != null) {
             return entityInfo.containsKey("email");
-        } 
+        }
         return false;
     }
 
@@ -96,7 +96,7 @@ public class DefaultUserInfo extends AbstractUserGroupInfo implements UserInfo {
         Map<String, Object> entityInfo = registry.get(entity.getId());
         if (entityInfo != null) {
             return ((String) (entityInfo.get("email")));
-        } 
+        }
         throw new IllegalStateException(("No EMail address found for " + (entity.getId())));
     }
 
@@ -104,7 +104,7 @@ public class DefaultUserInfo extends AbstractUserGroupInfo implements UserInfo {
         Map<String, Object> entityInfo = registry.get(entity.getId());
         if (entityInfo != null) {
             return ((String) (entityInfo.get("locale")));
-        } 
+        }
         return null;
     }
 
@@ -126,10 +126,10 @@ public class DefaultUserInfo extends AbstractUserGroupInfo implements UserInfo {
                     String memberList = elems[3];
                     if (memberList.startsWith("[")) {
                         memberList = memberList.substring(1);
-                    } 
+                    }
                     if (memberList.endsWith("]")) {
                         memberList = memberList.substring(0, ((memberList.length()) - 1));
-                    } 
+                    }
                     String[] members = memberList.split(",");
                     List<OrganizationalEntity> membersList = new ArrayList<OrganizationalEntity>();
                     for (String member : members) {
@@ -138,10 +138,10 @@ public class DefaultUserInfo extends AbstractUserGroupInfo implements UserInfo {
                         membersList.add(user);
                     }
                     entityInfo.put("members", membersList);
-                } 
+                }
                 registry.put(propertyKey, entityInfo);
-            }
-        } 
+            } 
+        }
     }
 }
 

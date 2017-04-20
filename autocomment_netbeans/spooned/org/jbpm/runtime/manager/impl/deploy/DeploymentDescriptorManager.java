@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,20 +17,21 @@
 
 package org.jbpm.runtime.manager.impl.deploy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.io.ByteArrayInputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
+import org.slf4j.LoggerFactory;
 import org.kie.internal.runtime.conf.DeploymentDescriptor;
-import java.io.IOException;
 import org.drools.compiler.kie.builder.impl.InternalKieModule;
 import org.kie.api.runtime.KieContainer;
 import org.drools.compiler.kie.builder.impl.KieContainerImpl;
 import org.drools.compiler.kie.builder.impl.KieModuleKieProject;
 import java.util.List;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.net.MalformedURLException;
-import java.net.URL;
+import DeploymentDescriptor.META_INF_LOCATION;
 
 public class DeploymentDescriptorManager {
     private static final Logger logger = LoggerFactory.getLogger(DeploymentDescriptorManager.class);
@@ -41,7 +42,7 @@ public class DeploymentDescriptorManager {
     }
 
     public DeploymentDescriptorManager(String defaultPU) {
-        DeploymentDescriptorManager.this.defaultPU = defaultPU;
+        this.defaultPU = defaultPU;
     }
 
     public DeploymentDescriptor getDefaultDescriptor() {
@@ -54,7 +55,7 @@ public class DeploymentDescriptorManager {
             } catch (IOException e) {
                 throw new RuntimeException(("Unable to read default deployment descriptor from " + defaultDescriptorLocation), e);
             }
-        } else {
+        }else {
             DeploymentDescriptorManager.logger.debug("No descriptor found returning default instance");
             defaultDesc = new DeploymentDescriptorImpl(defaultPU);
         }
@@ -64,8 +65,10 @@ public class DeploymentDescriptorManager {
     public List<DeploymentDescriptor> getDeploymentDescriptorHierarchy(KieContainer kieContainer) {
         List<DeploymentDescriptor> descriptorHierarchy = new ArrayList<DeploymentDescriptor>();
         InternalKieModule module = ((KieModuleKieProject) (((KieContainerImpl) (kieContainer)).getKieProject())).getInternalKieModule();
+        // collect deployment InternalKieModule{module} to DeploymentDescriptorManager{}
         collectDeploymentDescriptors(module, descriptorHierarchy);
         // last is the default descriptor
+        // add DeploymentDescriptor{getDefaultDescriptor()} to List{descriptorHierarchy}
         descriptorHierarchy.add(getDefaultDescriptor());
         return descriptorHierarchy;
     }
@@ -76,21 +79,21 @@ public class DeploymentDescriptorManager {
         if (defaultDescriptorLocation != null) {
             if (defaultDescriptorLocation.startsWith("classpath:")) {
                 String stripedLocation = defaultDescriptorLocation.replaceFirst("classpath:", "");
-                locationUrl = DeploymentDescriptorManager.this.getClass().getResource(stripedLocation);
+                locationUrl = this.getClass().getResource(stripedLocation);
                 if (locationUrl == null) {
                     locationUrl = Thread.currentThread().getContextClassLoader().getResource(stripedLocation);
-                } 
-            } else {
+                }
+            }else {
                 try {
                     locationUrl = new URL(defaultDescriptorLocation);
                 } catch (MalformedURLException e) {
-                    locationUrl = DeploymentDescriptorManager.this.getClass().getResource(defaultDescriptorLocation);
+                    locationUrl = this.getClass().getResource(defaultDescriptorLocation);
                     if (locationUrl == null) {
                         locationUrl = Thread.currentThread().getContextClassLoader().getResource(defaultDescriptorLocation);
-                    } 
+                    }
                 }
             }
-        } 
+        }
         return locationUrl;
     }
 
@@ -98,19 +101,19 @@ public class DeploymentDescriptorManager {
         DeploymentDescriptor descriptor = getDescriptorFromKModule(kmodule);
         if (descriptor != null) {
             descriptorHierarchy.add(descriptor);
-        } 
+        }
         if ((kmodule.getKieDependencies()) != null) {
             Collection<InternalKieModule> depModules = kmodule.getKieDependencies().values();
             for (InternalKieModule depModule : depModules) {
                 collectDeploymentDescriptors(depModule, descriptorHierarchy);
             }
-        } 
+        }
     }
 
     protected DeploymentDescriptor getDescriptorFromKModule(InternalKieModule kmodule) {
         DeploymentDescriptor desc = null;
-        if (kmodule.isAvailable(DeploymentDescriptor.META_INF_LOCATION)) {
-            byte[] content = kmodule.getBytes(DeploymentDescriptor.META_INF_LOCATION);
+        if (kmodule.isAvailable(META_INF_LOCATION)) {
+            byte[] content = kmodule.getBytes(META_INF_LOCATION);
             ByteArrayInputStream input = new ByteArrayInputStream(content);
             try {
                 desc = DeploymentDescriptorIO.fromXml(input);
@@ -121,7 +124,7 @@ public class DeploymentDescriptorManager {
                     DeploymentDescriptorManager.logger.debug("Error when closing stream of kie-deployment-descriptor.xml");
                 }
             }
-        } 
+        }
         return desc;
     }
 }

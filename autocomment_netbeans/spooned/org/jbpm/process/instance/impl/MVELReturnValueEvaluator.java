@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,26 +17,23 @@
 
 package org.jbpm.process.instance.impl;
 
-import java.io.Externalizable;
-import org.drools.core.spi.GlobalResolver;
-import java.io.IOException;
 import org.drools.core.common.InternalWorkingMemory;
+import java.io.IOException;
+import java.io.Externalizable;
+import org.drools.core.impl.StatefulKnowledgeSessionImpl;
+import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.core.spi.GlobalResolver;
 import org.kie.api.definition.KiePackage;
 import org.drools.core.definitions.impl.KnowledgePackageImpl;
 import org.drools.core.base.mvel.MVELCompilationUnit;
+import org.mvel2.integration.VariableResolverFactory;
+import java.io.ObjectOutput;
 import org.drools.core.base.mvel.MVELCompileable;
+import java.io.Serializable;
 import org.drools.core.rule.MVELDialectRuntimeData;
+import org.kie.api.runtime.process.ProcessContext;
 import org.drools.core.util.MVELSafeHelper;
 import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import org.kie.api.runtime.process.ProcessContext;
-import org.drools.core.definitions.rule.impl.RuleImpl;
-import java.io.Serializable;
-import org.kie.internal.runtime.StatefulKnowledgeSession;
-import org.drools.core.impl.StatefulKnowledgeSessionImpl;
-import org.kie.internal.runtime.StatelessKnowledgeSession;
-import org.drools.core.impl.StatelessKnowledgeSessionImpl;
-import org.mvel2.integration.VariableResolverFactory;
 
 public class MVELReturnValueEvaluator implements ReturnValueEvaluator , Externalizable , MVELCompileable {
     private static final long serialVersionUID = 510L;
@@ -51,8 +48,8 @@ public class MVELReturnValueEvaluator implements ReturnValueEvaluator , External
     }
 
     public MVELReturnValueEvaluator(final MVELCompilationUnit unit, final String id) {
-        MVELReturnValueEvaluator.this.unit = unit;
-        MVELReturnValueEvaluator.this.id = id;
+        this.unit = unit;
+        this.id = id;
     }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -61,7 +58,9 @@ public class MVELReturnValueEvaluator implements ReturnValueEvaluator , External
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write utf String{id} to ObjectOutput{out}
         out.writeUTF(id);
+        // write object MVELCompilationUnit{unit} to ObjectOutput{out}
         out.writeObject(unit);
     }
 
@@ -74,7 +73,7 @@ public class MVELReturnValueEvaluator implements ReturnValueEvaluator , External
     }
 
     public String getDialect() {
-        return MVELReturnValueEvaluator.this.id;
+        return this.id;
     }
 
     public Object evaluate(ProcessContext context) throws Exception {
@@ -84,29 +83,31 @@ public class MVELReturnValueEvaluator implements ReturnValueEvaluator , External
             for (int i = 0; i < length; i++) {
                 vars[i] = context.getVariable(unit.getOtherIdentifiers()[i]);
             }
-        } 
+        }
         InternalWorkingMemory internalWorkingMemory = null;
         if ((context.getKieRuntime()) instanceof StatefulKnowledgeSessionImpl) {
             internalWorkingMemory = ((StatefulKnowledgeSessionImpl) (context.getKieRuntime())).getInternalWorkingMemory();
-        } else if ((context.getKieRuntime()) instanceof StatelessKnowledgeSession) {
-            StatefulKnowledgeSession statefulKnowledgeSession = ((StatelessKnowledgeSessionImpl) (context.getKieRuntime())).newWorkingMemory();
-            internalWorkingMemory = ((StatefulKnowledgeSessionImpl) (statefulKnowledgeSession)).getInternalWorkingMemory();
-        } 
-        VariableResolverFactory factory = // No previous declarations
+        }else
+            if ((context.getKieRuntime()) instanceof org.kie.internal.runtime.StatelessKnowledgeSession) {
+                org.kie.internal.runtime.StatefulKnowledgeSession statefulKnowledgeSession = ((org.drools.core.impl.StatelessKnowledgeSessionImpl) (context.getKieRuntime())).newWorkingMemory();
+                internalWorkingMemory = ((StatefulKnowledgeSessionImpl) (statefulKnowledgeSession)).getInternalWorkingMemory();
+            }
+        
+        // No previous declarations
         // No rule
         // No "right object"
         // No (left) tuples
-        unit.getFactory(context, null, null, null, null, vars, internalWorkingMemory, ((GlobalResolver) (context.getKieRuntime().getGlobals())));
+        VariableResolverFactory factory = unit.getFactory(context, null, null, null, null, vars, internalWorkingMemory, ((GlobalResolver) (context.getKieRuntime().getGlobals())));
         // do we have any functions for this namespace?
         KiePackage pkg = context.getKieRuntime().getKieBase().getKiePackage("MAIN");
         if (pkg instanceof KnowledgePackageImpl) {
             MVELDialectRuntimeData data = ((MVELDialectRuntimeData) (((KnowledgePackageImpl) (pkg)).getDialectRuntimeRegistry().getDialectData(id)));
             factory.setNextFactory(data.getFunctionFactory());
-        } 
-        Object value = MVELSafeHelper.getEvaluator().executeExpression(MVELReturnValueEvaluator.this.expr, null, factory);
+        }
+        Object value = MVELSafeHelper.getEvaluator().executeExpression(this.expr, null, factory);
         if (!(value instanceof Boolean)) {
             throw new RuntimeException((((("Constraints must return boolean values: " + (unit.getExpression())) + " returns ") + value) + (value == null ? "" : " (type=" + (value.getClass()))));
-        } 
+        }
         return ((Boolean) (value)).booleanValue();
     }
 
@@ -115,7 +116,7 @@ public class MVELReturnValueEvaluator implements ReturnValueEvaluator , External
     }
 
     public String toString() {
-        return MVELReturnValueEvaluator.this.unit.getExpression();
+        return this.unit.getExpression();
     }
 }
 

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,24 +33,26 @@ public class TaskContentRegistry {
     }
 
     public synchronized void addMarshallerContext(String ownerId, ContentMarshallerContext context) {
-        TaskContentRegistry.this.marhsalContexts.put(ownerId, context);
+        // put String{ownerId} to ConcurrentHashMap{this.marhsalContexts}
+        this.marhsalContexts.put(ownerId, context);
     }
 
     public synchronized void removeMarshallerContext(String ownerId) {
-        TaskContentRegistry.this.marhsalContexts.remove(ownerId);
+        // remove String{ownerId} to ConcurrentHashMap{this.marhsalContexts}
+        this.marhsalContexts.remove(ownerId);
     }
 
     public ContentMarshallerContext getMarshallerContext(Task task) {
-        if (((task.getTaskData().getDeploymentId()) != null) && (TaskContentRegistry.this.marhsalContexts.containsKey(task.getTaskData().getDeploymentId()))) {
-            return TaskContentRegistry.this.marhsalContexts.get(task.getTaskData().getDeploymentId());
-        } 
+        if (((task.getTaskData().getDeploymentId()) != null) && (this.marhsalContexts.containsKey(task.getTaskData().getDeploymentId()))) {
+            return this.marhsalContexts.get(task.getTaskData().getDeploymentId());
+        }
         return new ContentMarshallerContext();
     }
 
     public ContentMarshallerContext getMarshallerContext(String deploymentId) {
-        if ((deploymentId != null) && (TaskContentRegistry.this.marhsalContexts.containsKey(deploymentId))) {
-            return TaskContentRegistry.this.marhsalContexts.get(deploymentId);
-        } 
+        if ((deploymentId != null) && (this.marhsalContexts.containsKey(deploymentId))) {
+            return this.marhsalContexts.get(deploymentId);
+        }
         return new ContentMarshallerContext();
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,8 +49,8 @@ public class MedicalRecord implements Serializable {
     }
 
     public MedicalRecord(String desc, Patient patient) {
-        MedicalRecord.this.description = desc;
-        MedicalRecord.this.patient = patient;
+        this.description = desc;
+        this.patient = patient;
     }
 
     public String getDescription() {
@@ -58,7 +58,7 @@ public class MedicalRecord implements Serializable {
     }
 
     public void setDescription(String desc) {
-        MedicalRecord.this.description = desc;
+        this.description = desc;
     }
 
     public Long getId() {
@@ -66,7 +66,7 @@ public class MedicalRecord implements Serializable {
     }
 
     public void setId(Long id) {
-        MedicalRecord.this.id = id;
+        this.id = id;
     }
 
     public Patient getPatient() {
@@ -74,7 +74,7 @@ public class MedicalRecord implements Serializable {
     }
 
     public void setPatient(Patient patient) {
-        MedicalRecord.this.patient = patient;
+        this.patient = patient;
     }
 
     public int getPriority() {
@@ -82,7 +82,7 @@ public class MedicalRecord implements Serializable {
     }
 
     public void setPriority(int priority) {
-        MedicalRecord.this.priority = priority;
+        this.priority = priority;
     }
 
     public List<RecordRow> getRows() {
@@ -90,7 +90,7 @@ public class MedicalRecord implements Serializable {
     }
 
     public void setRows(List<RecordRow> rows) {
-        MedicalRecord.this.rows = rows;
+        this.rows = rows;
     }
 
     @Override
@@ -102,37 +102,37 @@ public class MedicalRecord implements Serializable {
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        } 
+        }
         if ((getClass()) != (obj.getClass())) {
             return false;
-        } 
+        }
         final MedicalRecord other = ((MedicalRecord) (obj));
-        if (((MedicalRecord.this.id) != (other.id)) && (((MedicalRecord.this.id) == null) || (!(MedicalRecord.this.id.equals(other.id))))) {
+        if (((this.id) != (other.id)) && (((this.id) == null) || (!(this.id.equals(other.id))))) {
             return false;
-        } 
-        if ((MedicalRecord.this.description) == null ? (other.description) != null : !(MedicalRecord.this.description.equals(other.description))) {
+        }
+        if ((this.description) == null ? (other.description) != null : !(this.description.equals(other.description))) {
             return false;
-        } 
-        if (((MedicalRecord.this.patient) != (other.patient)) && (((MedicalRecord.this.patient) == null) || (!(MedicalRecord.this.patient.equals(other.patient))))) {
+        }
+        if (((this.patient) != (other.patient)) && (((this.patient) == null) || (!(this.patient.equals(other.patient))))) {
             return false;
-        } 
-        if (((MedicalRecord.this.rows) != (other.rows)) && (((MedicalRecord.this.rows) == null) || (!(MedicalRecord.this.rows.equals(other.rows))))) {
+        }
+        if (((this.rows) != (other.rows)) && (((this.rows) == null) || (!(this.rows.equals(other.rows))))) {
             return false;
-        } 
-        if ((MedicalRecord.this.priority) != (other.priority)) {
+        }
+        if ((this.priority) != (other.priority)) {
             return false;
-        } 
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = (67 * hash) + ((MedicalRecord.this.id) != null ? MedicalRecord.this.id.hashCode() : 0);
-        hash = (67 * hash) + ((MedicalRecord.this.description) != null ? MedicalRecord.this.description.hashCode() : 0);
-        hash = (67 * hash) + ((MedicalRecord.this.patient) != null ? MedicalRecord.this.patient.hashCode() : 0);
-        hash = (67 * hash) + ((MedicalRecord.this.rows) != null ? MedicalRecord.this.rows.hashCode() : 0);
-        hash = (67 * hash) + (MedicalRecord.this.priority);
+        hash = (67 * hash) + ((this.id) != null ? this.id.hashCode() : 0);
+        hash = (67 * hash) + ((this.description) != null ? this.description.hashCode() : 0);
+        hash = (67 * hash) + ((this.patient) != null ? this.patient.hashCode() : 0);
+        hash = (67 * hash) + ((this.rows) != null ? this.rows.hashCode() : 0);
+        hash = (67 * hash) + (this.priority);
         return hash;
     }
 }

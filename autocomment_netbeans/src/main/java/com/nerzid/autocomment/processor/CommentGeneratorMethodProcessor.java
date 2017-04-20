@@ -61,7 +61,7 @@ public class CommentGeneratorMethodProcessor extends AbstractProcessor<CtMethod>
             params.add(ctp.getSimpleName());
         }
         
-        commentStr = Test.getTemplateSentence(data_type, postag, splitted_identifier.split(" "), params);
+//        commentStr = Test.getTemplateSentence(data_type, postag, splitted_identifier.split(" "), params);
 
 //        int ix = 0;
 //        if(!template.isEmpty()){

@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,6 +26,7 @@ import java.util.Map;
 import org.jbpm.services.api.model.ProcessDefinition;
 
 /**
+ *
  */
 public class ProcessAssetDesc implements ProcessDefinition {
     private static final long serialVersionUID = -9059086115873165296L;
@@ -80,21 +81,21 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public ProcessAssetDesc(String id, String name, String version, String packageName, String type, String knowledgeType, String namespace, String deploymentId, boolean dynamic) {
-        ProcessAssetDesc.this.id = safeValue(id);
-        ProcessAssetDesc.this.name = safeValue(name);
-        ProcessAssetDesc.this.version = safeValue(version);
-        ProcessAssetDesc.this.packageName = safeValue(packageName);
-        ProcessAssetDesc.this.type = safeValue(type);
-        ProcessAssetDesc.this.knowledgeType = safeValue(knowledgeType);
-        ProcessAssetDesc.this.namespace = safeValue(namespace);
-        ProcessAssetDesc.this.deploymentId = safeValue(deploymentId);
-        ProcessAssetDesc.this.dynamic = dynamic;
+        this.id = safeValue(id);
+        this.name = safeValue(name);
+        this.version = safeValue(version);
+        this.packageName = safeValue(packageName);
+        this.type = safeValue(type);
+        this.knowledgeType = safeValue(knowledgeType);
+        this.namespace = safeValue(namespace);
+        this.deploymentId = safeValue(deploymentId);
+        this.dynamic = dynamic;
     }
 
     private String safeValue(String value) {
         if (value == null) {
             return "";
-        } 
+        }
         return value;
     }
 
@@ -104,7 +105,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setId(String id) {
-        ProcessAssetDesc.this.id = id;
+        this.id = id;
     }
 
     @Override
@@ -113,7 +114,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setName(String name) {
-        ProcessAssetDesc.this.name = name;
+        this.name = name;
     }
 
     @Override
@@ -132,7 +133,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setOriginalPath(String originalPath) {
-        ProcessAssetDesc.this.originalPath = originalPath;
+        this.originalPath = originalPath;
     }
 
     @Override
@@ -141,7 +142,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setPackageName(String packageName) {
-        ProcessAssetDesc.this.packageName = packageName;
+        this.packageName = packageName;
     }
 
     @Override
@@ -155,7 +156,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setDeploymentId(String deploymentId) {
-        ProcessAssetDesc.this.deploymentId = deploymentId;
+        this.deploymentId = deploymentId;
     }
 
     @Override
@@ -164,7 +165,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setAssociatedEntities(Map<String, Collection<String>> associatedEntities) {
-        ProcessAssetDesc.this.associatedEntities = associatedEntities;
+        this.associatedEntities = associatedEntities;
     }
 
     @Override
@@ -173,7 +174,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setServiceTasks(Map<String, String> serviceTasks) {
-        ProcessAssetDesc.this.serviceTasks = serviceTasks;
+        this.serviceTasks = serviceTasks;
     }
 
     @Override
@@ -182,7 +183,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setProcessVariables(Map<String, String> processVariables) {
-        ProcessAssetDesc.this.processVariables = processVariables;
+        this.processVariables = processVariables;
     }
 
     @Override
@@ -191,7 +192,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setReusableSubProcesses(Collection<String> reusableSubProcesses) {
-        ProcessAssetDesc.this.reusableSubProcesses = reusableSubProcesses;
+        this.reusableSubProcesses = reusableSubProcesses;
     }
 
     @Override
@@ -200,7 +201,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setSignals(Collection<String> signals) {
-        ProcessAssetDesc.this.signals = signals;
+        this.signals = signals;
     }
 
     @Override
@@ -209,7 +210,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setGlobals(Collection<String> globals) {
-        ProcessAssetDesc.this.globals = globals;
+        this.globals = globals;
     }
 
     @Override
@@ -218,7 +219,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setReferencedRules(Collection<String> rules) {
-        ProcessAssetDesc.this.rules = rules;
+        this.rules = rules;
     }
 
     public String getNamespace() {
@@ -230,7 +231,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setEncodedProcessSource(String processString) {
-        ProcessAssetDesc.this.encodedProcessSource = processString;
+        this.encodedProcessSource = processString;
     }
 
     public Map<String, String> getForms() {
@@ -238,11 +239,12 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setForms(Map<String, String> forms) {
-        ProcessAssetDesc.this.forms = forms;
+        this.forms = forms;
     }
 
     public void addForm(String id, String formContent) {
-        ProcessAssetDesc.this.forms.put(id, formContent);
+        // put String{id} to Map{this.forms}
+        this.forms.put(id, formContent);
     }
 
     public List<String> getRoles() {
@@ -250,7 +252,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setRoles(List<String> roles) {
-        ProcessAssetDesc.this.roles = roles;
+        this.roles = roles;
     }
 
     public boolean isActive() {
@@ -258,7 +260,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
     }
 
     public void setActive(boolean active) {
-        ProcessAssetDesc.this.active = active;
+        this.active = active;
     }
 
     @Override
@@ -299,7 +301,7 @@ public class ProcessAssetDesc implements ProcessDefinition {
 
     @Override
     public boolean equals(Object obj) {
-        if ((ProcessAssetDesc.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -316,124 +318,158 @@ public class ProcessAssetDesc implements ProcessDefinition {
             if ((other.associatedEntities) != null)
                 return false;
             
-        } else if (!(associatedEntities.equals(other.associatedEntities)))
-            return false;
+        }else
+            if (!(associatedEntities.equals(other.associatedEntities)))
+                return false;
+            
         
         if ((deploymentId) == null) {
             if ((other.deploymentId) != null)
                 return false;
             
-        } else if (!(deploymentId.equals(other.deploymentId)))
-            return false;
+        }else
+            if (!(deploymentId.equals(other.deploymentId)))
+                return false;
+            
         
         if ((encodedProcessSource) == null) {
             if ((other.encodedProcessSource) != null)
                 return false;
             
-        } else if (!(encodedProcessSource.equals(other.encodedProcessSource)))
-            return false;
+        }else
+            if (!(encodedProcessSource.equals(other.encodedProcessSource)))
+                return false;
+            
         
         if ((forms) == null) {
             if ((other.forms) != null)
                 return false;
             
-        } else if (!(forms.equals(other.forms)))
-            return false;
+        }else
+            if (!(forms.equals(other.forms)))
+                return false;
+            
         
         if ((id) == null) {
             if ((other.id) != null)
                 return false;
             
-        } else if (!(id.equals(other.id)))
-            return false;
+        }else
+            if (!(id.equals(other.id)))
+                return false;
+            
         
         if ((knowledgeType) == null) {
             if ((other.knowledgeType) != null)
                 return false;
             
-        } else if (!(knowledgeType.equals(other.knowledgeType)))
-            return false;
+        }else
+            if (!(knowledgeType.equals(other.knowledgeType)))
+                return false;
+            
         
         if ((name) == null) {
             if ((other.name) != null)
                 return false;
             
-        } else if (!(name.equals(other.name)))
-            return false;
+        }else
+            if (!(name.equals(other.name)))
+                return false;
+            
         
         if ((namespace) == null) {
             if ((other.namespace) != null)
                 return false;
             
-        } else if (!(namespace.equals(other.namespace)))
-            return false;
+        }else
+            if (!(namespace.equals(other.namespace)))
+                return false;
+            
         
         if ((originalPath) == null) {
             if ((other.originalPath) != null)
                 return false;
             
-        } else if (!(originalPath.equals(other.originalPath)))
-            return false;
+        }else
+            if (!(originalPath.equals(other.originalPath)))
+                return false;
+            
         
         if ((packageName) == null) {
             if ((other.packageName) != null)
                 return false;
             
-        } else if (!(packageName.equals(other.packageName)))
-            return false;
+        }else
+            if (!(packageName.equals(other.packageName)))
+                return false;
+            
         
         if ((processVariables) == null) {
             if ((other.processVariables) != null)
                 return false;
             
-        } else if (!(processVariables.equals(other.processVariables)))
-            return false;
+        }else
+            if (!(processVariables.equals(other.processVariables)))
+                return false;
+            
         
         if ((reusableSubProcesses) == null) {
             if ((other.reusableSubProcesses) != null)
                 return false;
             
-        } else if (!(reusableSubProcesses.equals(other.reusableSubProcesses)))
-            return false;
+        }else
+            if (!(reusableSubProcesses.equals(other.reusableSubProcesses)))
+                return false;
+            
         
         if ((roles) == null) {
             if ((other.roles) != null)
                 return false;
             
-        } else if (!(roles.equals(other.roles)))
-            return false;
+        }else
+            if (!(roles.equals(other.roles)))
+                return false;
+            
         
         if ((serviceTasks) == null) {
             if ((other.serviceTasks) != null)
                 return false;
             
-        } else if (!(serviceTasks.equals(other.serviceTasks)))
-            return false;
+        }else
+            if (!(serviceTasks.equals(other.serviceTasks)))
+                return false;
+            
         
         if ((signals) == null) {
             if ((other.signals) != null)
                 return false;
             
-        } else if (!(signals.equals(other.signals)))
-            return false;
+        }else
+            if (!(signals.equals(other.signals)))
+                return false;
+            
         
         if ((type) == null) {
             if ((other.type) != null)
                 return false;
             
-        } else if (!(type.equals(other.type)))
-            return false;
+        }else
+            if (!(type.equals(other.type)))
+                return false;
+            
         
         if ((version) == null) {
             if ((other.version) != null)
                 return false;
             
-        } else if (!(version.equals(other.version)))
-            return false;
+        }else
+            if (!(version.equals(other.version)))
+                return false;
+            
         
         if ((dynamic) != (other.dynamic)) {
             return false;
-        } 
+        }
         return true;
     }
 }

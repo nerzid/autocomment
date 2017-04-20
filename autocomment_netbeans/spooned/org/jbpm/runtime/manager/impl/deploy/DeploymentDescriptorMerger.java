@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,22 +31,23 @@ public class DeploymentDescriptorMerger {
     public DeploymentDescriptor merge(List<DeploymentDescriptor> descriptorHierarchy, MergeMode mode) {
         if ((descriptorHierarchy == null) || (descriptorHierarchy.isEmpty())) {
             throw new IllegalArgumentException("Descriptor hierarchy list cannot be empty");
-        } 
+        }
         if ((descriptorHierarchy.size()) == 1) {
             return descriptorHierarchy.get(0);
-        } 
+        }
         Stack<DeploymentDescriptor> stack = new Stack<DeploymentDescriptor>();
+        // add all List{descriptorHierarchy} to Stack{stack}
         stack.addAll(descriptorHierarchy);
         if (mode == null) {
             mode = MergeMode.MERGE_COLLECTIONS;
-        } 
+        }
         while ((stack.size()) > 1) {
             DeploymentDescriptor master = stack.pop();
             DeploymentDescriptor slave = stack.pop();
             DeploymentDescriptor desc = merge(master, slave, mode);
             // add merged one to be next iteration slave
             stack.push(desc);
-        }
+        } 
         // last element from the stack is the one that contains all merged descriptors
         return stack.pop();
     }
@@ -54,9 +55,10 @@ public class DeploymentDescriptorMerger {
     public DeploymentDescriptor merge(DeploymentDescriptor master, DeploymentDescriptor slave, MergeMode mode) {
         if ((master == null) || (slave == null)) {
             throw new IllegalArgumentException("Descriptors to merge must be provided");
-        } 
+        }
         DeploymentDescriptor merged = null;
         DeploymentDescriptorBuilder builder = master.getBuilder();
+        // set build MergeModeBuildHandler{new DeploymentDescriptorMerger.MergeModeBuildHandler(mode)} to DeploymentDescriptorBuilder{builder}
         builder.setBuildHandler(new DeploymentDescriptorMerger.MergeModeBuildHandler(mode));
         switch (mode) {
             case KEEP_ALL :
@@ -122,7 +124,7 @@ public class DeploymentDescriptorMerger {
                 Boolean masterLimit = master.getLimitSerializationClasses();
                 if (((slaveLimit != null) && (masterLimit != null)) && ((!slaveLimit) || (!masterLimit))) {
                     builder.setLimitSerializationClasses(false);
-                } 
+                }
                 merged = builder.get();
                 break;
             default :
@@ -135,7 +137,7 @@ public class DeploymentDescriptorMerger {
         private MergeMode mode;
 
         MergeModeBuildHandler(MergeMode mode) {
-            DeploymentDescriptorMerger.MergeModeBuildHandler.this.mode = mode;
+            this.mode = mode;
         }
 
         @Override
@@ -148,12 +150,12 @@ public class DeploymentDescriptorMerger {
                 case OVERRIDE_EMPTY :
                     if (!(isEmpty(value))) {
                         accepted = true;
-                    } 
+                    }
                     break;
                 case MERGE_COLLECTIONS :
                     if (!(isEmpty(value))) {
                         accepted = true;
-                    } 
+                    }
                     break;
                 default :
                     break;
@@ -164,13 +166,13 @@ public class DeploymentDescriptorMerger {
         protected boolean isEmpty(Object value) {
             if (value == null) {
                 return true;
-            } 
+            }
             if (value instanceof String) {
                 return ((String) (value)).isEmpty();
-            } 
+            }
             if (value instanceof Collection<?>) {
                 return ((Collection<?>) (value)).isEmpty();
-            } 
+            }
             return false;
         }
     }

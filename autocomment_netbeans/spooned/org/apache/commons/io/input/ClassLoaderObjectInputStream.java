@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ import java.io.StreamCorruptedException;
  * <code>ClassLoader</code> rather than the system default.
  * <p>
  * This is useful in dynamic container environments.
- * 
+ *
  * @version $Id: ClassLoaderObjectInputStream.java 1471767 2013-04-24 23:24:19Z sebb $
  * @since 1.1
  */
@@ -42,7 +42,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
 
     /**
      * Constructs a new ClassLoaderObjectInputStream.
-     * 
+     *
      * @param classLoader  the ClassLoader from which classes should be loaded
      * @param inputStream  the InputStream to work on
      * @throws IOException in case of an I/O error
@@ -56,7 +56,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
     /**
      * Resolve a class specified by the descriptor using the
      * specified ClassLoader or the super ClassLoader.
-     * 
+     *
      * @param objectStreamClass  descriptor of the class
      * @return the Class object described by the ObjectStreamClass
      * @throws IOException in case of an I/O error
@@ -75,7 +75,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
     /**
      * Create a proxy class that implements the specified interfaces using
      * the specified ClassLoader or the super ClassLoader.
-     * 
+     *
      * @param interfaces the interfaces to implement
      * @return a proxy class implementing the interfaces
      * @throws IOException in case of an I/O error

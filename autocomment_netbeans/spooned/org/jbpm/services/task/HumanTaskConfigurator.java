@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,24 +17,27 @@
 
 package org.jbpm.services.task;
 
+import EnvironmentName.ENTITY_MANAGER_FACTORY;
 import java.lang.reflect.Constructor;
 import javax.persistence.EntityManagerFactory;
 import org.kie.api.runtime.Environment;
 import org.drools.core.impl.EnvironmentFactory;
 import org.kie.internal.task.api.EventService;
+import org.jbpm.services.task.commands.TaskCommandExecutorImpl;
+import org.kie.api.task.TaskLifeCycleEventListener;
 import java.util.HashSet;
 import org.drools.core.command.Interceptor;
+import java.util.TreeSet;
 import org.slf4j.Logger;
+import org.kie.api.task.TaskService;
+import org.kie.internal.task.api.UserInfo;
+import org.kie.api.task.UserGroupCallback;
 import org.slf4j.LoggerFactory;
 import java.util.Set;
-import org.jbpm.services.task.commands.TaskCommandExecutorImpl;
+import EnvironmentName.TASK_USER_GROUP_CALLBACK;
 import org.jbpm.services.task.impl.TaskDeadlinesServiceImpl;
 import org.jbpm.services.task.events.TaskEventSupport;
-import org.kie.api.task.TaskLifeCycleEventListener;
-import org.kie.api.task.TaskService;
-import java.util.TreeSet;
-import org.kie.api.task.UserGroupCallback;
-import org.kie.internal.task.api.UserInfo;
+import EnvironmentName.TASK_USER_INFO;
 
 /**
  * Task service configurator that provides fluent API approach to building <code>TaskService</code>
@@ -47,7 +50,7 @@ import org.kie.internal.task.api.UserInfo;
  * 	<li>userInfo - DefaultUserInfo by default</li>
  * 	<li>userGroupCallback - uses MvelUserGroupCallbackImpl by default</li>
  * </ul>
- * 
+ *
  * @see DefaultUserInfo
  * @see MvelUserGroupCallbackImpl
  */
@@ -76,72 +79,75 @@ public class HumanTaskConfigurator {
 
     public HumanTaskConfigurator interceptor(int priority, Interceptor interceptor) {
         if (interceptor == null) {
-            return HumanTaskConfigurator.this;
-        } 
-        HumanTaskConfigurator.this.interceptors.add(new HumanTaskConfigurator.PriorityInterceptor(priority, interceptor));
-        return HumanTaskConfigurator.this;
+            return this;
+        }
+        // add PriorityInterceptor{new HumanTaskConfigurator.PriorityInterceptor(priority, interceptor)} to Set{this.interceptors}
+        this.interceptors.add(new HumanTaskConfigurator.PriorityInterceptor(priority, interceptor));
+        return this;
     }
 
     public HumanTaskConfigurator listener(TaskLifeCycleEventListener listener) {
         if (listener == null) {
-            return HumanTaskConfigurator.this;
-        } 
-        HumanTaskConfigurator.this.listeners.add(listener);
-        return HumanTaskConfigurator.this;
+            return this;
+        }
+        // add TaskLifeCycleEventListener{listener} to Set{this.listeners}
+        this.listeners.add(listener);
+        return this;
     }
 
     public HumanTaskConfigurator environment(Environment environment) {
         if (environment == null) {
-            return HumanTaskConfigurator.this;
-        } 
-        HumanTaskConfigurator.this.environment = environment;
-        return HumanTaskConfigurator.this;
+            return this;
+        }
+        this.environment = environment;
+        return this;
     }
 
     public HumanTaskConfigurator entityManagerFactory(EntityManagerFactory emf) {
         if (emf == null) {
-            return HumanTaskConfigurator.this;
-        } 
-        environment.set(EnvironmentName.ENTITY_MANAGER_FACTORY, emf);
-        return HumanTaskConfigurator.this;
+            return this;
+        }
+        // set void{ENTITY_MANAGER_FACTORY} to Environment{environment}
+        environment.set(ENTITY_MANAGER_FACTORY, emf);
+        return this;
     }
 
     public HumanTaskConfigurator userInfo(UserInfo userInfo) {
         if (userInfo == null) {
-            return HumanTaskConfigurator.this;
-        } 
-        HumanTaskConfigurator.this.userInfo = userInfo;
-        return HumanTaskConfigurator.this;
+            return this;
+        }
+        this.userInfo = userInfo;
+        return this;
     }
 
     public HumanTaskConfigurator userGroupCallback(UserGroupCallback userGroupCallback) {
         if (userGroupCallback == null) {
-            return HumanTaskConfigurator.this;
-        } 
-        HumanTaskConfigurator.this.userGroupCallback = userGroupCallback;
-        return HumanTaskConfigurator.this;
+            return this;
+        }
+        this.userGroupCallback = userGroupCallback;
+        return this;
     }
 
     @SuppressWarnings(value = "unchecked")
     public TaskService getTaskService() {
         if ((service) == null) {
             TaskEventSupport taskEventSupport = new TaskEventSupport();
-            HumanTaskConfigurator.this.commandExecutor = new TaskCommandExecutorImpl(HumanTaskConfigurator.this.environment, taskEventSupport);
+            this.commandExecutor = new TaskCommandExecutorImpl(this.environment, taskEventSupport);
             if ((userGroupCallback) == null) {
-                userGroupCallback = new org.jbpm.services.task.identity.MvelUserGroupCallbackImpl(true);
-            } 
-            environment.set(EnvironmentName.TASK_USER_GROUP_CALLBACK, userGroupCallback);
+                userGroupCallback = new MvelUserGroupCallbackImpl(true);
+            }
+            environment.set(TASK_USER_GROUP_CALLBACK, userGroupCallback);
             if ((userInfo) == null) {
-                userInfo = new org.jbpm.services.task.identity.DefaultUserInfo(true);
-            } 
-            environment.set(EnvironmentName.TASK_USER_INFO, userInfo);
+                userInfo = new DefaultUserInfo(true);
+            }
+            environment.set(TASK_USER_INFO, userInfo);
             addDefaultInterceptor();
             addTransactionLockInterceptor();
             addOptimisticLockInterceptor();
             for (HumanTaskConfigurator.PriorityInterceptor pInterceptor : interceptors) {
-                HumanTaskConfigurator.this.commandExecutor.addInterceptor(pInterceptor.getInterceptor());
+                this.commandExecutor.addInterceptor(pInterceptor.getInterceptor());
             }
-            service = new org.jbpm.services.task.impl.command.CommandBasedTaskService(HumanTaskConfigurator.this.commandExecutor, taskEventSupport);
+            service = new CommandBasedTaskService(this.commandExecutor, taskEventSupport);
             // register listeners
             for (TaskLifeCycleEventListener listener : listeners) {
                 ((EventService<TaskLifeCycleEventListener>) (service)).registerTaskEventListener(listener);
@@ -149,8 +155,8 @@ public class HumanTaskConfigurator {
             // initialize deadline service with command executor for processing
             if ((TaskDeadlinesServiceImpl.getInstance()) == null) {
                 TaskDeadlinesServiceImpl.initialize(commandExecutor);
-            } 
-        } 
+            }
+        }
         return service;
     }
 
@@ -160,7 +166,7 @@ public class HumanTaskConfigurator {
         try {
             Class<Interceptor> defaultInterceptorClass = ((Class<Interceptor>) (Class.forName(HumanTaskConfigurator.DEFAULT_INTERCEPTOR)));
             Constructor<Interceptor> constructor = defaultInterceptorClass.getConstructor(new Class[]{ Environment.class });
-            Interceptor defaultInterceptor = constructor.newInstance(HumanTaskConfigurator.this.environment);
+            Interceptor defaultInterceptor = constructor.newInstance(this.environment);
             interceptor(5, defaultInterceptor);
         } catch (Exception e) {
             HumanTaskConfigurator.logger.warn("No default interceptor found of type {} might be mssing jbpm-human-task-jpa module on classpath (error {}", HumanTaskConfigurator.DEFAULT_INTERCEPTOR, e.getMessage(), e);
@@ -173,7 +179,7 @@ public class HumanTaskConfigurator {
         try {
             Class<Interceptor> defaultInterceptorClass = ((Class<Interceptor>) (Class.forName(HumanTaskConfigurator.TX_LOCK_INTERCEPTOR)));
             Constructor<Interceptor> constructor = defaultInterceptorClass.getConstructor(new Class[]{ Environment.class , String.class });
-            Interceptor defaultInterceptor = constructor.newInstance(HumanTaskConfigurator.this.environment, "task-service-tx-unlock");
+            Interceptor defaultInterceptor = constructor.newInstance(this.environment, "task-service-tx-unlock");
             interceptor(6, defaultInterceptor);
         } catch (Exception e) {
             HumanTaskConfigurator.logger.warn("No tx lock interceptor found of type {} might be mssing drools-persistence-jpa module on classpath (error {}", HumanTaskConfigurator.TX_LOCK_INTERCEPTOR, e.getMessage(), e);
@@ -199,8 +205,8 @@ public class HumanTaskConfigurator {
         private Interceptor interceptor;
 
         PriorityInterceptor(Integer priority, Interceptor interceptor) {
-            HumanTaskConfigurator.PriorityInterceptor.this.priority = priority;
-            HumanTaskConfigurator.PriorityInterceptor.this.interceptor = interceptor;
+            this.priority = priority;
+            this.interceptor = interceptor;
         }
 
         public Integer getPriority() {
@@ -213,7 +219,7 @@ public class HumanTaskConfigurator {
 
         @Override
         public int compareTo(HumanTaskConfigurator.PriorityInterceptor other) {
-            return HumanTaskConfigurator.PriorityInterceptor.this.getPriority().compareTo(other.getPriority());
+            return this.getPriority().compareTo(other.getPriority());
         }
 
         @Override

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,7 +35,7 @@ public class Lane implements Serializable {
     private Map<String, Object> metaData = new HashMap<String, Object>();
 
     public Lane(String id) {
-        Lane.this.id = id;
+        this.id = id;
     }
 
     public String getId() {
@@ -47,7 +47,7 @@ public class Lane implements Serializable {
     }
 
     public void setName(String name) {
-        Lane.this.name = name;
+        this.name = name;
     }
 
     public List<String> getFlowElements() {
@@ -55,15 +55,17 @@ public class Lane implements Serializable {
     }
 
     public void addFlowElement(String id) {
+        // add String{id} to List{flowElementIds}
         flowElementIds.add(id);
     }
 
     public Map<String, Object> getMetaData() {
-        return Lane.this.metaData;
+        return this.metaData;
     }
 
     public void setMetaData(String name, Object data) {
-        Lane.this.metaData.put(name, data);
+        // put String{name} to Map{this.metaData}
+        this.metaData.put(name, data);
     }
 }
 

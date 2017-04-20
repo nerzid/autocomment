@@ -18,7 +18,7 @@ public class QrtzSchedulerState {
     }
 
     public void setId(Long id) {
-        QrtzSchedulerState.this.id = id;
+        this.id = id;
     }
 }
 

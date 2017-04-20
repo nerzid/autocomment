@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,7 +48,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setDocumentation(String documentation) {
-        WorkDefinitionImpl.this.documentation = documentation;
+        this.documentation = documentation;
     }
 
     public String getFile() {
@@ -56,7 +56,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setFile(String file) {
-        WorkDefinitionImpl.this.file = file;
+        this.file = file;
     }
 
     public String getPath() {
@@ -64,7 +64,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setPath(String path) {
-        WorkDefinitionImpl.this.path = path;
+        this.path = path;
     }
 
     public String getCategory() {
@@ -72,7 +72,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setCategory(String category) {
-        WorkDefinitionImpl.this.category = category;
+        this.category = category;
     }
 
     public String[] getDependencies() {
@@ -80,7 +80,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setDependencies(String[] dependencies) {
-        WorkDefinitionImpl.this.dependencies = dependencies;
+        this.dependencies = dependencies;
     }
 
     public String getDefaultHandler() {
@@ -88,7 +88,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setDefaultHandler(String defaultHandler) {
-        WorkDefinitionImpl.this.defaultHandler = defaultHandler;
+        this.defaultHandler = defaultHandler;
     }
 
     public String getIconEncoded() {
@@ -96,7 +96,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setIconEncoded(String iconEncoded) {
-        WorkDefinitionImpl.this.iconEncoded = iconEncoded;
+        this.iconEncoded = iconEncoded;
     }
 
     public String[] getMavenDependencies() {
@@ -104,7 +104,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setMavenDependencies(String[] mavenDependencies) {
-        WorkDefinitionImpl.this.mavenDependencies = mavenDependencies;
+        this.mavenDependencies = mavenDependencies;
     }
 
     public String getVersion() {
@@ -112,7 +112,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setVersion(String version) {
-        WorkDefinitionImpl.this.version = version;
+        this.version = version;
     }
 
     public String getDescription() {
@@ -120,7 +120,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setDescription(String description) {
-        WorkDefinitionImpl.this.description = description;
+        this.description = description;
     }
 
     public String getWidType() {
@@ -128,7 +128,7 @@ public class WorkDefinitionImpl extends WorkDefinitionExtensionImpl {
     }
 
     public void setWidType(String widType) {
-        WorkDefinitionImpl.this.widType = widType;
+        this.widType = widType;
     }
 }
 

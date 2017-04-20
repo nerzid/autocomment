@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,19 +39,19 @@ public class CaseStageInstanceImpl implements Serializable , CaseStageInstance {
     private StageStatus status;
 
     public CaseStageInstanceImpl(String id, String name) {
-        CaseStageInstanceImpl.this.id = id;
-        CaseStageInstanceImpl.this.name = name;
-        CaseStageInstanceImpl.this.adHocFragments = Collections.emptyList();
-        CaseStageInstanceImpl.this.activeNodes = Collections.emptyList();
-        CaseStageInstanceImpl.this.status = StageStatus.Active;
+        this.id = id;
+        this.name = name;
+        this.adHocFragments = Collections.emptyList();
+        this.activeNodes = Collections.emptyList();
+        this.status = StageStatus.Active;
     }
 
     public CaseStageInstanceImpl(String id, String name, Collection<AdHocFragment> adHocFragments, Collection<NodeInstanceDesc> activeNodes) {
-        CaseStageInstanceImpl.this.id = id;
-        CaseStageInstanceImpl.this.name = name;
-        CaseStageInstanceImpl.this.adHocFragments = adHocFragments;
-        CaseStageInstanceImpl.this.activeNodes = activeNodes;
-        CaseStageInstanceImpl.this.status = StageStatus.Active;
+        this.id = id;
+        this.name = name;
+        this.adHocFragments = adHocFragments;
+        this.activeNodes = activeNodes;
+        this.status = StageStatus.Active;
     }
 
     @Override

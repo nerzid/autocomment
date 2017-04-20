@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,8 +46,8 @@ public class MigrationReport implements Serializable {
     private List<MigrationEntry> entries = new ArrayList<MigrationEntry>();
 
     public MigrationReport(MigrationSpec migrationSpec) {
-        MigrationReport.this.migrationSpec = migrationSpec;
-        MigrationReport.this.startDate = new Date();
+        this.migrationSpec = migrationSpec;
+        this.startDate = new Date();
     }
 
     public MigrationSpec getMigrationSpec() {
@@ -55,7 +55,7 @@ public class MigrationReport implements Serializable {
     }
 
     public void setMigrationSpec(MigrationSpec processData) {
-        MigrationReport.this.migrationSpec = processData;
+        this.migrationSpec = processData;
     }
 
     public boolean isSuccessful() {
@@ -63,7 +63,7 @@ public class MigrationReport implements Serializable {
     }
 
     public void setSuccessful(boolean successful) {
-        MigrationReport.this.successful = successful;
+        this.successful = successful;
     }
 
     public Date getStartDate() {
@@ -71,7 +71,7 @@ public class MigrationReport implements Serializable {
     }
 
     public void setStartDate(Date startDate) {
-        MigrationReport.this.startDate = startDate;
+        this.startDate = startDate;
     }
 
     public Date getEndDate() {
@@ -79,7 +79,7 @@ public class MigrationReport implements Serializable {
     }
 
     public void setEndDate(Date endDate) {
-        MigrationReport.this.endDate = endDate;
+        this.endDate = endDate;
     }
 
     public List<MigrationEntry> getEntries() {
@@ -87,11 +87,12 @@ public class MigrationReport implements Serializable {
     }
 
     public void setEntries(List<MigrationEntry> entries) {
-        MigrationReport.this.entries = entries;
+        this.entries = entries;
     }
 
     public void addEntry(Type type, String message) throws MigrationException {
-        MigrationReport.this.entries.add(new MigrationEntry(type, message));
+        // add MigrationEntry{new MigrationEntry(type, message)} to List{this.entries}
+        this.entries.add(new MigrationEntry(type, message));
         switch (type) {
             case INFO :
                 MigrationReport.logger.debug(message);
@@ -101,9 +102,9 @@ public class MigrationReport implements Serializable {
                 break;
             case ERROR :
                 MigrationReport.logger.error(message);
-                MigrationReport.this.setSuccessful(false);
+                this.setSuccessful(false);
                 setEndDate(new Date());
-                throw new MigrationException(message, MigrationReport.this);
+                throw new MigrationException(message, this);
             default :
                 break;
         }

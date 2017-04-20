@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,10 +36,10 @@ public class MigrationReportImpl implements Serializable , MigrationReport {
     private List<MigrationEntry> entries = new ArrayList<MigrationEntry>();
 
     public MigrationReportImpl(boolean successful, Date startDate, Date endDate, List<MigrationEntry> entries) {
-        MigrationReportImpl.this.successful = successful;
-        MigrationReportImpl.this.startDate = startDate;
-        MigrationReportImpl.this.endDate = endDate;
-        MigrationReportImpl.this.entries = entries;
+        this.successful = successful;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.entries = entries;
     }
 
     public boolean isSuccessful() {
@@ -47,7 +47,7 @@ public class MigrationReportImpl implements Serializable , MigrationReport {
     }
 
     public void setSuccessful(boolean successful) {
-        MigrationReportImpl.this.successful = successful;
+        this.successful = successful;
     }
 
     public Date getStartDate() {
@@ -55,7 +55,7 @@ public class MigrationReportImpl implements Serializable , MigrationReport {
     }
 
     public void setStartDate(Date startDate) {
-        MigrationReportImpl.this.startDate = startDate;
+        this.startDate = startDate;
     }
 
     public Date getEndDate() {
@@ -63,7 +63,7 @@ public class MigrationReportImpl implements Serializable , MigrationReport {
     }
 
     public void setEndDate(Date endDate) {
-        MigrationReportImpl.this.endDate = endDate;
+        this.endDate = endDate;
     }
 
     public List<MigrationEntry> getEntries() {
@@ -71,7 +71,7 @@ public class MigrationReportImpl implements Serializable , MigrationReport {
     }
 
     public void setEntries(List<MigrationEntry> entries) {
-        MigrationReportImpl.this.entries = entries;
+        this.entries = entries;
     }
 }
 

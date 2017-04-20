@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * DroolsSwitch
@@ -24,6 +25,13 @@ package org.jboss.drools.util;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import java.util.List;
+import static DroolsPackage.DOCUMENT_ROOT;
+import static DroolsPackage.GLOBAL_TYPE;
+import static DroolsPackage.IMPORT_TYPE;
+import static DroolsPackage.META_DATA_TYPE;
+import static DroolsPackage.ON_ENTRY_SCRIPT_TYPE;
+import static DroolsPackage.ON_EXIT_SCRIPT_TYPE;
+import static DroolsPackage.eINSTANCE;
 
 /**
  * <!-- begin-user-doc -->
@@ -56,7 +64,7 @@ public class DroolsSwitch<T> {
     public DroolsSwitch() {
         if ((DroolsSwitch.modelPackage) == null) {
             DroolsSwitch.modelPackage = DroolsPackage.eINSTANCE;
-        } 
+        }
     }
 
     /**
@@ -80,7 +88,7 @@ public class DroolsSwitch<T> {
     protected T doSwitch(EClass theEClass, EObject theEObject) {
         if ((theEClass.eContainer()) == (DroolsSwitch.modelPackage)) {
             return doSwitch(theEClass.getClassifierID(), theEObject);
-        } else {
+        }else {
             List<EClass> eSuperTypes = theEClass.getESuperTypes();
             return eSuperTypes.isEmpty() ? defaultCase(theEObject) : doSwitch(eSuperTypes.get(0), theEObject);
         }

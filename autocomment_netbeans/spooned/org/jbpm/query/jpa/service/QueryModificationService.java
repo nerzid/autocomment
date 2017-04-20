@@ -26,7 +26,7 @@ public interface QueryModificationService {
 
     /**
      * Create a specific {@link Predicate} based on the given {@link QueryCriteria}.
-     * 
+     *
      * @param criteria The {@link QueryCriteria} with the abstract query criteria information.
      * @param query The {@link CriteriaQuery} instance being built.
      * @param builder The {@link CriteriaBuilder} used to create the {@link CriteriaQuery}.

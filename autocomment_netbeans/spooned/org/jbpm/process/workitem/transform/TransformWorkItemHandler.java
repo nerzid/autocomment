@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,13 +43,13 @@ public class TransformWorkItemHandler extends AbstractLogOrThrowWorkItemHandler 
             Object in = inputItem.getParameter(TransformWorkItemHandler.INPUT_KEY);
             String outputType = ((String) (inputItem.getParameter(TransformWorkItemHandler.OUTPUT_TYPE_KEY)));
             Object output = Class.forName(outputType).newInstance();
-            Method txMethod = TransformWorkItemHandler.this.findTransform(output.getClass(), in.getClass());
+            Method txMethod = this.findTransform(output.getClass(), in.getClass());
             if (txMethod != null) {
                 Object out = txMethod.invoke(null, in);
                 Map<String, Object> result = new HashMap<String, Object>();
                 result.put(TransformWorkItemHandler.VARIABLE_OUTPUT_NAME, out);
                 itemMgr.completeWorkItem(inputItem.getId(), result);
-            } else {
+            }else {
                 TransformWorkItemHandler.logger.error("Failed to find a transform ");
             }
         } catch (Exception e) {
@@ -61,19 +61,19 @@ public class TransformWorkItemHandler extends AbstractLogOrThrowWorkItemHandler 
         Method[] methods = transformer.getMethods();
         if (methods == null) {
             return ;
-        } 
+        }
         for (Method meth : methods) {
             // Only consider methods that have the @Transformer annotation
             if ((meth.getAnnotation(Transformer.class)) == null) {
                 continue;
-            } 
+            }
             Class<?> returnType = meth.getReturnType();
             Class<?> paramType = meth.getParameterTypes()[0];
             Map<Class<?>, Method> index = transforms.get(returnType);
             if (index == null) {
                 index = new HashMap<Class<?>, Method>();
                 transforms.put(returnType, index);
-            } 
+            }
             index.put(paramType, meth);
         }
     }
@@ -82,7 +82,7 @@ public class TransformWorkItemHandler extends AbstractLogOrThrowWorkItemHandler 
         Map<Class<?>, Method> indexedTxForm = transforms.get(returnClass);
         if (indexedTxForm == null) {
             return null;
-        } 
+        }
         return indexedTxForm.get(paramClass);
     }
 

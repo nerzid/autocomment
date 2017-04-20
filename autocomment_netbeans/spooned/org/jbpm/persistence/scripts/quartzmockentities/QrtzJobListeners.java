@@ -18,7 +18,7 @@ public class QrtzJobListeners {
     }
 
     public void setId(Long id) {
-        QrtzJobListeners.this.id = id;
+        this.id = id;
     }
 }
 

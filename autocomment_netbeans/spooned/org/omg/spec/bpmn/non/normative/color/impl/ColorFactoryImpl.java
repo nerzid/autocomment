@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * ColorFactoryImpl
@@ -21,10 +22,16 @@
 
 package org.omg.spec.bpmn.non.normative.color.impl;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-import org.eclipse.emf.ecore.EObject;
+import EPackage.Registry.INSTANCE;
+import XMLTypePackage.Literals.STRING;
+import XMLTypeFactory.eINSTANCE;
+import static ColorPackage.DOCUMENT_ROOT;
+import static ColorPackage.HEX_COLOR;
+import static ColorPackage.eINSTANCE;
 
 /**
  * <!-- begin-user-doc -->
@@ -41,10 +48,10 @@ public class ColorFactoryImpl extends EFactoryImpl implements ColorFactory {
      */
     public static ColorFactory init() {
         try {
-            ColorFactory theColorFactory = ((ColorFactory) (EPackage.Registry.INSTANCE.getEFactory("http://www.omg.org/spec/BPMN/non-normative/color")));
+            ColorFactory theColorFactory = ((ColorFactory) (INSTANCE.getEFactory("http://www.omg.org/spec/BPMN/non-normative/color")));
             if (theColorFactory != null) {
                 return theColorFactory;
-            } 
+            }
         } catch (Exception exception) {
             EcorePlugin.INSTANCE.log(exception);
         }
@@ -122,7 +129,7 @@ public class ColorFactoryImpl extends EFactoryImpl implements ColorFactory {
      * @generated
      */
     public String createHexColorFromString(EDataType eDataType, String initialValue) {
-        return ((String) (XMLTypeFactory.eINSTANCE.createFromString(XMLTypePackage.Literals.STRING, initialValue)));
+        return ((String) (eINSTANCE.createFromString(STRING, initialValue)));
     }
 
     /**
@@ -131,7 +138,7 @@ public class ColorFactoryImpl extends EFactoryImpl implements ColorFactory {
      * @generated
      */
     public String convertHexColorToString(EDataType eDataType, Object instanceValue) {
-        return XMLTypeFactory.eINSTANCE.convertToString(XMLTypePackage.Literals.STRING, instanceValue);
+        return eINSTANCE.convertToString(STRING, instanceValue);
     }
 
     /**

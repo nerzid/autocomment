@@ -20,7 +20,7 @@ public class QueryParameterIdentifiersUtil {
             }
             if (!(objVal instanceof String)) {
                 continue;
-            } 
+            }
             String val = ((String) (objVal));
             Integer idVal;
             try {

@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,8 +27,8 @@ public class GroupColumnFilter implements Serializable {
     private String columnId;
 
     public GroupColumnFilter(String columnId, String newColumnId) {
-        GroupColumnFilter.this.columnId = columnId;
-        GroupColumnFilter.this.newColumnId = newColumnId;
+        this.columnId = columnId;
+        this.newColumnId = newColumnId;
     }
 
     public String getNewColumnId() {
@@ -36,7 +36,7 @@ public class GroupColumnFilter implements Serializable {
     }
 
     public void setNewColumnId(String newColumnId) {
-        GroupColumnFilter.this.newColumnId = newColumnId;
+        this.newColumnId = newColumnId;
     }
 
     public String getColumnId() {
@@ -44,7 +44,7 @@ public class GroupColumnFilter implements Serializable {
     }
 
     public void setColumnId(String columnId) {
-        GroupColumnFilter.this.columnId = columnId;
+        this.columnId = columnId;
     }
 }
 

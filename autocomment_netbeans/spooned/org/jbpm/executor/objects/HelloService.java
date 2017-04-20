@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,36 +23,43 @@ public class HelloService {
     public static String VALIDATE_STRING = null;
 
     public String hello(String name) {
+        // println String{(((Thread.currentThread().getName()) + " Service invoked with name ") + name)} to PrintStream{System.out}
         System.out.println((((Thread.currentThread().getName()) + " Service invoked with name ") + name));
         return ("Hello " + name) + "!";
     }
 
     public String hello(Object name) {
+        // println String{(((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date()))} to PrintStream{System.out}
         System.out.println((((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date())));
         return ("Hello " + name) + "!";
     }
 
     public String hello1(Object name) {
+        // println String{(((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date()))} to PrintStream{System.out}
         System.out.println((((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date())));
         return ("Hello " + name) + "!";
     }
 
     public String hello2(Object name) {
+        // println String{(((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date()))} to PrintStream{System.out}
         System.out.println((((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date())));
         return ("Hello " + name) + "!";
     }
 
     public String hello3(Object name) {
+        // println String{(((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date()))} to PrintStream{System.out}
         System.out.println((((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date())));
         return ("Hello " + name) + "!";
     }
 
     public String hello4(Object name) {
+        // println String{(((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date()))} to PrintStream{System.out}
         System.out.println((((((Thread.currentThread().getName()) + " Service invoked with name ") + name) + " at ") + (new Date())));
         return ("Hello " + name) + "!";
     }
 
     public String helloEcho(String name) {
+        // println String{(((Thread.currentThread().getName()) + " Service invoked with name ") + name)} to PrintStream{System.out}
         System.out.println((((Thread.currentThread().getName()) + " Service invoked with name ") + name));
         return name;
     }
@@ -61,8 +68,8 @@ public class HelloService {
         if ((HelloService.VALIDATE_STRING) != null) {
             if (!(HelloService.VALIDATE_STRING.equals(value))) {
                 throw new RuntimeException(("Value does not match expected string: " + value));
-            } 
-        } 
+            }
+        }
         return value;
     }
 

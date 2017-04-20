@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,22 +17,22 @@
 
 package org.jbpm.process.core.transformation;
 
+import java.util.HashMap;
 import javax.script.Bindings;
 import javax.script.Compilable;
+import javax.script.ScriptContext;
 import javax.script.CompiledScript;
 import org.kie.api.runtime.process.DataTransformer;
-import java.util.HashMap;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import java.io.IOException;
 import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Properties;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptException;
 import javax.script.SimpleScriptContext;
+import javax.script.ScriptEngineFactory;
 import java.io.StringWriter;
 
 /**
@@ -67,8 +67,8 @@ public class JavaScriptingDataTransformer implements DataTransformer {
     private Map<String, Object> engineProperties = new HashMap<String, Object>();
 
     public JavaScriptingDataTransformer(ScriptEngineFactory factory) {
-        JavaScriptingDataTransformer.this.factory = factory;
-        JavaScriptingDataTransformer.this.scriptEngine = JavaScriptingDataTransformer.this.factory.getScriptEngine();
+        this.factory = factory;
+        this.scriptEngine = this.factory.getScriptEngine();
         registerAttributes();
     }
 
@@ -86,7 +86,8 @@ public class JavaScriptingDataTransformer implements DataTransformer {
             } catch (ScriptException e) {
                 throw new RuntimeException("Error when compiling script", e);
             }
-        } 
+        }
+        // debug String{"Compilation not supported on engine {}"} to Logger{JavaScriptingDataTransformer.logger}
         JavaScriptingDataTransformer.logger.debug("Compilation not supported on engine {}", scriptEngine);
         return expression;
     }
@@ -106,13 +107,13 @@ public class JavaScriptingDataTransformer implements DataTransformer {
             if (expression instanceof CompiledScript) {
                 JavaScriptingDataTransformer.logger.debug("About to evaluate compiled expression {} with bindings {} on engine", expression, parameters, scriptEngine);
                 result = ((CompiledScript) (expression)).eval(context);
-            } else {
+            }else {
                 JavaScriptingDataTransformer.logger.debug("About to evaluate expression {} with bindings {} on engine", expression, parameters, scriptEngine);
                 result = scriptEngine.eval(expression.toString(), context);
             }
             if (result == null) {
                 result = writer.toString();
-            } 
+            }
             return result;
         } catch (ScriptException e) {
             throw new RuntimeException("Error when evaluating script", e);
@@ -121,7 +122,7 @@ public class JavaScriptingDataTransformer implements DataTransformer {
 
     protected void registerAttributes() {
         try {
-            InputStream propsIn = JavaScriptingDataTransformer.this.getClass().getResourceAsStream((("/" + (JavaScriptingDataTransformer.this.factory.getClass().getName())) + ".properties"));
+            InputStream propsIn = this.getClass().getResourceAsStream((("/" + (this.factory.getClass().getName())) + ".properties"));
             if (propsIn != null) {
                 Properties props = new Properties();
                 props.load(propsIn);
@@ -129,9 +130,9 @@ public class JavaScriptingDataTransformer implements DataTransformer {
                     Object objectValue = resolveValue(props.getProperty(propertyName));
                     if (objectValue != null) {
                         engineProperties.put(propertyName, objectValue);
-                    } 
+                    }
                 }
-            } 
+            }
         } catch (IOException e) {
             JavaScriptingDataTransformer.logger.error("Error while loading script engine properties", e);
         }
@@ -140,12 +141,14 @@ public class JavaScriptingDataTransformer implements DataTransformer {
     private Object resolveValue(String value) {
         if (value == null) {
             return null;
-        } 
+        }
         if (value.toLowerCase().matches("true|false")) {
             return Boolean.parseBoolean(value);
-        } else if (value.matches("\\d+")) {
-            return Integer.parseInt(value);
-        } 
+        }else
+            if (value.matches("\\d+")) {
+                return Integer.parseInt(value);
+            }
+        
         return value;
     }
 }

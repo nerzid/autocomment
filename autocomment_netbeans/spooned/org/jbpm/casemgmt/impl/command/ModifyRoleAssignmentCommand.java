@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 
 package org.jbpm.casemgmt.impl.command;
 
-import org.kie.internal.process.CaseAssignment;
 import org.jbpm.casemgmt.impl.event.CaseEventSupport;
+import org.kie.internal.process.CaseAssignment;
 import org.jbpm.casemgmt.api.model.instance.CaseFileInstance;
 import java.util.Collection;
 import org.kie.internal.command.Context;
@@ -40,18 +40,18 @@ public class ModifyRoleAssignmentCommand extends CaseCommand<Void> {
     private boolean add;
 
     public ModifyRoleAssignmentCommand(String roleName, OrganizationalEntity entity, boolean add) {
-        ModifyRoleAssignmentCommand.this.roleName = roleName;
-        ModifyRoleAssignmentCommand.this.entity = entity;
-        ModifyRoleAssignmentCommand.this.add = add;
+        this.roleName = roleName;
+        this.entity = entity;
+        this.add = add;
     }
 
     @Override
     public Void execute(Context context) {
         KieSession ksession = ((KnowledgeCommandContext) (context)).getKieSession();
-        Collection<? extends Object> caseFiles = ksession.getObjects(new org.drools.core.ClassObjectFilter(CaseFileInstance.class));
+        Collection<? extends Object> caseFiles = ksession.getObjects(new ClassObjectFilter(CaseFileInstance.class));
         if ((caseFiles.size()) != 1) {
             throw new IllegalStateException(("Not able to find distinct case file - found case files " + (caseFiles.size())));
-        } 
+        }
         CaseFileInstance caseFile = ((CaseFileInstance) (caseFiles.iterator().next()));
         FactHandle factHandle = ksession.getFactHandle(caseFile);
         CaseEventSupport caseEventSupport = getCaseEventSupport(context);
@@ -59,11 +59,12 @@ public class ModifyRoleAssignmentCommand extends CaseCommand<Void> {
             caseEventSupport.fireBeforeCaseRoleAssignmentAdded(caseFile.getCaseId(), roleName, entity);
             ((CaseAssignment) (caseFile)).assign(roleName, entity);
             caseEventSupport.fireAfterCaseRoleAssignmentAdded(caseFile.getCaseId(), roleName, entity);
-        } else {
+        }else {
             caseEventSupport.fireBeforeCaseRoleAssignmentRemoved(caseFile.getCaseId(), roleName, entity);
             ((CaseAssignment) (caseFile)).remove(roleName, entity);
             caseEventSupport.fireAfterCaseRoleAssignmentRemoved(caseFile.getCaseId(), roleName, entity);
         }
+        // update FactHandle{factHandle} to KieSession{ksession}
         ksession.update(factHandle, caseFile);
         return null;
     }

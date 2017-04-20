@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ public class ExecutorEventSupport extends AbstractEventSupport<AsynchronousJobLi
             do {
                 iter.next().beforeJobScheduled(new AsynchronousJobEventImpl(job, exception));
             } while (iter.hasNext() );
-        } 
+        }
     }
 
     public void fireBeforeJobExecuted(final RequestInfo job, Throwable exception) {
@@ -38,7 +38,7 @@ public class ExecutorEventSupport extends AbstractEventSupport<AsynchronousJobLi
             do {
                 iter.next().beforeJobExecuted(new AsynchronousJobEventImpl(job, exception));
             } while (iter.hasNext() );
-        } 
+        }
     }
 
     public void fireBeforeJobCancelled(final RequestInfo job, Throwable exception) {
@@ -47,7 +47,7 @@ public class ExecutorEventSupport extends AbstractEventSupport<AsynchronousJobLi
             do {
                 iter.next().beforeJobCancelled(new AsynchronousJobEventImpl(job, exception));
             } while (iter.hasNext() );
-        } 
+        }
     }
 
     public void fireAfterJobScheduled(final RequestInfo job, Throwable exception) {
@@ -56,7 +56,7 @@ public class ExecutorEventSupport extends AbstractEventSupport<AsynchronousJobLi
             do {
                 iter.next().afterJobScheduled(new AsynchronousJobEventImpl(job, exception));
             } while (iter.hasNext() );
-        } 
+        }
     }
 
     public void fireAfterJobExecuted(final RequestInfo job, Throwable exception) {
@@ -65,7 +65,7 @@ public class ExecutorEventSupport extends AbstractEventSupport<AsynchronousJobLi
             do {
                 iter.next().afterJobExecuted(new AsynchronousJobEventImpl(job, exception));
             } while (iter.hasNext() );
-        } 
+        }
     }
 
     public void fireAfterJobCancelled(final RequestInfo job, Throwable exception) {
@@ -74,7 +74,7 @@ public class ExecutorEventSupport extends AbstractEventSupport<AsynchronousJobLi
             do {
                 iter.next().afterJobCancelled(new AsynchronousJobEventImpl(job, exception));
             } while (iter.hasNext() );
-        } 
+        }
     }
 }
 

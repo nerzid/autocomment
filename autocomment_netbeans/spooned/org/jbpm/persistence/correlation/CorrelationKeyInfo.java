@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,20 +17,20 @@
 
 package org.jbpm.persistence.correlation;
 
+import org.kie.internal.process.CorrelationKey;
 import java.util.ArrayList;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import org.kie.internal.process.CorrelationKey;
 import org.kie.internal.jaxb.CorrelationKeyXmlAdapter;
+import javax.persistence.SequenceGenerator;
 import org.kie.internal.process.CorrelationProperty;
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.OneToMany;
 import javax.persistence.Id;
 import java.util.List;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import java.io.Serializable;
 import javax.persistence.Version;
 
 @Entity
@@ -56,12 +56,12 @@ public class CorrelationKeyInfo implements Serializable , CorrelationKey {
 
     @Override
     public String getName() {
-        return CorrelationKeyInfo.this.name;
+        return this.name;
     }
 
     @Override
     public List<CorrelationProperty<?>> getProperties() {
-        return new ArrayList<CorrelationProperty<?>>(CorrelationKeyInfo.this.properties);
+        return new ArrayList<CorrelationProperty<?>>(this.properties);
     }
 
     public long getProcessInstanceId() {
@@ -69,28 +69,30 @@ public class CorrelationKeyInfo implements Serializable , CorrelationKey {
     }
 
     public void setProcessInstanceId(long processInstanceId) {
-        CorrelationKeyInfo.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public void setName(String name) {
-        CorrelationKeyInfo.this.name = name;
+        this.name = name;
     }
 
     public void addProperty(CorrelationPropertyInfo property) {
-        if ((CorrelationKeyInfo.this.properties) == null) {
-            CorrelationKeyInfo.this.properties = new ArrayList<CorrelationPropertyInfo>();
-        } 
-        property.setCorrelationKey(CorrelationKeyInfo.this);
-        CorrelationKeyInfo.this.properties.add(property);
+        if ((this.properties) == null) {
+            this.properties = new ArrayList<CorrelationPropertyInfo>();
+        }
+        // set correlation CorrelationKeyInfo{this} to CorrelationPropertyInfo{property}
+        property.setCorrelationKey(this);
+        // add CorrelationPropertyInfo{property} to List{this.properties}
+        this.properties.add(property);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((int) (((id) ^ ((id) >>> 32))));
+        result = (prime * result) + ((int) ((id) ^ ((id) >>> 32)));
         result = (prime * result) + ((name) == null ? 0 : name.hashCode());
-        result = (prime * result) + ((int) (((processInstanceId) ^ ((processInstanceId) >>> 32))));
+        result = (prime * result) + ((int) ((processInstanceId) ^ ((processInstanceId) >>> 32)));
         result = (prime * result) + ((properties) == null ? 0 : properties.hashCode());
         result = (prime * result) + (version);
         return result;
@@ -98,7 +100,7 @@ public class CorrelationKeyInfo implements Serializable , CorrelationKey {
 
     @Override
     public boolean equals(Object obj) {
-        if ((CorrelationKeyInfo.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -115,8 +117,10 @@ public class CorrelationKeyInfo implements Serializable , CorrelationKey {
             if ((other.name) != null)
                 return false;
             
-        } else if (!(name.equals(other.name)))
-            return false;
+        }else
+            if (!(name.equals(other.name)))
+                return false;
+            
         
         if ((processInstanceId) != (other.processInstanceId))
             return false;
@@ -125,8 +129,10 @@ public class CorrelationKeyInfo implements Serializable , CorrelationKey {
             if ((other.properties) != null)
                 return false;
             
-        } else if (!(properties.equals(other.properties)))
-            return false;
+        }else
+            if (!(properties.equals(other.properties)))
+                return false;
+            
         
         if ((version) != (other.version))
             return false;
@@ -145,7 +151,7 @@ public class CorrelationKeyInfo implements Serializable , CorrelationKey {
 
     @Override
     public String toExternalForm() {
-        return CorrelationKeyXmlAdapter.marshalCorrelationKey(CorrelationKeyInfo.this);
+        return CorrelationKeyXmlAdapter.marshalCorrelationKey(this);
     }
 }
 

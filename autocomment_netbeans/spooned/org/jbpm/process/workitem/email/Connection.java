@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,15 +24,15 @@ public class Connection {
     }
 
     public Connection(String host, String port, String userName, String password) {
-        Connection.this.host = host;
-        Connection.this.port = port;
-        Connection.this.userName = userName;
-        Connection.this.password = password;
+        this.host = host;
+        this.port = port;
+        this.userName = userName;
+        this.password = password;
     }
 
     public Connection(String host, String port) {
-        Connection.this.host = host;
-        Connection.this.port = port;
+        this.host = host;
+        this.port = port;
     }
 
     private String host;
@@ -56,7 +56,7 @@ public class Connection {
     }
 
     public boolean equals(Object obj) {
-        if ((Connection.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -68,15 +68,17 @@ public class Connection {
         Field[] fields = Connection.class.getDeclaredFields();
         for (int i = 0; i < (fields.length); ++i) {
             try {
-                Object thisVal = fields[i].get(Connection.this);
+                Object thisVal = fields[i].get(this);
                 Object thatVal = fields[i].get(obj);
                 if ((thisVal != null) && (thatVal != null)) {
                     if (!(thisVal.equals(thatVal))) {
                         return false;
-                    } 
-                } else if (thisVal != thatVal) {
-                    return false;
-                } 
+                    }
+                }else
+                    if (thisVal != thatVal) {
+                        return false;
+                    }
+                
             } catch (Exception e) {
                 return false;
             }
@@ -89,7 +91,7 @@ public class Connection {
     }
 
     public void setHost(String host) {
-        Connection.this.host = host;
+        this.host = host;
     }
 
     public String getPort() {
@@ -97,7 +99,7 @@ public class Connection {
     }
 
     public void setPort(String port) {
-        Connection.this.port = port;
+        this.port = port;
     }
 
     public String getUserName() {
@@ -105,7 +107,7 @@ public class Connection {
     }
 
     public void setUserName(String userName) {
-        Connection.this.userName = userName;
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -113,7 +115,7 @@ public class Connection {
     }
 
     public void setPassword(String password) {
-        Connection.this.password = password;
+        this.password = password;
     }
 
     public Boolean getStartTls() {
@@ -121,7 +123,7 @@ public class Connection {
     }
 
     public void setStartTls(boolean startTls) {
-        Connection.this.startTls = startTls;
+        this.startTls = startTls;
     }
 }
 

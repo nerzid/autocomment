@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * DroolsValidator
@@ -21,12 +22,24 @@
 
 package org.jboss.drools.util;
 
+import org.eclipse.emf.ecore.EPackage;
 import java.math.BigInteger;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.util.EObjectValidator;
-import org.eclipse.emf.ecore.EPackage;
 import java.util.Map;
 import org.eclipse.emf.ecore.xml.type.util.XMLTypeValidator;
+import static DroolsPackage.DOCUMENT_ROOT;
+import static DroolsPackage.PACKAGE_NAME_TYPE;
+import static DroolsPackage.GLOBAL_TYPE;
+import static DroolsPackage.IMPORT_TYPE;
+import static DroolsPackage.ON_EXIT_SCRIPT_TYPE;
+import static DroolsPackage.PRIORITY_TYPE;
+import static DroolsPackage.eINSTANCE;
+import static DroolsPackage.META_DATA_TYPE;
+import static DroolsPackage.ON_ENTRY_SCRIPT_TYPE;
+import static DroolsPackage.TASK_NAME_TYPE;
+import static DroolsPackage.RULE_FLOW_GROUP_TYPE;
+import static DroolsPackage.VERSION_TYPE;
 
 /**
  * <!-- begin-user-doc -->

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,13 +25,16 @@ public class OrderEligibilityCheck {
 
     public static Boolean dateDifference(Date dt1, Date dt2) {
         long diff = (dt1.getTime()) - (dt2.getTime());
+        // debug String{("Start Date: " + dt2)} to Logger{OrderEligibilityCheck.logger}
         OrderEligibilityCheck.logger.debug(("Start Date: " + dt2));
+        // debug String{("End Date: " + dt1)} to Logger{OrderEligibilityCheck.logger}
         OrderEligibilityCheck.logger.debug(("End Date: " + dt1));
         long result = diff / (((24 * 60) * 60) * 1000);
         if (result > 30) {
             OrderEligibilityCheck.logger.debug("Date difference is more than 30");
             return true;
-        } 
+        }
+        // debug String{"Date difference is less than 30"} to Logger{OrderEligibilityCheck.logger}
         OrderEligibilityCheck.logger.debug("Date difference is less than 30");
         return false;
     }

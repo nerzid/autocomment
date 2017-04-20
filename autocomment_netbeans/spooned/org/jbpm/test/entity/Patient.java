@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +45,7 @@ public class Patient implements Serializable {
     }
 
     public Patient(String name) {
-        Patient.this.name = name;
+        this.name = name;
     }
 
     public Long getId() {
@@ -53,7 +53,7 @@ public class Patient implements Serializable {
     }
 
     public void setId(Long id) {
-        Patient.this.id = id;
+        this.id = id;
     }
 
     public Date getNextAppointment() {
@@ -61,7 +61,7 @@ public class Patient implements Serializable {
     }
 
     public void setNextAppointment(Date nextAppointment) {
-        Patient.this.nextAppointment = nextAppointment;
+        this.nextAppointment = nextAppointment;
     }
 
     public String getName() {
@@ -69,7 +69,7 @@ public class Patient implements Serializable {
     }
 
     public void setName(String name) {
-        Patient.this.name = name;
+        this.name = name;
     }
 
     public MedicalRecord getRecord() {
@@ -77,7 +77,7 @@ public class Patient implements Serializable {
     }
 
     public void setRecord(MedicalRecord record) {
-        Patient.this.record = record;
+        this.record = record;
     }
 
     @Override
@@ -89,33 +89,33 @@ public class Patient implements Serializable {
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        } 
+        }
         if ((getClass()) != (obj.getClass())) {
             return false;
-        } 
+        }
         final Patient other = ((Patient) (obj));
-        if (((Patient.this.id) != (other.id)) && (((Patient.this.id) == null) || (!(Patient.this.id.equals(other.id))))) {
+        if (((this.id) != (other.id)) && (((this.id) == null) || (!(this.id.equals(other.id))))) {
             return false;
-        } 
-        if ((Patient.this.name) == null ? (other.name) != null : !(Patient.this.name.equals(other.name))) {
+        }
+        if ((this.name) == null ? (other.name) != null : !(this.name.equals(other.name))) {
             return false;
-        } 
-        if (((Patient.this.record) != (other.record)) && (((Patient.this.record) == null) || (!(Patient.this.record.equals(other.record))))) {
+        }
+        if (((this.record) != (other.record)) && (((this.record) == null) || (!(this.record.equals(other.record))))) {
             return false;
-        } 
-        if (((Patient.this.nextAppointment) != (other.nextAppointment)) && (((Patient.this.nextAppointment) == null) || (!(Patient.this.nextAppointment.equals(other.nextAppointment))))) {
+        }
+        if (((this.nextAppointment) != (other.nextAppointment)) && (((this.nextAppointment) == null) || (!(this.nextAppointment.equals(other.nextAppointment))))) {
             return false;
-        } 
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = (47 * hash) + ((Patient.this.id) != null ? Patient.this.id.hashCode() : 0);
-        hash = (47 * hash) + ((Patient.this.name) != null ? Patient.this.name.hashCode() : 0);
-        hash = (47 * hash) + ((Patient.this.record) != null ? Patient.this.record.hashCode() : 0);
-        hash = (47 * hash) + ((Patient.this.nextAppointment) != null ? Patient.this.nextAppointment.hashCode() : 0);
+        hash = (47 * hash) + ((this.id) != null ? this.id.hashCode() : 0);
+        hash = (47 * hash) + ((this.name) != null ? this.name.hashCode() : 0);
+        hash = (47 * hash) + ((this.record) != null ? this.record.hashCode() : 0);
+        hash = (47 * hash) + ((this.nextAppointment) != null ? this.nextAppointment.hashCode() : 0);
         return hash;
     }
 }

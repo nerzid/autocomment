@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,18 +19,18 @@ package org.jbpm.runtime.manager.impl.deploy;
 import org.kie.internal.runtime.Cacheable;
 import java.lang.reflect.Constructor;
 import javax.persistence.EntityManagerFactory;
+import org.kie.internal.runtime.conf.ObjectModel;
 import org.kie.api.executor.ExecutorService;
+import javax.naming.NamingException;
 import java.util.HashMap;
 import javax.naming.InitialContext;
+import org.kie.api.task.TaskService;
 import org.kie.internal.runtime.manager.InternalRuntimeManager;
+import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.KieServices;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
-import javax.naming.NamingException;
-import org.kie.internal.runtime.conf.ObjectModel;
-import org.kie.api.runtime.manager.RuntimeManager;
-import org.kie.api.task.TaskService;
 
 public class EjbObjectModelResolver extends ReflectionObjectModelResolver {
     private static final Logger logger = LoggerFactory.getLogger(EjbObjectModelResolver.class);
@@ -58,8 +58,8 @@ public class EjbObjectModelResolver extends ReflectionObjectModelResolver {
             instance = manager.getCacheManager().get(clazz.getName());
             if (instance != null) {
                 return instance;
-            } 
-        } 
+            }
+        }
         if (((model.getParameters()) == null) || (model.getParameters().isEmpty())) {
             EjbObjectModelResolver.logger.debug("About to create instance of {} with no arg constructor", model.getIdentifier());
             // no parameters then use no arg constructor
@@ -68,7 +68,7 @@ public class EjbObjectModelResolver extends ReflectionObjectModelResolver {
             } catch (Exception e) {
                 throw new IllegalArgumentException(((("Unable to create instance (no arg constructor) of type " + (model.getIdentifier())) + " due to ") + (e.getMessage())), e);
             }
-        } else {
+        }else {
             EjbObjectModelResolver.logger.debug("About to create instance of {} with {} parameters", model.getIdentifier(), model.getParameters().size());
             // process parameter instances
             Class<?>[] parameterTypes = new Class<?>[model.getParameters().size()];
@@ -80,17 +80,17 @@ public class EjbObjectModelResolver extends ReflectionObjectModelResolver {
                     Class<?> paramclazz = getClassObject(((ObjectModel) (param)).getIdentifier(), cl);
                     parameterTypes[index] = paramclazz;
                     paramInstances[index] = getInstance(((ObjectModel) (param)), cl, contextParams);
-                } else {
+                }else {
                     if (contextParams.containsKey(param)) {
                         EjbObjectModelResolver.logger.debug("Parametr references context parametr with name {}", param);
                         Object contextValue = contextParams.get(param);
                         Class<?> paramClass = contextValue.getClass();
                         if (knownContextParamMapping.containsKey(param)) {
                             paramClass = knownContextParamMapping.get(param);
-                        } 
+                        }
                         parameterTypes[index] = paramClass;
                         paramInstances[index] = contextValue;
-                    } else {
+                    }else {
                         if (param.toString().startsWith("jndi:")) {
                             EjbObjectModelResolver.logger.debug("Parameter is jndi lookup type - {}", param);
                             // remove the jndi: prefix
@@ -102,7 +102,7 @@ public class EjbObjectModelResolver extends ReflectionObjectModelResolver {
                             } catch (NamingException e) {
                                 throw new IllegalArgumentException(("Unable to look up object from jndi using name " + lookupName), e);
                             }
-                        } else {
+                        }else {
                             EjbObjectModelResolver.logger.debug("Parameter is simple type (string) - {}", param);
                             parameterTypes[index] = param.getClass();
                             paramInstances[index] = param;
@@ -119,10 +119,11 @@ public class EjbObjectModelResolver extends ReflectionObjectModelResolver {
                 throw new IllegalArgumentException(((((("Unable to create instance (" + parameterTypes) + " constructor) of type ") + (model.getIdentifier())) + " due to ") + (e.getMessage())), e);
             }
         }
+        // debug String{"Created instance : {}"} to Logger{EjbObjectModelResolver.logger}
         EjbObjectModelResolver.logger.debug("Created instance : {}", instance);
         if ((manager != null) && (instance instanceof Cacheable)) {
             manager.getCacheManager().add(instance.getClass().getName(), instance);
-        } 
+        }
         return instance;
     }
 
@@ -130,8 +131,9 @@ public class EjbObjectModelResolver extends ReflectionObjectModelResolver {
     public boolean accept(String resolverId) {
         if (EjbObjectModelResolver.ID.equals(resolverId)) {
             return true;
-        } 
-        EjbObjectModelResolver.logger.debug("Resolver id {} is not accepted by {}", resolverId, EjbObjectModelResolver.this.getClass());
+        }
+        // debug String{"Resolver id {} is not accepted by {}"} to Logger{EjbObjectModelResolver.logger}
+        EjbObjectModelResolver.logger.debug("Resolver id {} is not accepted by {}", resolverId, this.getClass());
         return false;
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,9 @@
 package org.jbpm.marshalling.impl;
 
 import java.util.HashMap;
+import ProtobufRuleFlowProcessInstanceMarshaller.INSTANCE;
 import java.util.Map;
+import RuleFlowProcess.RULEFLOW_TYPE;
 
 /**
  * Registry for Process/ProcessMarshaller
@@ -29,16 +31,17 @@ public class ProcessMarshallerRegistry {
     private Map<String, ProcessInstanceMarshaller> registry;
 
     private ProcessMarshallerRegistry() {
-        ProcessMarshallerRegistry.this.registry = new HashMap<String, ProcessInstanceMarshaller>();
-        register(RuleFlowProcess.RULEFLOW_TYPE, ProtobufRuleFlowProcessInstanceMarshaller.INSTANCE);
+        this.registry = new HashMap<String, ProcessInstanceMarshaller>();
+        register(RULEFLOW_TYPE, ProtobufRuleFlowProcessInstanceMarshaller.INSTANCE);
     }
 
     public void register(String type, ProcessInstanceMarshaller marchaller) {
-        ProcessMarshallerRegistry.this.registry.put(type, marchaller);
+        // put String{type} to Map{this.registry}
+        this.registry.put(type, marchaller);
     }
 
     public ProcessInstanceMarshaller getMarshaller(String type) {
-        return ProcessMarshallerRegistry.this.registry.get(type);
+        return this.registry.get(type);
     }
 }
 

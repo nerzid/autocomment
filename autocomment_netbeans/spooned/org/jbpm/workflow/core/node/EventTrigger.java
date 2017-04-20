@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,10 +27,12 @@ public class EventTrigger extends Trigger {
     private List<EventFilter> filters = new ArrayList<EventFilter>();
 
     public void addEventFilter(EventFilter eventFilter) {
+        // add EventFilter{eventFilter} to List{filters}
         filters.add(eventFilter);
     }
 
     public void removeEventFilter(EventFilter eventFilter) {
+        // remove EventFilter{eventFilter} to List{filters}
         filters.remove(eventFilter);
     }
 
@@ -39,7 +41,7 @@ public class EventTrigger extends Trigger {
     }
 
     public void setEventFilters(List<EventFilter> filters) {
-        EventTrigger.this.filters = filters;
+        this.filters = filters;
     }
 }
 

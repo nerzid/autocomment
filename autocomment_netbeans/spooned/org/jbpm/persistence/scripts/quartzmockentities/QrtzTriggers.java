@@ -18,7 +18,7 @@ public class QrtzTriggers {
     }
 
     public void setId(Long id) {
-        QrtzTriggers.this.id = id;
+        this.id = id;
     }
 }
 

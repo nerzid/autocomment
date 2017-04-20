@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,45 +52,46 @@ public class FindVariableInstancesByNameCommand extends AuditCommand<List<Variab
     }
 
     public FindVariableInstancesByNameCommand(String variableId) {
-        FindVariableInstancesByNameCommand.this.variableId = variableId;
-        FindVariableInstancesByNameCommand.this.activeProcesses = true;
+        this.variableId = variableId;
+        this.activeProcesses = true;
     }
 
     public FindVariableInstancesByNameCommand(String variableId, boolean onlyFromActiveProcesses) {
-        FindVariableInstancesByNameCommand.this.variableId = variableId;
-        FindVariableInstancesByNameCommand.this.activeProcesses = onlyFromActiveProcesses;
+        this.variableId = variableId;
+        this.activeProcesses = onlyFromActiveProcesses;
     }
 
     public FindVariableInstancesByNameCommand(String variableId, String value) {
         if ((variableId == null) || (variableId.isEmpty())) {
             throw new IllegalArgumentException("The variableId field may not be null or empty.");
-        } 
-        FindVariableInstancesByNameCommand.this.variableId = variableId;
+        }
+        this.variableId = variableId;
         if ((value == null) || (value.isEmpty())) {
             throw new IllegalArgumentException("The value field may not be null or empty.");
-        } 
-        FindVariableInstancesByNameCommand.this.value = value;
-        FindVariableInstancesByNameCommand.this.activeProcesses = true;
+        }
+        this.value = value;
+        this.activeProcesses = true;
     }
 
     public FindVariableInstancesByNameCommand(String variableId, String value, boolean onlyFromActiveProcesses) {
         this(variableId, value);
-        FindVariableInstancesByNameCommand.this.activeProcesses = onlyFromActiveProcesses;
+        this.activeProcesses = onlyFromActiveProcesses;
     }
 
     public List<VariableInstanceLog> execute(Context cntxt) {
+        // set log Context{cntxt} to FindVariableInstancesByNameCommand{}
         setLogEnvironment(cntxt);
-        if (((FindVariableInstancesByNameCommand.this.value) == null) || (FindVariableInstancesByNameCommand.this.value.isEmpty())) {
-            return FindVariableInstancesByNameCommand.this.auditLogService.findVariableInstancesByName(variableId, activeProcesses);
-        } else {
-            return FindVariableInstancesByNameCommand.this.auditLogService.findVariableInstancesByNameAndValue(variableId, value, activeProcesses);
+        if (((this.value) == null) || (this.value.isEmpty())) {
+            return this.auditLogService.findVariableInstancesByName(variableId, activeProcesses);
+        }else {
+            return this.auditLogService.findVariableInstancesByNameAndValue(variableId, value, activeProcesses);
         }
     }
 
     public String toString() {
         if (((variableId) == null) || (variableId.isEmpty())) {
             return (((((AuditLogService.class.getSimpleName()) + ".findVariableInstancesByName(") + (variableId)) + ", ") + (activeProcesses)) + ")";
-        } else {
+        }else {
             return (((((((AuditLogService.class.getSimpleName()) + ".findNodeInstancesByNameAndValue(") + (variableId)) + ", ") + (value)) + ", ") + (activeProcesses)) + ")";
         }
     }

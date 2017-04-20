@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,24 +20,26 @@ package org.jbpm.bpmn2.xml;
 import org.xml.sax.Attributes;
 import org.jbpm.workflow.core.node.Join;
 import org.jbpm.workflow.core.Node;
-import org.jbpm.workflow.core.node.Split;
+import Join.TYPE_XOR;
 
 public class ExclusiveGatewayHandler extends AbstractNodeHandler {
     protected Node createNode(Attributes attrs) {
         final String type = attrs.getValue("gatewayDirection");
         if ("Converging".equals(type)) {
             Join join = new Join();
-            join.setType(Join.TYPE_XOR);
+            join.setType(TYPE_XOR);
             return join;
-        } else if ("Diverging".equals(type)) {
-            Split split = new Split();
-            split.setType(Split.TYPE_XOR);
-            String isDefault = attrs.getValue("default");
-            split.setMetaData("Default", isDefault);
-            return split;
-        } else {
-            throw new IllegalArgumentException(("Unknown gateway direction: " + type));
-        }
+        }else
+            if ("Diverging".equals(type)) {
+                org.jbpm.workflow.core.node.Split split = new org.jbpm.workflow.core.node.Split();
+                split.setType(Split.TYPE_XOR);
+                String isDefault = attrs.getValue("default");
+                split.setMetaData("Default", isDefault);
+                return split;
+            }else {
+                throw new IllegalArgumentException(("Unknown gateway direction: " + type));
+            }
+        
     }
 
     @SuppressWarnings(value = "unchecked")

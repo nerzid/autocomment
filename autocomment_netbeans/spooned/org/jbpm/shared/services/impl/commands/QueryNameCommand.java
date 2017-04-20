@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,14 +31,14 @@ public class QueryNameCommand<T> implements GenericCommand<T> {
     private Map<String, Object> params;
 
     public QueryNameCommand(String queryName) {
-        QueryNameCommand.this.queryName = queryName;
-        QueryNameCommand.this.resultType = ((Class<T>) (Object.class.getClass()));
+        this.queryName = queryName;
+        this.resultType = ((Class<T>) (Object.class.getClass()));
     }
 
     public QueryNameCommand(String queryName, Map<String, Object> params) {
-        QueryNameCommand.this.queryName = queryName;
-        QueryNameCommand.this.params = params;
-        QueryNameCommand.this.resultType = ((Class<T>) (Object.class.getClass()));
+        this.queryName = queryName;
+        this.params = params;
+        this.resultType = ((Class<T>) (Object.class.getClass()));
     }
 
     @Override
@@ -46,7 +46,7 @@ public class QueryNameCommand<T> implements GenericCommand<T> {
         JpaPersistenceContext ctx = ((JpaPersistenceContext) (context));
         if ((params) == null) {
             return ctx.queryInTransaction(queryName, resultType);
-        } else {
+        }else {
             return ctx.queryWithParametersInTransaction(queryName, params, resultType);
         }
     }

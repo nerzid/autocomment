@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -79,22 +79,22 @@ public class AuditTaskImpl implements Serializable , AuditTask {
     }
 
     public AuditTaskImpl(long taskId, String name, String status, Date activationTime, String actualOwner, String description, int priority, String createdBy, Date createdOn, Date dueDate, long processInstanceId, String processId, long processSessionId, String deploymentId, long parentId, long workItemId) {
-        AuditTaskImpl.this.taskId = taskId;
-        AuditTaskImpl.this.status = status;
-        AuditTaskImpl.this.activationTime = activationTime;
-        AuditTaskImpl.this.name = name;
-        AuditTaskImpl.this.description = description;
-        AuditTaskImpl.this.priority = priority;
-        AuditTaskImpl.this.createdBy = createdBy;
-        AuditTaskImpl.this.createdOn = createdOn;
-        AuditTaskImpl.this.actualOwner = actualOwner;
-        AuditTaskImpl.this.dueDate = dueDate;
-        AuditTaskImpl.this.processInstanceId = processInstanceId;
-        AuditTaskImpl.this.processId = processId;
-        AuditTaskImpl.this.processSessionId = processSessionId;
-        AuditTaskImpl.this.deploymentId = deploymentId;
-        AuditTaskImpl.this.parentId = parentId;
-        AuditTaskImpl.this.workItemId = workItemId;
+        this.taskId = taskId;
+        this.status = status;
+        this.activationTime = activationTime;
+        this.name = name;
+        this.description = description;
+        this.priority = priority;
+        this.createdBy = createdBy;
+        this.createdOn = createdOn;
+        this.actualOwner = actualOwner;
+        this.dueDate = dueDate;
+        this.processInstanceId = processInstanceId;
+        this.processId = processId;
+        this.processSessionId = processSessionId;
+        this.deploymentId = deploymentId;
+        this.parentId = parentId;
+        this.workItemId = workItemId;
     }
 
     public Long getId() {
@@ -102,7 +102,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
     }
 
     public void setId(Long id) {
-        AuditTaskImpl.this.id = id;
+        this.id = id;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setTaskId(long taskId) {
-        AuditTaskImpl.this.taskId = taskId;
+        this.taskId = taskId;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setStatus(String status) {
-        AuditTaskImpl.this.status = status;
+        this.status = status;
     }
 
     @Override
@@ -132,7 +132,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setActivationTime(Date activationTime) {
-        AuditTaskImpl.this.activationTime = activationTime;
+        this.activationTime = activationTime;
     }
 
     @Override
@@ -142,7 +142,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setName(String name) {
-        AuditTaskImpl.this.name = name;
+        this.name = name;
     }
 
     @Override
@@ -152,7 +152,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setDescription(String description) {
-        AuditTaskImpl.this.description = description;
+        this.description = description;
     }
 
     @Override
@@ -162,7 +162,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setPriority(int priority) {
-        AuditTaskImpl.this.priority = priority;
+        this.priority = priority;
     }
 
     @Override
@@ -172,7 +172,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setCreatedBy(String createdBy) {
-        AuditTaskImpl.this.createdBy = createdBy;
+        this.createdBy = createdBy;
     }
 
     @Override
@@ -182,7 +182,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setCreatedOn(Date createdOn) {
-        AuditTaskImpl.this.createdOn = createdOn;
+        this.createdOn = createdOn;
     }
 
     @Override
@@ -192,7 +192,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setDueDate(Date dueDate) {
-        AuditTaskImpl.this.dueDate = dueDate;
+        this.dueDate = dueDate;
     }
 
     @Override
@@ -202,7 +202,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setProcessInstanceId(long processInstanceId) {
-        AuditTaskImpl.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     @Override
@@ -212,7 +212,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setProcessId(String processId) {
-        AuditTaskImpl.this.processId = processId;
+        this.processId = processId;
     }
 
     @Override
@@ -222,7 +222,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setProcessSessionId(long processSessionId) {
-        AuditTaskImpl.this.processSessionId = processSessionId;
+        this.processSessionId = processSessionId;
     }
 
     @Override
@@ -232,7 +232,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setParentId(long parentId) {
-        AuditTaskImpl.this.parentId = parentId;
+        this.parentId = parentId;
     }
 
     public String getActualOwner() {
@@ -240,7 +240,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
     }
 
     public void setActualOwner(String actualOwner) {
-        AuditTaskImpl.this.actualOwner = actualOwner;
+        this.actualOwner = actualOwner;
     }
 
     public String getDeploymentId() {
@@ -248,7 +248,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
     }
 
     public void setDeploymentId(String deploymentId) {
-        AuditTaskImpl.this.deploymentId = deploymentId;
+        this.deploymentId = deploymentId;
     }
 
     @Override
@@ -258,7 +258,7 @@ public class AuditTaskImpl implements Serializable , AuditTask {
 
     @Override
     public void setWorkItemId(long workItemId) {
-        AuditTaskImpl.this.workItemId = workItemId;
+        this.workItemId = workItemId;
     }
 }
 

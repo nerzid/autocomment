@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,6 @@
 package org.apache.commons.io;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.io.Reader;
@@ -45,7 +44,7 @@ import java.io.Reader;
  *   it.close();
  * }
  * </pre>
- * 
+ *
  * @version $Id: LineIterator.java 1471767 2013-04-24 23:24:19Z sebb $
  * @since 1.2
  */
@@ -68,17 +67,17 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Constructs an iterator of the lines for a <code>Reader</code>.
-     * 
+     *
      * @param reader the <code>Reader</code> to read from, not null
      * @throws IllegalArgumentException if the reader is null
      */
     public LineIterator(final Reader reader) throws IllegalArgumentException {
         if (reader == null) {
             throw new IllegalArgumentException("Reader must not be null");
-        } 
+        }
         if (reader instanceof BufferedReader) {
             bufferedReader = ((BufferedReader) (reader));
-        } else {
+        }else {
             bufferedReader = new BufferedReader(reader);
         }
     }
@@ -88,32 +87,36 @@ public class LineIterator implements Iterator<String> {
      * Indicates whether the <code>Reader</code> has more lines.
      * If there is an <code>IOException</code> then {@link #close()} will
      * be called on this instance.
-     * 
+     *
      * @return {@code true} if the Reader has more lines
      * @throws IllegalStateException if an IO exception occurs
      */
     public boolean hasNext() {
         if ((cachedLine) != null) {
             return true;
-        } else if (finished) {
-            return false;
-        } else {
-            try {
-                while (true) {
-                    final String line = bufferedReader.readLine();
-                    if (line == null) {
-                        finished = true;
-                        return false;
-                    } else if (isValidLine(line)) {
-                        cachedLine = line;
-                        return true;
+        }else
+            if (finished) {
+                return false;
+            }else {
+                try {
+                    while (true) {
+                        final String line = bufferedReader.readLine();
+                        if (line == null) {
+                            finished = true;
+                            return false;
+                        }else
+                            if (isValidLine(line)) {
+                                cachedLine = line;
+                                return true;
+                            }
+                        
                     } 
+                } catch (final java.io.IOException ioe) {
+                    close();
+                    throw new IllegalStateException(ioe);
                 }
-            } catch (final IOException ioe) {
-                close();
-                throw new IllegalStateException(ioe);
             }
-        }
+        
     }
 
     /**
@@ -128,7 +131,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Returns the next line in the wrapped <code>Reader</code>.
-     * 
+     *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
      */
@@ -138,14 +141,14 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Returns the next line in the wrapped <code>Reader</code>.
-     * 
+     *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
      */
     public String nextLine() {
         if (!(hasNext())) {
             throw new NoSuchElementException("No more lines");
-        } 
+        }
         final String currentLine = cachedLine;
         cachedLine = null;
         return currentLine;
@@ -160,13 +163,14 @@ public class LineIterator implements Iterator<String> {
      */
     public void close() {
         finished = true;
+        // close quietly BufferedReader{bufferedReader} to void{IOUtils}
         IOUtils.closeQuietly(bufferedReader);
         cachedLine = null;
     }
 
     /**
      * Unsupported.
-     * 
+     *
      * @throws UnsupportedOperationException always
      */
     public void remove() {
@@ -176,13 +180,13 @@ public class LineIterator implements Iterator<String> {
     // -----------------------------------------------------------------------
     /**
      * Closes the iterator, handling null and ignoring exceptions.
-     * 
+     *
      * @param iterator  the iterator to close
      */
     public static void closeQuietly(final LineIterator iterator) {
         if (iterator != null) {
             iterator.close();
-        } 
+        }
     }
 }
 

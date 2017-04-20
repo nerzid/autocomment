@@ -5,11 +5,11 @@ rule1
   : V NPR PP? EOF
   ;
 
-boolean_one_verb_rule
-  : V NPR EOF
+one_verb_rule
+  : V NPR? EOF
   ;
 
-boolean_two_verb_rule
+two_verb_rule
   : V NPR V NPR? EOF
   ;
 
@@ -18,10 +18,12 @@ NPR // Recursive Noun Phrase Variable
   | 'NNS'
   | 'NNP'
   | 'NNPS'
+  | 'JJ'
   | 'NN' ' ' NPR
   | 'NNS' ' ' NPR
   | 'NNP' ' ' NPR
   | 'NNPS' ' ' NPR
+  | 'JJ' ' ' NPR
   ;
 
 V // Non-Recursive Verb Variable

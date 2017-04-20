@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,14 +33,14 @@ public class CaseRoleInstanceImpl implements Serializable , CaseRoleInstance {
     private Collection<OrganizationalEntity> roleAssignments;
 
     public CaseRoleInstanceImpl(String roleName, Integer cardinality) {
-        CaseRoleInstanceImpl.this.roleName = roleName;
-        CaseRoleInstanceImpl.this.cardinality = cardinality;
-        CaseRoleInstanceImpl.this.roleAssignments = new ArrayList();
+        this.roleName = roleName;
+        this.cardinality = cardinality;
+        this.roleAssignments = new ArrayList();
     }
 
     public CaseRoleInstanceImpl(String roleName, Collection<OrganizationalEntity> roleAssignments) {
-        CaseRoleInstanceImpl.this.roleName = roleName;
-        CaseRoleInstanceImpl.this.roleAssignments = roleAssignments;
+        this.roleName = roleName;
+        this.roleAssignments = roleAssignments;
     }
 
     @Override
@@ -57,13 +57,15 @@ public class CaseRoleInstanceImpl implements Serializable , CaseRoleInstance {
         if (((cardinality) != null) && ((cardinality) > 0)) {
             if ((cardinality) < ((roleAssignments.size()) + 1)) {
                 throw new IllegalArgumentException((((("Cannot add more users for role " + (roleName)) + ", maximum cardinality ") + (cardinality)) + " already reached"));
-            } 
-        } 
-        CaseRoleInstanceImpl.this.roleAssignments.add(entity);
+            }
+        }
+        // add OrganizationalEntity{entity} to Collection{this.roleAssignments}
+        this.roleAssignments.add(entity);
     }
 
     public void removeRoleAssignment(OrganizationalEntity entity) {
-        CaseRoleInstanceImpl.this.roleAssignments.remove(entity);
+        // remove OrganizationalEntity{entity} to Collection{this.roleAssignments}
+        this.roleAssignments.remove(entity);
     }
 
     @Override

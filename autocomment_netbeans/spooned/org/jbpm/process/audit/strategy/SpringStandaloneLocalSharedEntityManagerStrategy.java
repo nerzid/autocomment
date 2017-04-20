@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,25 +25,25 @@ public class SpringStandaloneLocalSharedEntityManagerStrategy implements Persist
     private boolean manageTx;
 
     public SpringStandaloneLocalSharedEntityManagerStrategy(EntityManagerFactory emf) {
-        SpringStandaloneLocalSharedEntityManagerStrategy.this.em = emf.createEntityManager();
-        SpringStandaloneLocalSharedEntityManagerStrategy.this.manageTx = true;
+        this.em = emf.createEntityManager();
+        this.manageTx = true;
     }
 
     public SpringStandaloneLocalSharedEntityManagerStrategy(EntityManager em) {
-        SpringStandaloneLocalSharedEntityManagerStrategy.this.em = em;
-        SpringStandaloneLocalSharedEntityManagerStrategy.this.manageTx = false;
+        this.em = em;
+        this.manageTx = false;
     }
 
     @Override
     public EntityManager getEntityManager() {
-        return SpringStandaloneLocalSharedEntityManagerStrategy.this.em;
+        return this.em;
     }
 
     @Override
     public Object joinTransaction(EntityManager em) {
         if (manageTx) {
             em.getTransaction().begin();
-        } 
+        }
         return manageTx;
     }
 
@@ -51,7 +51,7 @@ public class SpringStandaloneLocalSharedEntityManagerStrategy implements Persist
     public void leaveTransaction(EntityManager em, Object transaction) {
         if (manageTx) {
             em.getTransaction().commit();
-        } 
+        }
     }
 
     @Override

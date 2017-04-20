@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,13 +41,14 @@ public class CDIPrintOutCommand implements Command {
         String clazz = ((String) (getParameter(ctx, "CDIBeanClassName")));
         if (StringUtils.isEmpty(clazz)) {
             clazz = ExecutorService.class.getName();
-        } 
+        }
         try {
             Object cdiBean = CDIUtils.createBean(Class.forName(clazz), manager);
             CDIPrintOutCommand.logger.info("CDI bean created {}", cdiBean);
         } catch (Exception e) {
             CDIPrintOutCommand.logger.error("Error while creating CDI bean from jbpm executor", e);
         }
+        // info String{"Command executed on executor with data {}"} to Logger{CDIPrintOutCommand.logger}
         CDIPrintOutCommand.logger.info("Command executed on executor with data {}", ctx.getData());
         ExecutionResults executionResults = new ExecutionResults();
         return executionResults;
@@ -56,11 +57,11 @@ public class CDIPrintOutCommand implements Command {
     protected Object getParameter(CommandContext commandContext, String parameterName) {
         if ((commandContext.getData(parameterName)) != null) {
             return commandContext.getData(parameterName);
-        } 
+        }
         WorkItem workItem = ((WorkItem) (commandContext.getData("workItem")));
         if (workItem != null) {
             return workItem.getParameter(parameterName);
-        } 
+        }
         return null;
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,11 +17,11 @@
 
 package org.jbpm.process.instance;
 
+import org.kie.api.KieBase;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.lang.reflect.Constructor;
-import org.kie.api.KieBase;
 import org.kie.internal.runtime.KnowledgeRuntime;
 import java.util.Map;
 import org.kie.api.runtime.process.ProcessInstance;
@@ -34,36 +34,36 @@ public final class StartProcessHelper {
     public static ProcessInstance startProcessByName(KnowledgeRuntime kruntime, String name, Map<String, Object> parameters) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");
-        } 
+        }
         String processId = StartProcessHelper.findLatestProcessByName(kruntime.getKieBase(), name);
         if (processId == null) {
             throw new IllegalArgumentException(("Could not find process with name " + name));
-        } 
+        }
         return kruntime.startProcess(processId, parameters);
     }
 
     public static ProcessInstance startProcessByName(KnowledgeRuntime kruntime, String name, Map<String, Object> parameters, Comparator<Process> comparator) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null");
-        } 
+        }
         String processId = StartProcessHelper.findLatestProcessByName(kruntime.getKieBase(), name, comparator);
         if (processId == null) {
             throw new IllegalArgumentException(("Could not find process with name " + name));
-        } 
+        }
         return kruntime.startProcess(processId, parameters);
     }
 
     public static String findLatestProcessByName(KieBase kbase, final String processName) {
         if (kbase == null) {
             return null;
-        } 
+        }
         return StartProcessHelper.findLatestProcessByName(kbase.getProcesses(), processName);
     }
 
     public static String findLatestProcessByName(KieBase kbase, final String processName, Comparator<Process> comparator) {
         if (kbase == null) {
             return null;
-        } 
+        }
         return StartProcessHelper.findLatestProcessByName(kbase.getProcesses(), processName, comparator);
     }
 
@@ -74,11 +74,11 @@ public final class StartProcessHelper {
     public static String findLatestProcessByName(Collection<Process> processes, final String processName, Comparator<Process> comparator) {
         if ((processes == null) || (processName == null)) {
             return null;
-        } 
+        }
         Process highestVersionProcess = Collections.max(processes, comparator);
         if ((highestVersionProcess != null) && (processName.equals(highestVersionProcess.getName()))) {
             return highestVersionProcess.getId();
-        } 
+        }
         return null;
     }
 
@@ -90,7 +90,7 @@ public final class StartProcessHelper {
                 return constructor.newInstance(name);
             } catch (Exception e) {
             }
-        } 
+        }
         return new StartProcessHelper.NumberVersionComparator(name);
     }
 
@@ -98,7 +98,7 @@ public final class StartProcessHelper {
         private String processName;
 
         private NumberVersionComparator(String processName) {
-            StartProcessHelper.NumberVersionComparator.this.processName = processName;
+            this.processName = processName;
         }
 
         public int compare(Process o1, Process o2) {
@@ -109,20 +109,24 @@ public final class StartProcessHelper {
                     if (((o1.getVersion()) != null) && ((o2.getVersion()) != null)) {
                         if ((Double.valueOf(o1.getVersion())) > (Double.valueOf(o2.getVersion()))) {
                             return 1;
-                        } else {
+                        }else {
                             return -1;
                         }
-                    } else if ((o1.getVersion()) != null) {
-                        return 1;
-                    } else {
-                        return o1.getId().compareTo(o2.getId());
-                    }
+                    }else
+                        if ((o1.getVersion()) != null) {
+                            return 1;
+                        }else {
+                            return o1.getId().compareTo(o2.getId());
+                        }
+                    
                 } catch (NumberFormatException e) {
                     throw new IllegalArgumentException(((("Could not parse version: " + (o1.getVersion())) + " ") + (o2.getVersion())), e);
                 }
-            } else if (o1.getName().equals(processName)) {
-                return 1;
-            } 
+            }else
+                if (o1.getName().equals(processName)) {
+                    return 1;
+                }
+            
             return -1;
         }
     }

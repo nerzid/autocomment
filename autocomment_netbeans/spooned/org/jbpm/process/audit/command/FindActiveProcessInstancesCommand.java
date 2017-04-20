@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,18 +44,19 @@ public class FindActiveProcessInstancesCommand extends AuditCommand<List<Process
     }
 
     public FindActiveProcessInstancesCommand(String processId) {
-        FindActiveProcessInstancesCommand.this.processId = processId;
+        this.processId = processId;
         if ((processId == null) || (processId.isEmpty())) {
             throw new IllegalArgumentException("The processId field must not be null or empty.");
-        } 
+        }
     }
 
     public List<ProcessInstanceLog> execute(Context cntxt) {
+        // set log Context{cntxt} to FindActiveProcessInstancesCommand{}
         setLogEnvironment(cntxt);
         if (((processId) != null) && (!(processId.trim().isEmpty()))) {
-            return FindActiveProcessInstancesCommand.this.auditLogService.findActiveProcessInstances(processId);
-        } else {
-            return FindActiveProcessInstancesCommand.this.auditLogService.findActiveProcessInstances();
+            return this.auditLogService.findActiveProcessInstances(processId);
+        }else {
+            return this.auditLogService.findActiveProcessInstances();
         }
     }
 
@@ -64,7 +65,7 @@ public class FindActiveProcessInstancesCommand extends AuditCommand<List<Process
     }
 
     public void setProcessId(String processId) {
-        FindActiveProcessInstancesCommand.this.processId = processId;
+        this.processId = processId;
     }
 
     public String toString() {

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ import java.io.Serializable;
  * <p>
  * For example, to print all files and directories in the
  * current directory older than one day:
- * 
+ *
  * <pre>
  * File dir = new File(".");
  * // We are interested in files older than one day
@@ -39,7 +39,7 @@ import java.io.Serializable;
  *     System.out.println(files[i]);
  * }
  * </pre>
- * 
+ *
  * @version $Id: AgeFileFilter.java 1642757 2014-12-01 21:09:30Z sebb $
  * @see FileFilterUtils#ageFileFilter(Date)
  * @see FileFilterUtils#ageFileFilter(File)
@@ -65,7 +65,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new age file filter for files equal to or older than
      * a certain cutoff
-     * 
+     *
      * @param cutoff  the threshold age of the files
      */
     public AgeFileFilter(final long cutoff) {
@@ -75,7 +75,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new age file filter for files on any one side
      * of a certain cutoff.
-     * 
+     *
      * @param cutoff  the threshold age of the files
      * @param acceptOlder  if true, older files (at or before the cutoff)
      * are accepted, else newer ones (after the cutoff).
@@ -88,7 +88,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new age file filter for files older than (at or before)
      * a certain cutoff date.
-     * 
+     *
      * @param cutoffDate  the threshold age of the files
      */
     public AgeFileFilter(final Date cutoffDate) {
@@ -98,7 +98,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new age file filter for files on any one side
      * of a certain cutoff date.
-     * 
+     *
      * @param cutoffDate  the threshold age of the files
      * @param acceptOlder  if true, older files (at or before the cutoff)
      * are accepted, else newer ones (after the cutoff).
@@ -110,7 +110,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new age file filter for files older than (at or before)
      * a certain File (whose last modification time will be used as reference).
-     * 
+     *
      * @param cutoffReference  the file whose last modification
      *        time is usesd as the threshold age of the files
      */
@@ -122,7 +122,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      * Constructs a new age file filter for files on any one side
      * of a certain File (whose last modification time will be used as
      * reference).
-     * 
+     *
      * @param cutoffReference  the file whose last modification
      *        time is usesd as the threshold age of the files
      * @param acceptOlder  if true, older files (at or before the cutoff)
@@ -141,7 +141,7 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
      * file <b>IS NOT</b> selected.
      * If last modification time equals cutoff and older files are required,
      * file <b>IS</b> selected.
-     * 
+     *
      * @param file  the File to check
      * @return true if the filename matches
      */
@@ -153,12 +153,12 @@ public class AgeFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Provide a String representaion of this file filter.
-     * 
+     *
      * @return a String representaion
      */
     @Override
     public String toString() {
-        final String condition = acceptOlder ? "<=" : ">";
+        final String condition = (acceptOlder) ? "<=" : ">";
         return ((((super.toString()) + "(") + condition) + (cutoff)) + ")";
     }
 }

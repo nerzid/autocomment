@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@ import java.io.Serializable;
  *   <li>Length (see {@link File#length()}) - directories treated as zero</li>
  *   <li>Children - contents of a directory (see {@link File#listFiles(java.io.FileFilter)})</li>
  * </ul>
- * 
+ *
  * <h3>Custom Implementations</h3>
  * <p>
  * If the state of additional {@link File} attributes is required then create a custom
@@ -65,7 +65,7 @@ public class FileEntry implements Serializable {
 
     /**
      * Construct a new monitor for a specified {@link File}.
-     * 
+     *
      * @param file The file being monitored
      */
     public FileEntry(final File file) {
@@ -74,17 +74,17 @@ public class FileEntry implements Serializable {
 
     /**
      * Construct a new monitor for a specified {@link File}.
-     * 
+     *
      * @param parent The parent
      * @param file The file being monitored
      */
     public FileEntry(final FileEntry parent, final File file) {
         if (file == null) {
             throw new IllegalArgumentException("File is missing");
-        } 
+        }
         this.file = file;
         this.parent = parent;
-        FileEntry.this.name = file.getName();
+        this.name = file.getName();
     }
 
     /**
@@ -97,7 +97,7 @@ public class FileEntry implements Serializable {
      * <p>
      * The <code>exists</code>, <code>directory</code>, <code>lastModified</code>
      * and <code>length</code> properties are compared for changes
-     * 
+     *
      * @param file the file instance to compare to
      * @return {@code true} if the file has changed, otherwise {@code false}
      */
@@ -122,17 +122,17 @@ public class FileEntry implements Serializable {
      * <p>
      * Custom implementations should override this method to return
      * a new instance of the appropriate type.
-     * 
+     *
      * @param file The child file
      * @return a new child instance
      */
     public FileEntry newChildInstance(final File file) {
-        return new FileEntry(FileEntry.this, file);
+        return new FileEntry(this, file);
     }
 
     /**
      * Return the parent entry.
-     * 
+     *
      * @return the parent entry
      */
     public FileEntry getParent() {
@@ -141,7 +141,7 @@ public class FileEntry implements Serializable {
 
     /**
      * Return the level
-     * 
+     *
      * @return the level
      */
     public int getLevel() {
@@ -150,7 +150,7 @@ public class FileEntry implements Serializable {
 
     /**
      * Return the directory's files.
-     * 
+     *
      * @return This directory's files or an empty
      * array if the file is not a directory or the
      * directory is empty
@@ -161,16 +161,16 @@ public class FileEntry implements Serializable {
 
     /**
      * Set the directory's files.
-     * 
+     *
      * @param children This directory's files, may be null
      */
     public void setChildren(final FileEntry[] children) {
-        FileEntry.this.children = children;
+        this.children = children;
     }
 
     /**
      * Return the file being monitored.
-     * 
+     *
      * @return the file being monitored
      */
     public File getFile() {
@@ -179,7 +179,7 @@ public class FileEntry implements Serializable {
 
     /**
      * Return the file name.
-     * 
+     *
      * @return the file name
      */
     public String getName() {
@@ -188,17 +188,17 @@ public class FileEntry implements Serializable {
 
     /**
      * Set the file name.
-     * 
+     *
      * @param name the file name
      */
     public void setName(final String name) {
-        FileEntry.this.name = name;
+        this.name = name;
     }
 
     /**
      * Return the last modified time from the last time it
      * was checked.
-     * 
+     *
      * @return the last modified time
      */
     public long getLastModified() {
@@ -208,16 +208,16 @@ public class FileEntry implements Serializable {
     /**
      * Return the last modified time from the last time it
      * was checked.
-     * 
+     *
      * @param lastModified The last modified time
      */
     public void setLastModified(final long lastModified) {
-        FileEntry.this.lastModified = lastModified;
+        this.lastModified = lastModified;
     }
 
     /**
      * Return the length.
-     * 
+     *
      * @return the length
      */
     public long getLength() {
@@ -226,17 +226,17 @@ public class FileEntry implements Serializable {
 
     /**
      * Set the length.
-     * 
+     *
      * @param length the length
      */
     public void setLength(final long length) {
-        FileEntry.this.length = length;
+        this.length = length;
     }
 
     /**
      * Indicate whether the file existed the last time it
      * was checked.
-     * 
+     *
      * @return whether the file existed
      */
     public boolean isExists() {
@@ -246,16 +246,16 @@ public class FileEntry implements Serializable {
     /**
      * Set whether the file existed the last time it
      * was checked.
-     * 
+     *
      * @param exists whether the file exists or not
      */
     public void setExists(final boolean exists) {
-        FileEntry.this.exists = exists;
+        this.exists = exists;
     }
 
     /**
      * Indicate whether the file is a directory or not.
-     * 
+     *
      * @return whether the file is a directory or not
      */
     public boolean isDirectory() {
@@ -264,11 +264,11 @@ public class FileEntry implements Serializable {
 
     /**
      * Set whether the file is a directory or not.
-     * 
+     *
      * @param directory whether the file is a directory or not
      */
     public void setDirectory(final boolean directory) {
-        FileEntry.this.directory = directory;
+        this.directory = directory;
     }
 }
 

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +36,7 @@ public class WorkflowReuseContextInstanceFactory implements ContextInstanceFacto
         ContextInstance result = contextInstanceContainer.getContextInstance(context.getType(), context.getId());
         if (result != null) {
             return result;
-        } 
+        }
         try {
             AbstractContextInstance contextInstance = ((AbstractContextInstance) (cls.newInstance()));
             contextInstance.setContextId(context.getId());
@@ -46,22 +46,26 @@ public class WorkflowReuseContextInstanceFactory implements ContextInstanceFacto
             NodeInstanceContainer nodeInstanceContainer = null;
             if (contextInstanceContainer instanceof NodeInstanceContainer) {
                 nodeInstanceContainer = ((NodeInstanceContainer) (contextInstanceContainer));
-            } else if (contextInstanceContainer instanceof ContextInstance) {
-                ContextInstanceContainer parent = ((ContextInstance) (contextInstanceContainer)).getContextInstanceContainer();
-                while (parent != null) {
-                    if (parent instanceof NodeInstanceContainer) {
-                        nodeInstanceContainer = ((NodeInstanceContainer) (parent));
-                    } else if (contextInstanceContainer instanceof ContextInstance) {
-                        parent = ((ContextInstance) (contextInstanceContainer)).getContextInstanceContainer();
-                    } else {
-                        parent = null;
-                    }
+            }else
+                if (contextInstanceContainer instanceof ContextInstance) {
+                    ContextInstanceContainer parent = ((ContextInstance) (contextInstanceContainer)).getContextInstanceContainer();
+                    while (parent != null) {
+                        if (parent instanceof NodeInstanceContainer) {
+                            nodeInstanceContainer = ((NodeInstanceContainer) (parent));
+                        }else
+                            if (contextInstanceContainer instanceof ContextInstance) {
+                                parent = ((ContextInstance) (contextInstanceContainer)).getContextInstanceContainer();
+                            }else {
+                                parent = null;
+                            }
+                        
+                    } 
                 }
-            } 
+            
             ((WorkflowContextInstance) (contextInstance)).setNodeInstanceContainer(nodeInstanceContainer);
             return contextInstance;
         } catch (Exception e) {
-            throw new RuntimeException(((("Unable to instantiate context '" + (WorkflowReuseContextInstanceFactory.this.cls.getName())) + "': ") + (e.getMessage())));
+            throw new RuntimeException(((("Unable to instantiate context '" + (this.cls.getName())) + "': ") + (e.getMessage())));
         }
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 
 package org.jbpm.services.task.impl.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.io.IOException;
@@ -26,10 +26,10 @@ import javax.persistence.Id;
 import org.kie.internal.task.api.model.InternalI18NText;
 import java.util.List;
 import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.persistence.SequenceGenerator;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "I18NText")
@@ -52,18 +52,22 @@ public class I18NTextImpl implements InternalI18NText {
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long Long{id} to ObjectOutput{out}
         out.writeLong(id);
         if ((language) == null) {
             language = "";
-        } 
+        }
+        // write utf String{language} to ObjectOutput{out}
         out.writeUTF(language);
         if ((shortText) == null) {
             shortText = "";
-        } 
+        }
+        // write utf String{shortText} to ObjectOutput{out}
         out.writeUTF(shortText);
         if ((text) == null) {
             text = "";
-        } 
+        }
+        // write utf String{text} to ObjectOutput{out}
         out.writeUTF(text);
     }
 
@@ -75,13 +79,13 @@ public class I18NTextImpl implements InternalI18NText {
     }
 
     public I18NTextImpl(String language, String text) {
-        I18NTextImpl.this.language = language;
+        this.language = language;
         if ((text != null) && ((text.length()) > 256)) {
-            I18NTextImpl.this.shortText = text.substring(0, 255);
-        } else {
-            I18NTextImpl.this.shortText = text;
+            this.shortText = text.substring(0, 255);
+        }else {
+            this.shortText = text;
         }
-        I18NTextImpl.this.text = text;
+        this.text = text;
     }
 
     public Long getId() {
@@ -89,7 +93,7 @@ public class I18NTextImpl implements InternalI18NText {
     }
 
     public void setId(Long id) {
-        I18NTextImpl.this.id = id;
+        this.id = id;
     }
 
     public String getLanguage() {
@@ -97,7 +101,7 @@ public class I18NTextImpl implements InternalI18NText {
     }
 
     public void setLanguage(String language) {
-        I18NTextImpl.this.language = language;
+        this.language = language;
     }
 
     public String getText() {
@@ -106,11 +110,11 @@ public class I18NTextImpl implements InternalI18NText {
 
     public void setText(String text) {
         if ((text != null) && ((text.length()) > 256)) {
-            I18NTextImpl.this.shortText = text.substring(0, 255);
-        } else {
-            I18NTextImpl.this.shortText = text;
+            this.shortText = text.substring(0, 255);
+        }else {
+            this.shortText = text;
         }
-        I18NTextImpl.this.text = text;
+        this.text = text;
     }
 
     @Override
@@ -125,7 +129,7 @@ public class I18NTextImpl implements InternalI18NText {
 
     @Override
     public boolean equals(Object obj) {
-        if ((I18NTextImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -139,22 +143,28 @@ public class I18NTextImpl implements InternalI18NText {
             if ((other.language) != null)
                 return false;
             
-        } else if (!(language.equals(other.language)))
-            return false;
+        }else
+            if (!(language.equals(other.language)))
+                return false;
+            
         
         if ((shortText) == null) {
             if ((other.shortText) != null)
                 return false;
             
-        } else if (!(shortText.equals(other.shortText)))
-            return false;
+        }else
+            if (!(shortText.equals(other.shortText)))
+                return false;
+            
         
         if ((text) == null) {
             if ((other.text) != null)
                 return false;
             
-        } else if (!(text.equals(other.text)))
-            return false;
+        }else
+            if (!(text.equals(other.text)))
+                return false;
+            
         
         return true;
     }
@@ -163,15 +173,15 @@ public class I18NTextImpl implements InternalI18NText {
         for (I18NTextImpl text : list) {
             if (text.getLanguage().equals(prefferedLanguage)) {
                 return text.getText();
-            } 
+            }
         }
         if (defaultLanguage == null) {
             for (I18NTextImpl text : list) {
                 if (text.getLanguage().equals(defaultLanguage)) {
                     return text.getText();
-                } 
+                }
             }
-        } 
+        }
         return "";
     }
 }

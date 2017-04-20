@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,18 +17,18 @@
 
 package org.jbpm.services.task.audit.impl.model;
 
+import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import java.io.Serializable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Version;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "BAMTaskSummary")
@@ -71,12 +71,12 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public BAMTaskSummaryImpl(long taskId, String name, String status, Date createdDate, String userId, long processInstanceId) {
-        BAMTaskSummaryImpl.this.taskId = taskId;
-        BAMTaskSummaryImpl.this.taskName = name;
-        BAMTaskSummaryImpl.this.userId = userId;
-        BAMTaskSummaryImpl.this.status = status;
-        BAMTaskSummaryImpl.this.createdDate = createdDate;
-        BAMTaskSummaryImpl.this.processInstanceId = processInstanceId;
+        this.taskId = taskId;
+        this.taskName = name;
+        this.userId = userId;
+        this.status = status;
+        this.createdDate = createdDate;
+        this.processInstanceId = processInstanceId;
     }
 
     public long getTaskId() {
@@ -84,7 +84,7 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public void setTaskId(long taskId) {
-        BAMTaskSummaryImpl.this.taskId = taskId;
+        this.taskId = taskId;
     }
 
     public String getName() {
@@ -92,7 +92,7 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public void setName(String name) {
-        BAMTaskSummaryImpl.this.taskName = name;
+        this.taskName = name;
     }
 
     public Date getStartDate() {
@@ -100,7 +100,7 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public void setStartDate(Date startDate) {
-        BAMTaskSummaryImpl.this.startDate = startDate;
+        this.startDate = startDate;
     }
 
     public Date getEndDate() {
@@ -108,7 +108,7 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public void setEndDate(Date endDate) {
-        BAMTaskSummaryImpl.this.endDate = endDate;
+        this.endDate = endDate;
     }
 
     public String getUserId() {
@@ -116,7 +116,7 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public void setUserId(String userId) {
-        BAMTaskSummaryImpl.this.userId = userId;
+        this.userId = userId;
     }
 
     public Long getDuration() {
@@ -124,7 +124,7 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public void setDuration(Long duration) {
-        BAMTaskSummaryImpl.this.duration = duration;
+        this.duration = duration;
     }
 
     public String getStatus() {
@@ -132,7 +132,7 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public void setStatus(String status) {
-        BAMTaskSummaryImpl.this.status = status;
+        this.status = status;
     }
 
     public long getProcessInstanceId() {
@@ -140,7 +140,7 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public void setProcessInstanceId(long processInstanceId) {
-        BAMTaskSummaryImpl.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     @Override
@@ -153,7 +153,7 @@ public class BAMTaskSummaryImpl implements Serializable {
     }
 
     public void setVersion(Integer version) {
-        BAMTaskSummaryImpl.this.version = version;
+        this.version = version;
     }
 
     @Override
@@ -164,10 +164,10 @@ public class BAMTaskSummaryImpl implements Serializable {
         result = (prime * result) + ((duration) == null ? 0 : duration.hashCode());
         result = (prime * result) + ((endDate) == null ? 0 : endDate.hashCode());
         result = (prime * result) + ((pk) == null ? 0 : pk.hashCode());
-        result = (prime * result) + ((int) (((processInstanceId) ^ ((processInstanceId) >>> 32))));
+        result = (prime * result) + ((int) ((processInstanceId) ^ ((processInstanceId) >>> 32)));
         result = (prime * result) + ((startDate) == null ? 0 : startDate.hashCode());
         result = (prime * result) + ((status) == null ? 0 : status.hashCode());
-        result = (prime * result) + ((int) (((taskId) ^ ((taskId) >>> 32))));
+        result = (prime * result) + ((int) ((taskId) ^ ((taskId) >>> 32)));
         result = (prime * result) + ((taskName) == null ? 0 : taskName.hashCode());
         result = (prime * result) + ((userId) == null ? 0 : userId.hashCode());
         result = (prime * result) + ((version) == null ? 0 : version.hashCode());
@@ -176,7 +176,7 @@ public class BAMTaskSummaryImpl implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if ((BAMTaskSummaryImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -190,29 +190,37 @@ public class BAMTaskSummaryImpl implements Serializable {
             if ((other.createdDate) != null)
                 return false;
             
-        } else if (!(createdDate.equals(other.createdDate)))
-            return false;
+        }else
+            if (!(createdDate.equals(other.createdDate)))
+                return false;
+            
         
         if ((duration) == null) {
             if ((other.duration) != null)
                 return false;
             
-        } else if (!(duration.equals(other.duration)))
-            return false;
+        }else
+            if (!(duration.equals(other.duration)))
+                return false;
+            
         
         if ((endDate) == null) {
             if ((other.endDate) != null)
                 return false;
             
-        } else if (!(endDate.equals(other.endDate)))
-            return false;
+        }else
+            if (!(endDate.equals(other.endDate)))
+                return false;
+            
         
         if ((pk) == null) {
             if ((other.pk) != null)
                 return false;
             
-        } else if (!(pk.equals(other.pk)))
-            return false;
+        }else
+            if (!(pk.equals(other.pk)))
+                return false;
+            
         
         if ((processInstanceId) != (other.processInstanceId))
             return false;
@@ -221,15 +229,19 @@ public class BAMTaskSummaryImpl implements Serializable {
             if ((other.startDate) != null)
                 return false;
             
-        } else if (!(startDate.equals(other.startDate)))
-            return false;
+        }else
+            if (!(startDate.equals(other.startDate)))
+                return false;
+            
         
         if ((status) == null) {
             if ((other.status) != null)
                 return false;
             
-        } else if (!(status.equals(other.status)))
-            return false;
+        }else
+            if (!(status.equals(other.status)))
+                return false;
+            
         
         if ((taskId) != (other.taskId))
             return false;
@@ -238,22 +250,28 @@ public class BAMTaskSummaryImpl implements Serializable {
             if ((other.taskName) != null)
                 return false;
             
-        } else if (!(taskName.equals(other.taskName)))
-            return false;
+        }else
+            if (!(taskName.equals(other.taskName)))
+                return false;
+            
         
         if ((userId) == null) {
             if ((other.userId) != null)
                 return false;
             
-        } else if (!(userId.equals(other.userId)))
-            return false;
+        }else
+            if (!(userId.equals(other.userId)))
+                return false;
+            
         
         if ((version) == null) {
             if ((other.version) != null)
                 return false;
             
-        } else if (!(version.equals(other.version)))
-            return false;
+        }else
+            if (!(version.equals(other.version)))
+                return false;
+            
         
         return true;
     }

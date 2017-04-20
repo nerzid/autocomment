@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,13 +17,13 @@
 
 package org.jbpm.kie.services.impl.store;
 
+import javax.persistence.Lob;
 import javax.persistence.Column;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import java.io.Serializable;
 import javax.persistence.Table;
@@ -59,7 +59,7 @@ public class DeploymentStoreEntry implements Serializable {
     }
 
     public void setId(Long id) {
-        DeploymentStoreEntry.this.id = id;
+        this.id = id;
     }
 
     public String getDeploymentId() {
@@ -67,7 +67,7 @@ public class DeploymentStoreEntry implements Serializable {
     }
 
     public void setDeploymentId(String deploymentId) {
-        DeploymentStoreEntry.this.deploymentId = deploymentId;
+        this.deploymentId = deploymentId;
     }
 
     public String getDeploymentUnit() {
@@ -75,7 +75,7 @@ public class DeploymentStoreEntry implements Serializable {
     }
 
     public void setDeploymentUnit(String deploymentUnit) {
-        DeploymentStoreEntry.this.deploymentUnit = deploymentUnit;
+        this.deploymentUnit = deploymentUnit;
     }
 
     public Integer getState() {
@@ -83,7 +83,7 @@ public class DeploymentStoreEntry implements Serializable {
     }
 
     public void setState(Integer state) {
-        DeploymentStoreEntry.this.state = state;
+        this.state = state;
     }
 
     public Date getUpdateDate() {
@@ -91,7 +91,7 @@ public class DeploymentStoreEntry implements Serializable {
     }
 
     public void setUpdateDate(Date updateDate) {
-        DeploymentStoreEntry.this.updateDate = updateDate;
+        this.updateDate = updateDate;
     }
 
     public String getAttributes() {
@@ -99,7 +99,7 @@ public class DeploymentStoreEntry implements Serializable {
     }
 
     public void setAttributes(String attributes) {
-        DeploymentStoreEntry.this.attributes = attributes;
+        this.attributes = attributes;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class DeploymentStoreEntry implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if ((DeploymentStoreEntry.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -131,43 +131,55 @@ public class DeploymentStoreEntry implements Serializable {
             if ((other.attributes) != null)
                 return false;
             
-        } else if (!(attributes.equals(other.attributes)))
-            return false;
+        }else
+            if (!(attributes.equals(other.attributes)))
+                return false;
+            
         
         if ((deploymentId) == null) {
             if ((other.deploymentId) != null)
                 return false;
             
-        } else if (!(deploymentId.equals(other.deploymentId)))
-            return false;
+        }else
+            if (!(deploymentId.equals(other.deploymentId)))
+                return false;
+            
         
         if ((deploymentUnit) == null) {
             if ((other.deploymentUnit) != null)
                 return false;
             
-        } else if (!(deploymentUnit.equals(other.deploymentUnit)))
-            return false;
+        }else
+            if (!(deploymentUnit.equals(other.deploymentUnit)))
+                return false;
+            
         
         if ((id) == null) {
             if ((other.id) != null)
                 return false;
             
-        } else if (!(id.equals(other.id)))
-            return false;
+        }else
+            if (!(id.equals(other.id)))
+                return false;
+            
         
         if ((state) == null) {
             if ((other.state) != null)
                 return false;
             
-        } else if (!(state.equals(other.state)))
-            return false;
+        }else
+            if (!(state.equals(other.state)))
+                return false;
+            
         
         if ((updateDate) == null) {
             if ((other.updateDate) != null)
                 return false;
             
-        } else if (!(updateDate.equals(other.updateDate)))
-            return false;
+        }else
+            if (!(updateDate.equals(other.updateDate)))
+                return false;
+            
         
         return true;
     }

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,32 +48,32 @@ public class DocumentImpl implements Document {
     }
 
     public DocumentImpl(String identifier, String name, long size, Date lastModified) {
-        DocumentImpl.this.identifier = identifier;
-        DocumentImpl.this.name = name;
-        DocumentImpl.this.size = size;
-        DocumentImpl.this.lastModified = lastModified;
+        this.identifier = identifier;
+        this.name = name;
+        this.size = size;
+        this.lastModified = lastModified;
         attributes = new HashMap<String, String>();
     }
 
     public DocumentImpl(String name, long size, Date lastModified) {
-        DocumentImpl.this.name = name;
-        DocumentImpl.this.size = size;
-        DocumentImpl.this.lastModified = lastModified;
+        this.name = name;
+        this.size = size;
+        this.lastModified = lastModified;
         attributes = new HashMap<String, String>();
     }
 
     public DocumentImpl(String identifier, String name, long size, Date lastModified, String link) {
-        DocumentImpl.this.identifier = identifier;
-        DocumentImpl.this.name = name;
-        DocumentImpl.this.size = size;
-        DocumentImpl.this.lastModified = lastModified;
-        DocumentImpl.this.link = link;
+        this.identifier = identifier;
+        this.name = name;
+        this.size = size;
+        this.lastModified = lastModified;
+        this.link = link;
         attributes = new HashMap<String, String>();
     }
 
     @Override
     public void setIdentifier(String identifier) {
-        DocumentImpl.this.identifier = identifier;
+        this.identifier = identifier;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class DocumentImpl implements Document {
 
     @Override
     public void setName(String name) {
-        DocumentImpl.this.name = name;
+        this.name = name;
     }
 
     @Override
@@ -93,17 +93,17 @@ public class DocumentImpl implements Document {
 
     @Override
     public void setLink(String link) {
-        DocumentImpl.this.link = link;
+        this.link = link;
     }
 
     @Override
     public String getLink() {
-        return DocumentImpl.this.link;
+        return this.link;
     }
 
     @Override
     public void setSize(long size) {
-        DocumentImpl.this.size = size;
+        this.size = size;
     }
 
     @Override
@@ -113,7 +113,7 @@ public class DocumentImpl implements Document {
 
     @Override
     public void setLastModified(Date lastModified) {
-        DocumentImpl.this.lastModified = lastModified;
+        this.lastModified = lastModified;
     }
 
     @Override
@@ -128,12 +128,13 @@ public class DocumentImpl implements Document {
 
     @Override
     public void addAttribute(String attributeName, String attributeValue) {
+        // put String{attributeName} to Map{attributes}
         attributes.put(attributeName, attributeValue);
     }
 
     @Override
     public void setAttributes(Map<String, String> attributes) {
-        DocumentImpl.this.attributes = attributes;
+        this.attributes = attributes;
     }
 
     @Override
@@ -143,7 +144,7 @@ public class DocumentImpl implements Document {
 
     @Override
     public void setContent(byte[] content) {
-        DocumentImpl.this.content = content;
+        this.content = content;
     }
 
     @Override

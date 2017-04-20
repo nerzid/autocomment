@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 
 package org.jbpm.services.task.commands;
 
+import javax.xml.bind.annotation.XmlElement;
 import org.kie.internal.command.Context;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,6 @@ import org.kie.api.task.model.Status;
 import org.kie.api.task.model.TaskSummary;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "get-task-assigned-as-potential-owner-by-exp-date-command")
@@ -45,9 +45,9 @@ public class GetTaskAssignedAsPotentialOwnerByExpDateCommand extends UserGroupCa
 
     public GetTaskAssignedAsPotentialOwnerByExpDateCommand(String userId, List<Status> status, Date expirationDate, boolean optional) {
         this.userId = userId;
-        GetTaskAssignedAsPotentialOwnerByExpDateCommand.this.status = status;
-        GetTaskAssignedAsPotentialOwnerByExpDateCommand.this.expirationDate = expirationDate;
-        GetTaskAssignedAsPotentialOwnerByExpDateCommand.this.optional = optional;
+        this.status = status;
+        this.expirationDate = expirationDate;
+        this.optional = optional;
     }
 
     public List<Status> getStatuses() {
@@ -55,7 +55,7 @@ public class GetTaskAssignedAsPotentialOwnerByExpDateCommand extends UserGroupCa
     }
 
     public void setStatuses(List<Status> status) {
-        GetTaskAssignedAsPotentialOwnerByExpDateCommand.this.status = status;
+        this.status = status;
     }
 
     public Date getExpirationDate() {
@@ -63,7 +63,7 @@ public class GetTaskAssignedAsPotentialOwnerByExpDateCommand extends UserGroupCa
     }
 
     public void setExpirationDate(Date expirationDate) {
-        GetTaskAssignedAsPotentialOwnerByExpDateCommand.this.expirationDate = expirationDate;
+        this.expirationDate = expirationDate;
     }
 
     public boolean isOptional() {
@@ -71,16 +71,17 @@ public class GetTaskAssignedAsPotentialOwnerByExpDateCommand extends UserGroupCa
     }
 
     public void setOptional(boolean optional) {
-        GetTaskAssignedAsPotentialOwnerByExpDateCommand.this.optional = optional;
+        this.optional = optional;
     }
 
     public List<TaskSummary> execute(Context cntxt) {
         TaskContext context = ((TaskContext) (cntxt));
+        // do callback GetTaskAssignedAsPotentialOwnerByExpDateCommand{userId} to GetTaskAssignedAsPotentialOwnerByExpDateCommand{}
         doCallbackUserOperation(userId, context);
         List<String> groupIds = doUserGroupCallbackOperation(userId, null, context);
         if (optional) {
             return context.getTaskQueryService().getTasksAssignedAsPotentialOwnerByExpirationDateOptional(userId, groupIds, status, expirationDate);
-        } else {
+        }else {
             return context.getTaskQueryService().getTasksAssignedAsPotentialOwnerByExpirationDate(userId, groupIds, status, expirationDate);
         }
     }

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,20 +16,21 @@
 
 package org.jbpm.process.core.async;
 
+import org.kie.api.executor.ExecutionResults;
 import java.util.Arrays;
+import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.executor.Command;
 import org.kie.api.executor.CommandContext;
 import org.kie.internal.process.CorrelationAwareProcessRuntime;
 import org.kie.internal.process.CorrelationKey;
 import org.kie.internal.process.CorrelationKeyFactory;
-import org.kie.api.executor.ExecutionResults;
+import KieInternalServices.Factory;
+import org.kie.api.runtime.process.WorkItem;
 import java.util.Map;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
-import org.kie.api.runtime.manager.RuntimeEngine;
-import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.internal.runtime.manager.RuntimeManagerRegistry;
-import org.kie.api.runtime.process.WorkItem;
 import org.drools.core.process.instance.impl.WorkItemImpl;
+import org.kie.api.runtime.manager.RuntimeEngine;
 
 /**
  * Executor command that allows asynchronously start process instance based on given parameters:
@@ -41,7 +42,7 @@ import org.drools.core.process.instance.impl.WorkItemImpl;
  * </ul>
  */
 public class AsyncStartProcessCommand implements Command {
-    private static CorrelationKeyFactory correlationKeyFactory = KieInternalServices.Factory.get().newCorrelationKeyFactory();
+    private static CorrelationKeyFactory correlationKeyFactory = Factory.get().newCorrelationKeyFactory();
 
     @SuppressWarnings(value = "unchecked")
     @Override
@@ -52,16 +53,16 @@ public class AsyncStartProcessCommand implements Command {
         Map<String, Object> variables = ((Map<String, Object>) (getData("Variables", ctx)));
         if ((deploymentId == null) || (processId == null)) {
             throw new IllegalArgumentException("Deployment id and process id is required");
-        } 
+        }
         RuntimeManager runtimeManager = RuntimeManagerRegistry.get().getManager(deploymentId);
         if (runtimeManager == null) {
             throw new IllegalArgumentException(("No runtime manager found for deployment id " + deploymentId));
-        } 
+        }
         RuntimeEngine engine = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get());
         try {
             if ((correlationKey == null) || (correlationKey.isEmpty())) {
                 engine.getKieSession().startProcess(processId, variables);
-            } else {
+            }else {
                 String[] correlationKeyProperties = correlationKey.split(",");
                 CorrelationKey ck = AsyncStartProcessCommand.correlationKeyFactory.newCorrelationKey(Arrays.asList(correlationKeyProperties));
                 ((CorrelationAwareProcessRuntime) (engine.getKieSession())).startProcess(processId, ck, variables);
@@ -75,11 +76,11 @@ public class AsyncStartProcessCommand implements Command {
     protected Object getData(String name, CommandContext ctx) {
         if ((ctx.getData(name)) != null) {
             return ctx.getData(name);
-        } 
+        }
         WorkItem workItem = ((WorkItem) (ctx.getData("workItem")));
         if (workItem != null) {
             return workItem.getParameter(name);
-        } 
+        }
         return null;
     }
 
@@ -87,14 +88,14 @@ public class AsyncStartProcessCommand implements Command {
         String deploymentId = ((String) (ctx.getData("DeploymentId")));
         if (deploymentId != null) {
             return deploymentId;
-        } 
+        }
         WorkItem workItem = ((WorkItem) (ctx.getData("workItem")));
         if (workItem != null) {
             deploymentId = ((String) (workItem.getParameter("DeploymentId")));
             if (deploymentId == null) {
                 deploymentId = ((WorkItemImpl) (workItem)).getDeploymentId();
-            } 
-        } 
+            }
+        }
         return deploymentId;
     }
 }

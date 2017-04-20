@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,9 +16,9 @@
 
 package org.jbpm.process.builder.dialect.mvel;
 
+import org.drools.compiler.compiler.BoundIdentifiers;
 import org.drools.compiler.compiler.AnalysisResult;
 import org.drools.compiler.lang.descr.BaseDescr;
-import org.drools.compiler.compiler.BoundIdentifiers;
 import java.util.HashSet;
 import org.drools.compiler.rule.builder.dialect.mvel.MVELAnalysisResult;
 import org.drools.compiler.rule.builder.dialect.mvel.MVELDialect;
@@ -71,10 +71,12 @@ public class AbstractMVELBuilder {
                 if (lastNonWhite != ';') {
                     result.append(';');
                     lastNonWhite = ';';
-                } 
-            } else if (!(Character.isWhitespace(c))) {
-                lastNonWhite = c;
-            } 
+                }
+            }else
+                if (!(Character.isWhitespace(c))) {
+                    lastNonWhite = c;
+                }
+            
             result.append(c);
         }
         return result.toString();
@@ -83,6 +85,7 @@ public class AbstractMVELBuilder {
     protected MVELAnalysisResult getAnalysis(final PackageBuildContext context, final BaseDescr descr, MVELDialect dialect, final String text, Map<String, Class<?>> variables) {
         boolean typeSafe = context.isTypesafe();
         // we can't know all the types ahead of time with processes, but we don't need return types, so it's ok
+        // set typesafe boolean{false} to PackageBuildContext{context}
         context.setTypesafe(false);
         MVELAnalysisResult analysis = null;
         try {
@@ -102,7 +105,7 @@ public class AbstractMVELBuilder {
                 referencedTypes.add(varClass.getCanonicalName());
             }
             context.getProcess().getMetaData().put((key + "ReferencedTypes"), referencedTypes);
-        } 
+        }
     }
 }
 

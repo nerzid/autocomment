@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,22 +17,21 @@
 
 package org.jbpm.services.task.impl.model;
 
+import org.kie.internal.task.api.model.InternalPeopleAssignments;
 import java.util.ArrayList;
 import org.jbpm.services.task.utils.CollectionUtils;
+import org.kie.api.task.model.User;
 import java.util.Collections;
 import javax.persistence.Embeddable;
-import org.kie.api.task.model.Group;
+import org.kie.api.task.model.OrganizationalEntity;
+import java.io.ObjectOutput;
 import java.io.IOException;
-import org.kie.internal.task.api.model.InternalPeopleAssignments;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import java.io.ObjectInput;
 import java.util.List;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import org.kie.api.task.model.OrganizationalEntity;
-import org.kie.api.task.model.User;
 
 @Embeddable
 public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
@@ -76,13 +75,18 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
         if ((taskInitiator) != null) {
             out.writeBoolean(true);
             taskInitiator.writeExternal(out);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
+        // write organizational List{potentialOwners} to void{CollectionUtils}
         CollectionUtils.writeOrganizationalEntityList(potentialOwners, out);
+        // write organizational List{excludedOwners} to void{CollectionUtils}
         CollectionUtils.writeOrganizationalEntityList(excludedOwners, out);
+        // write organizational List{taskStakeholders} to void{CollectionUtils}
         CollectionUtils.writeOrganizationalEntityList(taskStakeholders, out);
+        // write organizational List{businessAdministrators} to void{CollectionUtils}
         CollectionUtils.writeOrganizationalEntityList(businessAdministrators, out);
+        // write organizational List{recipients} to void{CollectionUtils}
         CollectionUtils.writeOrganizationalEntityList(recipients, out);
     }
 
@@ -90,7 +94,7 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
         if (in.readBoolean()) {
             taskInitiator = new UserImpl();
             taskInitiator.readExternal(in);
-        } 
+        }
         potentialOwners = CollectionUtils.readOrganizationalEntityList(in);
         excludedOwners = CollectionUtils.readOrganizationalEntityList(in);
         taskStakeholders = CollectionUtils.readOrganizationalEntityList(in);
@@ -103,7 +107,7 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
     }
 
     public void setTaskInitiator(User taskInitiator) {
-        PeopleAssignmentsImpl.this.taskInitiator = TaskDataImpl.convertToUserImpl(taskInitiator);
+        this.taskInitiator = TaskDataImpl.convertToUserImpl(taskInitiator);
     }
 
     public List<OrganizationalEntity> getPotentialOwners() {
@@ -111,7 +115,7 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
     }
 
     public void setPotentialOwners(List<OrganizationalEntity> potentialOwners) {
-        PeopleAssignmentsImpl.this.potentialOwners = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(potentialOwners);
+        this.potentialOwners = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(potentialOwners);
     }
 
     public List<OrganizationalEntity> getExcludedOwners() {
@@ -119,7 +123,7 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
     }
 
     public void setExcludedOwners(List<OrganizationalEntity> excludedOwners) {
-        PeopleAssignmentsImpl.this.excludedOwners = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(excludedOwners);
+        this.excludedOwners = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(excludedOwners);
     }
 
     public List<OrganizationalEntity> getTaskStakeholders() {
@@ -127,7 +131,7 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
     }
 
     public void setTaskStakeholders(List<OrganizationalEntity> taskStakeholders) {
-        PeopleAssignmentsImpl.this.taskStakeholders = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(taskStakeholders);
+        this.taskStakeholders = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(taskStakeholders);
     }
 
     public List<OrganizationalEntity> getBusinessAdministrators() {
@@ -135,7 +139,7 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
     }
 
     public void setBusinessAdministrators(List<OrganizationalEntity> businessAdministrators) {
-        PeopleAssignmentsImpl.this.businessAdministrators = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(businessAdministrators);
+        this.businessAdministrators = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(businessAdministrators);
     }
 
     public List<OrganizationalEntity> getRecipients() {
@@ -143,7 +147,7 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
     }
 
     public void setRecipients(List<OrganizationalEntity> recipients) {
-        PeopleAssignmentsImpl.this.recipients = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(recipients);
+        this.recipients = PeopleAssignmentsImpl.convertToPersistentOrganizationalEntity(recipients);
     }
 
     @Override
@@ -161,7 +165,7 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
 
     @Override
     public boolean equals(Object obj) {
-        if ((PeopleAssignmentsImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -175,8 +179,10 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
             if ((other.taskInitiator) != null)
                 return false;
             
-        } else if (!(taskInitiator.equals(other.taskInitiator)))
-            return false;
+        }else
+            if (!(taskInitiator.equals(other.taskInitiator)))
+                return false;
+            
         
         return ((((CollectionUtils.equals(businessAdministrators, other.businessAdministrators)) && (CollectionUtils.equals(excludedOwners, other.excludedOwners))) && (CollectionUtils.equals(potentialOwners, other.potentialOwners))) && (CollectionUtils.equals(recipients, other.recipients))) && (CollectionUtils.equals(taskStakeholders, other.taskStakeholders));
     }
@@ -188,15 +194,19 @@ public class PeopleAssignmentsImpl implements InternalPeopleAssignments {
             for (OrganizationalEntity orgEnt : orgEntList) {
                 if ((orgEnt instanceof UserImpl) || (orgEnt instanceof GroupImpl)) {
                     persistentOrgEnts.add(orgEnt);
-                } else if (orgEnt instanceof User) {
-                    persistentOrgEnts.add(new UserImpl(orgEnt.getId()));
-                } else if (orgEnt instanceof Group) {
-                    persistentOrgEnts.add(new GroupImpl(orgEnt.getId()));
-                } else {
-                    throw new IllegalStateException(("Unknown user or group object: " + (orgEnt.getClass().getName())));
-                }
+                }else
+                    if (orgEnt instanceof User) {
+                        persistentOrgEnts.add(new UserImpl(orgEnt.getId()));
+                    }else
+                        if (orgEnt instanceof org.kie.api.task.model.Group) {
+                            persistentOrgEnts.add(new GroupImpl(orgEnt.getId()));
+                        }else {
+                            throw new IllegalStateException(("Unknown user or group object: " + (orgEnt.getClass().getName())));
+                        }
+                    
+                
             }
-        } 
+        }
         return persistentOrgEnts;
     }
 }

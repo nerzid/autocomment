@@ -18,7 +18,7 @@ public class QrtzLocks {
     }
 
     public void setId(Long id) {
-        QrtzLocks.this.id = id;
+        this.id = id;
     }
 }
 

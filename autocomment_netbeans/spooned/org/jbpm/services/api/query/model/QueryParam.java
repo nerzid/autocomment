@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,9 +35,9 @@ public class QueryParam implements Serializable {
     private List<?> value;
 
     public QueryParam(String column, String operator, List<?> value) {
-        QueryParam.this.column = column;
-        QueryParam.this.operator = operator;
-        QueryParam.this.value = value;
+        this.column = column;
+        this.operator = operator;
+        this.value = value;
     }
 
     public static QueryParam isNull(String column) {
@@ -127,7 +127,7 @@ public class QueryParam implements Serializable {
     }
 
     public void setColumn(String column) {
-        QueryParam.this.column = column;
+        this.column = column;
     }
 
     public String getOperator() {
@@ -135,7 +135,7 @@ public class QueryParam implements Serializable {
     }
 
     public void setOperator(String operator) {
-        QueryParam.this.operator = operator;
+        this.operator = operator;
     }
 
     public List<?> getValue() {
@@ -143,7 +143,7 @@ public class QueryParam implements Serializable {
     }
 
     public void setValue(List<?> value) {
-        QueryParam.this.value = value;
+        this.value = value;
     }
 
     public static QueryParam.Builder getBuilder() {
@@ -154,12 +154,13 @@ public class QueryParam implements Serializable {
         private List<QueryParam> parameters = new ArrayList<QueryParam>();
 
         public QueryParam.Builder append(QueryParam... params) {
-            QueryParam.Builder.this.parameters.addAll(Arrays.asList(params));
-            return QueryParam.Builder.this;
+            // add all List{Arrays.asList(params)} to List{this.parameters}
+            this.parameters.addAll(Arrays.asList(params));
+            return this;
         }
 
         public QueryParam[] get() {
-            return QueryParam.Builder.this.parameters.toArray(new QueryParam[QueryParam.Builder.this.parameters.size()]);
+            return this.parameters.toArray(new QueryParam[this.parameters.size()]);
         }
     }
 }

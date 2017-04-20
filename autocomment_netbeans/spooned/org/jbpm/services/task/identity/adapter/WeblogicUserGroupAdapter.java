@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +31,7 @@ public class WeblogicUserGroupAdapter implements UserGroupAdapter {
 
     public WeblogicUserGroupAdapter() {
         try {
-            WeblogicUserGroupAdapter.this.webLogicSecurity = Class.forName("weblogic.security.Security");
+            this.webLogicSecurity = Class.forName("weblogic.security.Security");
         } catch (Exception e) {
             WeblogicUserGroupAdapter.logger.info("Unable to find weblogic.security.Security, disabling weblogic adapter");
         }
@@ -42,7 +42,7 @@ public class WeblogicUserGroupAdapter implements UserGroupAdapter {
         List<String> roles = new ArrayList<String>();
         if ((((webLogicSecurity) == null) || (userId == null)) || (userId.isEmpty())) {
             return roles;
-        } 
+        }
         try {
             Method method = webLogicSecurity.getMethod("getCurrentSubject", new Class[]{  });
             Subject wlsSubject = ((Subject) (method.invoke(null, new Object[]{  })));
@@ -50,9 +50,9 @@ public class WeblogicUserGroupAdapter implements UserGroupAdapter {
                 for (Principal p : wlsSubject.getPrincipals()) {
                     if ((p.getClass().getName().indexOf("WLSGroup")) != (-1)) {
                         roles.add(p.getName());
-                    } 
+                    }
                 }
-            } 
+            }
         } catch (Exception e) {
             WeblogicUserGroupAdapter.logger.error("Unable to get roles for user {} from subject due to {}", userId, e.getMessage(), e);
         }

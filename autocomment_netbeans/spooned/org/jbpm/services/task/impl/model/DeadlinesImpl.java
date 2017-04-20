@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,11 @@
 
 package org.jbpm.services.task.impl.model;
 
+import java.util.Collections;
 import javax.persistence.CascadeType;
 import org.jbpm.services.task.utils.CollectionUtils;
-import java.util.Collections;
 import org.kie.internal.task.api.model.Deadline;
+import javax.persistence.OneToMany;
 import org.kie.internal.task.api.model.Deadlines;
 import javax.persistence.Embeddable;
 import java.io.IOException;
@@ -28,7 +29,6 @@ import javax.persistence.JoinColumn;
 import java.util.List;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import javax.persistence.OneToMany;
 
 @Embeddable
 public class DeadlinesImpl implements Deadlines {
@@ -41,7 +41,9 @@ public class DeadlinesImpl implements Deadlines {
     private List<Deadline> endDeadlines = Collections.emptyList();
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write deadline List{startDeadlines} to void{CollectionUtils}
         CollectionUtils.writeDeadlineList(startDeadlines, out);
+        // write deadline List{endDeadlines} to void{CollectionUtils}
         CollectionUtils.writeDeadlineList(endDeadlines, out);
     }
 
@@ -55,7 +57,7 @@ public class DeadlinesImpl implements Deadlines {
     }
 
     public void setStartDeadlines(List<Deadline> startDeadlines) {
-        DeadlinesImpl.this.startDeadlines = startDeadlines;
+        this.startDeadlines = startDeadlines;
     }
 
     public List<Deadline> getEndDeadlines() {
@@ -63,7 +65,7 @@ public class DeadlinesImpl implements Deadlines {
     }
 
     public void setEndDeadlines(List<Deadline> endDeadlines) {
-        DeadlinesImpl.this.endDeadlines = endDeadlines;
+        this.endDeadlines = endDeadlines;
     }
 
     @Override
@@ -77,7 +79,7 @@ public class DeadlinesImpl implements Deadlines {
 
     @Override
     public boolean equals(Object obj) {
-        if ((DeadlinesImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)

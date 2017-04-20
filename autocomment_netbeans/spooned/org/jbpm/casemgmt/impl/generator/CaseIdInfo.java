@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,7 +44,7 @@ public class CaseIdInfo implements Serializable {
     }
 
     public void setId(Long id) {
-        CaseIdInfo.this.id = id;
+        this.id = id;
     }
 
     public String getCaseIdPrefix() {
@@ -52,7 +52,7 @@ public class CaseIdInfo implements Serializable {
     }
 
     public void setCaseIdPrefix(String caseIdPrefix) {
-        CaseIdInfo.this.caseIdPrefix = caseIdPrefix;
+        this.caseIdPrefix = caseIdPrefix;
     }
 
     public Long getCurrentValue() {
@@ -60,7 +60,7 @@ public class CaseIdInfo implements Serializable {
     }
 
     public void setCurrentValue(Long currentValue) {
-        CaseIdInfo.this.currentValue = currentValue;
+        this.currentValue = currentValue;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CaseIdInfo implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if ((CaseIdInfo.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -89,22 +89,28 @@ public class CaseIdInfo implements Serializable {
             if ((other.caseIdPrefix) != null)
                 return false;
             
-        } else if (!(caseIdPrefix.equals(other.caseIdPrefix)))
-            return false;
+        }else
+            if (!(caseIdPrefix.equals(other.caseIdPrefix)))
+                return false;
+            
         
         if ((currentValue) == null) {
             if ((other.currentValue) != null)
                 return false;
             
-        } else if (!(currentValue.equals(other.currentValue)))
-            return false;
+        }else
+            if (!(currentValue.equals(other.currentValue)))
+                return false;
+            
         
         if ((id) == null) {
             if ((other.id) != null)
                 return false;
             
-        } else if (!(id.equals(other.id)))
-            return false;
+        }else
+            if (!(id.equals(other.id)))
+                return false;
+            
         
         return true;
     }

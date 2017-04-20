@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,34 +39,36 @@ public class StateBasedNode extends ExtendedNodeImpl {
     public void addTimer(Timer timer, DroolsAction action) {
         if ((timers) == null) {
             timers = new HashMap<Timer, DroolsAction>();
-        } 
+        }
         if ((timer.getId()) == 0) {
             long id = 0;
             for (Timer t : timers.keySet()) {
                 if ((t.getId()) > id) {
                     id = t.getId();
-                } 
+                }
             }
             timer.setId((++id));
-        } 
+        }
+        // put Timer{timer} to Map{timers}
         timers.put(timer, action);
     }
 
     public void removeAllTimers() {
         if ((timers) != null) {
             timers.clear();
-        } 
+        }
     }
 
     public void addBoundaryEvents(String boundaryEvent) {
-        if ((StateBasedNode.this.boundaryEvents) == null) {
-            StateBasedNode.this.boundaryEvents = new ArrayList<String>();
-        } 
-        StateBasedNode.this.boundaryEvents.add(boundaryEvent);
+        if ((this.boundaryEvents) == null) {
+            this.boundaryEvents = new ArrayList<String>();
+        }
+        // add String{boundaryEvent} to List{this.boundaryEvents}
+        this.boundaryEvents.add(boundaryEvent);
     }
 
     public void setBoundaryEvents(List<String> boundaryEvents) {
-        StateBasedNode.this.boundaryEvents = boundaryEvents;
+        this.boundaryEvents = boundaryEvents;
     }
 
     public List<String> getBoundaryEvents() {

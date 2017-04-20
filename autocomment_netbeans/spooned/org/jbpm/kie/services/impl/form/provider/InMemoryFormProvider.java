@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,14 +33,14 @@ public class InMemoryFormProvider extends FreemakerFormProvider {
         ProcessAssetDesc asset = null;
         if (!(process instanceof ProcessAssetDesc)) {
             return null;
-        } 
+        }
         String templateString = formManagerService.getFormByKey(process.getDeploymentId(), process.getId());
         if (templateString == null) {
             templateString = formManagerService.getFormByKey(process.getDeploymentId(), ((process.getId()) + (getFormSuffix())));
-        } 
+        }
         if ((templateString == null) || (templateString.isEmpty())) {
             return null;
-        } else {
+        }else {
             return render(name, new ByteArrayInputStream(templateString.getBytes()), renderContext);
         }
     }
@@ -57,7 +57,7 @@ public class InMemoryFormProvider extends FreemakerFormProvider {
         String templateString = formManagerService.getFormByKey(task.getTaskData().getDeploymentId(), lookupName);
         if ((templateString == null) || (templateString.isEmpty())) {
             return null;
-        } else {
+        }else {
             return render(name, new ByteArrayInputStream(templateString.getBytes()), renderContext);
         }
     }

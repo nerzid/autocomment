@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ public class Person implements Serializable {
     }
 
     public Person(String name) {
-        Person.this.name = name;
+        this.name = name;
     }
 
     public String getName() {
@@ -33,7 +33,7 @@ public class Person implements Serializable {
     }
 
     public void setName(String name) {
-        Person.this.name = name;
+        this.name = name;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Person implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if ((Person.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -60,8 +60,10 @@ public class Person implements Serializable {
             if ((other.name) != null)
                 return false;
             
-        } else if (!(name.equals(other.name)))
-            return false;
+        }else
+            if (!(name.equals(other.name)))
+                return false;
+            
         
         return true;
     }

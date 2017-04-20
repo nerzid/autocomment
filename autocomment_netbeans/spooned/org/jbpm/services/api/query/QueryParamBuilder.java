@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,12 +20,12 @@ package org.jbpm.services.api.query;
 
 /**
  * QueryParamBuilder is responsible for building up one or more filter parameters.
- * 
+ *
  * QueryService (that is primary consumer of this builder) will call the
  * <code>build</code> method as long as it returns non null value.
  * That way it allows to build multiple filters from single builder or build complex
  * filters e.g. nested etc with single builder
- * 
+ *
  * @param <T> type of filter instances
  */
 public interface QueryParamBuilder<T> {

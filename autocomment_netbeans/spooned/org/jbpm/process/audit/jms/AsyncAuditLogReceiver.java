@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,8 +16,8 @@
 
 package org.jbpm.process.audit.jms;
 
-import org.jbpm.process.audit.AbstractAuditLogger;
 import javax.persistence.EntityManager;
+import org.jbpm.process.audit.AbstractAuditLogger;
 import javax.persistence.EntityManagerFactory;
 import javax.jms.JMSException;
 import java.util.List;
@@ -36,11 +36,11 @@ import com.thoughtworks.xstream.XStream;
  * Thus it shares the same message format that is TextMessage with
  * Xstream serialized *Log classes (ProcessInstanceLog,
  * NodeInstanceLog, VaraiableInstanceLog) as content.
- * 
+ *
  * by default it uses entity manager factory and creates entity manager for each message
  * although it provides getEntityManager method that can be overloaded by extensions to supply
  * entity managers instead of creating it for every message.
- * 
+ *
  * For more enterprise based solution this class can be extended by MDB implementations to
  * provide additional details that are required by MDB such as:
  * <ul>
@@ -52,7 +52,7 @@ public class AsyncAuditLogReceiver implements MessageListener {
     private EntityManagerFactory entityManagerFactory;
 
     public AsyncAuditLogReceiver(EntityManagerFactory entityManagerFactory) {
-        AsyncAuditLogReceiver.this.entityManagerFactory = entityManagerFactory;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     @SuppressWarnings(value = "unchecked")
@@ -75,8 +75,8 @@ public class AsyncAuditLogReceiver implements MessageListener {
                                 NodeInstanceLog log = result.get(((result.size()) - 1));
                                 log.setWorkItemId(nodeAfterEnterEvent.getWorkItemId());
                                 em.merge(log);
-                            } 
-                        } 
+                            }
+                        }
                         break;
                     case AbstractAuditLogger.AFTER_COMPLETE_EVENT_TYPE :
                         ProcessInstanceLog processCompletedEvent = ((ProcessInstanceLog) (event));
@@ -88,7 +88,7 @@ public class AsyncAuditLogReceiver implements MessageListener {
                             log.setEnd(processCompletedEvent.getEnd());
                             log.setDuration(processCompletedEvent.getDuration());
                             em.merge(log);
-                        } 
+                        }
                         break;
                     default :
                         em.persist(event);
@@ -100,7 +100,7 @@ public class AsyncAuditLogReceiver implements MessageListener {
                 e.printStackTrace();
                 throw new RuntimeException("Exception when receiving audit event event", e);
             }
-        } 
+        }
     }
 
     public EntityManagerFactory getEntityManagerFactory() {
@@ -108,7 +108,7 @@ public class AsyncAuditLogReceiver implements MessageListener {
     }
 
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        AsyncAuditLogReceiver.this.entityManagerFactory = entityManagerFactory;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     public EntityManager getEntityManager() {

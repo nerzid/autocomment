@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,9 +67,9 @@ public class ContextMappingInfo implements Serializable {
     }
 
     public ContextMappingInfo(String contextId, Long ksessionId, String ownerId) {
-        ContextMappingInfo.this.contextId = contextId;
-        ContextMappingInfo.this.ksessionId = ksessionId;
-        ContextMappingInfo.this.ownerId = ownerId;
+        this.contextId = contextId;
+        this.ksessionId = ksessionId;
+        this.ownerId = ownerId;
     }
 
     public Long getMappingId() {
@@ -77,7 +77,7 @@ public class ContextMappingInfo implements Serializable {
     }
 
     public void setMappingId(Long mappingId) {
-        ContextMappingInfo.this.mappingId = mappingId;
+        this.mappingId = mappingId;
     }
 
     public int getVersion() {
@@ -85,7 +85,7 @@ public class ContextMappingInfo implements Serializable {
     }
 
     public void setVersion(int version) {
-        ContextMappingInfo.this.version = version;
+        this.version = version;
     }
 
     public String getContextId() {
@@ -93,7 +93,7 @@ public class ContextMappingInfo implements Serializable {
     }
 
     public void setContextId(String contextId) {
-        ContextMappingInfo.this.contextId = contextId;
+        this.contextId = contextId;
     }
 
     public Long getKsessionId() {
@@ -101,7 +101,7 @@ public class ContextMappingInfo implements Serializable {
     }
 
     public void setKsessionId(Long ksessionId) {
-        ContextMappingInfo.this.ksessionId = ksessionId;
+        this.ksessionId = ksessionId;
     }
 
     public String getOwnerId() {
@@ -109,7 +109,7 @@ public class ContextMappingInfo implements Serializable {
     }
 
     public void setOwnerId(String ownerId) {
-        ContextMappingInfo.this.ownerId = ownerId;
+        this.ownerId = ownerId;
     }
 }
 

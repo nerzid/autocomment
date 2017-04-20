@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,14 +35,15 @@ public abstract class OrganizationalEntityImpl implements InternalOrganizational
     }
 
     public OrganizationalEntityImpl(String id) {
-        OrganizationalEntityImpl.this.id = id;
+        this.id = id;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
         // id should never be "", given that it's the only field here!
         if ((id) == null) {
             id = "";
-        } 
+        }
+        // write utf String{id} to ObjectOutput{out}
         out.writeUTF(id);
     }
 
@@ -55,7 +56,7 @@ public abstract class OrganizationalEntityImpl implements InternalOrganizational
     }
 
     public void setId(String id) {
-        OrganizationalEntityImpl.this.id = id;
+        this.id = id;
     }
 
     @Override
@@ -68,7 +69,7 @@ public abstract class OrganizationalEntityImpl implements InternalOrganizational
 
     @Override
     public boolean equals(Object obj) {
-        if ((OrganizationalEntityImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -82,8 +83,10 @@ public abstract class OrganizationalEntityImpl implements InternalOrganizational
             if ((other.id) != null)
                 return false;
             
-        } else if (!(id.equals(other.id)))
-            return false;
+        }else
+            if (!(id.equals(other.id)))
+                return false;
+            
         
         return true;
     }

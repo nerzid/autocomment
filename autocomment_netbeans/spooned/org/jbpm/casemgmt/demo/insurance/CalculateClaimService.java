@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,11 +27,14 @@ public class CalculateClaimService {
         Double currentAmount = claimReport.getAmount();
         if (currentAmount == null) {
             currentAmount = new Double(10);
-        } else {
+        }else {
             currentAmount += 5;
         }
+        // info String{"Calculated amount on claim {} is {}"} to Logger{CalculateClaimService.logger}
         CalculateClaimService.logger.info("Calculated amount on claim {} is {}", claimReport, currentAmount);
+        // set amount Double{currentAmount} to ClaimReport{claimReport}
         claimReport.setAmount(currentAmount);
+        // set calculated Boolean{Boolean.TRUE} to ClaimReport{claimReport}
         claimReport.setCalculated(Boolean.TRUE);
         return claimReport;
     }

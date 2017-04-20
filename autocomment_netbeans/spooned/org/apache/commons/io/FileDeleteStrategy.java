@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ import java.io.IOException;
  * directories if they are empty, or maybe to force deletion.
  * <p>
  * This class captures the strategy to use and is designed for user subclassing.
- * 
+ *
  * @version $Id: FileDeleteStrategy.java 1563227 2014-01-31 19:45:30Z ggregory $
  * @since 1.3
  */
@@ -54,7 +54,7 @@ public class FileDeleteStrategy {
     // -----------------------------------------------------------------------
     /**
      * Restricted constructor.
-     * 
+     *
      * @param name  the name by which the strategy is known
      */
     protected FileDeleteStrategy(final String name) {
@@ -68,14 +68,14 @@ public class FileDeleteStrategy {
      * If the file does not exist or is null, true is returned.
      * <p>
      * Subclass writers should override {@link #doDelete(File)}, not this method.
-     * 
+     *
      * @param fileToDelete  the file to delete, null returns true
      * @return true if the file was deleted, or there was no such file
      */
     public boolean deleteQuietly(final File fileToDelete) {
         if ((fileToDelete == null) || ((fileToDelete.exists()) == false)) {
             return true;
-        } 
+        }
         try {
             return doDelete(fileToDelete);
         } catch (final IOException ex) {
@@ -88,7 +88,7 @@ public class FileDeleteStrategy {
      * If the file does not exist, the method just returns.
      * <p>
      * Subclass writers should override {@link #doDelete(File)}, not this method.
-     * 
+     *
      * @param fileToDelete  the file to delete, not null
      * @throws NullPointerException if the file is null
      * @throws IOException if an error occurs during file deletion
@@ -96,7 +96,7 @@ public class FileDeleteStrategy {
     public void delete(final File fileToDelete) throws IOException {
         if ((fileToDelete.exists()) && ((doDelete(fileToDelete)) == false)) {
             throw new IOException(("Deletion failed: " + fileToDelete));
-        } 
+        }
     }
 
     /**
@@ -109,7 +109,7 @@ public class FileDeleteStrategy {
      * A check has been made to ensure that the file will exist.
      * <p>
      * This implementation uses {@link File#delete()}.
-     * 
+     *
      * @param fileToDelete  the file to delete, exists, not null
      * @return true if the file was deleteds
      * @throws NullPointerException if the file is null
@@ -122,7 +122,7 @@ public class FileDeleteStrategy {
     // -----------------------------------------------------------------------
     /**
      * Gets a string describing the delete strategy.
-     * 
+     *
      * @return a string describing the delete strategy
      */
     @Override
@@ -147,7 +147,7 @@ public class FileDeleteStrategy {
          * <p>
          * This implementation uses <code>FileUtils.forceDelete()</code>
          * if the file exists.
-         * 
+         *
          * @param fileToDelete  the file to delete, not null
          * @return Always returns {@code true}
          * @throws NullPointerException if the file is null
@@ -155,6 +155,7 @@ public class FileDeleteStrategy {
          */
         @Override
         protected boolean doDelete(final File fileToDelete) throws IOException {
+            // force delete File{fileToDelete} to void{FileUtils}
             FileUtils.forceDelete(fileToDelete);
             return true;
         }

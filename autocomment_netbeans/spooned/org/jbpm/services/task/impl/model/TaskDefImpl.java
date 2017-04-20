@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,10 +20,10 @@
 
 package org.jbpm.services.task.impl.model;
 
+import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.io.IOException;
 import javax.persistence.Id;
 import java.io.ObjectInput;
@@ -33,6 +33,7 @@ import javax.persistence.Table;
 import org.kie.internal.task.api.model.TaskDef;
 
 /**
+ *
  */
 @Entity
 @Table(name = "TaskDef")
@@ -51,7 +52,7 @@ public class TaskDefImpl implements TaskDef {
     }
 
     public TaskDefImpl(String name) {
-        TaskDefImpl.this.name = name;
+        this.name = name;
     }
 
     public long getId() {
@@ -59,7 +60,7 @@ public class TaskDefImpl implements TaskDef {
     }
 
     public void setId(long id) {
-        TaskDefImpl.this.id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -67,7 +68,7 @@ public class TaskDefImpl implements TaskDef {
     }
 
     public void setName(String name) {
-        TaskDefImpl.this.name = name;
+        this.name = name;
     }
 
     public int getPriority() {
@@ -75,15 +76,18 @@ public class TaskDefImpl implements TaskDef {
     }
 
     public void setPriority(int priority) {
-        TaskDefImpl.this.priority = priority;
+        this.priority = priority;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long long{id} to ObjectOutput{out}
         out.writeLong(id);
         if ((name) == null) {
             name = "";
-        } 
+        }
+        // write utf String{name} to ObjectOutput{out}
         out.writeUTF(name);
+        // write int int{priority} to ObjectOutput{out}
         out.writeInt(priority);
     }
 

@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,42 +60,58 @@ public class UserDataServiceProvider {
     private static final String CUSTOM_USER_INFO_IMPL = System.getProperty("org.jbpm.ht.custom.userinfo");
 
     public static UserGroupCallback getUserGroupCallback() {
-        UserGroupCallback callback = new org.jbpm.services.task.identity.MvelUserGroupCallbackImpl(true);
+        UserGroupCallback callback = new MvelUserGroupCallbackImpl(true);
         if ("ldap".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
-            callback = new org.jbpm.services.task.identity.LDAPUserGroupCallbackImpl(true);
-        } else if ("db".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
-            callback = new org.jbpm.services.task.identity.DBUserGroupCallbackImpl(true);
-        } else if ("mvel".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
-            callback = new org.jbpm.services.task.identity.MvelUserGroupCallbackImpl(true);
-        } else if ("props".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
-            callback = new org.jbpm.services.task.identity.JBossUserGroupCallbackImpl(true);
-        } else if ("jaas".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
-            callback = new org.jbpm.services.task.identity.JAASUserGroupCallbackImpl(true);
-        } else if ("custom".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
-            try {
-                callback = ((UserGroupCallback) (Class.forName(UserDataServiceProvider.CUSTOM_USER_CALLBACK_IMPL).newInstance()));
-            } catch (Exception e) {
-                throw new RuntimeException("Unable to create instance of custom user group callback impl", e);
-            }
-        } 
+            callback = new LDAPUserGroupCallbackImpl(true);
+        }else
+            if ("db".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
+                callback = new DBUserGroupCallbackImpl(true);
+            }else
+                if ("mvel".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
+                    callback = new MvelUserGroupCallbackImpl(true);
+                }else
+                    if ("props".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
+                        callback = new JBossUserGroupCallbackImpl(true);
+                    }else
+                        if ("jaas".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
+                            callback = new JAASUserGroupCallbackImpl(true);
+                        }else
+                            if ("custom".equalsIgnoreCase(UserDataServiceProvider.USER_CALLBACK_IMPL)) {
+                                try {
+                                    callback = ((UserGroupCallback) (Class.forName(UserDataServiceProvider.CUSTOM_USER_CALLBACK_IMPL).newInstance()));
+                                } catch (Exception e) {
+                                    throw new RuntimeException("Unable to create instance of custom user group callback impl", e);
+                                }
+                            }
+                        
+                    
+                
+            
+        
         return callback;
     }
 
     public static UserInfo getUserInfo() {
-        UserInfo userInfo = new org.jbpm.services.task.identity.DefaultUserInfo(true);
+        UserInfo userInfo = new DefaultUserInfo(true);
         if ("ldap".equalsIgnoreCase(UserDataServiceProvider.USER_INFO_IMPL)) {
-            userInfo = new org.jbpm.services.task.identity.LDAPUserInfoImpl(true);
-        } else if ("db".equalsIgnoreCase(UserDataServiceProvider.USER_INFO_IMPL)) {
-            userInfo = new org.jbpm.services.task.identity.DBUserInfoImpl(true);
-        } else if ("props".equalsIgnoreCase(UserDataServiceProvider.USER_INFO_IMPL)) {
-            userInfo = new org.jbpm.services.task.identity.PropertyUserInfoImpl(true);
-        } else if ("custom".equalsIgnoreCase(UserDataServiceProvider.USER_INFO_IMPL)) {
-            try {
-                userInfo = ((UserInfo) (Class.forName(UserDataServiceProvider.CUSTOM_USER_INFO_IMPL).newInstance()));
-            } catch (Exception e) {
-                throw new RuntimeException("Unable to create instance of custom user info impl", e);
-            }
-        } 
+            userInfo = new LDAPUserInfoImpl(true);
+        }else
+            if ("db".equalsIgnoreCase(UserDataServiceProvider.USER_INFO_IMPL)) {
+                userInfo = new DBUserInfoImpl(true);
+            }else
+                if ("props".equalsIgnoreCase(UserDataServiceProvider.USER_INFO_IMPL)) {
+                    userInfo = new PropertyUserInfoImpl(true);
+                }else
+                    if ("custom".equalsIgnoreCase(UserDataServiceProvider.USER_INFO_IMPL)) {
+                        try {
+                            userInfo = ((UserInfo) (Class.forName(UserDataServiceProvider.CUSTOM_USER_INFO_IMPL).newInstance()));
+                        } catch (Exception e) {
+                            throw new RuntimeException("Unable to create instance of custom user info impl", e);
+                        }
+                    }
+                
+            
+        
         return userInfo;
     }
 }

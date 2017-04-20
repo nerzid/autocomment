@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,11 +31,12 @@ public class Trigger implements Serializable , Mappable {
     private List<DataAssociation> inMapping = new LinkedList<DataAssociation>();
 
     public void addInMapping(String subVariableName, String variableName) {
+        // add DataAssociation{new DataAssociation(subVariableName, variableName, null, null)} to List{inMapping}
         inMapping.add(new DataAssociation(subVariableName, variableName, null, null));
     }
 
     public void setInMappings(Map<String, String> inMapping) {
-        Trigger.this.inMapping = new LinkedList<DataAssociation>();
+        this.inMapping = new LinkedList<DataAssociation>();
         for (Map.Entry<String, String> entry : inMapping.entrySet()) {
             addInMapping(entry.getKey(), entry.getValue());
         }
@@ -50,12 +51,13 @@ public class Trigger implements Serializable , Mappable {
         for (DataAssociation a : inMapping) {
             if ((((a.getSources().size()) == 1) && (((a.getAssignments()) == null) || ((a.getAssignments().size()) == 0))) && ((a.getTransformation()) == null)) {
                 in.put(a.getSources().get(0), a.getTarget());
-            } 
+            }
         }
         return in;
     }
 
     public void addInAssociation(DataAssociation dataAssociation) {
+        // add DataAssociation{dataAssociation} to List{inMapping}
         inMapping.add(dataAssociation);
     }
 

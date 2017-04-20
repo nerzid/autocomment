@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,23 +20,22 @@ package org.apache.commons.io.testtools;
 
 import java.util.Arrays;
 import org.junit.Assert;
-import junit.framework.AssertionFailedError;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.PrintStream;
 import java.io.BufferedOutputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import java.io.File;
+import java.io.Writer;
 import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import org.apache.commons.io.FileUtils;
 import java.io.IOException;
-import org.apache.commons.io.IOUtils;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.OutputStreamWriter;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Base class for testcases doing tests with files.
@@ -48,7 +47,7 @@ public abstract class TestUtils {
     public static void createFile(final File file, final long size) throws IOException {
         if (!(file.getParentFile().exists())) {
             throw new IOException((("Cannot create file " + file) + " as the parent directory does not exist"));
-        } 
+        }
         final BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file));
         try {
             TestUtils.generateTestData(output, size);
@@ -78,7 +77,7 @@ public abstract class TestUtils {
     public static void createLineBasedFile(final File file, final String[] data) throws IOException {
         if (((file.getParentFile()) != null) && (!(file.getParentFile().exists()))) {
             throw new IOException((("Cannot create file " + file) + " as the parent directory does not exist"));
-        } 
+        }
         final PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
         try {
             for (final String element : data) {
@@ -96,12 +95,14 @@ public abstract class TestUtils {
          */
         if (destination.exists()) {
             FileUtils.forceDelete(destination);
-        } 
+        }
         return destination;
     }
 
     public static void checkFile(final File file, final File referenceFile) throws Exception {
+        // assert true String{"Check existence of output file"} to void{Assert}
         Assert.assertTrue("Check existence of output file", file.exists());
+        // assert equal File{referenceFile} to void{TestUtils}
         TestUtils.assertEqualContent(referenceFile, file);
     }
 
@@ -128,7 +129,7 @@ public abstract class TestUtils {
                     n1 = is1.read(buf1);
                     Assert.assertTrue((((((((("The files " + f0) + " and ") + f1) + " have differing number of bytes available (") + n0) + " vs ") + n1) + ")"), (n0 == n1));
                     Assert.assertTrue((((("The files " + f0) + " and ") + f1) + " have different content"), Arrays.equals(buf0, buf1));
-                }
+                } 
             } finally {
                 is1.close();
             }
@@ -139,7 +140,7 @@ public abstract class TestUtils {
 
     /**
      * Assert that the content of a file is equal to that in a byte[].
-     * 
+     *
      * @param b0   the expected contents
      * @param file the file to check
      * @throws IOException If an I/O error occurs while reading the file contents
@@ -153,7 +154,7 @@ public abstract class TestUtils {
             while ((count < (b0.length)) && (numRead >= 0)) {
                 numRead = is.read(b1, count, b0.length);
                 count += numRead;
-            }
+            } 
             Assert.assertEquals("Different number of bytes: ", b0.length, count);
             for (int i = 0; i < count; i++) {
                 Assert.assertEquals((("byte " + i) + " differs"), b0[i], b1[i]);
@@ -165,7 +166,7 @@ public abstract class TestUtils {
 
     /**
      * Assert that the content of a file is equal to that in a char[].
-     * 
+     *
      * @param c0   the expected contents
      * @param file the file to check
      * @throws IOException If an I/O error occurs while reading the file contents
@@ -179,7 +180,7 @@ public abstract class TestUtils {
             while ((count < (c0.length)) && (numRead >= 0)) {
                 numRead = ir.read(c1, count, c0.length);
                 count += numRead;
-            }
+            } 
             Assert.assertEquals("Different number of chars: ", c0.length, count);
             for (int i = 0; i < count; i++) {
                 Assert.assertEquals((("char " + i) + " differs"), c0[i], c1[i]);
@@ -208,12 +209,12 @@ public abstract class TestUtils {
     public static void deleteFile(final File file) throws Exception {
         if (file.exists()) {
             Assert.assertTrue(("Couldn't delete file: " + file), file.delete());
-        } 
+        }
     }
 
     /**
      * Sleep for a guaranteed number of milliseconds unless interrupted.
-     * 
+     *
      * This method exists because Thread.sleep(100) can sleep for 0, 70, 100 or 200ms or anything else
      * it deems appropriate. Read the docs on Thread.sleep for further details.
      * @

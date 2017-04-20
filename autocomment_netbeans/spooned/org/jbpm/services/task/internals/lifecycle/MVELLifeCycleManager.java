@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,42 +23,44 @@ package org.jbpm.services.task.internals.lifecycle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.kie.api.task.model.Content;
+import org.kie.api.task.model.PeopleAssignments;
+import org.kie.api.task.model.Task;
+import org.slf4j.LoggerFactory;
+import Status.Reserved;
 import org.jbpm.services.task.utils.ContentMarshallerHelper;
 import org.kie.internal.task.api.model.FaultData;
+import org.kie.internal.task.api.TaskContentService;
+import org.kie.internal.task.api.TaskModelProvider;
+import org.jbpm.services.task.events.TaskEventSupport;
+import org.kie.api.task.model.Status;
 import org.kie.api.task.model.Group;
+import org.kie.api.task.model.OrganizationalEntity;
+import org.mvel2.ParserConfiguration;
+import org.jbpm.services.task.exception.PermissionDeniedException;
+import org.mvel2.MVEL;
+import org.kie.api.task.model.User;
+import java.io.Serializable;
+import org.kie.internal.task.api.TaskContext;
+import org.kie.internal.task.api.model.InternalPeopleAssignments;
+import java.util.List;
+import org.kie.internal.task.exception.TaskException;
+import org.kie.api.task.model.TaskData;
+import org.kie.internal.task.api.model.InternalTaskData;
 import java.util.HashMap;
+import org.drools.core.util.MVELSafeHelper;
+import org.mvel2.ParserContext;
+import java.util.Map;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import org.kie.internal.task.api.model.InternalContent;
-import org.kie.internal.task.api.model.InternalPeopleAssignments;
-import org.kie.internal.task.api.model.InternalTaskData;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.mvel2.MVEL;
-import org.drools.core.util.MVELSafeHelper;
-import java.util.Map;
-import org.kie.internal.task.api.model.Operation;
-import org.kie.api.task.model.OrganizationalEntity;
-import org.mvel2.ParserConfiguration;
-import org.mvel2.ParserContext;
-import org.kie.api.task.model.PeopleAssignments;
-import org.jbpm.services.task.exception.PermissionDeniedException;
 import java.io.Reader;
-import java.io.Serializable;
-import org.kie.api.task.model.Status;
-import org.kie.api.task.model.Task;
-import org.kie.internal.task.api.TaskContentService;
-import org.kie.internal.task.api.TaskContext;
-import org.kie.api.task.model.TaskData;
-import org.jbpm.services.task.events.TaskEventSupport;
-import org.kie.internal.task.exception.TaskException;
-import org.kie.internal.task.api.TaskModelProvider;
 import org.kie.internal.task.api.TaskPersistenceContext;
-import org.kie.api.task.model.User;
+import org.kie.internal.task.api.model.InternalContent;
+import org.slf4j.Logger;
+import org.kie.internal.task.api.model.Operation;
 
 /**
+ *
  */
 public class MVELLifeCycleManager implements LifeCycleManager {
     private static final Logger logger = LoggerFactory.getLogger(MVELLifeCycleManager.class);
@@ -77,22 +79,22 @@ public class MVELLifeCycleManager implements LifeCycleManager {
     }
 
     public MVELLifeCycleManager(TaskContext context, TaskPersistenceContext persistenceContext, TaskContentService contentService, TaskEventSupport taskEventSupport) {
-        MVELLifeCycleManager.this.context = context;
-        MVELLifeCycleManager.this.persistenceContext = persistenceContext;
-        MVELLifeCycleManager.this.taskContentService = contentService;
-        MVELLifeCycleManager.this.taskEventSupport = taskEventSupport;
+        this.context = context;
+        this.persistenceContext = persistenceContext;
+        this.taskContentService = contentService;
+        this.taskEventSupport = taskEventSupport;
     }
 
     public void setPersistenceContext(TaskPersistenceContext persistenceContext) {
-        MVELLifeCycleManager.this.persistenceContext = persistenceContext;
+        this.persistenceContext = persistenceContext;
     }
 
     public void setTaskEventSupport(TaskEventSupport taskEventSupport) {
-        MVELLifeCycleManager.this.taskEventSupport = taskEventSupport;
+        this.taskEventSupport = taskEventSupport;
     }
 
     public void setTaskContentService(TaskContentService taskContentService) {
-        MVELLifeCycleManager.this.taskContentService = taskContentService;
+        this.taskContentService = taskContentService;
     }
 
     void evalCommand(final Operation operation, final List<OperationCommand> commands, final Task task, final User user, final OrganizationalEntity targetEntity, List<String> groupIds, OrganizationalEntity... entities) throws PermissionDeniedException {
@@ -108,13 +110,13 @@ public class MVELLifeCycleManager implements LifeCycleManager {
                         if (!(isAllowed(command, task, user, groupIds))) {
                             String errorMessage = (((("User '" + user) + "' does not have permissions to execute operation '") + operation) + "' on task id ") + (task.getId());
                             throw new PermissionDeniedException(errorMessage);
-                        } 
+                        }
                         commands(command, task, user, targetEntity, entities);
-                    } else {
+                    }else {
                         MVELLifeCycleManager.logger.debug("No match on status for task {} :status {}  != {}", task.getId(), task.getTaskData().getStatus(), status);
                     }
                 }
-            } 
+            }
             if ((command.getPreviousStatus()) != null) {
                 for (Status status : command.getPreviousStatus()) {
                     if ((taskData.getPreviousStatus()) == status) {
@@ -123,22 +125,22 @@ public class MVELLifeCycleManager implements LifeCycleManager {
                         if (!(isAllowed(command, task, user, groupIds))) {
                             String errorMessage = (((("User '" + user) + "' does not have permissions to execute operation '") + operation) + "' on task id ") + (task.getId());
                             throw new PermissionDeniedException(errorMessage);
-                        } 
+                        }
                         commands(command, task, user, targetEntity, entities);
-                    } else {
+                    }else {
                         MVELLifeCycleManager.logger.debug("No match on previous status for task {} :status {}  != {}", task.getId(), task.getTaskData().getStatus(), status);
                     }
                 }
-            } 
+            }
             if ((!(command.isGroupTargetEntityAllowed())) && (targetEntity instanceof Group)) {
                 String errorMessage = ((((("User '" + user) + "' was unable to execute operation '") + operation) + "' on task id ") + (task.getId())) + " due to 'target entity cannot be group'";
                 throw new PermissionDeniedException(errorMessage);
-            } 
+            }
         }
         if (!statusMatched) {
             String errorMessage = ((((("User '" + user) + "' was unable to execute operation '") + operation) + "' on task id ") + (task.getId())) + " due to a no 'current status' match";
             throw new PermissionDeniedException(errorMessage);
-        } 
+        }
     }
 
     private boolean isAllowed(final OperationCommand command, final Task task, final User user, List<String> groupIds) {
@@ -146,7 +148,7 @@ public class MVELLifeCycleManager implements LifeCycleManager {
         for (Allowed allowed : command.getAllowed()) {
             if (operationAllowed) {
                 break;
-            } 
+            }
             switch (allowed) {
                 case Owner :
                     {
@@ -183,10 +185,10 @@ public class MVELLifeCycleManager implements LifeCycleManager {
         if (operationAllowed && (command.isUserIsExplicitPotentialOwner())) {
             // if user has rights to execute the command, make sure user is explicitly specified (not as a group)
             operationAllowed = task.getPeopleAssignments().getPotentialOwners().contains(user);
-        } 
+        }
         if (operationAllowed && (command.isSkipable())) {
             operationAllowed = task.getTaskData().isSkipable();
-        } 
+        }
         return operationAllowed;
     }
 
@@ -195,10 +197,10 @@ public class MVELLifeCycleManager implements LifeCycleManager {
         for (OrganizationalEntity entity : entities) {
             if ((entity instanceof User) && (entity.equals(user))) {
                 return true;
-            } 
+            }
             if (((entity instanceof Group) && (groupIds != null)) && (groupIds.contains(entity.getId()))) {
                 return true;
-            } 
+            }
         }
         return false;
     }
@@ -208,21 +210,23 @@ public class MVELLifeCycleManager implements LifeCycleManager {
         final InternalTaskData taskData = ((InternalTaskData) (task.getTaskData()));
         if ((command.getNewStatus()) != null) {
             taskData.setStatus(command.getNewStatus());
-        } else if (command.isSetToPreviousStatus()) {
-            taskData.setStatus(taskData.getPreviousStatus());
-        } 
+        }else
+            if (command.isSetToPreviousStatus()) {
+                taskData.setStatus(taskData.getPreviousStatus());
+            }
+        
         if ((command.isAddTargetEntityToPotentialOwners()) && (!(people.getPotentialOwners().contains(targetEntity)))) {
             people.getPotentialOwners().add(targetEntity);
-        } 
+        }
         if (command.isRemoveUserFromPotentialOwners()) {
             people.getPotentialOwners().remove(user);
-        } 
+        }
         if (command.isSetNewOwnerToUser()) {
             taskData.setActualOwner(user);
-        } 
+        }
         if (command.isSetNewOwnerToNull()) {
             taskData.setActualOwner(null);
-        } 
+        }
         if ((command.getExec()) != null) {
             switch (command.getExec()) {
                 case Claim :
@@ -239,11 +243,11 @@ public class MVELLifeCycleManager implements LifeCycleManager {
                             List<OrganizationalEntity> potentialOwners = new ArrayList<OrganizationalEntity>(Arrays.asList(entities));
                             ((InternalPeopleAssignments) (task.getPeopleAssignments())).setPotentialOwners(potentialOwners);
                             MVELLifeCycleManager.assignOwnerAndStatus(((InternalTaskData) (task.getTaskData())), potentialOwners);
-                        } 
+                        }
                         break;
                     }
             }
-        } 
+        }
     }
 
     public void taskOperation(final Operation operation, final long taskId, final String userId, final String targetEntityId, final Map<String, Object> data, List<String> groupIds, OrganizationalEntity... entities) throws TaskException {
@@ -253,12 +257,12 @@ public class MVELLifeCycleManager implements LifeCycleManager {
             if (task == null) {
                 String errorMessage = ("Task '" + taskId) + "' not found";
                 throw new PermissionDeniedException(errorMessage);
-            } 
+            }
             User user = persistenceContext.findUser(userId);
             OrganizationalEntity targetEntity = null;
             if ((targetEntityId != null) && (!(targetEntityId.equals("")))) {
                 targetEntity = persistenceContext.findOrgEntity(targetEntityId);
-            } 
+            }
             switch (operation) {
                 case Activate :
                     {
@@ -293,7 +297,7 @@ public class MVELLifeCycleManager implements LifeCycleManager {
                             ((InternalContent) (content)).setContent(faultData.getContent());
                             persistenceContext.persistContent(content);
                             ((InternalTaskData) (task.getTaskData())).setFault(content.getId(), faultData);
-                        } 
+                        }
                         taskEventSupport.fireBeforeTaskFailed(task, context);
                         break;
                     }
@@ -354,14 +358,14 @@ public class MVELLifeCycleManager implements LifeCycleManager {
                     {
                         if (data != null) {
                             taskContentService.addOutputContent(taskId, data);
-                        } 
+                        }
                         taskEventSupport.fireAfterTaskCompleted(task, context);
                         break;
                     }
                 case Delegate :
                     // This is a really bad hack to execut the correct behavior
                     {
-                        ((InternalTaskData) (task.getTaskData())).setStatus(Status.Reserved);
+                        ((InternalTaskData) (task.getTaskData())).setStatus(Reserved);
                         taskEventSupport.fireAfterTaskDelegated(task, context);
                         break;
                     }
@@ -433,7 +437,7 @@ public class MVELLifeCycleManager implements LifeCycleManager {
         // }
         if (is == null) {
             throw new RuntimeException("Unable To initialise TaskService, could not find Operations DSL");
-        } 
+        }
         Reader reader = new InputStreamReader(is);
         try {
             return ((Map<Operation, List<OperationCommand>>) (MVELLifeCycleManager.eval(MVELLifeCycleManager.toString(reader), vars)));
@@ -447,7 +451,7 @@ public class MVELLifeCycleManager implements LifeCycleManager {
         StringBuffer sb = new StringBuffer(1024);
         while ((charValue = reader.read()) != (-1)) {
             sb.append(((char) (charValue)));
-        }
+        } 
         return sb.toString();
     }
 
@@ -469,19 +473,27 @@ public class MVELLifeCycleManager implements LifeCycleManager {
 
     public static Object eval(String str, Map<String, Object> vars) {
         ParserConfiguration pconf = new ParserConfiguration();
+        // add package String{"org.kie.internal.task.api.model"} to ParserConfiguration{pconf}
         pconf.addPackageImport("org.kie.internal.task.api.model");
+        // add package String{"org.jbpm.services.task"} to ParserConfiguration{pconf}
         pconf.addPackageImport("org.jbpm.services.task");
+        // add package String{"org.jbpm.services.task.impl.model"} to ParserConfiguration{pconf}
         pconf.addPackageImport("org.jbpm.services.task.impl.model");
+        // add package String{"org.jbpm.services.task.query"} to ParserConfiguration{pconf}
         pconf.addPackageImport("org.jbpm.services.task.query");
+        // add package String{"org.jbpm.services.task.internals.lifecycle"} to ParserConfiguration{pconf}
         pconf.addPackageImport("org.jbpm.services.task.internals.lifecycle");
+        // add import Class{Status.class} to ParserConfiguration{pconf}
         pconf.addImport(Status.class);
+        // add import Class{Allowed.class} to ParserConfiguration{pconf}
         pconf.addImport(Allowed.class);
+        // add package String{"java.util"} to ParserConfiguration{pconf}
         pconf.addPackageImport("java.util");
         ParserContext context = new ParserContext(pconf);
         Serializable s = MVEL.compileExpression(str.trim(), context);
         if (vars != null) {
             return MVELSafeHelper.getEvaluator().executeExpression(s, vars);
-        } else {
+        }else {
             return MVELSafeHelper.getEvaluator().executeExpression(s);
         }
     }
@@ -495,7 +507,7 @@ public class MVELLifeCycleManager implements LifeCycleManager {
      * and the status will be set to <code>Status.Ready</code>.</li>
      * <li>If there are more than 1 potential owners, the status will be set to <code>Status.Ready</code>.</li>
      * <li>otherwise, the task data will be unchanged</li>
-     * 
+     *
      * @param taskdata - task data
      * @param potentialOwners - list of potential owners
      * @return current status of task data
@@ -503,8 +515,10 @@ public class MVELLifeCycleManager implements LifeCycleManager {
     public static Status assignOwnerAndStatus(InternalTaskData taskData, List<OrganizationalEntity> potentialOwners) {
         if ((taskData.getStatus()) != (Status.Created)) {
             throw new PermissionDeniedException("Can only assign task owner if status is Created!");
-        } 
+        }
         Status assignedStatus = null;
+        // multiple potential owners, so set to Ready so one can claim.
+        // @TODO we have no potential owners
         if ((potentialOwners.size()) == 1) {
             // if there is a single potential owner, assign and set status to Reserved
             OrganizationalEntity potentialOwner = potentialOwners.get(0);
@@ -512,20 +526,22 @@ public class MVELLifeCycleManager implements LifeCycleManager {
             if (potentialOwner instanceof User) {
                 taskData.setActualOwner(((User) (potentialOwner)));
                 assignedStatus = Status.Reserved;
-            } 
+            }
             // If there is a group set as potentialOwners, set the status to Ready ??
             if (potentialOwner instanceof Group) {
                 assignedStatus = Status.Ready;
-            } 
-        } else if ((potentialOwners.size()) > 1) {
-            // multiple potential owners, so set to Ready so one can claim.
-            assignedStatus = Status.Ready;
-        } else {
-            // @TODO we have no potential owners
-        }
+            }
+        }// multiple potential owners, so set to Ready so one can claim.
+        // @TODO we have no potential owners
+        else
+            if ((potentialOwners.size()) > 1) {
+                assignedStatus = Status.Ready;
+            }else {
+            }
+        
         if (assignedStatus != null) {
             taskData.setStatus(assignedStatus);
-        } else {
+        }else {
             // status wasn't assigned, so just return the currrent status
             assignedStatus = taskData.getStatus();
         }

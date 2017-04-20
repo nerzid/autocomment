@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ import org.jbpm.workflow.core.NodeContainer;
 import org.jbpm.ruleflow.core.RuleFlowNodeContainerFactory;
 
 /**
+ *
  */
 public abstract class NodeFactory {
     private Node node;
@@ -31,17 +32,18 @@ public abstract class NodeFactory {
     protected RuleFlowNodeContainerFactory nodeContainerFactory;
 
     protected NodeFactory(RuleFlowNodeContainerFactory nodeContainerFactory, NodeContainer nodeContainer, long id) {
-        NodeFactory.this.nodeContainerFactory = nodeContainerFactory;
-        NodeFactory.this.nodeContainer = nodeContainer;
-        NodeFactory.this.node = createNode();
-        NodeFactory.this.node.setId(id);
+        this.nodeContainerFactory = nodeContainerFactory;
+        this.nodeContainer = nodeContainer;
+        this.node = createNode();
+        this.node.setId(id);
     }
 
     protected abstract Node createNode();
 
     public RuleFlowNodeContainerFactory done() {
+        // add node Node{node} to NodeContainer{nodeContainer}
         nodeContainer.addNode(node);
-        return NodeFactory.this.nodeContainerFactory;
+        return this.nodeContainerFactory;
     }
 
     protected Node getNode() {

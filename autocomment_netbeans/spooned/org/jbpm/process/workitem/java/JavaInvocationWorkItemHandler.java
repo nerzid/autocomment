@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,18 +16,18 @@
 
 package org.jbpm.process.workitem.java;
 
+import java.util.List;
 import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
+import org.kie.api.runtime.process.WorkItemManager;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import org.kie.api.runtime.process.WorkItem;
-import org.kie.api.runtime.process.WorkItemManager;
 
 public class JavaInvocationWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
     private static final Logger logger = LoggerFactory.getLogger(JavaInvocationWorkItemHandler.class);
@@ -46,7 +46,7 @@ public class JavaInvocationWorkItemHandler extends AbstractLogOrThrowWorkItemHan
             Method method = null;
             if (params == null) {
                 params = new ArrayList<Object>();
-            } 
+            }
             if (paramTypes == null) {
                 classes = new Class<?>[0];
                 try {
@@ -56,13 +56,13 @@ public class JavaInvocationWorkItemHandler extends AbstractLogOrThrowWorkItemHan
                         if ((m.getName().equals(methodName)) && ((m.getParameterTypes().length) == (params.size()))) {
                             method = m;
                             break;
-                        } 
+                        }
                     }
                     if (method == null) {
                         throw new NoSuchMethodException((((className + ".") + methodName) + "(..)"));
-                    } 
+                    }
                 }
-            } else {
+            }else {
                 List<Class<?>> classesList = new ArrayList<Class<?>>();
                 for (String paramType : paramTypes) {
                     classesList.add(Class.forName(paramType));
@@ -73,8 +73,8 @@ public class JavaInvocationWorkItemHandler extends AbstractLogOrThrowWorkItemHan
             if (!(Modifier.isStatic(method.getModifiers()))) {
                 if (object == null) {
                     object = c.newInstance();
-                } 
-            } 
+                }
+            }
             result = method.invoke(object, params.toArray());
             Map<String, Object> results = new HashMap<String, Object>();
             results.put("Result", result);

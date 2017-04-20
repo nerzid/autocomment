@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,20 +17,20 @@
 
 package org.jbpm.runtime.manager.impl.deploy;
 
+import org.slf4j.LoggerFactory;
 import org.kie.internal.runtime.Cacheable;
 import java.lang.reflect.Constructor;
+import org.kie.api.runtime.manager.RuntimeManager;
 import javax.persistence.EntityManagerFactory;
 import org.kie.api.executor.ExecutorService;
 import java.util.HashMap;
+import org.kie.api.task.TaskService;
 import org.kie.internal.runtime.manager.InternalRuntimeManager;
 import org.kie.api.KieServices;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.Map;
 import org.kie.internal.runtime.conf.ObjectModel;
 import org.kie.internal.runtime.conf.ObjectModelResolver;
-import org.kie.api.runtime.manager.RuntimeManager;
-import org.kie.api.task.TaskService;
 
 /**
  * Java reflection based <code>ObjectModelResolver</code> that creates class instances
@@ -62,8 +62,8 @@ public class ReflectionObjectModelResolver implements ObjectModelResolver {
             instance = manager.getCacheManager().get(clazz.getName());
             if (instance != null) {
                 return instance;
-            } 
-        } 
+            }
+        }
         if (((model.getParameters()) == null) || (model.getParameters().isEmpty())) {
             ReflectionObjectModelResolver.logger.debug("About to create instance of {} with no arg constructor", model.getIdentifier());
             // no parameters then use no arg constructor
@@ -72,7 +72,7 @@ public class ReflectionObjectModelResolver implements ObjectModelResolver {
             } catch (Exception e) {
                 throw new IllegalArgumentException(((("Unable to create instance (no arg constructor) of type " + (model.getIdentifier())) + " due to ") + (e.getMessage())), e);
             }
-        } else {
+        }else {
             ReflectionObjectModelResolver.logger.debug("About to create instance of {} with {} parameters", model.getIdentifier(), model.getParameters().size());
             // process parameter instances
             Class<?>[] parameterTypes = new Class<?>[model.getParameters().size()];
@@ -84,17 +84,17 @@ public class ReflectionObjectModelResolver implements ObjectModelResolver {
                     Class<?> paramclazz = getClassObject(((ObjectModel) (param)).getIdentifier(), cl);
                     parameterTypes[index] = paramclazz;
                     paramInstances[index] = getInstance(((ObjectModel) (param)), cl, contextParams);
-                } else {
+                }else {
                     if (contextParams.containsKey(param)) {
                         ReflectionObjectModelResolver.logger.debug("Parametr references context parametr with name {}", param);
                         Object contextValue = contextParams.get(param);
                         Class<?> paramClass = contextValue.getClass();
                         if (knownContextParamMapping.containsKey(param)) {
                             paramClass = knownContextParamMapping.get(param);
-                        } 
+                        }
                         parameterTypes[index] = paramClass;
                         paramInstances[index] = contextValue;
-                    } else {
+                    }else {
                         ReflectionObjectModelResolver.logger.debug("Parameter is simple type (string) - {}", param);
                         parameterTypes[index] = param.getClass();
                         paramInstances[index] = param;
@@ -110,10 +110,11 @@ public class ReflectionObjectModelResolver implements ObjectModelResolver {
                 throw new IllegalArgumentException(((((("Unable to create instance (" + parameterTypes) + " constructor) of type ") + (model.getIdentifier())) + " due to ") + (e.getMessage())), e);
             }
         }
+        // debug String{"Created instance : {}"} to Logger{ReflectionObjectModelResolver.logger}
         ReflectionObjectModelResolver.logger.debug("Created instance : {}", instance);
         if ((manager != null) && (instance instanceof Cacheable)) {
             manager.getCacheManager().add(instance.getClass().getName(), instance);
-        } 
+        }
         return instance;
     }
 
@@ -121,8 +122,9 @@ public class ReflectionObjectModelResolver implements ObjectModelResolver {
     public boolean accept(String resolverId) {
         if (ReflectionObjectModelResolver.ID.equals(resolverId)) {
             return true;
-        } 
-        ReflectionObjectModelResolver.logger.debug("Resolver id {} is not accepted by {}", resolverId, ReflectionObjectModelResolver.this.getClass());
+        }
+        // debug String{"Resolver id {} is not accepted by {}"} to Logger{ReflectionObjectModelResolver.logger}
+        ReflectionObjectModelResolver.logger.debug("Resolver id {} is not accepted by {}", resolverId, this.getClass());
         return false;
     }
 

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,14 +19,10 @@ package org.jbpm.bpmn2.xpath;
 import org.jbpm.workflow.core.node.Assignment;
 import org.jbpm.process.instance.impl.AssignmentAction;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.kie.api.runtime.process.ProcessContext;
-import org.w3c.dom.Text;
 import org.drools.core.process.instance.WorkItem;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -43,10 +39,10 @@ public class XPATHAssignmentAction implements AssignmentAction {
     private boolean isInput;
 
     public XPATHAssignmentAction(Assignment assignment, String sourceExpr, String targetExpr, boolean isInput) {
-        XPATHAssignmentAction.this.assignment = assignment;
-        XPATHAssignmentAction.this.sourceExpr = sourceExpr;
-        XPATHAssignmentAction.this.targetExpr = targetExpr;
-        XPATHAssignmentAction.this.isInput = isInput;
+        this.assignment = assignment;
+        this.sourceExpr = sourceExpr;
+        this.targetExpr = targetExpr;
+        this.isInput = isInput;
     }
 
     public void execute(WorkItem workItem, ProcessContext context) throws Exception {
@@ -62,7 +58,7 @@ public class XPATHAssignmentAction implements AssignmentAction {
         if (isInput) {
             source = context.getVariable(sourceExpr);
             target = ((WorkItem) (workItem)).getParameter(targetExpr);
-        } else {
+        }else {
             target = context.getVariable(targetExpr);
             source = ((WorkItem) (workItem)).getResult(sourceExpr);
         }
@@ -77,49 +73,57 @@ public class XPATHAssignmentAction implements AssignmentAction {
             targetElem = exprTo.evaluate(parent, XPathConstants.NODE);
             if (targetElem == null) {
                 throw new RuntimeException(((("Nothing was selected by the to expression " + to) + " on ") + (targetExpr)));
-            } 
-        } 
+            }
+        }
         NodeList nl = null;
+        // quirky: create a temporary element, use its nodelist
+        // don't throw errors yet ?
         if (source instanceof Node) {
             nl = ((NodeList) (exprFrom.evaluate(source, XPathConstants.NODESET)));
-        } else if (source instanceof String) {
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = builder.newDocument();
-            // quirky: create a temporary element, use its nodelist
-            Element temp = doc.createElementNS(null, "temp");
-            temp.appendChild(doc.createTextNode(((String) (source))));
-            nl = temp.getChildNodes();
-        } else if (source == null) {
-            // don't throw errors yet ?
-            throw new RuntimeException(("Source value was null for source " + (sourceExpr)));
-        } 
+        }// quirky: create a temporary element, use its nodelist
+        // don't throw errors yet ?
+        else
+            if (source instanceof String) {
+                javax.xml.parsers.DocumentBuilder builder = javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                org.w3c.dom.Document doc = builder.newDocument();
+                Element temp = doc.createElementNS(null, "temp");
+                temp.appendChild(doc.createTextNode(((String) (source))));
+                nl = temp.getChildNodes();
+            }else
+                if (source == null) {
+                    throw new RuntimeException(("Source value was null for source " + (sourceExpr)));
+                }
+            
+        
         if ((nl.getLength()) == 0) {
             throw new RuntimeException(((("Nothing was selected by the from expression " + from) + " on ") + (sourceExpr)));
-        } 
+        }
         for (int i = 0; i < (nl.getLength()); i++) {
             if (!(targetElem instanceof Node)) {
                 if ((nl.item(i)) instanceof Attr) {
                     targetElem = ((Attr) (nl.item(i))).getValue();
-                } else if ((nl.item(i)) instanceof Text) {
-                    targetElem = ((Text) (nl.item(i))).getWholeText();
-                } else {
-                    DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                    Document doc = builder.newDocument();
-                    targetElem = doc.importNode(nl.item(i), true);
-                }
+                }else
+                    if ((nl.item(i)) instanceof org.w3c.dom.Text) {
+                        targetElem = ((org.w3c.dom.Text) (nl.item(i))).getWholeText();
+                    }else {
+                        javax.xml.parsers.DocumentBuilder builder = javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                        org.w3c.dom.Document doc = builder.newDocument();
+                        targetElem = doc.importNode(nl.item(i), true);
+                    }
+                
                 target = targetElem;
-            } else {
+            }else {
                 Node n = ((Node) (targetElem)).getOwnerDocument().importNode(nl.item(i), true);
                 if (n instanceof Attr) {
                     ((Element) (targetElem)).setAttributeNode(((Attr) (n)));
-                } else {
+                }else {
                     ((Node) (targetElem)).appendChild(n);
                 }
             }
         }
         if (isInput) {
             ((WorkItem) (workItem)).setParameter(targetExpr, target);
-        } else {
+        }else {
             context.setVariable(targetExpr, target);
         }
     }

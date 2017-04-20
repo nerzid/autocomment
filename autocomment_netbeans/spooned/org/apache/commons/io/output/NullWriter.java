@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import java.io.Writer;
  * <p>
  * This <code>Writer</code> has no destination (file/socket etc.) and all
  * characters written to it are ignored and lost.
- * 
+ *
  * @version $Id: NullWriter.java 1471767 2013-04-24 23:24:19Z sebb $
  */
 public class NullWriter extends Writer {
@@ -49,7 +49,7 @@ public class NullWriter extends Writer {
     @Override
     public Writer append(final char c) {
         // to /dev/null
-        return NullWriter.this;
+        return this;
     }
 
     /**
@@ -63,7 +63,7 @@ public class NullWriter extends Writer {
     @Override
     public Writer append(final CharSequence csq, final int start, final int end) {
         // to /dev/null
-        return NullWriter.this;
+        return this;
     }
 
     /**
@@ -75,7 +75,7 @@ public class NullWriter extends Writer {
     @Override
     public Writer append(final CharSequence csq) {
         // to /dev/null
-        return NullWriter.this;
+        return this;
     }
 
     /**

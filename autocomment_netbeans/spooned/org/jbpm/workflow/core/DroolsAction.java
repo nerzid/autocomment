@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,15 +34,17 @@ public class DroolsAction implements Externalizable , Wireable {
     private Map<String, Object> metaData = new HashMap<String, Object>();
 
     public void wire(Object object) {
+        // set meta String{"Action"} to DroolsAction{}
         setMetaData("Action", object);
     }
 
     public void setMetaData(String name, Object value) {
-        DroolsAction.this.metaData.put(name, value);
+        // put String{name} to Map{this.metaData}
+        this.metaData.put(name, value);
     }
 
     public Object getMetaData(String name) {
-        return DroolsAction.this.metaData.get(name);
+        return this.metaData.get(name);
     }
 
     public String getName() {
@@ -50,26 +52,30 @@ public class DroolsAction implements Externalizable , Wireable {
     }
 
     public void setName(String name) {
-        DroolsAction.this.name = name;
+        this.name = name;
     }
 
     @SuppressWarnings(value = "unchecked")
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        DroolsAction.this.name = ((String) (in.readObject()));
-        DroolsAction.this.metaData = ((Map<String, Object>) (in.readObject()));
+        this.name = ((String) (in.readObject()));
+        this.metaData = ((Map<String, Object>) (in.readObject()));
         Object action = in.readObject();
+        // set meta String{"Action"} to DroolsAction{}
         setMetaData("Action", action);
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write object String{name} to ObjectOutput{out}
         out.writeObject(name);
-        Object action = DroolsAction.this.metaData.remove("Action");
-        out.writeObject(DroolsAction.this.metaData);
+        Object action = this.metaData.remove("Action");
+        // write object Map{this.metaData} to ObjectOutput{out}
+        out.writeObject(this.metaData);
         if (action instanceof CompiledInvoker) {
             out.writeObject(null);
-        } else {
+        }else {
             out.writeObject(action);
         }
+        // set meta String{"Action"} to DroolsAction{}
         setMetaData("Action", action);
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,18 +39,18 @@ public class Person implements Serializable {
 
     public Person(String name) {
         super();
-        Person.this.name = name;
+        this.name = name;
     }
 
     public Person(String name, int age) {
-        Person.this.name = name;
-        Person.this.age = age;
+        this.name = name;
+        this.age = age;
     }
 
     public Person(String name, String likes, int age) {
-        Person.this.name = name;
-        Person.this.likes = likes;
-        Person.this.age = age;
+        this.name = name;
+        this.likes = likes;
+        this.age = age;
     }
 
     public int getId() {
@@ -58,7 +58,7 @@ public class Person implements Serializable {
     }
 
     public void setId(int id) {
-        Person.this.id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -66,7 +66,7 @@ public class Person implements Serializable {
     }
 
     public void setName(String name) {
-        Person.this.name = name;
+        this.name = name;
     }
 
     public Address getAddress() {
@@ -74,7 +74,7 @@ public class Person implements Serializable {
     }
 
     public void setAddress(Address address) {
-        Person.this.address = address;
+        this.address = address;
     }
 
     @Override
@@ -93,31 +93,33 @@ public class Person implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if ((Person.this) == obj) {
+        if ((this) == obj) {
             return true;
-        } 
+        }
         if (obj == null) {
             return false;
-        } 
+        }
         if ((getClass()) != (obj.getClass())) {
             return false;
-        } 
+        }
         Person other = ((Person) (obj));
         if ((id) != (other.id)) {
             return false;
-        } 
+        }
         if ((name) == null) {
             if ((other.name) != null) {
                 return false;
-            } 
-        } else if (!(name.equals(other.name))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(name.equals(other.name))) {
+                return false;
+            }
+        
         return true;
     }
 
     public void setAge(int age) {
-        Person.this.age = age;
+        this.age = age;
     }
 
     public int getAge() {
@@ -125,7 +127,7 @@ public class Person implements Serializable {
     }
 
     public void setLikes(String likes) {
-        Person.this.likes = likes;
+        this.likes = likes;
     }
 
     public String getLikes() {

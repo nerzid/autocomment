@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +24,11 @@ import javax.naming.InitialContext;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.kie.internal.task.api.UserGroupCallback;
 import java.sql.PreparedStatement;
 import java.util.Properties;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.kie.internal.task.api.UserGroupCallback;
 
 /**
  * Data base server user group callback implementation that utilizes SQL queries
@@ -68,35 +68,35 @@ public class DBUserGroupCallbackImpl extends AbstractUserGroupInfo implements Us
     }
 
     public DBUserGroupCallbackImpl(Properties config) {
-        DBUserGroupCallbackImpl.this.config = config;
+        this.config = config;
         init();
     }
 
     public boolean existsUser(String userId) {
         if (userId == null) {
             throw new IllegalArgumentException("UserId cannot be null");
-        } 
-        return checkExistence(DBUserGroupCallbackImpl.this.config.getProperty(DBUserGroupCallbackImpl.PRINCIPAL_QUERY), userId);
+        }
+        return checkExistence(this.config.getProperty(DBUserGroupCallbackImpl.PRINCIPAL_QUERY), userId);
     }
 
     public boolean existsGroup(String groupId) {
         if (groupId == null) {
             throw new IllegalArgumentException("GroupId cannot be null");
-        } 
-        return checkExistence(DBUserGroupCallbackImpl.this.config.getProperty(DBUserGroupCallbackImpl.ROLES_QUERY), groupId);
+        }
+        return checkExistence(this.config.getProperty(DBUserGroupCallbackImpl.ROLES_QUERY), groupId);
     }
 
     public List<String> getGroupsForUser(String userId, List<String> groupIds, List<String> allExistingGroupIds) {
         if (userId == null) {
             throw new IllegalArgumentException("UserId cannot be null");
-        } 
+        }
         List<String> roles = new ArrayList<String>();
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             conn = ds.getConnection();
-            ps = conn.prepareStatement(DBUserGroupCallbackImpl.this.config.getProperty(DBUserGroupCallbackImpl.USER_ROLES_QUERY));
+            ps = conn.prepareStatement(this.config.getProperty(DBUserGroupCallbackImpl.USER_ROLES_QUERY));
             try {
                 ps.setString(1, userId);
             } catch (ArrayIndexOutOfBoundsException ignore) {
@@ -104,7 +104,7 @@ public class DBUserGroupCallbackImpl extends AbstractUserGroupInfo implements Us
             rs = ps.executeQuery();
             while (rs.next()) {
                 roles.add(rs.getString(1));
-            }
+            } 
         } catch (Exception e) {
             DBUserGroupCallbackImpl.logger.error(("Error when checking roles in db, parameter: " + userId), e);
         } finally {
@@ -113,19 +113,19 @@ public class DBUserGroupCallbackImpl extends AbstractUserGroupInfo implements Us
                     rs.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (Exception ex) {
                 }
-            } 
+            }
         }
         return roles;
     }
@@ -135,10 +135,10 @@ public class DBUserGroupCallbackImpl extends AbstractUserGroupInfo implements Us
     }
 
     private void init() {
-        if ((((((DBUserGroupCallbackImpl.this.config) == null) || (!(DBUserGroupCallbackImpl.this.config.containsKey(DBUserGroupCallbackImpl.DS_JNDI_NAME)))) || (!(DBUserGroupCallbackImpl.this.config.containsKey(DBUserGroupCallbackImpl.PRINCIPAL_QUERY)))) || (!(DBUserGroupCallbackImpl.this.config.containsKey(DBUserGroupCallbackImpl.ROLES_QUERY)))) || (!(DBUserGroupCallbackImpl.this.config.containsKey(DBUserGroupCallbackImpl.USER_ROLES_QUERY)))) {
+        if ((((((this.config) == null) || (!(this.config.containsKey(DBUserGroupCallbackImpl.DS_JNDI_NAME)))) || (!(this.config.containsKey(DBUserGroupCallbackImpl.PRINCIPAL_QUERY)))) || (!(this.config.containsKey(DBUserGroupCallbackImpl.ROLES_QUERY)))) || (!(this.config.containsKey(DBUserGroupCallbackImpl.USER_ROLES_QUERY)))) {
             throw new IllegalArgumentException((((((((("All properties must be given (" + (DBUserGroupCallbackImpl.DS_JNDI_NAME)) + ",") + (DBUserGroupCallbackImpl.USER_ROLES_QUERY)) + ",") + (DBUserGroupCallbackImpl.ROLES_QUERY)) + ",") + (DBUserGroupCallbackImpl.USER_ROLES_QUERY)) + ")"));
-        } 
-        String jndiName = DBUserGroupCallbackImpl.this.config.getProperty(DBUserGroupCallbackImpl.DS_JNDI_NAME, "java:/DefaultDS");
+        }
+        String jndiName = this.config.getProperty(DBUserGroupCallbackImpl.DS_JNDI_NAME, "java:/DefaultDS");
         try {
             InitialContext ctx = new InitialContext();
             ds = ((DataSource) (ctx.lookup(jndiName)));
@@ -159,7 +159,7 @@ public class DBUserGroupCallbackImpl extends AbstractUserGroupInfo implements Us
             rs = ps.executeQuery();
             if (rs.next()) {
                 result = true;
-            } 
+            }
         } catch (Exception e) {
             DBUserGroupCallbackImpl.logger.error(("Error when checking user/group in db, parameter: " + parameter), e);
         } finally {
@@ -168,19 +168,19 @@ public class DBUserGroupCallbackImpl extends AbstractUserGroupInfo implements Us
                     rs.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (Exception ex) {
                 }
-            } 
+            }
         }
         return result;
     }

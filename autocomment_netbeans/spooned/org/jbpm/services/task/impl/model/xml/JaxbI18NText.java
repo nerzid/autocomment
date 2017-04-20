@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,10 +25,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
 
 @XmlRootElement(name = "i18n-text")
 @XmlAccessorType(value = XmlAccessType.FIELD)
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
+@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE)
 public class JaxbI18NText extends AbstractJaxbTaskObject<I18NText> implements I18NText {
     @XmlElement
     @XmlSchemaType(name = "long")
@@ -55,7 +57,7 @@ public class JaxbI18NText extends AbstractJaxbTaskObject<I18NText> implements I1
     }
 
     public void setId(Long id) {
-        JaxbI18NText.this.id = id;
+        this.id = id;
     }
 
     public String getText() {
@@ -63,7 +65,7 @@ public class JaxbI18NText extends AbstractJaxbTaskObject<I18NText> implements I1
     }
 
     public void setText(String text) {
-        JaxbI18NText.this.text = text;
+        this.text = text;
     }
 
     public String getLanguage() {
@@ -71,7 +73,7 @@ public class JaxbI18NText extends AbstractJaxbTaskObject<I18NText> implements I1
     }
 
     public void setLanguage(String lang) {
-        JaxbI18NText.this.language = lang;
+        this.language = lang;
     }
 
     public static List<I18NText> convertListFromJaxbImplToInterface(List<JaxbI18NText> jaxbList) {
@@ -81,14 +83,14 @@ public class JaxbI18NText extends AbstractJaxbTaskObject<I18NText> implements I1
             for (JaxbI18NText jaxb : jaxbList) {
                 list.add(jaxb.createImplInstance());
             }
-        } else {
+        }else {
             list = new ArrayList<I18NText>();
         }
         return list;
     }
 
     private I18NText createImplInstance() {
-        return new org.jbpm.services.task.impl.model.xml.InternalJaxbWrapper.GetterI18NText(JaxbI18NText.this.id, JaxbI18NText.this.language, JaxbI18NText.this.text);
+        return new InternalJaxbWrapper.GetterI18NText(this.id, this.language, this.text);
     }
 }
 

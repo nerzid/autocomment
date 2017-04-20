@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,14 +47,14 @@ public class GetTasksByStatusByProcessInstanceIdCommand extends TaskCommand<List
     }
 
     public GetTasksByStatusByProcessInstanceIdCommand(long processInstanceId, List<Status> status) {
-        GetTasksByStatusByProcessInstanceIdCommand.this.processInstanceId = processInstanceId;
-        GetTasksByStatusByProcessInstanceIdCommand.this.statuses = status;
+        this.processInstanceId = processInstanceId;
+        this.statuses = status;
     }
 
     public GetTasksByStatusByProcessInstanceIdCommand(long processInstanceId, List<Status> status, String taskName) {
-        GetTasksByStatusByProcessInstanceIdCommand.this.processInstanceId = processInstanceId;
-        GetTasksByStatusByProcessInstanceIdCommand.this.statuses = status;
-        GetTasksByStatusByProcessInstanceIdCommand.this.taskName = taskName;
+        this.processInstanceId = processInstanceId;
+        this.statuses = status;
+        this.taskName = taskName;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class GetTasksByStatusByProcessInstanceIdCommand extends TaskCommand<List
 
     @Override
     public void setProcessInstanceId(Long processInstanceId) {
-        GetTasksByStatusByProcessInstanceIdCommand.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public List<Status> getStatus() {
@@ -72,14 +72,14 @@ public class GetTasksByStatusByProcessInstanceIdCommand extends TaskCommand<List
     }
 
     public void setStatus(List<Status> status) {
-        GetTasksByStatusByProcessInstanceIdCommand.this.statuses = status;
+        this.statuses = status;
     }
 
     public List<TaskSummary> execute(Context cntxt) {
         TaskContext context = ((TaskContext) (cntxt));
         if ((taskName) != null) {
             return context.getTaskQueryService().getTasksByStatusByProcessInstanceIdByTaskName(processInstanceId, statuses, taskName);
-        } else {
+        }else {
             return context.getTaskQueryService().getTasksByStatusByProcessInstanceId(processInstanceId, statuses);
         }
     }

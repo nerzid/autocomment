@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +36,7 @@ public class CDIUtils {
         for (String jndiName : CDIUtils.BEAN_MANAGER_NAMES) {
             if (jndiName == null) {
                 continue;
-            } 
+            }
             try {
                 beanManager = InitialContext.doLookup(jndiName);
                 CDIUtils.logger.debug("Found bean manager under {} jndi name", jndiName);
@@ -47,7 +47,7 @@ public class CDIUtils {
         }
         if (beanManager == null) {
             beanManager = ((BeanManager) (ctx.getData("BeanManager")));
-        } 
+        }
         return beanManager;
     }
 
@@ -57,7 +57,7 @@ public class CDIUtils {
         if ((beans != null) && (!(beans.isEmpty()))) {
             Bean<T> bean = ((Bean<T>) (beans.iterator().next()));
             return ((T) (beanManager.getReference(bean, beanType, beanManager.createCreationalContext(bean))));
-        } 
+        }
         return null;
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,60 +42,60 @@ public class ClaimReport implements Serializable {
     }
 
     public String getName() {
-        return ClaimReport.this.name;
+        return this.name;
     }
 
     public void setName(String name) {
-        ClaimReport.this.name = name;
+        this.name = name;
     }
 
     public String getAddress() {
-        return ClaimReport.this.address;
+        return this.address;
     }
 
     public void setAddress(String address) {
-        ClaimReport.this.address = address;
+        this.address = address;
     }
 
     public Date getAccidentDate() {
-        return ClaimReport.this.accidentDate;
+        return this.accidentDate;
     }
 
     public void setAccidentDate(Date accidentDate) {
-        ClaimReport.this.accidentDate = accidentDate;
+        this.accidentDate = accidentDate;
     }
 
     public String getAccidentDescription() {
-        return ClaimReport.this.accidentDescription;
+        return this.accidentDescription;
     }
 
     public void setAccidentDescription(String accidentDescription) {
-        ClaimReport.this.accidentDescription = accidentDescription;
+        this.accidentDescription = accidentDescription;
     }
 
     public Boolean getCalculated() {
-        return ClaimReport.this.calculated;
+        return this.calculated;
     }
 
     public void setCalculated(Boolean calculated) {
-        ClaimReport.this.calculated = calculated;
+        this.calculated = calculated;
     }
 
     public Double getAmount() {
-        return ClaimReport.this.amount;
+        return this.amount;
     }
 
     public void setAmount(Double amount) {
-        ClaimReport.this.amount = amount;
+        this.amount = amount;
     }
 
     public ClaimReport(String name, String address, Date accidentDate, String accidentDescription, Boolean calculated, Double amount) {
-        ClaimReport.this.name = name;
-        ClaimReport.this.address = address;
-        ClaimReport.this.accidentDate = accidentDate;
-        ClaimReport.this.accidentDescription = accidentDescription;
-        ClaimReport.this.calculated = calculated;
-        ClaimReport.this.amount = amount;
+        this.name = name;
+        this.address = address;
+        this.accidentDate = accidentDate;
+        this.accidentDescription = accidentDescription;
+        this.calculated = calculated;
+        this.amount = amount;
     }
 }
 

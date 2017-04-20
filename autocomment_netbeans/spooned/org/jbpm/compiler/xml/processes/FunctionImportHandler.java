@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@
 
 package org.jbpm.compiler.xml.processes;
 
+import org.xml.sax.SAXException;
 import java.util.ArrayList;
 import org.xml.sax.Attributes;
 import org.drools.core.xml.BaseAbstractHandler;
@@ -24,30 +25,32 @@ import org.drools.core.xml.ExtensibleXmlParser;
 import org.drools.core.xml.Handler;
 import java.util.HashSet;
 import java.util.List;
-import org.xml.sax.SAXException;
 import org.jbpm.workflow.core.impl.WorkflowProcessImpl;
 
 public class FunctionImportHandler extends BaseAbstractHandler implements Handler {
     public FunctionImportHandler() {
-        if (((FunctionImportHandler.this.validParents) == null) && ((FunctionImportHandler.this.validPeers) == null)) {
+        if (((this.validParents) == null) && ((this.validPeers) == null)) {
             this.validParents = new HashSet();
-            FunctionImportHandler.this.validParents.add(Process.class);
+            this.validParents.add(Process.class);
             this.validPeers = new HashSet();
-            FunctionImportHandler.this.validPeers.add(null);
+            this.validPeers.add(null);
             this.allowNesting = false;
-        } 
+        }
     }
 
     public Object start(final String uri, final String localName, final Attributes attrs, final ExtensibleXmlParser parser) throws SAXException {
+        // start element String{localName} to ExtensibleXmlParser{parser}
         parser.startElementBuilder(localName, attrs);
         WorkflowProcessImpl process = ((WorkflowProcessImpl) (parser.getParent()));
         final String name = attrs.getValue("name");
+        // empty attribute String{localName} to FunctionImportHandler{}
         emptyAttributeCheck(localName, "name", name, parser);
         List<String> list = process.getFunctionImports();
         if (list == null) {
             list = new ArrayList<String>();
             process.setFunctionImports(list);
-        } 
+        }
+        // add String{name} to List{list}
         list.add(name);
         return null;
     }

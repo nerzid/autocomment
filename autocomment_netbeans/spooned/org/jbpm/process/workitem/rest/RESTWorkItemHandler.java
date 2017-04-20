@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,51 +17,43 @@
 
 package org.jbpm.process.workitem.rest;
 
+import org.apache.http.entity.ContentType;
+import ClientContext.AUTH_CACHE;
 import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
-import java.util.ArrayList;
+import org.apache.http.util.EntityUtils;
+import java.util.Map;
+import org.apache.http.HttpHost;
+import org.kie.api.runtime.process.WorkItem;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.client.AuthCache;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.Consts;
-import org.apache.http.entity.ContentType;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import java.util.HashMap;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.HttpHost;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpUriRequest;
-import java.io.IOException;
-import javax.xml.bind.JAXBContext;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Map;
-import org.apache.http.NameValuePair;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.StatusLine;
-import org.apache.http.entity.StringEntity;
-import java.io.StringReader;
 import org.drools.core.util.StringUtils;
-import java.io.StringWriter;
-import java.net.URI;
-import java.nio.charset.UnsupportedCharsetException;
-import java.io.UnsupportedEncodingException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.kie.api.runtime.process.WorkItem;
+import org.apache.http.client.methods.RequestBuilder;
+import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import CoreConnectionPNames.SO_TIMEOUT;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.HttpResponse;
+import org.slf4j.Logger;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import CoreConnectionPNames.CONNECTION_TIMEOUT;
+import org.apache.http.client.HttpClient;
 import org.kie.api.runtime.process.WorkItemManager;
+import org.apache.http.impl.client.CloseableHttpClient;
+import java.nio.charset.UnsupportedCharsetException;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.slf4j.LoggerFactory;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.HttpClientBuilder;
+import java.net.URI;
+import org.apache.http.StatusLine;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 /**
  * WorkItemHandler that is capable of interacting with REST service. Supports both types of services
@@ -107,9 +99,9 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
     static {
         try {
             Class.forName("org.apache.http.client.methods.RequestBuilder");
-            HTTP_CLIENT_API_43 = true;
+            RESTWorkItemHandler.HTTP_CLIENT_API_43 = true;
         } catch (ClassNotFoundException e) {
-            HTTP_CLIENT_API_43 = false;
+            RESTWorkItemHandler.HTTP_CLIENT_API_43 = false;
         }
     }
 
@@ -118,8 +110,8 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
      */
     public RESTWorkItemHandler() {
         RESTWorkItemHandler.logger.debug(("REST work item handler will use http client 4.3 api " + (RESTWorkItemHandler.HTTP_CLIENT_API_43)));
-        RESTWorkItemHandler.this.type = RESTWorkItemHandler.AuthenticationType.NONE;
-        RESTWorkItemHandler.this.classLoader = RESTWorkItemHandler.this.getClass().getClassLoader();
+        this.type = RESTWorkItemHandler.AuthenticationType.NONE;
+        this.classLoader = this.getClass().getClassLoader();
     }
 
     /**
@@ -129,10 +121,10 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
      */
     public RESTWorkItemHandler(String username, String password) {
         this();
-        RESTWorkItemHandler.this.username = username;
-        RESTWorkItemHandler.this.password = password;
-        RESTWorkItemHandler.this.type = RESTWorkItemHandler.AuthenticationType.BASIC;
-        RESTWorkItemHandler.this.classLoader = RESTWorkItemHandler.this.getClass().getClassLoader();
+        this.username = username;
+        this.password = password;
+        this.type = RESTWorkItemHandler.AuthenticationType.BASIC;
+        this.classLoader = this.getClass().getClassLoader();
     }
 
     /**
@@ -143,11 +135,11 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
      */
     public RESTWorkItemHandler(String username, String password, String authUrl) {
         this();
-        RESTWorkItemHandler.this.username = username;
-        RESTWorkItemHandler.this.password = password;
-        RESTWorkItemHandler.this.type = RESTWorkItemHandler.AuthenticationType.FORM_BASED;
-        RESTWorkItemHandler.this.authUrl = authUrl;
-        RESTWorkItemHandler.this.classLoader = RESTWorkItemHandler.this.getClass().getClassLoader();
+        this.username = username;
+        this.password = password;
+        this.type = RESTWorkItemHandler.AuthenticationType.FORM_BASED;
+        this.authUrl = authUrl;
+        this.classLoader = this.getClass().getClassLoader();
     }
 
     /**
@@ -155,8 +147,8 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
      */
     public RESTWorkItemHandler(ClassLoader classLoader) {
         RESTWorkItemHandler.logger.debug(("REST work item handler will use http client 4.3 api " + (RESTWorkItemHandler.HTTP_CLIENT_API_43)));
-        RESTWorkItemHandler.this.type = RESTWorkItemHandler.AuthenticationType.NONE;
-        RESTWorkItemHandler.this.classLoader = classLoader;
+        this.type = RESTWorkItemHandler.AuthenticationType.NONE;
+        this.classLoader = classLoader;
     }
 
     /**
@@ -166,10 +158,10 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
      */
     public RESTWorkItemHandler(String username, String password, ClassLoader classLoader) {
         this();
-        RESTWorkItemHandler.this.username = username;
-        RESTWorkItemHandler.this.password = password;
-        RESTWorkItemHandler.this.type = RESTWorkItemHandler.AuthenticationType.BASIC;
-        RESTWorkItemHandler.this.classLoader = classLoader;
+        this.username = username;
+        this.password = password;
+        this.type = RESTWorkItemHandler.AuthenticationType.BASIC;
+        this.classLoader = classLoader;
     }
 
     /**
@@ -180,11 +172,11 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
      */
     public RESTWorkItemHandler(String username, String password, String authUrl, ClassLoader classLoader) {
         this();
-        RESTWorkItemHandler.this.username = username;
-        RESTWorkItemHandler.this.password = password;
-        RESTWorkItemHandler.this.type = RESTWorkItemHandler.AuthenticationType.FORM_BASED;
-        RESTWorkItemHandler.this.authUrl = authUrl;
-        RESTWorkItemHandler.this.classLoader = classLoader;
+        this.username = username;
+        this.password = password;
+        this.type = RESTWorkItemHandler.AuthenticationType.FORM_BASED;
+        this.authUrl = authUrl;
+        this.classLoader = classLoader;
     }
 
     public String getAuthUrl() {
@@ -200,19 +192,19 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
         String resultClass = ((String) (workItem.getParameter("ResultClass")));
         if (urlStr == null) {
             throw new IllegalArgumentException("Url is a required parameter");
-        } 
+        }
         if ((method == null) || ((method.trim().length()) == 0)) {
             method = "GET";
-        } 
+        }
         if (handleExceptionStr != null) {
             handleException = Boolean.parseBoolean(handleExceptionStr);
-        } 
+        }
         Map<String, Object> params = workItem.getParameters();
         // authentication type from parameters
         RESTWorkItemHandler.AuthenticationType authType = type;
         if ((params.get("AuthType")) != null) {
             authType = RESTWorkItemHandler.AuthenticationType.valueOf(((String) (params.get("AuthType"))));
-        } 
+        }
         // optional timeout config parameters, defaulted to 60 seconds
         Integer connectTimeout = getParamAsInt(params.get("ConnectTimeout"));
         if (connectTimeout == null)
@@ -236,15 +228,15 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
                 responseBody = EntityUtils.toString(respEntity);
                 if ((respEntity.getContentType()) != null) {
                     contentType = respEntity.getContentType().getValue();
-                } 
-            } 
+                }
+            }
             if ((responseCode >= 200) && (responseCode < 300)) {
                 postProcessResult(responseBody, resultClass, contentType, results);
                 results.put("StatusMsg", ((("request to endpoint " + urlStr) + " successfully completed ") + (statusLine.getReasonPhrase())));
-            } else {
+            }else {
                 if (handleException) {
                     handleException(new RESTServiceException(responseCode, responseBody, urlStr));
-                } else {
+                }else {
                     RESTWorkItemHandler.logger.warn("Unsuccessful response from REST server (status: {}, endpoint: {}, response: {}", responseCode, urlStr, responseBody);
                     results.put("StatusMsg", ((("endpoint " + urlStr) + " could not be reached: ") + responseBody));
                 }
@@ -266,13 +258,13 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
     protected Integer getParamAsInt(Object param) {
         if (param == null) {
             return null;
-        } 
+        }
         if ((param instanceof String) && (!(((String) (param)).isEmpty()))) {
             return Integer.parseInt(((String) (param)));
-        } 
+        }
         if (param instanceof Number) {
             return ((Number) (param)).intValue();
-        } 
+        }
         return null;
     }
 
@@ -283,13 +275,13 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
                 Object content = params.get("Content");
                 if (!(content instanceof String)) {
                     content = transformRequest(content, contentType);
-                } 
+                }
                 StringEntity entity = new StringEntity(((String) (content)), ContentType.parse(contentType));
                 builder.setEntity(entity);
             } catch (UnsupportedCharsetException e) {
                 throw new RuntimeException(((("Cannot set body for REST request [" + (builder.getMethod())) + "] ") + (builder.getUri())), e);
             }
-        } 
+        }
     }
 
     protected void setBody(HttpRequestBase theMethod, Map<String, Object> params) {
@@ -297,9 +289,9 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
             Object content = params.get("Content");
             if (!(content instanceof String)) {
                 content = transformRequest(content, ((String) (params.get("ContentType"))));
-            } 
+            }
             ((HttpEntityEnclosingRequestBase) (theMethod)).setEntity(new StringEntity(((String) (content)), ContentType.parse(((String) (params.get("ContentType"))))));
-        } 
+        }
     }
 
     protected void postProcessResult(String result, String resultClass, String contentType, Map<String, Object> results) {
@@ -311,7 +303,7 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
             } catch (Throwable e) {
                 throw new RuntimeException("Unable to transform respose to object", e);
             }
-        } else {
+        }else {
             results.put("Result", result);
         }
     }
@@ -321,12 +313,14 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
             if (contentType.toLowerCase().contains("application/json")) {
                 ObjectMapper mapper = new ObjectMapper();
                 return mapper.writeValueAsString(data);
-            } else if (contentType.toLowerCase().contains("application/xml")) {
-                StringWriter stringRep = new StringWriter();
-                JAXBContext jaxbContext = JAXBContext.newInstance(new Class[]{ data.getClass() });
-                jaxbContext.createMarshaller().marshal(data, stringRep);
-                return stringRep.toString();
-            } 
+            }else
+                if (contentType.toLowerCase().contains("application/xml")) {
+                    java.io.StringWriter stringRep = new java.io.StringWriter();
+                    javax.xml.bind.JAXBContext jaxbContext = javax.xml.bind.JAXBContext.newInstance(new Class[]{ data.getClass() });
+                    jaxbContext.createMarshaller().marshal(data, stringRep);
+                    return stringRep.toString();
+                }
+            
         } catch (Exception e) {
             throw new RuntimeException("Unable to transform request to object", e);
         }
@@ -337,11 +331,14 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
         if (contentType.toLowerCase().contains("application/json")) {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(content, clazz);
-        } else if (contentType.toLowerCase().contains("application/xml")) {
-            StringReader result = new StringReader(content);
-            JAXBContext jaxbContext = JAXBContext.newInstance(new Class[]{ clazz });
-            return jaxbContext.createUnmarshaller().unmarshal(result);
-        } 
+        }else
+            if (contentType.toLowerCase().contains("application/xml")) {
+                java.io.StringReader result = new java.io.StringReader(content);
+                javax.xml.bind.JAXBContext jaxbContext = javax.xml.bind.JAXBContext.newInstance(new Class[]{ clazz });
+                return jaxbContext.createUnmarshaller().unmarshal(result);
+            }
+        
+        // warn String{"Unable to find transformer for content type '{}' to handle for content '{}'"} to Logger{RESTWorkItemHandler.logger}
         RESTWorkItemHandler.logger.warn("Unable to find transformer for content type '{}' to handle for content '{}'", contentType, content);
         // unknown content type, returning string representation
         return content;
@@ -350,7 +347,7 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
     protected HttpResponse doRequestWithAuthorization(HttpClient httpclient, Object method, Map<String, Object> params, RESTWorkItemHandler.AuthenticationType authType) {
         if (RESTWorkItemHandler.HTTP_CLIENT_API_43) {
             return doRequestWithAuthorization(httpclient, ((RequestBuilder) (method)), params, authType);
-        } else {
+        }else {
             return doRequestWithAuthorization(httpclient, ((HttpRequestBase) (method)), params, authType);
         }
     }
@@ -361,7 +358,7 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
      * It is <b>not</b> responsible for cleaning up after the last request that it does.
      * </p>
      * It <i>is</i> responsible for cleaning up after all previous request, such as for form-based authentication, that happen.
-     * 
+     *
      * @param httpclient The {@link HttpClient} instance
      * @param requestBuilder The {@link RequestBuilder} instance
      * @param params The parameters that may be needed for authentication
@@ -376,34 +373,41 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
             } catch (Exception e) {
                 throw new RuntimeException(((("Could not execute request [" + (request.getMethod())) + "] ") + (request.getURI())), e);
             }
-        } 
+        }
         // user/password
         String u = ((String) (params.get("Username")));
         String p = ((String) (params.get("Password")));
         if ((u == null) || (p == null)) {
-            u = RESTWorkItemHandler.this.username;
-            p = RESTWorkItemHandler.this.password;
-        } 
+            u = this.username;
+            p = this.password;
+        }
         if (u == null) {
             throw new IllegalArgumentException("Could not find username");
-        } 
+        }
         if (p == null) {
             throw new IllegalArgumentException("Could not find password");
-        } 
+        }
+        // form auth
+        // 1. do initial request to trigger authentication
+        // weird, but this is the method that releases resources, including the connection
+        // 1b. form authentication requests should have a status of 401
+        // See: www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2
+        // 2. do POST form request to authentiate
+        // 3. rebuild request and execute
         if (type == (RESTWorkItemHandler.AuthenticationType.BASIC)) {
             // basic auth
             URI requestUri = requestBuilder.getUri();
             HttpHost targetHost = new HttpHost(requestUri.getHost(), requestUri.getPort(), requestUri.getScheme());
             // Create AuthCache instance and add it: so that HttpClient thinks that it has already queried (as per the HTTP spec)
             // - generate BASIC scheme object and add it to the local auth cache
-            AuthCache authCache = new org.apache.http.impl.client.BasicAuthCache();
+            AuthCache authCache = new BasicAuthCache();
             BasicScheme basicAuth = new BasicScheme();
             authCache.put(targetHost, basicAuth);
             // - add AuthCache to the execution context:
             HttpClientContext clientContext = HttpClientContext.create();
-            CredentialsProvider credsProvider = new org.apache.http.impl.client.BasicCredentialsProvider();
+            CredentialsProvider credsProvider = new BasicCredentialsProvider();
             // specify host and port, since that is safer/more secure
-            credsProvider.setCredentials(new AuthScope(requestUri.getHost(), requestUri.getPort(), AuthScope.ANY_REALM), new org.apache.http.auth.UsernamePasswordCredentials(u, p));
+            credsProvider.setCredentials(new AuthScope(requestUri.getHost(), requestUri.getPort(), AuthScope.ANY_REALM), new UsernamePasswordCredentials(u, p));
             clientContext.setCredentialsProvider(credsProvider);
             clientContext.setAuthCache(authCache);
             // - execute request
@@ -413,61 +417,63 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
             } catch (Exception e) {
                 throw new RuntimeException(((("Could not execute request with preemptive authentication [" + (request.getMethod())) + "] ") + (request.getURI())), e);
             }
-        } else if (type == (RESTWorkItemHandler.AuthenticationType.FORM_BASED)) {
-            // form auth
-            // 1. do initial request to trigger authentication
-            HttpUriRequest request = requestBuilder.build();
-            int statusCode = -1;
-            try {
-                HttpResponse initialResponse = httpclient.execute(request);
-                statusCode = initialResponse.getStatusLine().getStatusCode();
-            } catch (IOException e) {
-                throw new RuntimeException("Could not execute request for form-based authentication", e);
-            } finally {
-                // weird, but this is the method that releases resources, including the connection
-                request.abort();
+        }// form auth
+        // 1. do initial request to trigger authentication
+        // weird, but this is the method that releases resources, including the connection
+        // 1b. form authentication requests should have a status of 401
+        // See: www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2
+        // 2. do POST form request to authentiate
+        // 3. rebuild request and execute
+        else
+            if (type == (RESTWorkItemHandler.AuthenticationType.FORM_BASED)) {
+                HttpUriRequest request = requestBuilder.build();
+                int statusCode = -1;
+                try {
+                    HttpResponse initialResponse = httpclient.execute(request);
+                    statusCode = initialResponse.getStatusLine().getStatusCode();
+                } catch (IOException e) {
+                    throw new RuntimeException("Could not execute request for form-based authentication", e);
+                } finally {
+                    request.abort();
+                }
+                if (statusCode != (org.apache.http.HttpStatus.SC_UNAUTHORIZED)) {
+                    RESTWorkItemHandler.logger.error("Expected form authentication request with status {} but status on response is {}: proceeding anyways", HttpStatus.SC_UNAUTHORIZED, statusCode);
+                }
+                String authUrlStr = ((String) (params.get("AuthUrl")));
+                if (authUrlStr == null) {
+                    authUrlStr = authUrl;
+                }
+                if (authUrlStr == null) {
+                    throw new IllegalArgumentException("Could not find authentication url");
+                }
+                org.apache.http.client.methods.HttpPost authMethod = new org.apache.http.client.methods.HttpPost(authUrlStr);
+                java.util.List<org.apache.http.NameValuePair> formParams = new java.util.ArrayList<org.apache.http.NameValuePair>(2);
+                formParams.add(new BasicNameValuePair("j_username", u));
+                formParams.add(new BasicNameValuePair("j_password", p));
+                org.apache.http.client.entity.UrlEncodedFormEntity formEntity;
+                try {
+                    formEntity = new org.apache.http.client.entity.UrlEncodedFormEntity(formParams);
+                } catch (java.io.UnsupportedEncodingException uee) {
+                    throw new RuntimeException("Could not encode authentication parameters into request body", uee);
+                }
+                authMethod.setEntity(formEntity);
+                try {
+                    httpclient.execute(authMethod);
+                } catch (IOException e) {
+                    throw new RuntimeException("Could not initialize form-based authentication", e);
+                } finally {
+                    authMethod.releaseConnection();
+                }
+                request = requestBuilder.build();
+                try {
+                    return httpclient.execute(request);
+                } catch (Exception e) {
+                    throw new RuntimeException(((("Could not execute request [" + (request.getMethod())) + "] ") + (request.getURI())), e);
+                }
+            }else {
+                throw new RuntimeException(("Unknown AuthenticationType " + type));
             }
-            // 1b. form authentication requests should have a status of 401
-            // See: www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.2
-            if (statusCode != (HttpStatus.SC_UNAUTHORIZED)) {
-                RESTWorkItemHandler.logger.error("Expected form authentication request with status {} but status on response is {}: proceeding anyways", HttpStatus.SC_UNAUTHORIZED, statusCode);
-            } 
-            // 2. do POST form request to authentiate
-            String authUrlStr = ((String) (params.get("AuthUrl")));
-            if (authUrlStr == null) {
-                authUrlStr = authUrl;
-            } 
-            if (authUrlStr == null) {
-                throw new IllegalArgumentException("Could not find authentication url");
-            } 
-            HttpPost authMethod = new HttpPost(authUrlStr);
-            List<NameValuePair> formParams = new ArrayList<NameValuePair>(2);
-            formParams.add(new org.apache.http.message.BasicNameValuePair("j_username", u));
-            formParams.add(new org.apache.http.message.BasicNameValuePair("j_password", p));
-            UrlEncodedFormEntity formEntity;
-            try {
-                formEntity = new UrlEncodedFormEntity(formParams);
-            } catch (UnsupportedEncodingException uee) {
-                throw new RuntimeException("Could not encode authentication parameters into request body", uee);
-            }
-            authMethod.setEntity(formEntity);
-            try {
-                httpclient.execute(authMethod);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not initialize form-based authentication", e);
-            } finally {
-                authMethod.releaseConnection();
-            }
-            // 3. rebuild request and execute
-            request = requestBuilder.build();
-            try {
-                return httpclient.execute(request);
-            } catch (Exception e) {
-                throw new RuntimeException(((("Could not execute request [" + (request.getMethod())) + "] ") + (request.getURI())), e);
-            }
-        } else {
-            throw new RuntimeException(("Unknown AuthenticationType " + type));
-        }
+        
     }
 
     protected HttpResponse doRequestWithAuthorization(HttpClient httpclient, HttpRequestBase httpMethod, Map<String, Object> params, RESTWorkItemHandler.AuthenticationType type) {
@@ -477,71 +483,73 @@ public class RESTWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
             } catch (Exception e) {
                 throw new RuntimeException(((("Could not execute request [" + (httpMethod.getMethod())) + "] ") + (httpMethod.getURI())), e);
             }
-        } 
+        }
         String u = ((String) (params.get("Username")));
         String p = ((String) (params.get("Password")));
         if ((u == null) || (p == null)) {
-            u = RESTWorkItemHandler.this.username;
-            p = RESTWorkItemHandler.this.password;
-        } 
+            u = this.username;
+            p = this.password;
+        }
         if (u == null) {
             throw new IllegalArgumentException("Could not find username");
-        } 
+        }
         if (p == null) {
             throw new IllegalArgumentException("Could not find password");
-        } 
+        }
         if (type == (RESTWorkItemHandler.AuthenticationType.BASIC)) {
             HttpHost targetHost = new HttpHost(httpMethod.getURI().getHost(), httpMethod.getURI().getPort(), httpMethod.getURI().getScheme());
-            ((DefaultHttpClient) (httpclient)).getCredentialsProvider().setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()), new org.apache.http.auth.UsernamePasswordCredentials(u, p));
+            ((DefaultHttpClient) (httpclient)).getCredentialsProvider().setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()), new UsernamePasswordCredentials(u, p));
             // Create AuthCache instance
-            AuthCache authCache = new org.apache.http.impl.client.BasicAuthCache();
+            AuthCache authCache = new BasicAuthCache();
             // Generate BASIC scheme object and add it to the local
             // auth cache
             BasicScheme basicAuth = new BasicScheme();
             authCache.put(targetHost, basicAuth);
             // Add AuthCache to the execution context
             BasicHttpContext localcontext = new BasicHttpContext();
-            localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);
+            localcontext.setAttribute(AUTH_CACHE, authCache);
             try {
                 return httpclient.execute(targetHost, httpMethod, localcontext);
             } catch (Exception e) {
                 throw new RuntimeException(((("Could not execute request [" + (httpMethod.getMethod())) + "] ") + (httpMethod.getURI())), e);
             }
-        } else if (type == (RESTWorkItemHandler.AuthenticationType.FORM_BASED)) {
-            String authUrlStr = ((String) (params.get("AuthUrl")));
-            if (authUrlStr == null) {
-                authUrlStr = authUrl;
-            } 
-            if (authUrlStr == null) {
-                throw new IllegalArgumentException("Could not find authentication url");
-            } 
-            try {
-                httpclient.execute(httpMethod);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not execute request for form-based authentication", e);
-            } finally {
-                httpMethod.releaseConnection();
+        }else
+            if (type == (RESTWorkItemHandler.AuthenticationType.FORM_BASED)) {
+                String authUrlStr = ((String) (params.get("AuthUrl")));
+                if (authUrlStr == null) {
+                    authUrlStr = authUrl;
+                }
+                if (authUrlStr == null) {
+                    throw new IllegalArgumentException("Could not find authentication url");
+                }
+                try {
+                    httpclient.execute(httpMethod);
+                } catch (IOException e) {
+                    throw new RuntimeException("Could not execute request for form-based authentication", e);
+                } finally {
+                    httpMethod.releaseConnection();
+                }
+                org.apache.http.client.methods.HttpPost authMethod = new org.apache.http.client.methods.HttpPost(authUrlStr);
+                java.util.List<org.apache.http.NameValuePair> nvps = new java.util.ArrayList<org.apache.http.NameValuePair>();
+                nvps.add(new BasicNameValuePair("j_username", u));
+                nvps.add(new BasicNameValuePair("j_password", p));
+                authMethod.setEntity(new org.apache.http.client.entity.UrlEncodedFormEntity(nvps, org.apache.http.Consts.UTF_8));
+                try {
+                    httpclient.execute(authMethod);
+                } catch (IOException e) {
+                    throw new RuntimeException("Could not initialize form-based authentication", e);
+                } finally {
+                    authMethod.releaseConnection();
+                }
+                try {
+                    return httpclient.execute(httpMethod);
+                } catch (Exception e) {
+                    throw new RuntimeException(((("Could not execute request [" + (httpMethod.getMethod())) + "] ") + (httpMethod.getURI())), e);
+                }
+            }else {
+                throw new RuntimeException(("Unknown AuthenticationType " + type));
             }
-            HttpPost authMethod = new HttpPost(authUrlStr);
-            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-            nvps.add(new org.apache.http.message.BasicNameValuePair("j_username", u));
-            nvps.add(new org.apache.http.message.BasicNameValuePair("j_password", p));
-            authMethod.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
-            try {
-                httpclient.execute(authMethod);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not initialize form-based authentication", e);
-            } finally {
-                authMethod.releaseConnection();
-            }
-            try {
-                return httpclient.execute(httpMethod);
-            } catch (Exception e) {
-                throw new RuntimeException(((("Could not execute request [" + (httpMethod.getMethod())) + "] ") + (httpMethod.getURI())), e);
-            }
-        } else {
-            throw new RuntimeException(("Unknown AuthenticationType " + type));
-        }
+        
     }
 
     public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
@@ -557,10 +565,10 @@ NONE, BASIC, FORM_BASED;    }
             HttpClientBuilder clientBuilder = HttpClientBuilder.create().setDefaultRequestConfig(config);
             HttpClient httpClient = clientBuilder.build();
             return httpClient;
-        } else {
+        }else {
             DefaultHttpClient httpClient = new DefaultHttpClient();
-            httpClient.getParams().setIntParameter(CoreConnectionPNames.SO_TIMEOUT, readTimeout);
-            httpClient.getParams().setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, connectTimeout);
+            httpClient.getParams().setIntParameter(SO_TIMEOUT, readTimeout);
+            httpClient.getParams().setIntParameter(CONNECTION_TIMEOUT, connectTimeout);
             return httpClient;
         }
     }
@@ -568,7 +576,7 @@ NONE, BASIC, FORM_BASED;    }
     protected void close(HttpClient httpClient, Object httpMethod) throws IOException {
         if (RESTWorkItemHandler.HTTP_CLIENT_API_43) {
             ((CloseableHttpClient) (httpClient)).close();
-        } else {
+        }else {
             ((HttpRequestBase) (httpMethod)).releaseConnection();
         }
     }
@@ -578,33 +586,45 @@ NONE, BASIC, FORM_BASED;    }
             RequestBuilder builder = null;
             if ("GET".equals(method)) {
                 builder = RequestBuilder.get().setUri(urlStr);
-            } else if ("POST".equals(method)) {
-                builder = RequestBuilder.post().setUri(urlStr);
-                setBody(builder, params);
-            } else if ("PUT".equals(method)) {
-                builder = RequestBuilder.put().setUri(urlStr);
-                setBody(builder, params);
-            } else if ("DELETE".equals(method)) {
-                builder = RequestBuilder.delete().setUri(urlStr);
-            } else {
-                throw new IllegalArgumentException((("Method " + method) + " is not supported"));
-            }
+            }else
+                if ("POST".equals(method)) {
+                    builder = RequestBuilder.post().setUri(urlStr);
+                    setBody(builder, params);
+                }else
+                    if ("PUT".equals(method)) {
+                        builder = RequestBuilder.put().setUri(urlStr);
+                        setBody(builder, params);
+                    }else
+                        if ("DELETE".equals(method)) {
+                            builder = RequestBuilder.delete().setUri(urlStr);
+                        }else {
+                            throw new IllegalArgumentException((("Method " + method) + " is not supported"));
+                        }
+                    
+                
+            
             return builder;
-        } else {
+        }else {
             HttpRequestBase theMethod = null;
             if ("GET".equals(method)) {
-                theMethod = new org.apache.http.client.methods.HttpGet(urlStr);
-            } else if ("POST".equals(method)) {
-                theMethod = new HttpPost(urlStr);
-                setBody(theMethod, params);
-            } else if ("PUT".equals(method)) {
-                theMethod = new org.apache.http.client.methods.HttpPut(urlStr);
-                setBody(theMethod, params);
-            } else if ("DELETE".equals(method)) {
-                theMethod = new org.apache.http.client.methods.HttpDelete(urlStr);
-            } else {
-                throw new IllegalArgumentException((("Method " + method) + " is not supported"));
-            }
+                theMethod = new HttpGet(urlStr);
+            }else
+                if ("POST".equals(method)) {
+                    theMethod = new org.apache.http.client.methods.HttpPost(urlStr);
+                    setBody(theMethod, params);
+                }else
+                    if ("PUT".equals(method)) {
+                        theMethod = new HttpPut(urlStr);
+                        setBody(theMethod, params);
+                    }else
+                        if ("DELETE".equals(method)) {
+                            theMethod = new HttpDelete(urlStr);
+                        }else {
+                            throw new IllegalArgumentException((("Method " + method) + " is not supported"));
+                        }
+                    
+                
+            
             return theMethod;
         }
     }

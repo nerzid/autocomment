@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,7 +36,7 @@ public class ReuseNodeFactory implements NodeInstanceFactory {
         NodeInstance result = ((org.jbpm.workflow.instance.NodeInstanceContainer) (nodeInstanceContainer)).getFirstNodeInstance(node.getId());
         if (result != null) {
             return result;
-        } 
+        }
         try {
             NodeInstanceImpl nodeInstance = ((NodeInstanceImpl) (cls.newInstance()));
             nodeInstance.setNodeId(node.getId());
@@ -46,13 +46,13 @@ public class ReuseNodeFactory implements NodeInstanceFactory {
             assert uniqueId != null : (node.getName()) + " does not have a unique id.";
             if (uniqueId == null) {
                 uniqueId = (node.getId()) + "";
-            } 
+            }
             nodeInstance.setMetaData("UniqueId", uniqueId);
             int level = ((org.jbpm.workflow.instance.NodeInstanceContainer) (nodeInstanceContainer)).getLevelForNode(uniqueId);
             nodeInstance.setLevel(level);
             return nodeInstance;
         } catch (Exception e) {
-            throw new RuntimeException(((("Unable to instantiate node '" + (ReuseNodeFactory.this.cls.getName())) + "': ") + (e.getMessage())));
+            throw new RuntimeException(((("Unable to instantiate node '" + (this.cls.getName())) + "': ") + (e.getMessage())));
         }
     }
 }

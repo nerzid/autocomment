@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,9 +34,9 @@ public class RESTServiceException extends RuntimeException {
 
     public RESTServiceException(int status, String response, String endoint) {
         super((((((("Unsuccessful response from REST server (status " + status) + ", endpoint ") + endoint) + ", response ") + response) + ""));
-        RESTServiceException.this.status = status;
-        RESTServiceException.this.response = response;
-        RESTServiceException.this.endoint = endoint;
+        this.status = status;
+        this.response = response;
+        this.endoint = endoint;
     }
 
     public int getStatus() {

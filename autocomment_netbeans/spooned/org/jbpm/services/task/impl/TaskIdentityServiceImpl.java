@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,6 +29,7 @@ import org.kie.internal.task.api.TaskPersistenceContext;
 import org.kie.api.task.model.User;
 
 /**
+ *
  */
 public class TaskIdentityServiceImpl implements TaskIdentityService {
     private TaskPersistenceContext persistenceContext;
@@ -37,28 +38,32 @@ public class TaskIdentityServiceImpl implements TaskIdentityService {
     }
 
     public TaskIdentityServiceImpl(TaskPersistenceContext persistenceContext) {
-        TaskIdentityServiceImpl.this.persistenceContext = persistenceContext;
+        this.persistenceContext = persistenceContext;
     }
 
     public void setPersistenceContext(TaskPersistenceContext persistenceContext) {
-        TaskIdentityServiceImpl.this.persistenceContext = persistenceContext;
+        this.persistenceContext = persistenceContext;
     }
 
     public void addUser(User user) {
+        // persist user User{user} to TaskPersistenceContext{persistenceContext}
         persistenceContext.persistUser(user);
     }
 
     public void addGroup(Group group) {
+        // persist group Group{group} to TaskPersistenceContext{persistenceContext}
         persistenceContext.persistGroup(group);
     }
 
     public void removeGroup(String groupId) {
         Group group = persistenceContext.findGroup(groupId);
+        // remove Group{group} to TaskPersistenceContext{persistenceContext}
         persistenceContext.remove(group);
     }
 
     public void removeUser(String userId) {
         User user = persistenceContext.findUser(userId);
+        // remove User{user} to TaskPersistenceContext{persistenceContext}
         persistenceContext.remove(user);
     }
 

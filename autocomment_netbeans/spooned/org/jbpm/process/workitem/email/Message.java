@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,8 +36,8 @@ public class Message {
     private List<String> attachments;
 
     public Message() {
-        Message.this.recipients = new Recipients();
-        Message.this.setAttachments(new ArrayList<String>());
+        this.recipients = new Recipients();
+        this.setAttachments(new ArrayList<String>());
     }
 
     public Recipients getRecipients() {
@@ -45,7 +45,7 @@ public class Message {
     }
 
     public void setRecipients(Recipients recipients) {
-        Message.this.recipients = recipients;
+        this.recipients = recipients;
     }
 
     public String getFrom() {
@@ -53,7 +53,7 @@ public class Message {
     }
 
     public void setFrom(String from) {
-        Message.this.from = from;
+        this.from = from;
     }
 
     public String getReplyTo() {
@@ -61,7 +61,7 @@ public class Message {
     }
 
     public void setReplyTo(String replyTo) {
-        Message.this.replyTo = replyTo;
+        this.replyTo = replyTo;
     }
 
     public String getDocumentFormat() {
@@ -69,7 +69,7 @@ public class Message {
     }
 
     public void setDocumentFormat(String documentFormat) {
-        Message.this.documentFormat = documentFormat;
+        this.documentFormat = documentFormat;
     }
 
     public String getSubject() {
@@ -77,7 +77,7 @@ public class Message {
     }
 
     public void setSubject(String subject) {
-        Message.this.subject = subject;
+        this.subject = subject;
     }
 
     public String getBody() {
@@ -85,7 +85,7 @@ public class Message {
     }
 
     public void setBody(String body) {
-        Message.this.body = body;
+        this.body = body;
     }
 
     public List<String> getAttachments() {
@@ -93,11 +93,11 @@ public class Message {
     }
 
     public void setAttachments(List<String> attachments) {
-        Message.this.attachments = attachments;
+        this.attachments = attachments;
     }
 
     public boolean hasAttachment() {
-        return !(Message.this.attachments.isEmpty());
+        return !(this.attachments.isEmpty());
     }
 
     public int hashCode() {
@@ -114,65 +114,79 @@ public class Message {
     }
 
     public boolean equals(Object obj) {
-        if ((Message.this) == obj) {
+        if ((this) == obj) {
             return true;
-        } 
+        }
         if (obj == null) {
             return false;
-        } 
+        }
         if ((getClass()) != (obj.getClass())) {
             return false;
-        } 
+        }
         final Message other = ((Message) (obj));
         if ((body) == null) {
             if ((other.body) != null) {
                 return false;
-            } 
-        } else if (!(body.equals(other.body))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(body.equals(other.body))) {
+                return false;
+            }
+        
         if ((documentFormat) == null) {
             if ((other.documentFormat) != null) {
                 return false;
-            } 
-        } else if (!(documentFormat.equals(other.documentFormat))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(documentFormat.equals(other.documentFormat))) {
+                return false;
+            }
+        
         if ((from) == null) {
             if ((other.from) != null) {
                 return false;
-            } 
-        } else if (!(from.equals(other.from))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(from.equals(other.from))) {
+                return false;
+            }
+        
         if ((recipients) == null) {
             if ((other.recipients) != null) {
                 return false;
-            } 
-        } else if (!(recipients.equals(other.recipients))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(recipients.equals(other.recipients))) {
+                return false;
+            }
+        
         if ((replyTo) == null) {
             if ((other.replyTo) != null) {
                 return false;
-            } 
-        } else if (!(replyTo.equals(other.replyTo))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(replyTo.equals(other.replyTo))) {
+                return false;
+            }
+        
         if ((subject) == null) {
             if ((other.subject) != null) {
                 return false;
-            } 
-        } else if (!(subject.equals(other.subject))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(subject.equals(other.subject))) {
+                return false;
+            }
+        
         if ((attachments) == null) {
             if ((other.attachments) != null) {
                 return false;
-            } 
-        } else if (!(attachments.equals(other.attachments))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(attachments.equals(other.attachments))) {
+                return false;
+            }
+        
         return true;
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,38 +17,38 @@
 
 package org.jbpm.persistence.scripts.oldentities;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import org.jbpm.services.task.utils.CollectionUtils;
+import javax.persistence.Basic;
+import javax.persistence.EnumType;
+import org.jbpm.services.task.impl.model.TaskDataImpl;
+import java.util.List;
+import java.io.IOException;
+import javax.persistence.Id;
+import java.io.ObjectOutput;
+import org.jbpm.services.task.impl.model.PeopleAssignmentsImpl;
+import javax.persistence.GeneratedValue;
+import org.kie.api.task.model.I18NText;
+import javax.persistence.JoinColumn;
+import javax.persistence.SequenceGenerator;
+import org.kie.internal.task.api.model.SubTasksStrategy;
+import javax.persistence.OneToMany;
+import org.kie.api.task.model.PeopleAssignments;
+import javax.persistence.Table;
+import javax.persistence.Version;
+import org.jbpm.services.task.impl.model.I18NTextImpl;
+import java.io.ObjectInput;
 import java.util.Collections;
+import org.kie.api.task.model.TaskData;
+import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import org.kie.internal.task.api.model.Deadlines;
+import javax.persistence.Enumerated;
 import org.jbpm.services.task.impl.model.DeadlinesImpl;
 import org.kie.internal.task.api.model.Delegation;
 import org.jbpm.services.task.impl.model.DelegationImpl;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import org.kie.api.task.model.I18NText;
-import org.jbpm.services.task.impl.model.I18NTextImpl;
-import java.io.IOException;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import java.util.List;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import javax.persistence.OneToMany;
-import org.kie.api.task.model.PeopleAssignments;
-import org.jbpm.services.task.impl.model.PeopleAssignmentsImpl;
-import javax.persistence.SequenceGenerator;
-import org.kie.internal.task.api.model.SubTasksStrategy;
-import javax.persistence.Table;
-import org.kie.api.task.model.TaskData;
-import org.jbpm.services.task.impl.model.TaskDataImpl;
-import javax.persistence.Version;
 
 @Entity
 @Table(name = "Task")
@@ -112,42 +112,50 @@ public class TaskImpl {
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long Long{id} to ObjectOutput{out}
         out.writeLong(id);
+        // write int int{priority} to ObjectOutput{out}
         out.writeInt(priority);
+        // write short Short{archived} to ObjectOutput{out}
         out.writeShort(archived);
+        // write utf String{taskType} to ObjectOutput{out}
         out.writeUTF(taskType);
+        // write utf String{formName} to ObjectOutput{out}
         out.writeUTF(formName);
+        // write i18 List{names} to void{CollectionUtils}
         CollectionUtils.writeI18NTextList(names, out);
+        // write i18 List{subjects} to void{CollectionUtils}
         CollectionUtils.writeI18NTextList(subjects, out);
+        // write i18 List{descriptions} to void{CollectionUtils}
         CollectionUtils.writeI18NTextList(descriptions, out);
         if ((subTaskStrategy) != null) {
             out.writeBoolean(true);
             out.writeUTF(subTaskStrategy.toString());
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((peopleAssignments) != null) {
             out.writeBoolean(true);
             peopleAssignments.writeExternal(out);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((delegation) != null) {
             out.writeBoolean(true);
             delegation.writeExternal(out);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((taskData) != null) {
             out.writeBoolean(true);
             taskData.writeExternal(out);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((deadlines) != null) {
             out.writeBoolean(true);
             deadlines.writeExternal(out);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
     }
@@ -163,23 +171,23 @@ public class TaskImpl {
         descriptions = CollectionUtils.readI18NTextList(in);
         if (in.readBoolean()) {
             subTaskStrategy = SubTasksStrategy.valueOf(in.readUTF());
-        } 
+        }
         if (in.readBoolean()) {
             peopleAssignments = new PeopleAssignmentsImpl();
             peopleAssignments.readExternal(in);
-        } 
+        }
         if (in.readBoolean()) {
             delegation = new DelegationImpl();
             delegation.readExternal(in);
-        } 
+        }
         if (in.readBoolean()) {
             taskData = new TaskDataImpl();
             taskData.readExternal(in);
-        } 
+        }
         if (in.readBoolean()) {
             deadlines = new DeadlinesImpl();
             deadlines.readExternal(in);
-        } 
+        }
     }
 
     public Long getId() {
@@ -187,26 +195,26 @@ public class TaskImpl {
     }
 
     public void setId(long id) {
-        TaskImpl.this.id = id;
+        this.id = id;
     }
 
     public Boolean isArchived() {
         if ((archived) == null) {
             return null;
-        } 
+        }
         return (archived) == 1 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     public void setArchived(Boolean archived) {
         if (archived == null) {
-            TaskImpl.this.archived = null;
-        } else {
-            TaskImpl.this.archived = (archived == true) ? new Short("1") : new Short("0");
+            this.archived = null;
+        }else {
+            this.archived = (archived == true) ? new Short("1") : new Short("0");
         }
     }
 
     public int getVersion() {
-        return TaskImpl.this.version;
+        return this.version;
     }
 
     public int getPriority() {
@@ -214,7 +222,7 @@ public class TaskImpl {
     }
 
     public void setPriority(int priority) {
-        TaskImpl.this.priority = priority;
+        this.priority = priority;
     }
 
     public List<I18NText> getNames() {
@@ -222,7 +230,7 @@ public class TaskImpl {
     }
 
     public void setNames(List<I18NText> names) {
-        TaskImpl.this.names = names;
+        this.names = names;
     }
 
     public List<I18NText> getSubjects() {
@@ -230,7 +238,7 @@ public class TaskImpl {
     }
 
     public void setSubjects(List<I18NText> subjects) {
-        TaskImpl.this.subjects = subjects;
+        this.subjects = subjects;
     }
 
     public List<I18NText> getDescriptions() {
@@ -238,7 +246,7 @@ public class TaskImpl {
     }
 
     public void setDescriptions(List<I18NText> descriptions) {
-        TaskImpl.this.descriptions = descriptions;
+        this.descriptions = descriptions;
     }
 
     public PeopleAssignments getPeopleAssignments() {
@@ -246,7 +254,7 @@ public class TaskImpl {
     }
 
     public void setPeopleAssignments(PeopleAssignments peopleAssignments) {
-        TaskImpl.this.peopleAssignments = ((PeopleAssignmentsImpl) (peopleAssignments));
+        this.peopleAssignments = ((PeopleAssignmentsImpl) (peopleAssignments));
     }
 
     public Delegation getDelegation() {
@@ -254,7 +262,7 @@ public class TaskImpl {
     }
 
     public void setDelegation(Delegation delegation) {
-        TaskImpl.this.delegation = ((DelegationImpl) (delegation));
+        this.delegation = ((DelegationImpl) (delegation));
     }
 
     public TaskData getTaskData() {
@@ -262,7 +270,7 @@ public class TaskImpl {
     }
 
     public void setTaskData(TaskData taskData) {
-        TaskImpl.this.taskData = ((TaskDataImpl) (taskData));
+        this.taskData = ((TaskDataImpl) (taskData));
     }
 
     public Deadlines getDeadlines() {
@@ -270,7 +278,7 @@ public class TaskImpl {
     }
 
     public void setDeadlines(Deadlines deadlines) {
-        TaskImpl.this.deadlines = ((DeadlinesImpl) (deadlines));
+        this.deadlines = ((DeadlinesImpl) (deadlines));
     }
 
     public String getTaskType() {
@@ -278,7 +286,7 @@ public class TaskImpl {
     }
 
     public void setTaskType(String taskType) {
-        TaskImpl.this.taskType = taskType;
+        this.taskType = taskType;
     }
 
     public String getFormName() {
@@ -286,7 +294,7 @@ public class TaskImpl {
     }
 
     public void setFormName(String formName) {
-        TaskImpl.this.formName = formName;
+        this.formName = formName;
     }
 
     @Override
@@ -309,7 +317,7 @@ public class TaskImpl {
 
     @Override
     public boolean equals(Object obj) {
-        if ((TaskImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -319,38 +327,46 @@ public class TaskImpl {
             return false;
         
         TaskImpl other = ((TaskImpl) (obj));
-        if ((TaskImpl.this.version) != (other.version)) {
+        if ((this.version) != (other.version)) {
             return false;
-        } 
-        if ((TaskImpl.this.archived) != (other.archived)) {
+        }
+        if ((this.archived) != (other.archived)) {
             return false;
-        } 
+        }
         if ((taskType) == null) {
             if ((other.taskType) != null)
                 return false;
             
-        } else if (!(taskType.equals(other.taskType)))
-            return false;
+        }else
+            if (!(taskType.equals(other.taskType)))
+                return false;
+            
         
         if ((deadlines) == null) {
             if ((other.deadlines) != null) {
-            } 
-        } else if (!(deadlines.equals(other.deadlines)))
-            return false;
+            }
+        }else
+            if (!(deadlines.equals(other.deadlines)))
+                return false;
+            
         
         if ((delegation) == null) {
             if ((other.delegation) != null)
                 return false;
             
-        } else if (!(delegation.equals(other.delegation)))
-            return false;
+        }else
+            if (!(delegation.equals(other.delegation)))
+                return false;
+            
         
         if ((peopleAssignments) == null) {
             if ((other.peopleAssignments) != null)
                 return false;
             
-        } else if (!(peopleAssignments.equals(other.peopleAssignments)))
-            return false;
+        }else
+            if (!(peopleAssignments.equals(other.peopleAssignments)))
+                return false;
+            
         
         if ((priority) != (other.priority))
             return false;
@@ -359,8 +375,10 @@ public class TaskImpl {
             if ((other.taskData) != null)
                 return false;
             
-        } else if (!(taskData.equals(other.taskData)))
-            return false;
+        }else
+            if (!(taskData.equals(other.taskData)))
+                return false;
+            
         
         return ((CollectionUtils.equals(descriptions, other.descriptions)) && (CollectionUtils.equals(names, other.names))) && (CollectionUtils.equals(subjects, other.subjects));
     }
@@ -370,7 +388,7 @@ public class TaskImpl {
     }
 
     public void setSubTaskStrategy(SubTasksStrategy subTaskStrategy) {
-        TaskImpl.this.subTaskStrategy = subTaskStrategy;
+        this.subTaskStrategy = subTaskStrategy;
     }
 }
 

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,16 +20,17 @@ package org.jbpm.bpmn2.xml;
 import org.xml.sax.Attributes;
 import org.jbpm.workflow.core.Node;
 import org.jbpm.workflow.core.node.Split;
+import Split.TYPE_XAND;
 
 public class EventBasedGatewayHandler extends AbstractNodeHandler {
     protected Node createNode(Attributes attrs) {
         final String type = attrs.getValue("gatewayDirection");
         if ("Diverging".equals(type)) {
             Split split = new Split();
-            split.setType(Split.TYPE_XAND);
+            split.setType(TYPE_XAND);
             split.setMetaData("EventBased", "true");
             return split;
-        } else {
+        }else {
             throw new IllegalArgumentException(("Unknown gateway direction: " + type));
         }
     }

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ public class ProxyOutputStreamTest {
             public void write(final byte[] ba) throws IOException {
                 if (ba != null) {
                     super.write(ba);
-                } 
+                }
             }
         };
         proxied = new ProxyOutputStream(original);
@@ -47,15 +47,20 @@ public class ProxyOutputStreamTest {
 
     @Test
     public void testWrite() throws Exception {
+        // write char{'y'} to OutputStream{proxied}
         proxied.write('y');
+        // assert equals int{1} to void{Assert}
         Assert.assertEquals(1, original.size());
+        // assert equals char{'y'} to void{Assert}
         Assert.assertEquals('y', original.toByteArray()[0]);
     }
 
     @Test
     public void testWriteNullBaSucceeds() throws Exception {
         final byte[] ba = null;
+        // write byte[]{ba} to ByteArrayOutputStream{original}
         original.write(ba);
+        // write byte[]{ba} to OutputStream{proxied}
         proxied.write(ba);
     }
 }

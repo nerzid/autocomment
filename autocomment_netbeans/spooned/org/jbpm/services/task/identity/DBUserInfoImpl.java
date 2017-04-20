@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,22 +16,22 @@
 
 package org.jbpm.services.task.identity;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.sql.Connection;
 import javax.sql.DataSource;
 import org.kie.api.task.model.Group;
+import java.sql.SQLException;
+import org.kie.internal.task.api.UserInfo;
 import javax.naming.InitialContext;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Properties;
+import org.kie.internal.task.api.TaskModelProvider;
 import org.slf4j.Logger;
+import java.sql.ResultSet;
 import org.slf4j.LoggerFactory;
 import org.kie.api.task.model.OrganizationalEntity;
 import java.sql.PreparedStatement;
-import java.util.Properties;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import org.kie.internal.task.api.TaskModelProvider;
-import org.kie.internal.task.api.UserInfo;
 
 public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
     private static final Logger logger = LoggerFactory.getLogger(DBUserInfoImpl.class);
@@ -62,7 +62,7 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
     }
 
     public DBUserInfoImpl(Properties config) {
-        DBUserInfoImpl.this.config = config;
+        this.config = config;
         init();
     }
 
@@ -71,10 +71,10 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
     }
 
     private void init() {
-        if (((((((DBUserInfoImpl.this.config) == null) || (!(DBUserInfoImpl.this.config.containsKey(DBUserInfoImpl.DS_JNDI_NAME)))) || (!(DBUserInfoImpl.this.config.containsKey(DBUserInfoImpl.NAME_QUERY)))) || (!(DBUserInfoImpl.this.config.containsKey(DBUserInfoImpl.EMAIL_QUERY)))) || (!(DBUserInfoImpl.this.config.containsKey(DBUserInfoImpl.MEMBERS_QUERY)))) || (!(DBUserInfoImpl.this.config.containsKey(DBUserInfoImpl.LANG_QUERY)))) {
+        if (((((((this.config) == null) || (!(this.config.containsKey(DBUserInfoImpl.DS_JNDI_NAME)))) || (!(this.config.containsKey(DBUserInfoImpl.NAME_QUERY)))) || (!(this.config.containsKey(DBUserInfoImpl.EMAIL_QUERY)))) || (!(this.config.containsKey(DBUserInfoImpl.MEMBERS_QUERY)))) || (!(this.config.containsKey(DBUserInfoImpl.LANG_QUERY)))) {
             throw new IllegalArgumentException((((((((((((("All properties must be given (" + (DBUserInfoImpl.DS_JNDI_NAME)) + ",") + (DBUserInfoImpl.NAME_QUERY)) + ",") + (DBUserInfoImpl.EMAIL_QUERY)) + ",") + (DBUserInfoImpl.LANG_QUERY)) + ",") + (DBUserInfoImpl.EMAIL_QUERY)) + ",") + (DBUserInfoImpl.MEMBERS_QUERY)) + ")"));
-        } 
-        String jndiName = DBUserInfoImpl.this.config.getProperty(DBUserInfoImpl.DS_JNDI_NAME, "java:/DefaultDS");
+        }
+        String jndiName = this.config.getProperty(DBUserInfoImpl.DS_JNDI_NAME, "java:/DefaultDS");
         try {
             InitialContext ctx = new InitialContext();
             ds = ((DataSource) (ctx.lookup(jndiName)));
@@ -91,12 +91,12 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
         String displayName = null;
         try {
             conn = ds.getConnection();
-            ps = conn.prepareStatement(DBUserInfoImpl.this.config.getProperty(DBUserInfoImpl.NAME_QUERY));
+            ps = conn.prepareStatement(this.config.getProperty(DBUserInfoImpl.NAME_QUERY));
             ps.setString(1, entity.getId());
             rs = ps.executeQuery();
             if (rs.next()) {
                 displayName = rs.getString(1);
-            } 
+            }
         } catch (Exception e) {
             DBUserInfoImpl.logger.error(("Error when checking roles in db, parameter: " + (entity.getId())), e);
         } finally {
@@ -105,19 +105,19 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
                     rs.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (Exception ex) {
                 }
-            } 
+            }
         }
         return displayName;
     }
@@ -130,7 +130,7 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
         ResultSet rs = null;
         try {
             conn = ds.getConnection();
-            ps = conn.prepareStatement(DBUserInfoImpl.this.config.getProperty(DBUserInfoImpl.MEMBERS_QUERY));
+            ps = conn.prepareStatement(this.config.getProperty(DBUserInfoImpl.MEMBERS_QUERY));
             try {
                 ps.setString(1, group.getId());
             } catch (ArrayIndexOutOfBoundsException ignore) {
@@ -138,7 +138,7 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
             rs = ps.executeQuery();
             while (rs.next()) {
                 roles.add(TaskModelProvider.getFactory().newUser(rs.getString(1)));
-            }
+            } 
         } catch (Exception e) {
             DBUserInfoImpl.logger.error("Error when fetching members of a group from db, groups id: ", group.getId(), e);
         } finally {
@@ -147,19 +147,19 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
                     rs.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (Exception ex) {
                 }
-            } 
+            }
         }
         return roles.iterator();
     }
@@ -173,12 +173,12 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
             ResultSet rs = null;
             try {
                 conn = ds.getConnection();
-                ps = conn.prepareStatement(DBUserInfoImpl.this.config.getProperty(DBUserInfoImpl.HAS_EMAIL_QUERY));
+                ps = conn.prepareStatement(this.config.getProperty(DBUserInfoImpl.HAS_EMAIL_QUERY));
                 ps.setString(1, group.getId());
                 rs = ps.executeQuery();
                 if (rs.next()) {
                     result = true;
-                } 
+                }
             } catch (Exception e) {
                 DBUserInfoImpl.logger.error(("Error when checking roles in db, parameter: " + (group.getId())), e);
             } finally {
@@ -187,25 +187,25 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
                         rs.close();
                     } catch (SQLException e) {
                     }
-                } 
+                }
                 if (ps != null) {
                     try {
                         ps.close();
                     } catch (SQLException e) {
                     }
-                } 
+                }
                 if (conn != null) {
                     try {
                         conn.close();
                     } catch (Exception ex) {
                     }
-                } 
+                }
             }
-        } else {
+        }else {
             String email = getEmailForEntity(group);
             if (email != null) {
                 return true;
-            } 
+            }
         }
         return result;
     }
@@ -218,12 +218,12 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
         String emailAddress = null;
         try {
             conn = ds.getConnection();
-            ps = conn.prepareStatement(DBUserInfoImpl.this.config.getProperty(DBUserInfoImpl.EMAIL_QUERY));
+            ps = conn.prepareStatement(this.config.getProperty(DBUserInfoImpl.EMAIL_QUERY));
             ps.setString(1, entity.getId());
             rs = ps.executeQuery();
             if (rs.next()) {
                 emailAddress = rs.getString(1);
-            } 
+            }
         } catch (Exception e) {
             DBUserInfoImpl.logger.error("Error when fetching email address from db for entity {}", entity.getId(), e);
         } finally {
@@ -232,19 +232,19 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
                     rs.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (Exception ex) {
                 }
-            } 
+            }
         }
         return emailAddress;
     }
@@ -257,12 +257,12 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
         String language = null;
         try {
             conn = ds.getConnection();
-            ps = conn.prepareStatement(DBUserInfoImpl.this.config.getProperty(DBUserInfoImpl.LANG_QUERY));
+            ps = conn.prepareStatement(this.config.getProperty(DBUserInfoImpl.LANG_QUERY));
             ps.setString(1, entity.getId());
             rs = ps.executeQuery();
             if (rs.next()) {
                 language = rs.getString(1);
-            } 
+            }
         } catch (Exception e) {
             DBUserInfoImpl.logger.error("Error when fetching language for entity {} ", entity.getId(), e);
         } finally {
@@ -271,19 +271,19 @@ public class DBUserInfoImpl extends AbstractUserGroupInfo implements UserInfo {
                     rs.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (ps != null) {
                 try {
                     ps.close();
                 } catch (SQLException e) {
                 }
-            } 
+            }
             if (conn != null) {
                 try {
                     conn.close();
                 } catch (Exception ex) {
                 }
-            } 
+            }
         }
         return language;
     }

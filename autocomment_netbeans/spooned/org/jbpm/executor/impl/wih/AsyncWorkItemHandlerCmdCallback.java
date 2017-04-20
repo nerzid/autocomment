@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,26 +17,26 @@
 
 package org.jbpm.executor.impl.wih;
 
+import org.drools.core.command.impl.GenericCommand;
 import java.util.Collection;
 import org.kie.api.executor.CommandCallback;
 import org.kie.api.executor.CommandContext;
 import org.kie.internal.command.Context;
-import org.jbpm.process.instance.context.exception.ExceptionScopeInstance;
-import org.kie.api.executor.ExecutionResults;
-import org.drools.core.command.impl.GenericCommand;
-import org.kie.api.runtime.KieSession;
-import org.drools.core.command.impl.KnowledgeCommandContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.kie.api.runtime.process.NodeInstance;
-import org.jbpm.workflow.instance.NodeInstanceContainer;
-import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 import org.kie.api.runtime.manager.RuntimeEngine;
-import org.kie.api.runtime.manager.RuntimeManager;
-import org.kie.internal.runtime.manager.RuntimeManagerRegistry;
-import org.kie.api.runtime.process.WorkItem;
+import org.kie.api.runtime.process.NodeInstance;
 import org.jbpm.workflow.instance.node.WorkItemNodeInstance;
 import org.jbpm.workflow.instance.WorkflowProcessInstance;
+import ExceptionScope.EXCEPTION_SCOPE;
+import org.jbpm.process.instance.context.exception.ExceptionScopeInstance;
+import org.kie.api.executor.ExecutionResults;
+import org.kie.api.runtime.KieSession;
+import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
+import org.kie.api.runtime.process.WorkItem;
+import org.kie.api.runtime.manager.RuntimeManager;
+import org.drools.core.command.impl.KnowledgeCommandContext;
+import org.kie.internal.runtime.manager.RuntimeManagerRegistry;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Dedicated callback for <code>AsyncWorkItemHandler</code> that is responsible for:
@@ -51,6 +51,7 @@ public class AsyncWorkItemHandlerCmdCallback implements CommandCallback {
     @Override
     public void onCommandDone(CommandContext ctx, ExecutionResults results) {
         WorkItem workItem = ((WorkItem) (ctx.getData("workItem")));
+        // debug String{"About to complete work item {}"} to Logger{AsyncWorkItemHandlerCmdCallback.logger}
         AsyncWorkItemHandlerCmdCallback.logger.debug("About to complete work item {}", workItem);
         // find the right runtime to do the complete
         RuntimeManager manager = getRuntimeManager(ctx);
@@ -79,10 +80,10 @@ public class AsyncWorkItemHandlerCmdCallback implements CommandCallback {
                     WorkflowProcessInstance processInstance = ((WorkflowProcessInstance) (ksession.getProcessInstance(processInstanceId)));
                     NodeInstance nodeInstance = getNodeInstance(workItem, processInstance);
                     String exceptionName = exception.getClass().getName();
-                    ExceptionScopeInstance exceptionScopeInstance = ((ExceptionScopeInstance) (((org.jbpm.workflow.instance.NodeInstance) (nodeInstance)).resolveContextInstance(ExceptionScope.EXCEPTION_SCOPE, exceptionName)));
+                    ExceptionScopeInstance exceptionScopeInstance = ((ExceptionScopeInstance) (((NodeInstance) (nodeInstance)).resolveContextInstance(EXCEPTION_SCOPE, exceptionName)));
                     if (exceptionScopeInstance != null) {
                         exceptionScopeInstance.handleException(exceptionName, exception);
-                    } 
+                    }
                     return null;
                 }
             });
@@ -98,7 +99,7 @@ public class AsyncWorkItemHandlerCmdCallback implements CommandCallback {
         RuntimeManager runtimeManager = RuntimeManagerRegistry.get().getManager(deploymentId);
         if (runtimeManager == null) {
             throw new IllegalStateException(("There is no runtime manager for deployment " + deploymentId));
-        } 
+        }
         return runtimeManager;
     }
 
@@ -112,13 +113,15 @@ public class AsyncWorkItemHandlerCmdCallback implements CommandCallback {
             if (nodeInstance instanceof WorkItemNodeInstance) {
                 if ((((WorkItemNodeInstance) (nodeInstance)).getWorkItemId()) == (workItem.getId())) {
                     return nodeInstance;
-                } 
-            } else if (nodeInstance instanceof NodeInstanceContainer) {
-                NodeInstance found = getNodeInstance(workItem, ((NodeInstanceContainer) (nodeInstance)).getNodeInstances());
-                if (found != null) {
-                    return found;
-                } 
-            } 
+                }
+            }else
+                if (nodeInstance instanceof org.jbpm.workflow.instance.NodeInstanceContainer) {
+                    NodeInstance found = getNodeInstance(workItem, ((org.jbpm.workflow.instance.NodeInstanceContainer) (nodeInstance)).getNodeInstances());
+                    if (found != null) {
+                        return found;
+                    }
+                }
+            
         }
         return null;
     }

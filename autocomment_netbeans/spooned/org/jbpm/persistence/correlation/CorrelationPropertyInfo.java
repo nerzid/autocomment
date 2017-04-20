@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,8 +37,8 @@ public class CorrelationPropertyInfo implements Serializable , CorrelationProper
     }
 
     public CorrelationPropertyInfo(String name, String value) {
-        CorrelationPropertyInfo.this.name = name;
-        CorrelationPropertyInfo.this.value = value;
+        this.name = name;
+        this.value = value;
     }
 
     @Id
@@ -59,7 +59,7 @@ public class CorrelationPropertyInfo implements Serializable , CorrelationProper
 
     @Override
     public String getName() {
-        return CorrelationPropertyInfo.this.name;
+        return this.name;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CorrelationPropertyInfo implements Serializable , CorrelationProper
 
     @Override
     public String getValue() {
-        return CorrelationPropertyInfo.this.value;
+        return this.value;
     }
 
     public CorrelationKeyInfo getCorrelationKey() {
@@ -77,7 +77,7 @@ public class CorrelationPropertyInfo implements Serializable , CorrelationProper
     }
 
     public void setCorrelationKey(CorrelationKeyInfo correlationKey) {
-        CorrelationPropertyInfo.this.correlationKey = correlationKey;
+        this.correlationKey = correlationKey;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class CorrelationPropertyInfo implements Serializable , CorrelationProper
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((correlationKey) == null ? 0 : ((int) ((correlationKey.getId()) ^ ((correlationKey.getId()) >>> 32))));
-        result = (prime * result) + ((int) (((id) ^ ((id) >>> 32))));
+        result = (prime * result) + ((int) ((id) ^ ((id) >>> 32)));
         result = (prime * result) + ((name) == null ? 0 : name.hashCode());
         result = (prime * result) + ((value) == null ? 0 : value.hashCode());
         result = (prime * result) + (version);
@@ -99,7 +99,7 @@ public class CorrelationPropertyInfo implements Serializable , CorrelationProper
 
     @Override
     public boolean equals(Object obj) {
-        if ((CorrelationPropertyInfo.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -113,8 +113,10 @@ public class CorrelationPropertyInfo implements Serializable , CorrelationProper
             if ((other.correlationKey) != null)
                 return false;
             
-        } else if ((correlationKey.getId()) != (other.correlationKey.getId()))
-            return false;
+        }else
+            if ((correlationKey.getId()) != (other.correlationKey.getId()))
+                return false;
+            
         
         if ((id) != (other.id))
             return false;
@@ -123,15 +125,19 @@ public class CorrelationPropertyInfo implements Serializable , CorrelationProper
             if ((other.name) != null)
                 return false;
             
-        } else if (!(name.equals(other.name)))
-            return false;
+        }else
+            if (!(name.equals(other.name)))
+                return false;
+            
         
         if ((value) == null) {
             if ((other.value) != null)
                 return false;
             
-        } else if (!(value.equals(other.value)))
-            return false;
+        }else
+            if (!(value.equals(other.value)))
+                return false;
+            
         
         if ((version) != (other.version))
             return false;

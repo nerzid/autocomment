@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,18 +18,23 @@ package org.jbpm.query.jpa.data;
 
 import java.util.ArrayList;
 import java.util.Date;
+import javax.xml.bind.annotation.XmlType;
+import QueryCriteriaType.GROUP;
+import javax.xml.bind.annotation.XmlElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import java.util.List;
 import org.jbpm.query.jpa.data.QueryWhere.QueryCriteriaType;
-import java.text.SimpleDateFormat;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import static org.codehaus.jackson.annotate.JsonTypeInfo.Id.CLASS;
+import static org.codehaus.jackson.annotate.JsonTypeInfo.As.PROPERTY;
+import QueryCriteriaType.RANGE;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import QueryCriteriaType.REGEXP;
+import java.text.SimpleDateFormat;
 
 /**
  * This object contains the following information:
@@ -54,7 +59,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  *   [endGroups] [union] [startGroupos] [values]
  * </pre>
- * 
+ *
  * The main reason to include the grouping status in this object is that other data structures (nested lists, etc)
  * are much harder to de/serialize correctly.
  */
@@ -76,7 +81,7 @@ public class QueryCriteria {
     private QueryCriteriaType type = QueryCriteriaType.NORMAL;
 
     @XmlElement(name = "parameter")
-    @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, property = "class", use = JsonTypeInfo.Id.CLASS)
+    @JsonTypeInfo(include = PROPERTY, property = "class", use = CLASS)
     private List<Object> values;
 
     @XmlElement(name = "date-parameter")
@@ -94,13 +99,13 @@ public class QueryCriteria {
      * @param union Whether or not the group is part of an intersection or disjunction
      */
     public QueryCriteria(boolean union) {
-        QueryCriteria.this.union = union;
-        QueryCriteria.this.type = QueryCriteriaType.GROUP;
+        this.union = union;
+        this.type = QueryCriteriaType.GROUP;
     }
 
     private QueryCriteria(String listId, QueryCriteriaType type) {
-        QueryCriteria.this.listId = listId;
-        QueryCriteria.this.type = type;
+        this.listId = listId;
+        this.type = type;
     }
 
     /**
@@ -112,8 +117,8 @@ public class QueryCriteria {
      */
     public QueryCriteria(String listId, boolean union, QueryCriteriaType type, int valueListSize) {
         this(listId, type);
-        QueryCriteria.this.union = union;
-        QueryCriteria.this.values = new ArrayList<Object>(valueListSize);
+        this.union = union;
+        this.values = new ArrayList<Object>(valueListSize);
     }
 
     public String getListId() {
@@ -121,7 +126,7 @@ public class QueryCriteria {
     }
 
     public void setListId(String listId) {
-        QueryCriteria.this.listId = listId;
+        this.listId = listId;
     }
 
     public boolean isUnion() {
@@ -129,7 +134,7 @@ public class QueryCriteria {
     }
 
     public void setUnion(boolean union) {
-        QueryCriteria.this.union = union;
+        this.union = union;
     }
 
     public boolean isFirst() {
@@ -137,7 +142,7 @@ public class QueryCriteria {
     }
 
     public void setFirst(boolean first) {
-        QueryCriteria.this.first = first;
+        this.first = first;
     }
 
     public QueryCriteriaType getType() {
@@ -145,61 +150,61 @@ public class QueryCriteria {
     }
 
     public void setType(QueryCriteriaType type) {
-        QueryCriteria.this.type = type;
+        this.type = type;
     }
 
     public List<Object> getValues() {
-        if ((QueryCriteria.this.values) == null) {
-            QueryCriteria.this.values = new ArrayList<Object>();
-        } 
+        if ((this.values) == null) {
+            this.values = new ArrayList<Object>();
+        }
         return values;
     }
 
     public void setValues(List<Object> values) {
-        QueryCriteria.this.values = values;
+        this.values = values;
     }
 
     public List<Date> getDateValues() {
-        if ((QueryCriteria.this.dateValues) == null) {
-            QueryCriteria.this.dateValues = new ArrayList<Date>();
-        } 
+        if ((this.dateValues) == null) {
+            this.dateValues = new ArrayList<Date>();
+        }
         return dateValues;
     }
 
     public void setDateValues(List<Date> dateValues) {
-        QueryCriteria.this.dateValues = dateValues;
+        this.dateValues = dateValues;
     }
 
     // other methods
     @JsonIgnore
     public boolean isGroupCriteria() {
-        return QueryCriteria.this.type.equals(QueryCriteriaType.GROUP);
+        return this.type.equals(GROUP);
     }
 
     @JsonIgnore
     public boolean hasValues() {
-        return ((QueryCriteria.this.values) != null) && (!(QueryCriteria.this.values.isEmpty()));
+        return ((this.values) != null) && (!(this.values.isEmpty()));
     }
 
     @JsonIgnore
     public boolean hasDateValues() {
-        return ((QueryCriteria.this.dateValues) != null) && (!(QueryCriteria.this.dateValues.isEmpty()));
+        return ((this.dateValues) != null) && (!(this.dateValues.isEmpty()));
     }
 
     @JsonIgnore
     public boolean hasCriteria() {
-        return ((QueryCriteria.this.criteria) != null) && (!(QueryCriteria.this.criteria.isEmpty()));
+        return ((this.criteria) != null) && (!(this.criteria.isEmpty()));
     }
 
     public List<QueryCriteria> getCriteria() {
-        if ((QueryCriteria.this.criteria) == null) {
-            QueryCriteria.this.criteria = new ArrayList<QueryCriteria>();
-        } 
+        if ((this.criteria) == null) {
+            this.criteria = new ArrayList<QueryCriteria>();
+        }
         return criteria;
     }
 
     public void setCriteria(List<QueryCriteria> criteria) {
-        QueryCriteria.this.criteria = criteria;
+        this.criteria = criteria;
     }
 
     /**
@@ -208,19 +213,19 @@ public class QueryCriteria {
      */
     public List<Object> getParameters() {
         List<Object> parameters = new ArrayList<Object>(getValues());
-        if (((QueryCriteria.this.dateValues) != null) && (!(QueryCriteria.this.dateValues.isEmpty()))) {
-            parameters.addAll(QueryCriteria.this.dateValues);
-        } 
+        if (((this.dateValues) != null) && (!(this.dateValues.isEmpty()))) {
+            parameters.addAll(this.dateValues);
+        }
         if (parameters.isEmpty()) {
             return parameters;
-        } 
+        }
         return parameters;
     }
 
     void addParameter(Object value) {
         if (value instanceof Date) {
             getDateValues().add(((Date) (value)));
-        } else {
+        }else {
             getValues().add(value);
         }
     }
@@ -230,37 +235,39 @@ public class QueryCriteria {
         List addValues;
         if (value instanceof Date) {
             addValues = getDateValues();
-        } else {
+        }else {
             addValues = getValues();
         }
         while ((addValues.size()) <= index) {
             addValues.add(null);
-        }
+        } 
+        // set int{index} to List{addValues}
         addValues.set(index, value);// throws NPE for (index > 1) if (list < index)
         
         while ((addValues.size()) < listSize) {
             addValues.add(null);
-        }
+        } 
     }
 
     public void addCriteria(QueryCriteria criteria) {
+        // add QueryCriteria{criteria} to List{getCriteria()}
         getCriteria().add(criteria);
     }
 
     public QueryCriteria(QueryCriteria queryCriteria) {
-        QueryCriteria.this.listId = queryCriteria.listId;
-        QueryCriteria.this.union = queryCriteria.union;
-        QueryCriteria.this.first = queryCriteria.first;
-        QueryCriteria.this.type = queryCriteria.type;
+        this.listId = queryCriteria.listId;
+        this.union = queryCriteria.union;
+        this.first = queryCriteria.first;
+        this.type = queryCriteria.type;
         if ((queryCriteria.values) != null) {
-            QueryCriteria.this.values = new ArrayList<Object>(queryCriteria.values);
-        } 
+            this.values = new ArrayList<Object>(queryCriteria.values);
+        }
         if ((queryCriteria.dateValues) != null) {
-            QueryCriteria.this.dateValues = new ArrayList<Date>(queryCriteria.dateValues);
-        } 
+            this.dateValues = new ArrayList<Date>(queryCriteria.dateValues);
+        }
         if ((queryCriteria.criteria) != null) {
-            QueryCriteria.this.criteria = new ArrayList<QueryCriteria>(queryCriteria.criteria);
-        } 
+            this.criteria = new ArrayList<QueryCriteria>(queryCriteria.criteria);
+        }
     }
 
     private static SimpleDateFormat toStringSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -270,62 +277,64 @@ public class QueryCriteria {
         StringBuilder out = new StringBuilder();
         if (!(first)) {
             out.append((union ? "OR" : "AND")).append(" ");
-        } 
+        }
         if ((listId) != null) {
             out.append(listId);
-        } 
-        if (((QueryCriteria.this.values) != null) && (!(QueryCriteria.this.values.isEmpty()))) {
+        }
+        if (((this.values) != null) && (!(this.values.isEmpty()))) {
             out.append(" =");
-            if (type.equals(QueryCriteriaType.REGEXP)) {
+            if (type.equals(REGEXP)) {
                 out.append("~");
-            } 
-            out.append(" ");
-            if (type.equals(QueryCriteriaType.RANGE)) {
-                out.append("[");
-            } 
-            out.append(QueryCriteria.this.values.get(0));
-            for (int i = 1; i < (QueryCriteria.this.values.size()); ++i) {
-                out.append(", ").append(QueryCriteria.this.values.get(i));
             }
-            if (type.equals(QueryCriteriaType.RANGE)) {
-                out.append("]");
-            } 
-        } else if (((QueryCriteria.this.dateValues) != null) && (!(QueryCriteria.this.dateValues.isEmpty()))) {
-            out.append(" =");
-            if (type.equals(QueryCriteriaType.REGEXP)) {
-                out.append("~");
-            } 
             out.append(" ");
-            if (type.equals(QueryCriteriaType.RANGE)) {
+            if (type.equals(RANGE)) {
                 out.append("[");
-            } 
-            Date date = QueryCriteria.this.dateValues.get(0);
-            String dateStr = date != null ? QueryCriteria.toStringSdf.format(date) : "null";
-            out.append(dateStr);
-            for (int i = 1; i < (QueryCriteria.this.dateValues.size()); ++i) {
-                date = QueryCriteria.this.dateValues.get(i);
-                dateStr = (date != null) ? QueryCriteria.toStringSdf.format(date) : "null";
-                out.append(", ").append(dateStr);
             }
-            if (type.equals(QueryCriteriaType.RANGE)) {
+            out.append(this.values.get(0));
+            for (int i = 1; i < (this.values.size()); ++i) {
+                out.append(", ").append(this.values.get(i));
+            }
+            if (type.equals(RANGE)) {
                 out.append("]");
-            } 
-        } 
+            }
+        }else
+            if (((this.dateValues) != null) && (!(this.dateValues.isEmpty()))) {
+                out.append(" =");
+                if (type.equals(REGEXP)) {
+                    out.append("~");
+                }
+                out.append(" ");
+                if (type.equals(RANGE)) {
+                    out.append("[");
+                }
+                Date date = this.dateValues.get(0);
+                String dateStr = (date != null) ? QueryCriteria.toStringSdf.format(date) : "null";
+                out.append(dateStr);
+                for (int i = 1; i < (this.dateValues.size()); ++i) {
+                    date = this.dateValues.get(i);
+                    dateStr = (date != null) ? QueryCriteria.toStringSdf.format(date) : "null";
+                    out.append(", ").append(dateStr);
+                }
+                if (type.equals(RANGE)) {
+                    out.append("]");
+                }
+            }
+        
         if ((criteria) != null) {
             if ((out.length()) > 0) {
                 out.append(" ");
-            } 
+            }
             out.append("(");
             int size = criteria.size();
             if (size > 0) {
                 out.append(criteria.get(0).toString());
-            } 
+            }
             for (int i = 1; i < size; ++i) {
                 out.append(", ");
                 out.append(criteria.get(i).toString());
             }
             out.append(")");
-        } 
+        }
         return out.toString();
     }
 }

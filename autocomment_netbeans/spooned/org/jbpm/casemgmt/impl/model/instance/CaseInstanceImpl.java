@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,12 +61,12 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
     }
 
     public CaseInstanceImpl(String caseId, String caseDescription, Collection<CaseStageInstance> caseStages, Collection<CaseMilestoneInstance> caseMilestones, Collection<CaseRoleInstance> caseRoles, CaseFileInstance caseFile) {
-        CaseInstanceImpl.this.caseId = caseId;
-        CaseInstanceImpl.this.caseDescription = caseDescription;
-        CaseInstanceImpl.this.caseStages = caseStages;
-        CaseInstanceImpl.this.caseMilestones = caseMilestones;
-        CaseInstanceImpl.this.caseRoles = caseRoles;
-        CaseInstanceImpl.this.caseFile = caseFile;
+        this.caseId = caseId;
+        this.caseDescription = caseDescription;
+        this.caseStages = caseStages;
+        this.caseMilestones = caseMilestones;
+        this.caseRoles = caseRoles;
+        this.caseFile = caseFile;
     }
 
     /**
@@ -75,16 +75,16 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
      * @param caseDescription
      */
     public CaseInstanceImpl(String caseId, String caseDescription, String caseDefinitionId, Integer status, String deploymentId, String owner, Date startedAt, Date completedAt, Long processInstanceId, String completionMessage) {
-        CaseInstanceImpl.this.caseId = caseId;
-        CaseInstanceImpl.this.caseDescription = caseDescription;
-        CaseInstanceImpl.this.caseDefinitionId = caseDefinitionId;
-        CaseInstanceImpl.this.status = status;
-        CaseInstanceImpl.this.deploymentId = deploymentId;
-        CaseInstanceImpl.this.owner = owner;
-        CaseInstanceImpl.this.startedAt = startedAt;
-        CaseInstanceImpl.this.completedAt = completedAt;
-        CaseInstanceImpl.this.processInstanceId = processInstanceId;
-        CaseInstanceImpl.this.completionMessage = completionMessage;
+        this.caseId = caseId;
+        this.caseDescription = caseDescription;
+        this.caseDefinitionId = caseDefinitionId;
+        this.status = status;
+        this.deploymentId = deploymentId;
+        this.owner = owner;
+        this.startedAt = startedAt;
+        this.completedAt = completedAt;
+        this.processInstanceId = processInstanceId;
+        this.completionMessage = completionMessage;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
     }
 
     public void setCaseDefinitionId(String caseDefinitionId) {
-        CaseInstanceImpl.this.caseDefinitionId = caseDefinitionId;
+        this.caseDefinitionId = caseDefinitionId;
     }
 
     public Integer getStatus() {
@@ -130,7 +130,7 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
     }
 
     public void setStatus(Integer status) {
-        CaseInstanceImpl.this.status = status;
+        this.status = status;
     }
 
     @Override
@@ -139,7 +139,7 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
     }
 
     public void setDeploymentId(String deploymentId) {
-        CaseInstanceImpl.this.deploymentId = deploymentId;
+        this.deploymentId = deploymentId;
     }
 
     public String getOwner() {
@@ -147,7 +147,7 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
     }
 
     public void setOwner(String owner) {
-        CaseInstanceImpl.this.owner = owner;
+        this.owner = owner;
     }
 
     public Date getStartedAt() {
@@ -155,7 +155,7 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
     }
 
     public void setStartedAt(Date startedAt) {
-        CaseInstanceImpl.this.startedAt = startedAt;
+        this.startedAt = startedAt;
     }
 
     public Long getProcessInstanceId() {
@@ -163,31 +163,31 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
     }
 
     public void setProcessInstanceId(Long processInstanceId) {
-        CaseInstanceImpl.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public void setCaseId(String caseId) {
-        CaseInstanceImpl.this.caseId = caseId;
+        this.caseId = caseId;
     }
 
     public void setCaseDescription(String caseDescription) {
-        CaseInstanceImpl.this.caseDescription = caseDescription;
+        this.caseDescription = caseDescription;
     }
 
     public void setCaseStages(Collection<CaseStageInstance> caseStages) {
-        CaseInstanceImpl.this.caseStages = caseStages;
+        this.caseStages = caseStages;
     }
 
     public void setCaseMilestones(Collection<CaseMilestoneInstance> caseMilestones) {
-        CaseInstanceImpl.this.caseMilestones = caseMilestones;
+        this.caseMilestones = caseMilestones;
     }
 
     public void setCaseRoles(Collection<CaseRoleInstance> caseRoles) {
-        CaseInstanceImpl.this.caseRoles = caseRoles;
+        this.caseRoles = caseRoles;
     }
 
     public void setCaseFile(CaseFileInstance caseFile) {
-        CaseInstanceImpl.this.caseFile = caseFile;
+        this.caseFile = caseFile;
     }
 
     public Date getCompletedAt() {
@@ -195,7 +195,7 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
     }
 
     public void setCompletedAt(Date completedAt) {
-        CaseInstanceImpl.this.completedAt = completedAt;
+        this.completedAt = completedAt;
     }
 
     public String getCompletionMessage() {
@@ -203,7 +203,7 @@ public class CaseInstanceImpl implements Serializable , CaseInstance {
     }
 
     public void setCompletionMessage(String completionMessage) {
-        CaseInstanceImpl.this.completionMessage = completionMessage;
+        this.completionMessage = completionMessage;
     }
 
     @Override

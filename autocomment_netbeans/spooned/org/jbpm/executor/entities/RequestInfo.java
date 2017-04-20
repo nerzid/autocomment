@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,30 +17,30 @@
 
 package org.jbpm.executor.entities;
 
+import javax.persistence.Column;
 import java.util.ArrayList;
+import javax.persistence.Id;
+import org.kie.api.executor.STATUS;
+import javax.persistence.SequenceGenerator;
 import java.util.Arrays;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import java.util.Date;
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
+import javax.persistence.Lob;
+import java.util.List;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.List;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import org.kie.api.executor.STATUS;
-import javax.persistence.SequenceGenerator;
-import java.io.Serializable;
 import javax.persistence.Temporal;
+import javax.persistence.GenerationType;
+import javax.persistence.OneToMany;
 import javax.persistence.TemporalType;
 
 @Entity
 @SequenceGenerator(name = "requestInfoIdSeq", sequenceName = "REQUEST_INFO_ID_SEQ")
-public class RequestInfo implements Serializable , org.kie.internal.executor.api.RequestInfo {
+public class RequestInfo implements RequestInfo , Serializable {
     private static final long serialVersionUID = 5823083735663566537L;
 
     @Id
@@ -94,7 +94,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setErrorInfo(List<ErrorInfo> errorInfo) {
-        RequestInfo.this.errorInfo = errorInfo;
+        this.errorInfo = errorInfo;
     }
 
     public Long getId() {
@@ -102,7 +102,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setId(Long id) {
-        RequestInfo.this.id = id;
+        this.id = id;
     }
 
     public int getRetries() {
@@ -110,7 +110,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setRetries(int retries) {
-        RequestInfo.this.retries = retries;
+        this.retries = retries;
     }
 
     public int getExecutions() {
@@ -118,7 +118,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setExecutions(int executions) {
-        RequestInfo.this.executions = executions;
+        this.executions = executions;
     }
 
     public String getCommandName() {
@@ -126,7 +126,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setCommandName(String commandName) {
-        RequestInfo.this.commandName = commandName;
+        this.commandName = commandName;
     }
 
     public String getKey() {
@@ -134,7 +134,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setKey(String key) {
-        RequestInfo.this.key = key;
+        this.key = key;
     }
 
     public String getDeploymentId() {
@@ -142,7 +142,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setDeploymentId(String deploymentId) {
-        RequestInfo.this.deploymentId = deploymentId;
+        this.deploymentId = deploymentId;
     }
 
     public String getMessage() {
@@ -150,7 +150,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setMessage(String message) {
-        RequestInfo.this.message = message;
+        this.message = message;
     }
 
     public STATUS getStatus() {
@@ -158,7 +158,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setStatus(STATUS status) {
-        RequestInfo.this.status = status;
+        this.status = status;
     }
 
     public Date getTime() {
@@ -166,7 +166,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setTime(Date time) {
-        RequestInfo.this.time = time;
+        this.time = time;
     }
 
     public byte[] getRequestData() {
@@ -174,7 +174,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setRequestData(byte[] requestData) {
-        RequestInfo.this.requestData = requestData;
+        this.requestData = requestData;
     }
 
     public byte[] getResponseData() {
@@ -182,7 +182,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setResponseData(byte[] responseData) {
-        RequestInfo.this.responseData = responseData;
+        this.responseData = responseData;
     }
 
     public String getOwner() {
@@ -190,7 +190,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setOwner(String owner) {
-        RequestInfo.this.owner = owner;
+        this.owner = owner;
     }
 
     public int getPriority() {
@@ -198,7 +198,7 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     }
 
     public void setPriority(int priority) {
-        RequestInfo.this.priority = priority;
+        this.priority = priority;
     }
 
     @Override
@@ -210,61 +210,61 @@ public class RequestInfo implements Serializable , org.kie.internal.executor.api
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        } 
+        }
         if ((getClass()) != (obj.getClass())) {
             return false;
-        } 
+        }
         final RequestInfo other = ((RequestInfo) (obj));
-        if (((RequestInfo.this.id) != (other.id)) && (((RequestInfo.this.id) == null) || (!(RequestInfo.this.id.equals(other.id))))) {
+        if (((this.id) != (other.id)) && (((this.id) == null) || (!(this.id.equals(other.id))))) {
             return false;
-        } 
-        if (((RequestInfo.this.time) != (other.time)) && (((RequestInfo.this.time) == null) || (!(RequestInfo.this.time.equals(other.time))))) {
+        }
+        if (((this.time) != (other.time)) && (((this.time) == null) || (!(this.time.equals(other.time))))) {
             return false;
-        } 
-        if ((RequestInfo.this.status) != (other.status)) {
+        }
+        if ((this.status) != (other.status)) {
             return false;
-        } 
-        if ((RequestInfo.this.commandName) == null ? (other.commandName) != null : !(RequestInfo.this.commandName.equals(other.commandName))) {
+        }
+        if ((this.commandName) == null ? (other.commandName) != null : !(this.commandName.equals(other.commandName))) {
             return false;
-        } 
-        if ((RequestInfo.this.message) == null ? (other.message) != null : !(RequestInfo.this.message.equals(other.message))) {
+        }
+        if ((this.message) == null ? (other.message) != null : !(this.message.equals(other.message))) {
             return false;
-        } 
-        if ((RequestInfo.this.key) == null ? (other.key) != null : !(RequestInfo.this.key.equals(other.key))) {
+        }
+        if ((this.key) == null ? (other.key) != null : !(this.key.equals(other.key))) {
             return false;
-        } 
-        if ((RequestInfo.this.owner) == null ? (other.owner) != null : !(RequestInfo.this.owner.equals(other.owner))) {
+        }
+        if ((this.owner) == null ? (other.owner) != null : !(this.owner.equals(other.owner))) {
             return false;
-        } 
-        if ((RequestInfo.this.deploymentId) == null ? (other.deploymentId) != null : !(RequestInfo.this.deploymentId.equals(other.deploymentId))) {
+        }
+        if ((this.deploymentId) == null ? (other.deploymentId) != null : !(this.deploymentId.equals(other.deploymentId))) {
             return false;
-        } 
-        if (!(Arrays.equals(RequestInfo.this.requestData, other.requestData))) {
+        }
+        if (!(Arrays.equals(this.requestData, other.requestData))) {
             return false;
-        } 
-        if (!(Arrays.equals(RequestInfo.this.responseData, other.responseData))) {
+        }
+        if (!(Arrays.equals(this.responseData, other.responseData))) {
             return false;
-        } 
-        if (((RequestInfo.this.errorInfo) != (other.errorInfo)) && (((RequestInfo.this.errorInfo) == null) || (!(RequestInfo.this.errorInfo.equals(other.errorInfo))))) {
+        }
+        if (((this.errorInfo) != (other.errorInfo)) && (((this.errorInfo) == null) || (!(this.errorInfo.equals(other.errorInfo))))) {
             return false;
-        } 
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = (79 * hash) + ((RequestInfo.this.id) != null ? RequestInfo.this.id.hashCode() : 0);
-        hash = (79 * hash) + ((RequestInfo.this.time) != null ? RequestInfo.this.time.hashCode() : 0);
-        hash = (79 * hash) + ((RequestInfo.this.status) != null ? RequestInfo.this.status.hashCode() : 0);
-        hash = (79 * hash) + ((RequestInfo.this.commandName) != null ? RequestInfo.this.commandName.hashCode() : 0);
-        hash = (79 * hash) + ((RequestInfo.this.message) != null ? RequestInfo.this.message.hashCode() : 0);
-        hash = (79 * hash) + ((RequestInfo.this.key) != null ? RequestInfo.this.key.hashCode() : 0);
-        hash = (79 * hash) + ((RequestInfo.this.owner) != null ? RequestInfo.this.owner.hashCode() : 0);
-        hash = (79 * hash) + ((RequestInfo.this.deploymentId) != null ? RequestInfo.this.deploymentId.hashCode() : 0);
-        hash = (79 * hash) + (Arrays.hashCode(RequestInfo.this.requestData));
-        hash = (79 * hash) + (Arrays.hashCode(RequestInfo.this.responseData));
-        hash = (79 * hash) + ((RequestInfo.this.errorInfo) != null ? RequestInfo.this.errorInfo.hashCode() : 0);
+        hash = (79 * hash) + ((this.id) != null ? this.id.hashCode() : 0);
+        hash = (79 * hash) + ((this.time) != null ? this.time.hashCode() : 0);
+        hash = (79 * hash) + ((this.status) != null ? this.status.hashCode() : 0);
+        hash = (79 * hash) + ((this.commandName) != null ? this.commandName.hashCode() : 0);
+        hash = (79 * hash) + ((this.message) != null ? this.message.hashCode() : 0);
+        hash = (79 * hash) + ((this.key) != null ? this.key.hashCode() : 0);
+        hash = (79 * hash) + ((this.owner) != null ? this.owner.hashCode() : 0);
+        hash = (79 * hash) + ((this.deploymentId) != null ? this.deploymentId.hashCode() : 0);
+        hash = (79 * hash) + (Arrays.hashCode(this.requestData));
+        hash = (79 * hash) + (Arrays.hashCode(this.responseData));
+        hash = (79 * hash) + ((this.errorInfo) != null ? this.errorInfo.hashCode() : 0);
         return hash;
     }
 }

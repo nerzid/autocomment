@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,7 @@ import org.junit.Test;
 
 /**
  * Unit tests for {@link AppendableOutputStream}.
- * 
+ *
  * @version $Id: AppendableOutputStreamTest.java 1681007 2015-05-22 06:58:18Z britter $
  */
 public class AppendableOutputStreamTest {
@@ -38,13 +38,17 @@ public class AppendableOutputStreamTest {
     @Test
     public void testWriteStringBuilder() throws Exception {
         String testData = "ABCD";
+        // write byte[]{testData.getBytes()} to AppendableOutputStream{out}
         out.write(testData.getBytes());
+        // assert equals String{testData} to void{Assert}
         Assert.assertEquals(testData, out.getAppendable().toString());
     }
 
     @Test
     public void testWriteInt() throws Exception {
+        // write char{((int) ('F'))} to AppendableOutputStream{out}
         out.write(((int) ('F')));
+        // assert equals String{"F"} to void{Assert}
         Assert.assertEquals("F", out.getAppendable().toString());
     }
 }

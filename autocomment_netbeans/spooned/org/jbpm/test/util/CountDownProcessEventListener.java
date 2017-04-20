@@ -17,15 +17,15 @@ public class CountDownProcessEventListener extends DefaultProcessEventListener {
     private CountDownLatch latch;
 
     public CountDownProcessEventListener(String nodeName, int threads) {
-        CountDownProcessEventListener.this.nodeName = nodeName;
-        CountDownProcessEventListener.this.latch = new CountDownLatch(threads);
+        this.nodeName = nodeName;
+        this.latch = new CountDownLatch(threads);
     }
 
     @Override
     public void afterNodeLeft(ProcessNodeLeftEvent event) {
         if (nodeName.equals(event.getNodeInstance().getNodeName())) {
             latch.countDown();
-        } 
+        }
     }
 
     public void waitTillCompleted() {

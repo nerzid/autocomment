@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -17,27 +17,27 @@
 
 package org.jbpm.services.task.impl.model;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Basic;
+import java.io.ObjectOutput;
 import org.jbpm.services.task.utils.CollectionUtils;
 import java.util.Collections;
 import javax.persistence.Column;
 import java.util.Date;
 import org.kie.internal.task.api.model.Deadline;
 import javax.persistence.Entity;
-import org.kie.internal.task.api.model.Escalation;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import org.kie.api.task.model.I18NText;
-import java.io.IOException;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import java.util.List;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import javax.persistence.OneToMany;
+import org.kie.internal.task.api.model.Escalation;
+import java.io.IOException;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import org.kie.api.task.model.I18NText;
+import javax.persistence.GenerationType;
+import java.io.ObjectInput;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 @Table(name = "Deadline")
@@ -64,28 +64,32 @@ public class DeadlineImpl implements Deadline {
     public Boolean isEscalated() {
         if ((escalated) == null) {
             return null;
-        } 
+        }
         return (escalated) == 1 ? Boolean.TRUE : Boolean.FALSE;
     }
 
     public void setEscalated(Boolean escalated) {
         if (escalated == null) {
-            DeadlineImpl.this.escalated = null;
-        } else {
-            DeadlineImpl.this.escalated = (escalated == true) ? new Short("1") : new Short("0");
+            this.escalated = null;
+        }else {
+            this.escalated = (escalated == true) ? new Short("1") : new Short("0");
         }
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long Long{id} to ObjectOutput{out}
         out.writeLong(id);
         if ((date) != null) {
             out.writeBoolean(true);
             out.writeLong(date.getTime());
-        } else {
+        }else {
             out.writeBoolean(false);
         }
+        // write i18 List{documentation} to void{CollectionUtils}
         CollectionUtils.writeI18NTextList(documentation, out);
+        // write escalation List{escalations} to void{CollectionUtils}
         CollectionUtils.writeEscalationList(escalations, out);
+        // write short Short{escalated} to ObjectOutput{out}
         out.writeShort(escalated);
     }
 
@@ -93,7 +97,7 @@ public class DeadlineImpl implements Deadline {
         id = in.readLong();
         if (in.readBoolean()) {
             date = new Date(in.readLong());
-        } 
+        }
         documentation = CollectionUtils.readI18NTextList(in);
         escalations = CollectionUtils.readEscalationList(in);
         escalated = in.readShort();
@@ -104,7 +108,7 @@ public class DeadlineImpl implements Deadline {
     }
 
     public void setId(long id) {
-        DeadlineImpl.this.id = id;
+        this.id = id;
     }
 
     public List<I18NText> getDocumentation() {
@@ -112,7 +116,7 @@ public class DeadlineImpl implements Deadline {
     }
 
     public void setDocumentation(List<I18NText> documentation) {
-        DeadlineImpl.this.documentation = documentation;
+        this.documentation = documentation;
     }
 
     public Date getDate() {
@@ -120,7 +124,7 @@ public class DeadlineImpl implements Deadline {
     }
 
     public void setDate(Date date) {
-        DeadlineImpl.this.date = date;
+        this.date = date;
     }
 
     public List<Escalation> getEscalations() {
@@ -128,7 +132,7 @@ public class DeadlineImpl implements Deadline {
     }
 
     public void setEscalations(List<Escalation> escalations) {
-        DeadlineImpl.this.escalations = escalations;
+        this.escalations = escalations;
     }
 
     @Override
@@ -140,33 +144,35 @@ public class DeadlineImpl implements Deadline {
         result = (prime * result) + (CollectionUtils.hashCode(escalations));
         result = (prime * result) + (isEscalated() ? 1231 : 1237);
         if ((id) != null) {
-            result = (prime * result) + ((int) (((id) ^ ((id) >>> 32))));
-        } 
+            result = (prime * result) + ((int) ((id) ^ ((id) >>> 32)));
+        }
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if ((DeadlineImpl.this) == obj) {
+        if ((this) == obj) {
             return true;
-        } 
+        }
         if (obj == null) {
             return false;
-        } 
+        }
         if (!(obj instanceof DeadlineImpl)) {
             return false;
-        } 
+        }
         DeadlineImpl other = ((DeadlineImpl) (obj));
         if ((date) == null) {
             if ((other.date) != null) {
                 return false;
-            } 
-        } else if ((date.getTime()) != (other.date.getTime())) {
-            return false;
-        } 
+            }
+        }else
+            if ((date.getTime()) != (other.date.getTime())) {
+                return false;
+            }
+        
         if ((isEscalated()) != (other.isEscalated())) {
             return false;
-        } 
+        }
         return (CollectionUtils.equals(documentation, other.documentation)) && (CollectionUtils.equals(escalations, other.escalations));
     }
 }

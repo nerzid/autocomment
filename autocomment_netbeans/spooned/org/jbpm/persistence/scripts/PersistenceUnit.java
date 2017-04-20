@@ -12,14 +12,17 @@ SCRIPT_RUNNER("scriptRunner","jdbc/testDS1"), DB_TESTING("dbTesting","jdbc/testD
      * Name of persistence unit. Must correspond to persistence unit names in persistence.xml.
      */
     private final String name;
+
     /**
      * Name of data source bound to persistence unit. Must correspond to data source name in persistence.xml.
      */
     private final String dataSourceName;
+
     PersistenceUnit(final String name, final String dataSourceName) {
         this.name = name;
         this.dataSourceName = dataSourceName;
     }
+
     public String getName() {
         return name;
     }

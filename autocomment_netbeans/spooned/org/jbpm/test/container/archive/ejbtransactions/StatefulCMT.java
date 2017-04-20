@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,6 +35,7 @@ public class StatefulCMT extends BeanWithCMT {
 
     public void startProcess(ProcessScenario scenario) {
         ksession = createNewSession(scenario.getKbase());
+        // run process KieSession{ksession} to ProcessScenario{scenario}
         scenario.runProcess(ksession);
     }
 
@@ -42,7 +43,7 @@ public class StatefulCMT extends BeanWithCMT {
         if ((ksession) != null) {
             ksession.dispose();
             ksession = null;
-        } 
+        }
     }
 }
 

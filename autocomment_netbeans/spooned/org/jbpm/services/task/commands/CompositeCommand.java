@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -127,8 +127,8 @@ public class CompositeCommand<T> extends TaskCommand<T> {
     }
 
     public CompositeCommand(TaskCommand<T> mainCommand, TaskCommand<?>... commands) {
-        CompositeCommand.this.mainCommand = mainCommand;
-        CompositeCommand.this.commands = Arrays.asList(commands);
+        this.mainCommand = mainCommand;
+        this.commands = Arrays.asList(commands);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class CompositeCommand<T> extends TaskCommand<T> {
             for (TaskCommand<?> cmd : commands) {
                 cmd.execute(context);
             }
-        } 
+        }
         return mainCommand.execute(context);
     }
 
@@ -146,7 +146,7 @@ public class CompositeCommand<T> extends TaskCommand<T> {
     }
 
     public void setMainCommand(TaskCommand<T> mainCommand) {
-        CompositeCommand.this.mainCommand = mainCommand;
+        this.mainCommand = mainCommand;
     }
 
     public List<TaskCommand<?>> getCommands() {
@@ -154,15 +154,15 @@ public class CompositeCommand<T> extends TaskCommand<T> {
     }
 
     public void setCommands(List<TaskCommand<?>> commands) {
-        CompositeCommand.this.commands = commands;
+        this.commands = commands;
     }
 
     @Override
     public Long getTaskId() {
         if ((mainCommand) != null) {
             return mainCommand.getTaskId();
-        } 
-        return CompositeCommand.this.taskId;
+        }
+        return this.taskId;
     }
 }
 

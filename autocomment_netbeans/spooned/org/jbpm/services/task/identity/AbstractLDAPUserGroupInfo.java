@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,37 +49,40 @@ abstract class AbstractLDAPUserGroupInfo extends AbstractUserGroupInfo {
     }
 
     private void initialize(String[] requiredProperties, Properties config) {
-        AbstractLDAPUserGroupInfo.this.config = config;
+        this.config = config;
+        // validate properties String[]{requiredProperties} to AbstractLDAPUserGroupInfo{}
         validateProperties(requiredProperties);
+        // copy config String{AbstractLDAPUserGroupInfo.BIND_USER} to AbstractLDAPUserGroupInfo{}
         copyConfigProperty(AbstractLDAPUserGroupInfo.BIND_USER, Context.SECURITY_PRINCIPAL);
+        // copy config String{AbstractLDAPUserGroupInfo.BIND_PWD} to AbstractLDAPUserGroupInfo{}
         copyConfigProperty(AbstractLDAPUserGroupInfo.BIND_PWD, Context.SECURITY_CREDENTIALS);
-        ldapSearcher = new LdapSearcher(AbstractLDAPUserGroupInfo.this.config);
+        ldapSearcher = new LdapSearcher(this.config);
     }
 
     private void copyConfigProperty(String sourceKey, String targetKey) {
         String value = config.getProperty(sourceKey);
         if (value != null) {
             config.setProperty(targetKey, value);
-        } 
+        }
     }
 
     private void validateProperties(String[] requiredProperties) {
         if ((config) == null) {
             throw new IllegalArgumentException((("No configuration found for " + (getClass().getSimpleName())) + ", aborting..."));
-        } 
+        }
         StringBuffer missingProperties = new StringBuffer();
         for (String requiredProperty : requiredProperties) {
             if (!(config.containsKey(requiredProperty))) {
                 if ((missingProperties.length()) > 0) {
                     missingProperties.append(", ");
-                } 
+                }
                 missingProperties.append(requiredProperty);
-            } 
+            }
         }
         if ((missingProperties.length()) > 0) {
             AbstractLDAPUserGroupInfo.logger.debug("Validation failed due to missing required properties: {}", missingProperties.toString());
             throw new IllegalArgumentException(((("Missing required properties to configure " + (getClass().getSimpleName())) + ": ") + (missingProperties.toString())));
-        } 
+        }
     }
 
     public String getConfigProperty(String key) {

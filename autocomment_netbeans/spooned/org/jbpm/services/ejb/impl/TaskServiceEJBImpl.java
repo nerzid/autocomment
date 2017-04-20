@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,45 +17,46 @@
 
 package org.jbpm.services.ejb.impl;
 
+import org.kie.api.task.model.I18NText;
+import org.kie.api.task.model.Content;
 import org.kie.api.task.model.Attachment;
 import org.jbpm.services.task.lifecycle.listeners.BAMTaskEventListener;
-import org.kie.api.task.model.Comment;
-import org.kie.api.task.model.Content;
-import org.kie.internal.task.api.model.ContentData;
-import org.kie.internal.task.api.ContentMarshallerContext;
-import java.util.Date;
-import org.kie.internal.runtime.conf.DeploymentDescriptor;
-import org.jbpm.runtime.manager.impl.deploy.DeploymentDescriptorManager;
-import javax.persistence.EntityManagerFactory;
-import org.jbpm.runtime.manager.impl.jpa.EntityManagerFactoryManager;
-import org.kie.internal.task.api.model.FaultData;
-import org.kie.api.task.model.Group;
-import org.jbpm.services.task.HumanTaskConfigurator;
-import org.jbpm.services.task.HumanTaskServiceFactory;
-import org.kie.api.task.model.I18NText;
+import org.kie.internal.task.api.UserInfo;
 import org.kie.internal.task.api.InternalTaskService;
-import org.jbpm.services.task.audit.JPATaskLifeCycleEventListener;
-import java.util.List;
-import java.util.Map;
-import org.kie.api.task.model.OrganizationalEntity;
-import javax.persistence.PersistenceUnit;
-import javax.annotation.PostConstruct;
-import org.kie.internal.query.QueryFilter;
-import javax.ejb.Stateless;
-import org.kie.api.task.model.Status;
-import org.kie.internal.task.api.model.SubTasksStrategy;
-import org.kie.api.task.model.Task;
-import org.kie.internal.task.api.model.TaskDef;
-import org.kie.internal.task.api.model.TaskEvent;
-import org.kie.api.task.TaskService;
 import org.jbpm.services.ejb.TaskServiceEJBLocal;
 import org.kie.api.task.model.TaskSummary;
-import org.kie.internal.task.query.TaskSummaryQueryBuilder;
-import org.kie.api.task.model.User;
-import org.jbpm.runtime.manager.impl.identity.UserDataServiceProvider;
-import org.kie.api.task.UserGroupCallback;
-import org.kie.internal.task.api.UserInfo;
+import org.kie.api.task.model.Comment;
+import AuditMode.NONE;
+import org.kie.internal.task.api.model.ContentData;
 import org.jbpm.services.api.UserTaskService;
+import org.kie.internal.task.api.ContentMarshallerContext;
+import org.kie.api.task.model.User;
+import java.util.Date;
+import org.kie.internal.task.query.TaskSummaryQueryBuilder;
+import org.jbpm.runtime.manager.impl.identity.UserDataServiceProvider;
+import org.kie.internal.task.api.model.FaultData;
+import org.jbpm.services.task.audit.JPATaskLifeCycleEventListener;
+import org.kie.api.task.UserGroupCallback;
+import org.kie.internal.runtime.conf.DeploymentDescriptor;
+import org.jbpm.runtime.manager.impl.deploy.DeploymentDescriptorManager;
+import org.jbpm.services.task.HumanTaskServiceFactory;
+import org.kie.api.task.model.Group;
+import org.kie.api.task.model.Task;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.EntityManagerFactory;
+import org.jbpm.runtime.manager.impl.jpa.EntityManagerFactoryManager;
+import javax.annotation.PostConstruct;
+import org.kie.internal.task.api.model.TaskEvent;
+import java.util.Map;
+import javax.ejb.Stateless;
+import org.kie.internal.task.api.model.SubTasksStrategy;
+import java.util.List;
+import org.kie.api.task.model.OrganizationalEntity;
+import org.kie.internal.query.QueryFilter;
+import org.kie.internal.task.api.model.TaskDef;
+import org.kie.api.task.model.Status;
+import org.kie.api.task.TaskService;
+import org.jbpm.services.task.HumanTaskConfigurator;
 
 @Stateless
 public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , InternalTaskService {
@@ -71,7 +72,7 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
         DeploymentDescriptorManager manager = new DeploymentDescriptorManager("org.jbpm.domain");
         DeploymentDescriptor descriptor = manager.getDefaultDescriptor();
         // in case there is descriptor with enabled audit register then by default
-        if (!(descriptor.getAuditMode().equals(AuditMode.NONE))) {
+        if (!(descriptor.getAuditMode().equals(NONE))) {
             JPATaskLifeCycleEventListener listener = new JPATaskLifeCycleEventListener(false);
             BAMTaskEventListener bamListener = new BAMTaskEventListener(false);
             // if the audit persistence unit is different than default for the engine perform proper init
@@ -79,10 +80,10 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
                 EntityManagerFactory emf = EntityManagerFactoryManager.get().getOrCreate(descriptor.getAuditPersistenceUnit());
                 listener = new JPATaskLifeCycleEventListener(emf);
                 bamListener = new BAMTaskEventListener(emf);
-            } 
+            }
             configurator.listener(listener);
             configurator.listener(bamListener);
-        } 
+        }
         delegate = ((InternalTaskService) (configurator.getTaskService()));
     }
 
@@ -280,41 +281,49 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
     // unsupported method
     @Override
     public void activate(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void claim(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void claimNextAvailable(String userId, String language) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void complete(long taskId, String userId, Map<String, Object> data) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void delegate(long taskId, String userId, String targetUserId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void exit(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void fail(long taskId, String userId, Map<String, Object> faultData) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void forward(long taskId, String userId, String targetEntityId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -335,36 +344,43 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void release(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void resume(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void skip(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void start(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void stop(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void suspend(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void nominate(long taskId, String userId, List<OrganizationalEntity> potentialOwners) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -390,11 +406,13 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void addGroup(Group group) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void addUser(User user) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -405,26 +423,31 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void claim(long taskId, String userId, List<String> groupIds) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void claimNextAvailable(String userId, List<String> groupIds) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void deleteFault(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void deleteOutput(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void deployTaskDef(TaskDef def) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -465,11 +488,13 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void remove(long taskId, String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void removeGroup(String groupId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -480,31 +505,37 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void removeUser(String userId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void setFault(long taskId, String userId, FaultData fault) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void setOutput(long taskId, String userId, Object outputContentData) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void setPriority(long taskId, int priority) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void setTaskNames(long taskId, List<I18NText> taskNames) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void undeployTaskDef(String id) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -520,11 +551,13 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void setUserInfo(UserInfo userInfo) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void addUsersAndGroups(Map<String, User> users, Map<String, Group> groups) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -545,6 +578,7 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void deleteContent(long taskId, long contentId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -560,6 +594,7 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void deleteAttachment(long taskId, long attachmentId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -570,6 +605,7 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void removeTaskEventsById(long taskId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -580,21 +616,25 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void setExpirationDate(long taskId, Date date) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void setDescriptions(long taskId, List<I18NText> descriptions) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void setSkipable(long taskId, boolean skipable) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void setSubTaskStrategy(long taskId, SubTasksStrategy strategy) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -645,6 +685,7 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void deleteComment(long taskId, long commentId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -660,11 +701,13 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public void addMarshallerContext(String ownerId, ContentMarshallerContext context) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
     @Override
     public void removeMarshallerContext(String ownerId) {
+        // unsupported Class{Void.class} to void{TaskServiceEJBImpl}
         TaskServiceEJBImpl.unsupported(Void.class);
     }
 
@@ -675,11 +718,12 @@ public class TaskServiceEJBImpl implements TaskServiceEJBLocal , TaskService , I
 
     @Override
     public TaskSummaryQueryBuilder taskSummaryQuery(String userId) {
-        return new org.jbpm.services.task.impl.TaskSummaryQueryBuilderImpl(userId, delegate);
+        return new TaskSummaryQueryBuilderImpl(userId, delegate);
     }
 
     @Override
     public void executeReminderForTask(long taskId, String initiator) {
+        // execute reminder long{taskId} to InternalTaskService{delegate}
         delegate.executeReminderForTask(taskId, initiator);
     }
 

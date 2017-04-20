@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 
 package org.jbpm.services.task.commands;
 
-import org.kie.api.task.model.Content;
 import org.kie.internal.command.Context;
+import org.kie.api.task.model.Content;
 import org.jbpm.services.task.impl.model.xml.JaxbContent;
 import org.drools.core.xml.jaxb.util.JaxbMapAdapter;
 import java.util.Map;
@@ -54,18 +54,18 @@ public class AddContentCommand extends TaskCommand<Long> {
 
     public AddContentCommand(Long taskId, Map<String, Object> params) {
         this.taskId = taskId;
-        AddContentCommand.this.params = params;
+        this.params = params;
     }
 
     public Long execute(Context cntxt) {
         TaskContext context = ((TaskContext) (cntxt));
         if ((params) != null) {
             return context.getTaskContentService().addOutputContent(taskId, params);
-        } else {
+        }else {
             Content comentImpl = content;
             if (comentImpl == null) {
                 comentImpl = jaxbContent;
-            } 
+            }
             return context.getTaskContentService().setDocumentContent(taskId, comentImpl);
         }
     }
@@ -75,7 +75,7 @@ public class AddContentCommand extends TaskCommand<Long> {
     }
 
     public void setContent(Content content) {
-        AddContentCommand.this.content = content;
+        this.content = content;
     }
 
     public JaxbContent getJaxbContent() {
@@ -83,7 +83,7 @@ public class AddContentCommand extends TaskCommand<Long> {
     }
 
     public void setJaxbContent(JaxbContent jaxbContent) {
-        AddContentCommand.this.jaxbContent = jaxbContent;
+        this.jaxbContent = jaxbContent;
     }
 }
 

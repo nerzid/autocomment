@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,13 @@
 
 package org.jbpm.kie.services.impl.query.mapper;
 
+import org.jbpm.services.api.query.QueryResultMapper;
 import java.util.ArrayList;
 import org.dashbuilder.dataset.DataSet;
 import java.util.List;
 import java.util.Map;
-import org.jbpm.services.api.query.QueryResultMapper;
 import org.jbpm.services.api.model.UserTaskInstanceDesc;
+import org.jbpm.services.api.query.org.jbpm.kie.services.impl.query.mapper.QueryResultMapper;
 
 /**
  * Dedicated mapper that transform data set into List of UserTaskInstanceDesc
@@ -51,15 +52,15 @@ public class UserTaskInstanceQueryMapper extends AbstractQueryMapper<UserTaskIns
                     UserTaskInstanceDesc ut = buildInstance(dataSetResult, i);
                     mappedResult.add(ut);
                 }
-            } 
+            }
             return mappedResult;
-        } 
+        }
         throw new IllegalArgumentException(("Unsupported result for mapping " + result));
     }
 
     @Override
     protected UserTaskInstanceDesc buildInstance(DataSet dataSetResult, int index) {
-        UserTaskInstanceDesc userTask = // taskId,
+        // taskId,
         // status,
         // activationTime,
         // name,
@@ -72,7 +73,7 @@ public class UserTaskInstanceQueryMapper extends AbstractQueryMapper<UserTaskIns
         // processInstanceId,
         // createdOn,
         // dueDate
-        new org.jbpm.kie.services.impl.model.UserTaskInstanceDesc(getColumnLongValue(dataSetResult, COLUMN_TASKID, index), getColumnStringValue(dataSetResult, COLUMN_TASK_STATUS, index), getColumnDateValue(dataSetResult, COLUMN_ACTIVATIONTIME, index), getColumnStringValue(dataSetResult, COLUMN_NAME, index), getColumnStringValue(dataSetResult, COLUMN_DESCRIPTION, index), getColumnIntValue(dataSetResult, COLUMN_PRIORITY, index), getColumnStringValue(dataSetResult, COLUMN_ACTUALOWNER, index), getColumnStringValue(dataSetResult, COLUMN_CREATEDBY, index), getColumnStringValue(dataSetResult, COLUMN_DEPLOYMENTID, index), getColumnStringValue(dataSetResult, COLUMN_TASK_PROCESSID, index), getColumnLongValue(dataSetResult, COLUMN_TASK_PROCESSINSTANCEID, index), getColumnDateValue(dataSetResult, COLUMN_CREATEDON, index), getColumnDateValue(dataSetResult, COLUMN_DUEDATE, index));
+        UserTaskInstanceDesc userTask = new UserTaskInstanceDesc(getColumnLongValue(dataSetResult, COLUMN_TASKID, index), getColumnStringValue(dataSetResult, COLUMN_TASK_STATUS, index), getColumnDateValue(dataSetResult, COLUMN_ACTIVATIONTIME, index), getColumnStringValue(dataSetResult, COLUMN_NAME, index), getColumnStringValue(dataSetResult, COLUMN_DESCRIPTION, index), getColumnIntValue(dataSetResult, COLUMN_PRIORITY, index), getColumnStringValue(dataSetResult, COLUMN_ACTUALOWNER, index), getColumnStringValue(dataSetResult, COLUMN_CREATEDBY, index), getColumnStringValue(dataSetResult, COLUMN_DEPLOYMENTID, index), getColumnStringValue(dataSetResult, COLUMN_TASK_PROCESSID, index), getColumnLongValue(dataSetResult, COLUMN_TASK_PROCESSINSTANCEID, index), getColumnDateValue(dataSetResult, COLUMN_CREATEDON, index), getColumnDateValue(dataSetResult, COLUMN_DUEDATE, index));
         return userTask;
     }
 

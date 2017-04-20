@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -60,15 +60,15 @@ class Java7Support {
             Class<?> path = cl.loadClass("java.nio.file.Path");
             Class<?> fa = cl.loadClass("java.nio.file.attribute.FileAttribute");
             Class<?> linkOption = cl.loadClass("java.nio.file.LinkOption");
-            isSymbolicLink = files.getMethod("isSymbolicLink", path);
-            delete = files.getMethod("delete", path);
-            readSymlink = files.getMethod("readSymbolicLink", path);
-            emptyFileAttributes = Array.newInstance(fa, 0);
-            createSymlink = files.getMethod("createSymbolicLink", path, path, Java7Support.emptyFileAttributes.getClass());
-            emptyLinkOpts = Array.newInstance(linkOption, 0);
-            exists = files.getMethod("exists", path, Java7Support.emptyLinkOpts.getClass());
-            toPath = File.class.getMethod("toPath");
-            toFile = path.getMethod("toFile");
+            Java7Support.isSymbolicLink = files.getMethod("isSymbolicLink", path);
+            Java7Support.delete = files.getMethod("delete", path);
+            Java7Support.readSymlink = files.getMethod("readSymbolicLink", path);
+            Java7Support.emptyFileAttributes = Array.newInstance(fa, 0);
+            Java7Support.createSymlink = files.getMethod("createSymbolicLink", path, path, Java7Support.emptyFileAttributes.getClass());
+            Java7Support.emptyLinkOpts = Array.newInstance(linkOption, 0);
+            Java7Support.exists = files.getMethod("exists", path, Java7Support.emptyLinkOpts.getClass());
+            Java7Support.toPath = File.class.getMethod("toPath");
+            Java7Support.toFile = path.getMethod("toFile");
         } catch (ClassNotFoundException e) {
             isJava7x = false;
         } catch (NoSuchMethodException e) {
@@ -143,7 +143,7 @@ class Java7Support {
                 Object link = Java7Support.toPath.invoke(symlink);
                 Object path = Java7Support.createSymlink.invoke(null, link, Java7Support.toPath.invoke(target), Java7Support.emptyFileAttributes);
                 return ((File) (Java7Support.toFile.invoke(path)));
-            } 
+            }
             return symlink;
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -155,7 +155,7 @@ class Java7Support {
 
     /**
      * Performs a nio delete
-     * 
+     *
      * @param file the file to delete
      * @throws IOException Upon error
      */

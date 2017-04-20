@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 
 package org.jbpm.process.audit.command;
 
-import org.jbpm.process.audit.AuditLogService;
 import org.kie.internal.command.Context;
+import org.jbpm.process.audit.AuditLogService;
 import java.util.List;
 import org.kie.internal.command.ProcessInstanceIdCommand;
 import org.jbpm.process.audit.VariableInstanceLog;
@@ -49,24 +49,25 @@ public class FindVariableInstancesCommand extends AuditCommand<List<VariableInst
     }
 
     public FindVariableInstancesCommand(long processInstanceId) {
-        FindVariableInstancesCommand.this.processInstanceId = processInstanceId;
-        FindVariableInstancesCommand.this.variableId = null;
+        this.processInstanceId = processInstanceId;
+        this.variableId = null;
     }
 
     public FindVariableInstancesCommand(long processInstanceId, String variableId) {
-        FindVariableInstancesCommand.this.processInstanceId = processInstanceId;
-        FindVariableInstancesCommand.this.variableId = variableId;
+        this.processInstanceId = processInstanceId;
+        this.variableId = variableId;
         if ((variableId == null) || (variableId.isEmpty())) {
             throw new IllegalArgumentException("The variableId field must not be null or empty.");
-        } 
+        }
     }
 
     public List<VariableInstanceLog> execute(Context cntxt) {
+        // set log Context{cntxt} to FindVariableInstancesCommand{}
         setLogEnvironment(cntxt);
         if (((variableId) == null) || (variableId.isEmpty())) {
-            return FindVariableInstancesCommand.this.auditLogService.findVariableInstances(processInstanceId);
-        } else {
-            return FindVariableInstancesCommand.this.auditLogService.findVariableInstances(processInstanceId, variableId);
+            return this.auditLogService.findVariableInstances(processInstanceId);
+        }else {
+            return this.auditLogService.findVariableInstances(processInstanceId, variableId);
         }
     }
 
@@ -77,7 +78,7 @@ public class FindVariableInstancesCommand extends AuditCommand<List<VariableInst
 
     @Override
     public void setProcessInstanceId(Long processInstanceId) {
-        FindVariableInstancesCommand.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public String getVariableId() {
@@ -85,13 +86,13 @@ public class FindVariableInstancesCommand extends AuditCommand<List<VariableInst
     }
 
     public void setVariableId(String variableId) {
-        FindVariableInstancesCommand.this.variableId = variableId;
+        this.variableId = variableId;
     }
 
     public String toString() {
         if (((variableId) == null) || (variableId.isEmpty())) {
             return (((AuditLogService.class.getSimpleName()) + ".findVariableInstances(") + (processInstanceId)) + ")";
-        } else {
+        }else {
             return (((((AuditLogService.class.getSimpleName()) + ".findVariableInstances(") + (processInstanceId)) + ", ") + (variableId)) + ")";
         }
     }

@@ -18,7 +18,7 @@ public class QrtzPausedTriggerGrps {
     }
 
     public void setId(Long id) {
-        QrtzPausedTriggerGrps.this.id = id;
+        this.id = id;
     }
 }
 

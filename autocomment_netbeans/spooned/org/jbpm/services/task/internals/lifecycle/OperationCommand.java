@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,7 +57,7 @@ public class OperationCommand {
     }
 
     public void setStatus(List<Status> status) {
-        OperationCommand.this.status = status;
+        this.status = status;
     }
 
     public List<Status> getPreviousStatus() {
@@ -65,7 +65,7 @@ public class OperationCommand {
     }
 
     public void setPreviousStatus(List<Status> previousStatus) {
-        OperationCommand.this.previousStatus = previousStatus;
+        this.previousStatus = previousStatus;
     }
 
     public List<Allowed> getAllowed() {
@@ -73,7 +73,7 @@ public class OperationCommand {
     }
 
     public void setAllowed(List<Allowed> allowed) {
-        OperationCommand.this.allowed = allowed;
+        this.allowed = allowed;
     }
 
     public Status getNewStatus() {
@@ -85,7 +85,7 @@ public class OperationCommand {
     }
 
     public void setSetNewOwnerToNull(boolean setNewOwnerToNull) {
-        OperationCommand.this.setNewOwnerToNull = setNewOwnerToNull;
+        this.setNewOwnerToNull = setNewOwnerToNull;
     }
 
     public boolean isAddTargetUserToPotentialOwners() {
@@ -93,7 +93,7 @@ public class OperationCommand {
     }
 
     public void setNewStatus(Status newStatus) {
-        OperationCommand.this.newStatus = newStatus;
+        this.newStatus = newStatus;
     }
 
     public boolean isSetNewOwnerToUser() {
@@ -101,7 +101,7 @@ public class OperationCommand {
     }
 
     public void setSetNewOwnerToUser(boolean setNewOwnerToTargetUser) {
-        OperationCommand.this.setNewOwnerToUser = setNewOwnerToTargetUser;
+        this.setNewOwnerToUser = setNewOwnerToTargetUser;
     }
 
     public boolean isSetToPreviousStatus() {
@@ -109,7 +109,7 @@ public class OperationCommand {
     }
 
     public void setSetToPreviousStatus(boolean setToPreviousStatus) {
-        OperationCommand.this.setToPreviousStatus = setToPreviousStatus;
+        this.setToPreviousStatus = setToPreviousStatus;
     }
 
     public boolean isUserIsExplicitPotentialOwner() {
@@ -117,7 +117,7 @@ public class OperationCommand {
     }
 
     public void setUserIsExplicitPotentialOwner(boolean userIsExplicitPotentialOwner) {
-        OperationCommand.this.userIsExplicitPotentialOwner = userIsExplicitPotentialOwner;
+        this.userIsExplicitPotentialOwner = userIsExplicitPotentialOwner;
     }
 
     public boolean isAddTargetEntityToPotentialOwners() {
@@ -125,7 +125,7 @@ public class OperationCommand {
     }
 
     public void setAddTargetUserToPotentialOwners(boolean addTargetUserToPotentialOwners) {
-        OperationCommand.this.addTargetUserToPotentialOwners = addTargetUserToPotentialOwners;
+        this.addTargetUserToPotentialOwners = addTargetUserToPotentialOwners;
     }
 
     public boolean isRemoveUserFromPotentialOwners() {
@@ -133,7 +133,7 @@ public class OperationCommand {
     }
 
     public void setRemoveUserFromPotentialOwners(boolean removeUserFromPotentialOwners) {
-        OperationCommand.this.removeUserFromPotentialOwners = removeUserFromPotentialOwners;
+        this.removeUserFromPotentialOwners = removeUserFromPotentialOwners;
     }
 
     public boolean isSkipable() {
@@ -141,7 +141,7 @@ public class OperationCommand {
     }
 
     public void setSkipable(boolean skippable) {
-        OperationCommand.this.skipable = skippable;
+        this.skipable = skippable;
     }
 
     public Operation getExec() {
@@ -149,7 +149,7 @@ public class OperationCommand {
     }
 
     public void setExec(Operation exec) {
-        OperationCommand.this.exec = exec;
+        this.exec = exec;
     }
 
     public boolean isGroupTargetEntityAllowed() {
@@ -157,7 +157,7 @@ public class OperationCommand {
     }
 
     public void setGroupTargetEntityAllowed(boolean groupTargetEntityAllowed) {
-        OperationCommand.this.groupTargetEntityAllowed = groupTargetEntityAllowed;
+        this.groupTargetEntityAllowed = groupTargetEntityAllowed;
     }
 }
 

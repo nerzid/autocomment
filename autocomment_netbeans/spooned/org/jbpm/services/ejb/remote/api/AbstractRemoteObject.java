@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,10 +25,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public abstract class AbstractRemoteObject {
-    private transient ClassLoader classLoader = AbstractRemoteObject.this.getClass().getClassLoader();
+    private transient ClassLoader classLoader = this.getClass().getClassLoader();
 
     public void setClassLoader(ClassLoader classLoader) {
-        AbstractRemoteObject.this.classLoader = classLoader;
+        this.classLoader = classLoader;
     }
 
     protected Object deserialize(byte[] bytes) {
@@ -46,7 +46,7 @@ public abstract class AbstractRemoteObject {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } 
+            }
         }
         return result;
     }

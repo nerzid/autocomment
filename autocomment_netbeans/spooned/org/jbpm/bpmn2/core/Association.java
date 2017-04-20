@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Intalio Inc
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,7 @@ public class Association implements Serializable {
     }
 
     public void setId(String id) {
-        Association.this.id = id;
+        this.id = id;
     }
 
     public String getSourceRef() {
@@ -46,7 +46,7 @@ public class Association implements Serializable {
     }
 
     public void setSourceRef(String sourceRef) {
-        Association.this.sourceRef = sourceRef;
+        this.sourceRef = sourceRef;
     }
 
     public String getTargetRef() {
@@ -54,7 +54,7 @@ public class Association implements Serializable {
     }
 
     public void setTargetRef(String targetRef) {
-        Association.this.targetRef = targetRef;
+        this.targetRef = targetRef;
     }
 
     public String getDirection() {
@@ -62,11 +62,11 @@ public class Association implements Serializable {
     }
 
     public void setDirection(String direction) {
-        Association.this.direction = direction;
+        this.direction = direction;
     }
 
     public String toString() {
-        return ((((("Association (" + (Association.this.id)) + ") [") + (Association.this.sourceRef)) + " -> ") + (Association.this.targetRef)) + "]";
+        return ((((("Association (" + (this.id)) + ") [") + (this.sourceRef)) + " -> ") + (this.targetRef)) + "]";
     }
 }
 

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,10 @@
 
 package org.apache.commons.io.input;
 
+import java.io.InputStreamReader;
 import org.junit.After;
+import org.junit.runner.RunWith;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import org.junit.Assert;
 import java.io.BufferedReader;
@@ -26,13 +29,10 @@ import java.util.Collection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Stack;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.junit.runner.RunWith;
-import java.util.Stack;
 import org.junit.Test;
-import java.net.URISyntaxException;
 
 /**
  * Test checks symmetric behaviour with  BufferedReader
@@ -62,7 +62,7 @@ public class ReversedLinesFileReaderTestParamFile {
 
     @Test
     public void testDataIntegrityWithBufferedReader() throws IOException, URISyntaxException {
-        final File testFileIso = new File(ReversedLinesFileReaderTestParamFile.this.getClass().getResource(("/" + (fileName))).toURI());
+        final File testFileIso = new File(this.getClass().getResource(("/" + (fileName))).toURI());
         reversedLinesFileReader = new ReversedLinesFileReader(testFileIso, buffSize, encoding);
         final Stack<String> lineStack = new Stack<String>();
         bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(testFileIso), encoding));
@@ -70,12 +70,12 @@ public class ReversedLinesFileReaderTestParamFile {
         // read all lines in normal order
         while ((line = bufferedReader.readLine()) != null) {
             lineStack.push(line);
-        }
+        } 
         // read in reverse order and compare with lines from stack
         while ((line = reversedLinesFileReader.readLine()) != null) {
             final String lineFromBufferedReader = lineStack.pop();
             Assert.assertEquals(lineFromBufferedReader, line);
-        }
+        } 
     }
 
     @After

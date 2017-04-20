@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,13 +46,20 @@ public class PathFileComparatorTest extends ComparatorAbstractTestCase {
         final File file3 = new File("FOO/file.txt");
         final Comparator<File> sensitive = new PathFileComparator(null);/* test null as well */
         
+        // assert true String{"sensitive file1 & file2 = 0"} to void{Assert}
         Assert.assertTrue("sensitive file1 & file2 = 0", ((sensitive.compare(equalFile1, equalFile2)) == 0));
+        // assert true String{"sensitive file1 & file3 > 0"} to void{Assert}
         Assert.assertTrue("sensitive file1 & file3 > 0", ((sensitive.compare(equalFile1, file3)) > 0));
+        // assert true String{"sensitive file1 & less  > 0"} to void{Assert}
         Assert.assertTrue("sensitive file1 & less  > 0", ((sensitive.compare(equalFile1, lessFile)) > 0));
         final Comparator<File> insensitive = PathFileComparator.PATH_INSENSITIVE_COMPARATOR;
+        // assert true String{"insensitive file1 & file2 = 0"} to void{Assert}
         Assert.assertTrue("insensitive file1 & file2 = 0", ((insensitive.compare(equalFile1, equalFile2)) == 0));
+        // assert true String{"insensitive file1 & file3 = 0"} to void{Assert}
         Assert.assertTrue("insensitive file1 & file3 = 0", ((insensitive.compare(equalFile1, file3)) == 0));
+        // assert true String{"insensitive file1 & file4 > 0"} to void{Assert}
         Assert.assertTrue("insensitive file1 & file4 > 0", ((insensitive.compare(equalFile1, lessFile)) > 0));
+        // assert true String{"insensitive file3 & less  > 0"} to void{Assert}
         Assert.assertTrue("insensitive file3 & less  > 0", ((insensitive.compare(file3, lessFile)) > 0));
     }
 }

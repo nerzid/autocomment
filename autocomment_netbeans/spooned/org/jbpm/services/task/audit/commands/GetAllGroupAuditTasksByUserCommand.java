@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,9 +16,9 @@
 
 package org.jbpm.services.task.audit.commands;
 
+import org.kie.internal.command.Context;
 import org.kie.internal.task.api.AuditTask;
 import org.jbpm.services.task.utils.ClassUtil;
-import org.kie.internal.command.Context;
 import java.util.List;
 import org.kie.internal.query.QueryFilter;
 import org.kie.internal.task.api.TaskContext;
@@ -34,12 +34,12 @@ public class GetAllGroupAuditTasksByUserCommand extends UserGroupCallbackTaskCom
     private QueryFilter filter;
 
     public GetAllGroupAuditTasksByUserCommand() {
-        GetAllGroupAuditTasksByUserCommand.this.filter = new QueryFilter(0, 0);
+        this.filter = new QueryFilter(0, 0);
     }
 
     public GetAllGroupAuditTasksByUserCommand(String userId, QueryFilter filter) {
         super.userId = userId;
-        GetAllGroupAuditTasksByUserCommand.this.filter = filter;
+        this.filter = filter;
     }
 
     @Override
@@ -47,6 +47,7 @@ public class GetAllGroupAuditTasksByUserCommand extends UserGroupCallbackTaskCom
         TaskPersistenceContext persistenceContext = ((TaskContext) (context)).getPersistenceContext();
         boolean userExists = doCallbackUserOperation(userId, ((TaskContext) (context)));
         List<String> groupIds = doUserGroupCallbackOperation(userId, null, ((TaskContext) (context)));
+        // add GetAllGroupAuditTasksByUserCommand{userId} to List{groupIds}
         groupIds.add(userId);
         List<AuditTask> groupTasks = persistenceContext.queryWithParametersInTransaction("getAllGroupAuditTasksByUser", persistenceContext.addParametersToMap("potentialOwners", groupIds, "firstResult", filter.getOffset(), "maxResults", filter.getCount()), ClassUtil.<List<AuditTask>>castClass(List.class));
         return groupTasks;

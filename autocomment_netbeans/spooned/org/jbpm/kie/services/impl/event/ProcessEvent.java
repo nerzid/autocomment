@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,12 +32,12 @@ public class ProcessEvent implements Serializable {
 
     private int state;
 
-    public ProcessEvent(org.kie.api.event.process.ProcessEvent event) {
-        ProcessEvent.this.processId = event.getProcessInstance().getProcessId();
-        ProcessEvent.this.version = event.getProcessInstance().getProcess().getVersion();
-        ProcessEvent.this.processInstanceId = event.getProcessInstance().getId();
-        ProcessEvent.this.state = event.getProcessInstance().getState();
-        ProcessEvent.this.processName = event.getProcessInstance().getProcessName();
+    public ProcessEvent(ProcessEvent event) {
+        this.processId = event.getProcessInstance().getProcessId();
+        this.version = event.getProcessInstance().getProcess().getVersion();
+        this.processInstanceId = event.getProcessInstance().getId();
+        this.state = event.getProcessInstance().getState();
+        this.processName = event.getProcessInstance().getProcessName();
     }
 
     public long getProcessInstanceId() {
@@ -45,7 +45,7 @@ public class ProcessEvent implements Serializable {
     }
 
     public void setProcessInstanceId(long processInstanceId) {
-        ProcessEvent.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public String getProcessId() {
@@ -53,7 +53,7 @@ public class ProcessEvent implements Serializable {
     }
 
     public void setProcessId(String processId) {
-        ProcessEvent.this.processId = processId;
+        this.processId = processId;
     }
 
     public String getVersion() {
@@ -61,7 +61,7 @@ public class ProcessEvent implements Serializable {
     }
 
     public void setVersion(String version) {
-        ProcessEvent.this.version = version;
+        this.version = version;
     }
 
     public String getProcessName() {
@@ -69,7 +69,7 @@ public class ProcessEvent implements Serializable {
     }
 
     public void setProcessName(String processName) {
-        ProcessEvent.this.processName = processName;
+        this.processName = processName;
     }
 }
 

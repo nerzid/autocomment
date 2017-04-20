@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,8 +42,8 @@ public class GetTaskOwnedByExpDateBeforeDateCommand extends UserGroupCallbackTas
 
     public GetTaskOwnedByExpDateBeforeDateCommand(String userId, List<Status> status, Date expirationDate) {
         this.userId = userId;
-        GetTaskOwnedByExpDateBeforeDateCommand.this.statuses = status;
-        GetTaskOwnedByExpDateBeforeDateCommand.this.expirationDate = expirationDate;
+        this.statuses = status;
+        this.expirationDate = expirationDate;
     }
 
     public List<Status> getStatuses() {
@@ -51,7 +51,7 @@ public class GetTaskOwnedByExpDateBeforeDateCommand extends UserGroupCallbackTas
     }
 
     public void setStatuses(List<Status> status) {
-        GetTaskOwnedByExpDateBeforeDateCommand.this.statuses = status;
+        this.statuses = status;
     }
 
     public Date getExpirationDate() {
@@ -59,11 +59,12 @@ public class GetTaskOwnedByExpDateBeforeDateCommand extends UserGroupCallbackTas
     }
 
     public void setExpirationDate(Date expirationDate) {
-        GetTaskOwnedByExpDateBeforeDateCommand.this.expirationDate = expirationDate;
+        this.expirationDate = expirationDate;
     }
 
     public List<TaskSummary> execute(Context cntxt) {
         TaskContext context = ((TaskContext) (cntxt));
+        // do callback GetTaskOwnedByExpDateBeforeDateCommand{userId} to GetTaskOwnedByExpDateBeforeDateCommand{}
         doCallbackUserOperation(userId, context);
         return context.getTaskQueryService().getTasksOwnedByExpirationDateBeforeSpecifiedDate(userId, statuses, expirationDate);
     }

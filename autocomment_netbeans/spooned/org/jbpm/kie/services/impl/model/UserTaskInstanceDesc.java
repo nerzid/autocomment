@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@ package org.jbpm.kie.services.impl.model;
 import java.util.Date;
 import java.io.Serializable;
 
-public class UserTaskInstanceDesc implements Serializable , org.jbpm.services.api.model.UserTaskInstanceDesc {
+public class UserTaskInstanceDesc implements UserTaskInstanceDesc , Serializable {
     private static final long serialVersionUID = -4594921035584546643L;
 
     private Long taskId;
@@ -51,84 +51,84 @@ public class UserTaskInstanceDesc implements Serializable , org.jbpm.services.ap
 
     public UserTaskInstanceDesc(Long taskId, String status, Date activationTime, String name, String description, Integer priority, String actualOwner, String createdBy, String deploymentId, String processId, Long processInstanceId, Date createdOn, Date dueDate) {
         super();
-        UserTaskInstanceDesc.this.taskId = taskId;
-        UserTaskInstanceDesc.this.status = status;
-        UserTaskInstanceDesc.this.activationTime = activationTime;
-        UserTaskInstanceDesc.this.name = name;
-        UserTaskInstanceDesc.this.description = description;
-        UserTaskInstanceDesc.this.priority = priority;
-        UserTaskInstanceDesc.this.actualOwner = actualOwner;
-        UserTaskInstanceDesc.this.createdBy = createdBy;
-        UserTaskInstanceDesc.this.deploymentId = deploymentId;
-        UserTaskInstanceDesc.this.processId = processId;
-        UserTaskInstanceDesc.this.processInstanceId = processInstanceId;
-        UserTaskInstanceDesc.this.createdOn = createdOn;
-        UserTaskInstanceDesc.this.dueDate = dueDate;
+        this.taskId = taskId;
+        this.status = status;
+        this.activationTime = activationTime;
+        this.name = name;
+        this.description = description;
+        this.priority = priority;
+        this.actualOwner = actualOwner;
+        this.createdBy = createdBy;
+        this.deploymentId = deploymentId;
+        this.processId = processId;
+        this.processInstanceId = processInstanceId;
+        this.createdOn = createdOn;
+        this.dueDate = dueDate;
     }
 
     @Override
     public Long getTaskId() {
-        return UserTaskInstanceDesc.this.taskId;
+        return this.taskId;
     }
 
     @Override
     public String getStatus() {
-        return UserTaskInstanceDesc.this.status;
+        return this.status;
     }
 
     @Override
     public Date getActivationTime() {
-        return UserTaskInstanceDesc.this.activationTime;
+        return this.activationTime;
     }
 
     @Override
     public String getName() {
-        return UserTaskInstanceDesc.this.name;
+        return this.name;
     }
 
     @Override
     public String getDescription() {
-        return UserTaskInstanceDesc.this.description;
+        return this.description;
     }
 
     @Override
     public Integer getPriority() {
-        return UserTaskInstanceDesc.this.priority;
+        return this.priority;
     }
 
     @Override
     public String getCreatedBy() {
-        return UserTaskInstanceDesc.this.createdBy;
+        return this.createdBy;
     }
 
     @Override
     public Date getCreatedOn() {
-        return UserTaskInstanceDesc.this.createdOn;
+        return this.createdOn;
     }
 
     @Override
     public Date getDueDate() {
-        return UserTaskInstanceDesc.this.dueDate;
+        return this.dueDate;
     }
 
     @Override
     public Long getProcessInstanceId() {
-        return UserTaskInstanceDesc.this.processInstanceId;
+        return this.processInstanceId;
     }
 
     @Override
     public String getProcessId() {
-        return UserTaskInstanceDesc.this.processId;
+        return this.processId;
     }
 
     @Override
     public String getActualOwner() {
-        return UserTaskInstanceDesc.this.actualOwner;
+        return this.actualOwner;
     }
 
     @Override
     public String getDeploymentId() {
-        return UserTaskInstanceDesc.this.deploymentId;
+        return this.deploymentId;
     }
 
     @Override

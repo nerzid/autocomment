@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,12 +53,15 @@ public class ProcessInstanceExecutor {
         KnowledgeBuilderImpl builder = new KnowledgeBuilderImpl();
         // load the process
         Reader source = new InputStreamReader(ProcessInstanceExecutor.class.getResourceAsStream("/ruleflow.rf"));
+        // add process Reader{source} to KnowledgeBuilderImpl{builder}
         builder.addProcessFromXml(source);
         source = new InputStreamReader(ProcessInstanceExecutor.class.getResourceAsStream("/ruleflow2.rf"));
+        // add process Reader{source} to KnowledgeBuilderImpl{builder}
         builder.addProcessFromXml(source);
         // create the knowledge base
         InternalKnowledgePackage pkg = builder.getPackage();
         KnowledgeBase ruleBase = KnowledgeBaseFactory.newKnowledgeBase();
+        // add knowledge List{((Collection) (Arrays.asList(pkg)))} to KnowledgeBase{ruleBase}
         ruleBase.addKnowledgePackages(((Collection) (Arrays.asList(pkg))));
         return ruleBase;
     }

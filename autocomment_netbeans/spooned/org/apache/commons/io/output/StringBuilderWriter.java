@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ import java.io.Writer;
  * (i.e. for use in a single thread) implementation for better performance.
  * For safe usage with multiple {@link Thread}s then
  * <code>java.io.StringWriter</code> should be used.
- * 
+ *
  * @version $Id: StringBuilderWriter.java 1722253 2015-12-30 00:36:12Z ggregory $
  * @since 2.0
  */
@@ -47,7 +47,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
 
     /**
      * Constructs a new {@link StringBuilder} instance with the specified capacity.
-     * 
+     *
      * @param capacity The initial capacity of the underlying {@link StringBuilder}
      */
     public StringBuilderWriter(final int capacity) {
@@ -56,9 +56,9 @@ public class StringBuilderWriter extends Writer implements Serializable {
 
     /**
      * Constructs a new instance with the specified {@link StringBuilder}.
-     * 
+     *
      * <p>If {@code builder} is null a new instance with default capacity will be created.</p>
-     * 
+     *
      * @param builder The String builder. May be null.
      */
     public StringBuilderWriter(final StringBuilder builder) {
@@ -67,31 +67,33 @@ public class StringBuilderWriter extends Writer implements Serializable {
 
     /**
      * Appends a single character to this Writer.
-     * 
+     *
      * @param value The character to append
      * @return This writer instance
      */
     @Override
     public Writer append(final char value) {
+        // append char{value} to StringBuilder{builder}
         builder.append(value);
-        return StringBuilderWriter.this;
+        return this;
     }
 
     /**
      * Appends a character sequence to this Writer.
-     * 
+     *
      * @param value The character to append
      * @return This writer instance
      */
     @Override
     public Writer append(final CharSequence value) {
+        // append CharSequence{value} to StringBuilder{builder}
         builder.append(value);
-        return StringBuilderWriter.this;
+        return this;
     }
 
     /**
      * Appends a portion of a character sequence to the {@link StringBuilder}.
-     * 
+     *
      * @param value The character to append
      * @param start The index of the first character
      * @param end The index of the last character + 1
@@ -99,8 +101,9 @@ public class StringBuilderWriter extends Writer implements Serializable {
      */
     @Override
     public Writer append(final CharSequence value, final int start, final int end) {
+        // append CharSequence{value} to StringBuilder{builder}
         builder.append(value, start, end);
-        return StringBuilderWriter.this;
+        return this;
     }
 
     /**
@@ -121,19 +124,19 @@ public class StringBuilderWriter extends Writer implements Serializable {
 
     /**
      * Writes a String to the {@link StringBuilder}.
-     * 
+     *
      * @param value The value to write
      */
     @Override
     public void write(final String value) {
         if (value != null) {
             builder.append(value);
-        } 
+        }
     }
 
     /**
      * Writes a portion of a character array to the {@link StringBuilder}.
-     * 
+     *
      * @param value The value to write
      * @param offset The index of the first character
      * @param length The number of characters to write
@@ -142,12 +145,12 @@ public class StringBuilderWriter extends Writer implements Serializable {
     public void write(final char[] value, final int offset, final int length) {
         if (value != null) {
             builder.append(value, offset, length);
-        } 
+        }
     }
 
     /**
      * Returns the underlying builder.
-     * 
+     *
      * @return The underlying builder
      */
     public StringBuilder getBuilder() {
@@ -156,7 +159,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
 
     /**
      * Returns {@link StringBuilder#toString()}.
-     * 
+     *
      * @return The contents of the String builder.
      */
     @Override

@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,11 +17,11 @@
 
 package org.jbpm.kie.services.impl;
 
+import org.jbpm.services.api.model.DeployedUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArraySet;
 import org.jbpm.services.api.model.DeployedAsset;
-import org.jbpm.services.api.model.DeployedUnit;
 import org.jbpm.services.api.model.DeploymentUnit;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,37 +41,39 @@ public class DeployedUnitImpl implements DeployedUnit {
     private Set<Class<?>> classes = new CopyOnWriteArraySet<Class<?>>();
 
     public DeployedUnitImpl(DeploymentUnit unit) {
-        DeployedUnitImpl.this.unit = unit;
+        this.unit = unit;
     }
 
     @Override
     public DeploymentUnit getDeploymentUnit() {
-        return DeployedUnitImpl.this.unit;
+        return this.unit;
     }
 
     @Override
     public String getDeployedAssetLocation(String assetId) {
-        return DeployedUnitImpl.this.assets.get(assetId).getOriginalPath();
+        return this.assets.get(assetId).getOriginalPath();
     }
 
     @Override
     public RuntimeManager getRuntimeManager() {
-        return DeployedUnitImpl.this.manager;
+        return this.manager;
     }
 
     public void addAssetLocation(String assetId, ProcessAssetDesc processAsset) {
-        DeployedUnitImpl.this.assets.put(assetId, processAsset);
+        // put String{assetId} to Map{this.assets}
+        this.assets.put(assetId, processAsset);
     }
 
     public void addClass(Class<?> kModuleClass) {
-        DeployedUnitImpl.this.classes.add(kModuleClass);
+        // add Class{kModuleClass} to Set{this.classes}
+        this.classes.add(kModuleClass);
     }
 
     public void setRuntimeManager(RuntimeManager manager) {
-        if ((DeployedUnitImpl.this.manager) != null) {
+        if ((this.manager) != null) {
             throw new IllegalStateException("RuntimeManager already exists");
-        } 
-        DeployedUnitImpl.this.manager = manager;
+        }
+        this.manager = manager;
     }
 
     @Override
@@ -89,7 +91,7 @@ public class DeployedUnitImpl implements DeployedUnit {
     }
 
     public void setActive(boolean active) {
-        DeployedUnitImpl.this.active = active;
+        this.active = active;
     }
 }
 

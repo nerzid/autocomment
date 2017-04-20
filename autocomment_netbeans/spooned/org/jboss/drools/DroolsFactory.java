@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * DroolsFactory
@@ -21,6 +22,7 @@
 
 package org.jboss.drools;
 
+import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.eclipse.emf.ecore.EFactory;
 
 /**
@@ -38,7 +40,7 @@ public interface DroolsFactory extends EFactory {
      * <!-- end-user-doc -->
      * @generated
      */
-    DroolsFactory eINSTANCE = org.jboss.drools.impl.DroolsFactoryImpl.init();
+    DroolsFactory eINSTANCE = DroolsFactoryImpl.init();
 
     /**
      * Returns a new object of class '<em>Document Root</em>'.

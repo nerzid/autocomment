@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ import java.text.MessageFormat;
 import org.kie.api.runtime.process.NodeInstance;
 import org.kie.api.runtime.process.ProcessInstance;
 import org.jbpm.process.instance.impl.ProcessInstanceImpl;
+import VariableScope.VARIABLE_SCOPE;
 import org.jbpm.process.instance.context.variable.VariableScopeInstance;
 
 /**
@@ -62,21 +63,21 @@ public class WorkflowRuntimeException extends RuntimeException {
     }
 
     private void initialize(NodeInstance nodeInstance, ProcessInstance processInstance) {
-        WorkflowRuntimeException.this.processInstanceId = processInstance.getId();
-        WorkflowRuntimeException.this.processId = processInstance.getProcessId();
+        this.processInstanceId = processInstance.getId();
+        this.processId = processInstance.getProcessId();
         if (nodeInstance != null) {
-            WorkflowRuntimeException.this.nodeInstanceId = nodeInstance.getId();
-            WorkflowRuntimeException.this.nodeId = nodeInstance.getNodeId();
+            this.nodeInstanceId = nodeInstance.getId();
+            this.nodeId = nodeInstance.getNodeId();
             if ((((ProcessInstanceImpl) (processInstance)).getKnowledgeRuntime()) != null) {
-                WorkflowRuntimeException.this.nodeName = nodeInstance.getNodeName();
-            } 
-        } 
-        VariableScopeInstance variableScope = ((VariableScopeInstance) (((org.jbpm.process.instance.ProcessInstance) (processInstance)).getContextInstance(VariableScope.VARIABLE_SCOPE)));
+                this.nodeName = nodeInstance.getNodeName();
+            }
+        }
+        VariableScopeInstance variableScope = ((VariableScopeInstance) (((ProcessInstance) (processInstance)).getContextInstance(VARIABLE_SCOPE)));
         // set input parameters
         if (variableScope != null) {
-            WorkflowRuntimeException.this.variables = variableScope.getVariables();
-        } else {
-            WorkflowRuntimeException.this.variables = new HashMap<String, Object>(0);
+            this.variables = variableScope.getVariables();
+        }else {
+            this.variables = new HashMap<String, Object>(0);
         }
     }
 
@@ -91,7 +92,7 @@ public class WorkflowRuntimeException extends RuntimeException {
      * @param processInstanceId the processInstanceId to set
      */
     public void setProcessInstanceId(long processInstanceId) {
-        WorkflowRuntimeException.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     /**
@@ -105,7 +106,7 @@ public class WorkflowRuntimeException extends RuntimeException {
      * @param processId the processId to set
      */
     public void setProcessId(String processId) {
-        WorkflowRuntimeException.this.processId = processId;
+        this.processId = processId;
     }
 
     /**
@@ -119,7 +120,7 @@ public class WorkflowRuntimeException extends RuntimeException {
      * @param nodeInstanceId the nodeInstanceId to set
      */
     public void setNodeInstanceId(long nodeInstanceId) {
-        WorkflowRuntimeException.this.nodeInstanceId = nodeInstanceId;
+        this.nodeInstanceId = nodeInstanceId;
     }
 
     /**
@@ -133,7 +134,7 @@ public class WorkflowRuntimeException extends RuntimeException {
      * @param nodeId the nodeId to set
      */
     public void setNodeId(long nodeId) {
-        WorkflowRuntimeException.this.nodeId = nodeId;
+        this.nodeId = nodeId;
     }
 
     /**
@@ -147,7 +148,7 @@ public class WorkflowRuntimeException extends RuntimeException {
      * @param nodeName the nodeName to set
      */
     public void setNodeName(String nodeName) {
-        WorkflowRuntimeException.this.nodeName = nodeName;
+        this.nodeName = nodeName;
     }
 
     public Map<String, Object> getVariables() {

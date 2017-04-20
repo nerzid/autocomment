@@ -4,15 +4,16 @@ import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.io.FilePicker;
 import com.nerzid.autocomment.processor.CommentGeneratorMethodProcessor;
 import com.nerzid.autocomment.processor.SUnitMethodProcessor;
+
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import spoon.Launcher;
 import spoon.compiler.Environment;
 import spoon.support.JavaOutputProcessor;
 
 /**
- *
  * @author nerzid
  */
 public class CommentGenerator {
@@ -58,7 +59,7 @@ public class CommentGenerator {
         l.addProcessor(new CommentGeneratorMethodProcessor());
 
         // Uncomment this if you want to insert comment into code
-//                l.addProcessor(jop);
+        l.addProcessor(jop);
         // Debuglevel 
         // env.setLevel("0");
         // Run the Launcher

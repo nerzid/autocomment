@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Netflix, Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,7 @@ package rx.exceptions;
  * to rethrow the exception on the thread that the message comes out from the observable sequence.
  * The OnCompleted behavior in this case is to do nothing."
  * </p></blockquote>
- * 
+ *
  * @see <a href="https://github.com/ReactiveX/RxJava/issues/198">RxJava issue #198</a>
  */
 public class OnErrorNotImplementedException extends RuntimeException {
@@ -37,7 +37,7 @@ public class OnErrorNotImplementedException extends RuntimeException {
     /**
      * Customizes the {@code Throwable} with a custom message and wraps it before it is to be re-thrown as an
      * {@code OnErrorNotImplementedException}.
-     * 
+     *
      * @param message
      *          the message to assign to the {@code Throwable} to re-throw
      * @param e
@@ -49,7 +49,7 @@ public class OnErrorNotImplementedException extends RuntimeException {
 
     /**
      * Wraps the {@code Throwable} before it is to be re-thrown as an {@code OnErrorNotImplementedException}.
-     * 
+     *
      * @param e
      *          the {@code Throwable} to re-throw; if null, a NullPointerException is constructed
      */

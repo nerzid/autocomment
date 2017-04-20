@@ -2,9 +2,9 @@
 
 package org.jbpm.services.task.impl.model.xml;
 
+import java.io.IOException;
 import org.kie.internal.task.api.model.AccessType;
 import org.kie.internal.task.api.model.FaultData;
-import java.io.IOException;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -12,11 +12,13 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
 import javax.xml.bind.annotation.XmlSchemaType;
 
 @XmlRootElement(name = "fault-data")
 @XmlAccessorType(value = XmlAccessType.FIELD)
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
+@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE)
 public class JaxbFaultData implements FaultData {
     @XmlElement
     private AccessType accessType;
@@ -38,10 +40,10 @@ public class JaxbFaultData implements FaultData {
     }
 
     public JaxbFaultData(FaultData faultData) {
-        JaxbFaultData.this.accessType = faultData.getAccessType();
-        JaxbFaultData.this.content = faultData.getContent();
-        JaxbFaultData.this.faultName = faultData.getFaultName();
-        JaxbFaultData.this.type = faultData.getType();
+        this.accessType = faultData.getAccessType();
+        this.content = faultData.getContent();
+        this.faultName = faultData.getFaultName();
+        this.type = faultData.getType();
     }
 
     @Override
@@ -51,7 +53,7 @@ public class JaxbFaultData implements FaultData {
 
     @Override
     public void setAccessType(AccessType accessType) {
-        JaxbFaultData.this.accessType = accessType;
+        this.accessType = accessType;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class JaxbFaultData implements FaultData {
 
     @Override
     public void setType(String type) {
-        JaxbFaultData.this.type = type;
+        this.type = type;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class JaxbFaultData implements FaultData {
 
     @Override
     public void setContent(byte[] content) {
-        JaxbFaultData.this.content = content;
+        this.content = content;
     }
 
     @Override
@@ -81,16 +83,18 @@ public class JaxbFaultData implements FaultData {
 
     @Override
     public void setFaultName(String faultName) {
-        JaxbFaultData.this.faultName = faultName;
+        this.faultName = faultName;
     }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
+        // unsupported Class{FaultData.class} to void{AbstractJaxbTaskObject}
         AbstractJaxbTaskObject.unsupported(FaultData.class);
     }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        // unsupported Class{FaultData.class} to void{AbstractJaxbTaskObject}
         AbstractJaxbTaskObject.unsupported(FaultData.class);
     }
 }

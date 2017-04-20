@@ -1,12 +1,12 @@
 /**
  * Copyright 2005 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,31 +45,31 @@ public class RuleConstraintEvaluator implements ConstraintEvaluator , Serializab
     private boolean isDefault;
 
     public String getConstraint() {
-        return RuleConstraintEvaluator.this.constraint;
+        return this.constraint;
     }
 
     public void setConstraint(final String constraint) {
-        RuleConstraintEvaluator.this.constraint = constraint;
+        this.constraint = constraint;
     }
 
     public String getName() {
-        return RuleConstraintEvaluator.this.name;
+        return this.name;
     }
 
     public void setName(final String name) {
-        RuleConstraintEvaluator.this.name = name;
+        this.name = name;
     }
 
     public String toString() {
-        return RuleConstraintEvaluator.this.name;
+        return this.name;
     }
 
     public int getPriority() {
-        return RuleConstraintEvaluator.this.priority;
+        return this.priority;
     }
 
     public void setPriority(final int priority) {
-        RuleConstraintEvaluator.this.priority = priority;
+        this.priority = priority;
     }
 
     public String getDialect() {
@@ -77,7 +77,7 @@ public class RuleConstraintEvaluator implements ConstraintEvaluator , Serializab
     }
 
     public void setDialect(String dialect) {
-        RuleConstraintEvaluator.this.dialect = dialect;
+        this.dialect = dialect;
     }
 
     public String getType() {
@@ -85,7 +85,7 @@ public class RuleConstraintEvaluator implements ConstraintEvaluator , Serializab
     }
 
     public void setType(String type) {
-        RuleConstraintEvaluator.this.type = type;
+        this.type = type;
     }
 
     public boolean isDefault() {
@@ -93,7 +93,7 @@ public class RuleConstraintEvaluator implements ConstraintEvaluator , Serializab
     }
 
     public void setDefault(boolean isDefault) {
-        RuleConstraintEvaluator.this.isDefault = isDefault;
+        this.isDefault = isDefault;
     }
 
     public boolean evaluate(NodeInstance instance, Connection connection, Constraint constraint) {

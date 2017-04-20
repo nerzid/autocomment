@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,9 +37,9 @@ public class TaskServiceRequest {
     private Class<? extends TaskException> exceptionClass;
 
     public TaskServiceRequest(String type, User user, Map<String, Object> parameters) {
-        TaskServiceRequest.this.type = type;
-        TaskServiceRequest.this.user = user;
-        TaskServiceRequest.this.parameters = parameters;
+        this.type = type;
+        this.user = user;
+        this.parameters = parameters;
     }
 
     public String getType() {
@@ -57,7 +57,7 @@ public class TaskServiceRequest {
     public Object getParameter(String name) {
         if ((parameters) == null) {
             return null;
-        } 
+        }
         return parameters.get(name);
     }
 
@@ -66,7 +66,7 @@ public class TaskServiceRequest {
     }
 
     public void setAllowed(boolean allowed) {
-        TaskServiceRequest.this.allowed = allowed;
+        this.allowed = allowed;
     }
 
     public List<String> getReasons() {
@@ -76,19 +76,20 @@ public class TaskServiceRequest {
     public void addReason(String reason) {
         if ((reasons) == null) {
             reasons = new ArrayList<String>();
-        } 
+        }
+        // add String{reason} to List{reasons}
         reasons.add(reason);
     }
 
     public TaskException getException(String message) {
-        if ((TaskServiceRequest.this.exceptionClass) != null) {
+        if ((this.exceptionClass) != null) {
             try {
-                return TaskServiceRequest.this.exceptionClass.getConstructor(new Class[]{ String.class }).newInstance(new Object[]{ message });
+                return this.exceptionClass.getConstructor(new Class[]{ String.class }).newInstance(new Object[]{ message });
             } catch (Exception e) {
                 // do nothing
             }
-        } 
-        return new org.jbpm.services.task.exception.CannotAddTaskException(message);
+        }
+        return new CannotAddTaskException(message);
     }
 
     public Class<? extends TaskException> getExceptionClass() {
@@ -96,7 +97,7 @@ public class TaskServiceRequest {
     }
 
     public void setExceptionClass(Class<? extends TaskException> exceptionClass) {
-        TaskServiceRequest.this.exceptionClass = exceptionClass;
+        this.exceptionClass = exceptionClass;
     }
 }
 

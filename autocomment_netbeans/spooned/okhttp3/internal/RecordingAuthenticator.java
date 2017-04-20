@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2013 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +42,8 @@ public final class RecordingAuthenticator extends Authenticator {
 
     @Override
     protected PasswordAuthentication getPasswordAuthentication() {
-        RecordingAuthenticator.this.calls.add(((((((((((((((("host=" + (getRequestingHost())) + " port=") + (getRequestingPort())) + " site=") + (getRequestingSite().getHostName())) + " url=") + (getRequestingURL())) + " type=") + (getRequestorType())) + " prompt=") + (getRequestingPrompt())) + " protocol=") + (getRequestingProtocol())) + " scheme=") + (getRequestingScheme())));
+        // add String{((((((((((((((("host=" + (getRequestingHost())) + " port=") + (getRequestingPort())) + " site=") + (getRequestingSite().getHostName())) + " url=") + (getRequestingURL())) + " type=") + (getRequestorType())) + " prompt=") + (getRequestingPrompt())) + " protocol=") + (getRequestingProtocol())) + " scheme=") + (getRequestingScheme()))} to List{this.calls}
+        this.calls.add(((((((((((((((("host=" + (getRequestingHost())) + " port=") + (getRequestingPort())) + " site=") + (getRequestingSite().getHostName())) + " url=") + (getRequestingURL())) + " type=") + (getRequestorType())) + " prompt=") + (getRequestingPrompt())) + " protocol=") + (getRequestingProtocol())) + " scheme=") + (getRequestingScheme())));
         return authentication;
     }
 }

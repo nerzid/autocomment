@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,7 +34,7 @@ public class DocumentVariable {
     }
 
     public void setId(long id) {
-        DocumentVariable.this.id = id;
+        this.id = id;
     }
 
     public String getContent() {
@@ -42,13 +42,13 @@ public class DocumentVariable {
     }
 
     public void setContent(String content) {
-        DocumentVariable.this.content = content;
+        this.content = content;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = (89 * hash) + ((int) (((DocumentVariable.this.id) ^ ((DocumentVariable.this.id) >>> 32))));
+        hash = (89 * hash) + ((int) ((this.id) ^ ((this.id) >>> 32)));
         return hash;
     }
 
@@ -56,14 +56,14 @@ public class DocumentVariable {
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        } 
+        }
         if ((getClass()) != (obj.getClass())) {
             return false;
-        } 
+        }
         final DocumentVariable other = ((DocumentVariable) (obj));
-        if ((DocumentVariable.this.id) != (other.id)) {
+        if ((this.id) != (other.id)) {
             return false;
-        } 
+        }
         return true;
     }
 }

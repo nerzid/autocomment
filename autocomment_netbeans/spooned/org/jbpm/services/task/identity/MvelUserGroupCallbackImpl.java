@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -17,10 +17,11 @@
 
 package org.jbpm.services.task.identity;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import org.kie.internal.task.api.UserGroupCallback;
 import org.kie.api.task.model.Group;
 import java.util.HashMap;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +29,6 @@ import org.jbpm.services.task.utils.MVELUtils;
 import java.util.Map;
 import java.io.Reader;
 import org.kie.api.task.model.User;
-import org.kie.internal.task.api.UserGroupCallback;
 
 public class MvelUserGroupCallbackImpl implements UserGroupCallback {
     private Map<User, List<Group>> userGroupMapping;
@@ -44,7 +44,7 @@ public class MvelUserGroupCallbackImpl implements UserGroupCallback {
             try {
                 if (reader != null) {
                     reader.close();
-                } 
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -58,8 +58,8 @@ public class MvelUserGroupCallbackImpl implements UserGroupCallback {
             User u = iter.next();
             if (u.getId().equals(userId)) {
                 return true;
-            } 
-        }
+            }
+        } 
         return false;
     }
 
@@ -71,9 +71,9 @@ public class MvelUserGroupCallbackImpl implements UserGroupCallback {
             for (Group g : groups) {
                 if (g.getId().equals(groupId)) {
                     return true;
-                } 
+                }
             }
-        }
+        } 
         return false;
     }
 
@@ -96,8 +96,8 @@ public class MvelUserGroupCallbackImpl implements UserGroupCallback {
                     groupList.add(g.getId());
                 }
                 return groupList;
-            } 
-        }
+            }
+        } 
         return new ArrayList<String>(0);
     }
 }

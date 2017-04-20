@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,6 +27,7 @@ import org.kie.internal.task.api.TaskDefService;
 import org.kie.internal.task.api.TaskPersistenceContext;
 
 /**
+ *
  */
 public class TaskDefServiceImpl implements TaskDefService {
     private TaskPersistenceContext persistenceContext;
@@ -35,14 +36,15 @@ public class TaskDefServiceImpl implements TaskDefService {
     }
 
     public TaskDefServiceImpl(TaskPersistenceContext persistenceContext) {
-        TaskDefServiceImpl.this.persistenceContext = persistenceContext;
+        this.persistenceContext = persistenceContext;
     }
 
     public void setPersistenceContext(TaskPersistenceContext persistenceContext) {
-        TaskDefServiceImpl.this.persistenceContext = persistenceContext;
+        this.persistenceContext = persistenceContext;
     }
 
     public void deployTaskDef(TaskDef def) {
+        // persist TaskDef{def} to TaskPersistenceContext{persistenceContext}
         persistenceContext.persist(def);
     }
 
@@ -56,12 +58,13 @@ public class TaskDefServiceImpl implements TaskDefService {
         List<TaskDef> resultList = persistenceContext.queryStringWithParametersInTransaction("select td from TaskDef td where td.name = :name", persistenceContext.addParametersToMap("name", name), ClassUtil.<List<TaskDef>>castClass(List.class));
         if ((resultList.size()) > 0) {
             return resultList.get(0);
-        } 
+        }
         return null;
     }
 
     public void undeployTaskDef(String name) {
         TaskDef taskDef = getTaskDefById(name);
+        // remove TaskDef{taskDef} to TaskPersistenceContext{persistenceContext}
         persistenceContext.remove(taskDef);
     }
 }

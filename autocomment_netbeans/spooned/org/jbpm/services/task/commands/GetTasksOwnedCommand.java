@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,8 +16,8 @@
 
 package org.jbpm.services.task.commands;
 
-import org.kie.internal.command.Context;
 import java.util.List;
+import org.kie.internal.command.Context;
 import org.kie.internal.query.QueryFilter;
 import org.kie.api.task.model.Status;
 import org.kie.api.task.model.TaskSummary;
@@ -46,13 +46,13 @@ public class GetTasksOwnedCommand extends UserGroupCallbackTaskCommand<List<Task
 
     public GetTasksOwnedCommand(String userId, List<Status> status) {
         this.userId = userId;
-        GetTasksOwnedCommand.this.statuses = status;
+        this.statuses = status;
     }
 
     public GetTasksOwnedCommand(String userId, List<Status> status, QueryFilter filter) {
         this.userId = userId;
-        GetTasksOwnedCommand.this.statuses = status;
-        GetTasksOwnedCommand.this.filter = filter;
+        this.statuses = status;
+        this.filter = filter;
     }
 
     public List<Status> getStatus() {
@@ -65,7 +65,9 @@ public class GetTasksOwnedCommand extends UserGroupCallbackTaskCommand<List<Task
 
     public List<TaskSummary> execute(Context cntxt) {
         TaskContext context = ((TaskContext) (cntxt));
+        // do callback GetTasksOwnedCommand{userId} to GetTasksOwnedCommand{}
         doCallbackUserOperation(userId, context);
+        // do user GetTasksOwnedCommand{userId} to GetTasksOwnedCommand{}
         doUserGroupCallbackOperation(userId, null, context);
         return context.getTaskQueryService().getTasksOwned(userId, statuses, filter);
     }

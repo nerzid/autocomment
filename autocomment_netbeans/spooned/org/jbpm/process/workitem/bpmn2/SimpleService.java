@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,6 +34,7 @@ public class SimpleService {
         } catch (InterruptedException e) {
             SimpleService.logger.error("Interupted while waiting", e);
         }
+        // info String{"Hello {}"} to Logger{SimpleService.logger}
         SimpleService.logger.info("Hello {}", name);
         return "Hello " + name;
     }
@@ -41,6 +42,7 @@ public class SimpleService {
     @WebMethod(operationName = "helloException")
     public String helloException(@WebParam(name = "name")
     String name) {
+        // info String{"Throwing error for {}"} to Logger{SimpleService.logger}
         SimpleService.logger.info("Throwing error for {}", name);
         throw new RuntimeException(("Hello exception " + name));
     }
@@ -49,6 +51,7 @@ public class SimpleService {
     public String helloMulitpleParams(@WebParam(name = "name")
     String name, @WebParam(name = "lastname")
     String lastname) {
+        // info String{"Hello first name {} and last name {}"} to Logger{SimpleService.logger}
         SimpleService.logger.info("Hello first name {} and last name {}", name, lastname);
         return (("Hello " + lastname) + ", ") + name;
     }
@@ -57,6 +60,7 @@ public class SimpleService {
     public String helloMulitpleIntParams(@WebParam(name = "name")
     int first, @WebParam(name = "lastname")
     int second) {
+        // info String{"Got numbers first {} and last {}"} to Logger{SimpleService.logger}
         SimpleService.logger.info("Got numbers first {} and last {}", first, second);
         return (("Hello " + first) + ", ") + second;
     }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,23 +29,25 @@ public class StateNode extends CompositeContextNode implements Constrainable {
     private Map<ConnectionRef, Constraint> constraints = new HashMap<ConnectionRef, Constraint>();
 
     public void setConstraints(Map<ConnectionRef, Constraint> constraints) {
-        StateNode.this.constraints = constraints;
+        this.constraints = constraints;
     }
 
     public void setConstraint(final Connection connection, final Constraint constraint) {
         if (connection == null) {
             throw new IllegalArgumentException("connection is null");
-        } 
+        }
         if (!(getDefaultOutgoingConnections().contains(connection))) {
             throw new IllegalArgumentException(("connection is unknown:" + connection));
-        } 
+        }
+        // add constraint ConnectionRef{new org.jbpm.workflow.core.impl.ConnectionRef(connection.getTo().getId(), connection.getToType())} to StateNode{}
         addConstraint(new ConnectionRef(connection.getTo().getId(), connection.getToType()), constraint);
     }
 
     public void addConstraint(ConnectionRef connectionRef, Constraint constraint) {
         if (connectionRef == null) {
             throw new IllegalArgumentException("A state node only accepts constraints linked to a connection");
-        } 
+        }
+        // put ConnectionRef{connectionRef} to Map{constraints}
         constraints.put(connectionRef, constraint);
     }
 
@@ -60,9 +62,9 @@ public class StateNode extends CompositeContextNode implements Constrainable {
     public Constraint getConstraint(final Connection connection) {
         if (connection == null) {
             throw new IllegalArgumentException("connection is null");
-        } 
+        }
         ConnectionRef ref = new ConnectionRef(connection.getTo().getId(), connection.getToType());
-        return StateNode.this.constraints.get(ref);
+        return this.constraints.get(ref);
     }
 }
 

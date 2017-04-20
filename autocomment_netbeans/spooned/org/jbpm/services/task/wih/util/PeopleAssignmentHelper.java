@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -17,22 +17,22 @@
 
 package org.jbpm.services.task.wih.util;
 
+import java.util.Collection;
 import java.util.ArrayList;
 import org.kie.internal.process.CaseAssignment;
 import org.kie.internal.process.CaseData;
-import java.util.Collection;
 import org.kie.api.task.model.Group;
+import org.kie.internal.task.api.TaskModelProvider;
+import org.kie.api.task.model.User;
 import org.kie.internal.task.api.model.InternalOrganizationalEntity;
+import org.kie.api.task.model.PeopleAssignments;
 import org.kie.internal.task.api.model.InternalPeopleAssignments;
+import org.kie.api.runtime.process.WorkItem;
 import org.kie.internal.task.api.model.InternalTask;
 import org.kie.internal.task.api.model.InternalTaskData;
 import java.util.List;
 import org.kie.api.task.model.OrganizationalEntity;
-import org.kie.api.task.model.PeopleAssignments;
 import org.kie.api.task.model.Task;
-import org.kie.internal.task.api.TaskModelProvider;
-import org.kie.api.task.model.User;
-import org.kie.api.runtime.process.WorkItem;
 
 /**
  * A class responsible for assigning the various ownerships (actors, groups, business
@@ -59,26 +59,33 @@ public class PeopleAssignmentHelper {
     private CaseData caseFile;
 
     public PeopleAssignmentHelper() {
-        PeopleAssignmentHelper.this.separator = System.getProperty("org.jbpm.ht.user.separator", ",");
+        this.separator = System.getProperty("org.jbpm.ht.user.separator", ",");
     }
 
     public PeopleAssignmentHelper(String separator) {
-        PeopleAssignmentHelper.this.separator = separator;
+        this.separator = separator;
     }
 
     public PeopleAssignmentHelper(CaseData caseFile) {
         this();
-        PeopleAssignmentHelper.this.caseFile = caseFile;
+        this.caseFile = caseFile;
     }
 
     public void handlePeopleAssignments(WorkItem workItem, InternalTask task, InternalTaskData taskData) {
         InternalPeopleAssignments peopleAssignments = getNullSafePeopleAssignments(task);
+        // assign actors WorkItem{workItem} to PeopleAssignmentHelper{}
         assignActors(workItem, peopleAssignments, taskData);
+        // assign groups WorkItem{workItem} to PeopleAssignmentHelper{}
         assignGroups(workItem, peopleAssignments);
+        // assign business WorkItem{workItem} to PeopleAssignmentHelper{}
         assignBusinessAdministrators(workItem, peopleAssignments);
+        // assign task WorkItem{workItem} to PeopleAssignmentHelper{}
         assignTaskStakeholders(workItem, peopleAssignments);
+        // assign excluded WorkItem{workItem} to PeopleAssignmentHelper{}
         assignExcludedOwners(workItem, peopleAssignments);
+        // assign recipients WorkItem{workItem} to PeopleAssignmentHelper{}
         assignRecipients(workItem, peopleAssignments);
+        // set people InternalPeopleAssignments{peopleAssignments} to InternalTask{task}
         task.setPeopleAssignments(peopleAssignments);
     }
 
@@ -88,14 +95,14 @@ public class PeopleAssignmentHelper {
         Object actorIds = adjustParam(workItem.getParameter(PeopleAssignmentHelper.ACTOR_ID));
         if (actorIds instanceof Collection) {
             processPeopleAssignments(((Collection<OrganizationalEntity>) (actorIds)), potentialOwners);
-        } else {
+        }else {
             processPeopleAssignments(((String) (actorIds)), potentialOwners, true);
         }
         // Set the first user as creator ID??? hmmm might be wrong
         if (((potentialOwners.size()) > 0) && ((taskData.getCreatedBy()) == null)) {
             OrganizationalEntity firstPotentialOwner = potentialOwners.get(0);
             taskData.setCreatedBy(((User) (firstPotentialOwner)));
-        } 
+        }
     }
 
     @SuppressWarnings(value = "unchecked")
@@ -104,7 +111,7 @@ public class PeopleAssignmentHelper {
         Object groupIds = adjustParam(workItem.getParameter(PeopleAssignmentHelper.GROUP_ID));
         if (groupIds instanceof Collection) {
             processPeopleAssignments(((Collection<OrganizationalEntity>) (groupIds)), potentialOwners);
-        } else {
+        }else {
             processPeopleAssignments(((String) (groupIds)), potentialOwners, false);
         }
     }
@@ -121,15 +128,15 @@ public class PeopleAssignmentHelper {
             Group adminGroup = TaskModelProvider.getFactory().newGroup();
             ((InternalOrganizationalEntity) (adminGroup)).setId("Administrators");
             businessAdministrators.add(adminGroup);
-        } 
+        }
         if (businessAdministratorIds instanceof Collection) {
             processPeopleAssignments(((Collection<OrganizationalEntity>) (businessAdministratorIds)), businessAdministrators);
-        } else {
+        }else {
             processPeopleAssignments(((String) (businessAdministratorIds)), businessAdministrators, true);
         }
         if (businessAdminGroupIds instanceof Collection) {
             processPeopleAssignments(((Collection<OrganizationalEntity>) (businessAdminGroupIds)), businessAdministrators);
-        } else {
+        }else {
             processPeopleAssignments(((String) (businessAdminGroupIds)), businessAdministrators, false);
         }
     }
@@ -140,7 +147,7 @@ public class PeopleAssignmentHelper {
         Object taskStakehodlerIds = adjustParam(workItem.getParameter(PeopleAssignmentHelper.TASKSTAKEHOLDER_ID));
         if (taskStakehodlerIds instanceof Collection) {
             processPeopleAssignments(((Collection<OrganizationalEntity>) (taskStakehodlerIds)), taskStakeholders);
-        } else {
+        }else {
             processPeopleAssignments(((String) (taskStakehodlerIds)), taskStakeholders, true);
         }
     }
@@ -151,7 +158,7 @@ public class PeopleAssignmentHelper {
         Object excludedOwnerIds = adjustParam(workItem.getParameter(PeopleAssignmentHelper.EXCLUDED_OWNER_ID));
         if (excludedOwnerIds instanceof Collection) {
             processPeopleAssignments(((Collection<OrganizationalEntity>) (excludedOwnerIds)), excludedOwners);
-        } else {
+        }else {
             processPeopleAssignments(((String) (excludedOwnerIds)), excludedOwners, true);
         }
     }
@@ -162,7 +169,7 @@ public class PeopleAssignmentHelper {
         Object recipientIds = adjustParam(workItem.getParameter(PeopleAssignmentHelper.RECIPIENT_ID));
         if (recipientIds instanceof Collection) {
             processPeopleAssignments(((Collection<OrganizationalEntity>) (recipientIds)), recipients);
-        } else {
+        }else {
             processPeopleAssignments(((String) (recipientIds)), recipients, true);
         }
     }
@@ -176,21 +183,21 @@ public class PeopleAssignmentHelper {
                 for (OrganizationalEntity orgEntity : organizationalEntities) {
                     if (orgEntity.getId().equals(id)) {
                         exists = true;
-                    } 
+                    }
                 }
                 if (!exists) {
                     OrganizationalEntity organizationalEntity = null;
                     if (user) {
                         organizationalEntity = TaskModelProvider.getFactory().newUser();
                         ((InternalOrganizationalEntity) (organizationalEntity)).setId(id);
-                    } else {
+                    }else {
                         organizationalEntity = TaskModelProvider.getFactory().newGroup();
                         ((InternalOrganizationalEntity) (organizationalEntity)).setId(id);
                     }
                     organizationalEntities.add(organizationalEntity);
-                } 
+                }
             }
-        } 
+        }
     }
 
     protected void processPeopleAssignments(Collection<OrganizationalEntity> peopleAssignmentIds, List<OrganizationalEntity> organizationalEntities) {
@@ -199,9 +206,9 @@ public class PeopleAssignmentHelper {
                 boolean exists = organizationalEntities.contains(entity);
                 if (!exists) {
                     organizationalEntities.add(entity);
-                } 
+                }
             }
-        } 
+        }
     }
 
     protected InternalPeopleAssignments getNullSafePeopleAssignments(Task task) {
@@ -213,7 +220,7 @@ public class PeopleAssignmentHelper {
             peopleAssignments.setExcludedOwners(new ArrayList<OrganizationalEntity>());
             peopleAssignments.setRecipients(new ArrayList<OrganizationalEntity>());
             peopleAssignments.setTaskStakeholders(new ArrayList<OrganizationalEntity>());
-        } 
+        }
         return peopleAssignments;
     }
 
@@ -221,7 +228,7 @@ public class PeopleAssignmentHelper {
         for (OrganizationalEntity entity : businessAdmins) {
             if (("Administrator".equals(entity.getId())) || ("Administrators".equals(entity.getId()))) {
                 return true;
-            } 
+            }
         }
         return false;
     }
@@ -229,12 +236,12 @@ public class PeopleAssignmentHelper {
     protected Object adjustParam(Object currentValue) {
         if ((currentValue == null) || ((caseFile) == null)) {
             return currentValue;
-        } 
+        }
         try {
             // check if there is case file prefix and if so remove it before checking case file data
             if ((caseFile) instanceof CaseAssignment) {
                 return ((CaseAssignment) (caseFile)).getAssignments(currentValue.toString());
-            } 
+            }
         } catch (IllegalArgumentException e) {
             // no role found with given name
         }

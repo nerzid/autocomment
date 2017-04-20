@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.Serializable;
 
-public class UserTaskInstanceWithVarsDesc extends UserTaskInstanceDesc implements Serializable , org.jbpm.services.api.model.UserTaskInstanceWithVarsDesc {
+public class UserTaskInstanceWithVarsDesc extends UserTaskInstanceDesc implements UserTaskInstanceWithVarsDesc , Serializable {
     private static final long serialVersionUID = -4594921035584546643L;
 
     private Map<String, Object> variables;
@@ -37,14 +37,15 @@ public class UserTaskInstanceWithVarsDesc extends UserTaskInstanceDesc implement
     }
 
     public void setVariables(Map<String, Object> variables) {
-        UserTaskInstanceWithVarsDesc.this.variables = variables;
+        this.variables = variables;
     }
 
     public void addVariable(String variable, Object variableValue) {
-        if ((UserTaskInstanceWithVarsDesc.this.variables) == null) {
-            UserTaskInstanceWithVarsDesc.this.variables = new HashMap<String, Object>();
-        } 
-        UserTaskInstanceWithVarsDesc.this.variables.put(variable, variableValue);
+        if ((this.variables) == null) {
+            this.variables = new HashMap<String, Object>();
+        }
+        // put String{variable} to Map{this.variables}
+        this.variables.put(variable, variableValue);
     }
 }
 

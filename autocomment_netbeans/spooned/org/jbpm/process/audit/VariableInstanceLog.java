@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,24 +17,24 @@
 
 package org.jbpm.process.audit;
 
+import javax.persistence.GenerationType;
 import org.jbpm.process.audit.event.AuditEvent;
 import javax.persistence.Column;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.Temporal;
 import javax.persistence.Id;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.persistence.SequenceGenerator;
 import java.io.Serializable;
-import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @Entity
 @SequenceGenerator(allocationSize = 1, name = "variableInstanceLogIdSeq", sequenceName = "VAR_INST_LOG_ID_SEQ")
-public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.api.runtime.manager.audit.VariableInstanceLog {
+public class VariableInstanceLog implements VariableInstanceLog , Serializable , AuditEvent {
     private static final Logger logger = LoggerFactory.getLogger(VariableInstanceLog.class);
 
     private static final long serialVersionUID = 510L;
@@ -70,13 +70,13 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
     }
 
     public VariableInstanceLog(long processInstanceId, String processId, String variableInstanceId, String variableId, String value, String oldValue) {
-        VariableInstanceLog.this.processInstanceId = processInstanceId;
-        VariableInstanceLog.this.processId = processId;
-        VariableInstanceLog.this.variableInstanceId = variableInstanceId;
-        VariableInstanceLog.this.variableId = variableId;
+        this.processInstanceId = processInstanceId;
+        this.processId = processId;
+        this.variableInstanceId = variableInstanceId;
+        this.variableId = variableId;
         setValue(value);
         setOldValue(oldValue);
-        VariableInstanceLog.this.date = new Date();
+        this.date = new Date();
     }
 
     public long getId() {
@@ -84,7 +84,7 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
     }
 
     public void setId(long id) {
-        VariableInstanceLog.this.id = id;
+        this.id = id;
     }
 
     public Long getProcessInstanceId() {
@@ -92,7 +92,7 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
     }
 
     public void setProcessInstanceId(long processInstanceId) {
-        VariableInstanceLog.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public String getProcessId() {
@@ -100,7 +100,7 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
     }
 
     public void setProcessId(String processId) {
-        VariableInstanceLog.this.processId = processId;
+        this.processId = processId;
     }
 
     public String getVariableInstanceId() {
@@ -108,7 +108,7 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
     }
 
     public void setVariableInstanceId(String variableInstanceId) {
-        VariableInstanceLog.this.variableInstanceId = variableInstanceId;
+        this.variableInstanceId = variableInstanceId;
     }
 
     public String getVariableId() {
@@ -116,7 +116,7 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
     }
 
     public void setVariableId(String variableId) {
-        VariableInstanceLog.this.variableId = variableId;
+        this.variableId = variableId;
     }
 
     public String getValue() {
@@ -127,8 +127,8 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
         if ((value != null) && ((value.length()) > (VARIABLE_LOG_LENGTH))) {
             value = value.substring(0, VARIABLE_LOG_LENGTH);
             VariableInstanceLog.logger.warn("Variable content was trimmed as it was too long (more than {} characters)", VARIABLE_LOG_LENGTH);
-        } 
-        VariableInstanceLog.this.value = value;
+        }
+        this.value = value;
     }
 
     public String getOldValue() {
@@ -139,8 +139,8 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
         if ((oldValue != null) && ((oldValue.length()) > (VARIABLE_LOG_LENGTH))) {
             oldValue = oldValue.substring(0, VARIABLE_LOG_LENGTH);
             VariableInstanceLog.logger.warn("Variable content was trimmed as it was too long (more than {} characters)", VARIABLE_LOG_LENGTH);
-        } 
-        VariableInstanceLog.this.oldValue = oldValue;
+        }
+        this.oldValue = oldValue;
     }
 
     public Date getDate() {
@@ -148,7 +148,7 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
     }
 
     public void setDate(Date date) {
-        VariableInstanceLog.this.date = date;
+        this.date = date;
     }
 
     public String getExternalId() {
@@ -156,7 +156,7 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
     }
 
     public void setExternalId(String domainId) {
-        VariableInstanceLog.this.externalId = domainId;
+        this.externalId = domainId;
     }
 
     public String toString() {
@@ -181,7 +181,7 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
 
     @Override
     public boolean equals(Object obj) {
-        if ((VariableInstanceLog.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -195,8 +195,10 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
             if ((other.date) != null)
                 return false;
             
-        } else if (!(date.equals(other.date)))
-            return false;
+        }else
+            if (!(date.equals(other.date)))
+                return false;
+            
         
         if ((id) != (other.id))
             return false;
@@ -205,8 +207,10 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
             if ((other.processId) != null)
                 return false;
             
-        } else if (!(processId.equals(other.processId)))
-            return false;
+        }else
+            if (!(processId.equals(other.processId)))
+                return false;
+            
         
         if ((processInstanceId) != (other.processInstanceId))
             return false;
@@ -215,36 +219,46 @@ public class VariableInstanceLog implements Serializable , AuditEvent , org.kie.
             if ((other.value) != null)
                 return false;
             
-        } else if (!(value.equals(other.value)))
-            return false;
+        }else
+            if (!(value.equals(other.value)))
+                return false;
+            
         
         if ((oldValue) == null) {
             if ((other.oldValue) != null)
                 return false;
             
-        } else if (!(oldValue.equals(other.oldValue)))
-            return false;
+        }else
+            if (!(oldValue.equals(other.oldValue)))
+                return false;
+            
         
         if ((variableId) == null) {
             if ((other.variableId) != null)
                 return false;
             
-        } else if (!(variableId.equals(other.variableId)))
-            return false;
+        }else
+            if (!(variableId.equals(other.variableId)))
+                return false;
+            
         
         if ((variableInstanceId) == null) {
             if ((other.variableInstanceId) != null)
                 return false;
             
-        } else if (!(variableInstanceId.equals(other.variableInstanceId)))
-            return false;
+        }else
+            if (!(variableInstanceId.equals(other.variableInstanceId)))
+                return false;
+            
         
         if ((externalId) == null) {
             if ((other.externalId) != null)
                 return false;
             
-        } else if (!(externalId.equals(other.externalId)))
-            return false;
+        }else
+            if (!(externalId.equals(other.externalId)))
+                return false;
+            
         
         return true;
     }

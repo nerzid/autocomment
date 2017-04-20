@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 
 
@@ -45,7 +46,7 @@ public class ProcessBuildData {
             for (ProcessDataEventListenerProvider provider : ProcessBuildData.providers) {
                 listeners.add(provider.newInstance());
             }
-        } 
+        }
     }
 
     public List<Process> getProcesses() {
@@ -56,12 +57,14 @@ public class ProcessBuildData {
     }
 
     public void addProcess(Process process) {
+        // on process Process{process} to ProcessBuildData{}
         onProcess(process);
-        ProcessBuildData.this.processes.add(process);
+        // add Process{process} to List{this.processes}
+        this.processes.add(process);
     }
 
     public void setProcesses(List<Process> process) {
-        ProcessBuildData.this.processes = process;
+        this.processes = process;
     }
 
     public Map<Long, Node> getNodes() {
@@ -69,12 +72,13 @@ public class ProcessBuildData {
     }
 
     public boolean addNode(Node node) {
+        // on node Node{node} to ProcessBuildData{}
         onNode(node);
-        return (ProcessBuildData.this.nodes.put(node.getId(), node)) != null;
+        return (this.nodes.put(node.getId(), node)) != null;
     }
 
     public Node getNode(Long id) {
-        return ProcessBuildData.this.nodes.get(id);
+        return this.nodes.get(id);
     }
 
     public Object getMetaData(String name) {
@@ -82,8 +86,10 @@ public class ProcessBuildData {
     }
 
     public void setMetaData(String name, Object data) {
+        // on meta String{name} to ProcessBuildData{}
         onMetaData(name, data);
-        ProcessBuildData.this.metaData.put(name, data);
+        // put String{name} to Map{this.metaData}
+        this.metaData.put(name, data);
     }
 
     // listener support

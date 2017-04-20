@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,23 +23,28 @@ import java.io.File;
 
 public abstract class IOFileFilterAbstractTestCase {
     public static void assertFileFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected) throws Exception {
+        // assert equals String{((((((("test " + testNumber) + " Filter(File) ") + (filter.getClass().getName())) + " not ") + expected) + " for ") + file)} to void{Assert}
         Assert.assertEquals(((((((("test " + testNumber) + " Filter(File) ") + (filter.getClass().getName())) + " not ") + expected) + " for ") + file), expected, filter.accept(file));
     }
 
     public static void assertFilenameFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected) throws Exception {
         // Assumes file has parent and is not passed as null
+        // assert equals String{((((((("test " + testNumber) + " Filter(File, String) ") + (filter.getClass().getName())) + " not ") + expected) + " for ") + file)} to void{Assert}
         Assert.assertEquals(((((((("test " + testNumber) + " Filter(File, String) ") + (filter.getClass().getName())) + " not ") + expected) + " for ") + file), expected, filter.accept(file.getParentFile(), file.getName()));
     }
 
     public static void assertFiltering(final int testNumber, final IOFileFilter filter, final File file, final boolean expected) throws Exception {
         // Note. This only tests the (File, String) version if the parent of
         // the File passed in is not null
+        // assert equals String{((((((("test " + testNumber) + " Filter(File) ") + (filter.getClass().getName())) + " not ") + expected) + " for ") + file)} to void{Assert}
         Assert.assertEquals(((((((("test " + testNumber) + " Filter(File) ") + (filter.getClass().getName())) + " not ") + expected) + " for ") + file), expected, filter.accept(file));
         if ((file != null) && ((file.getParentFile()) != null)) {
             Assert.assertEquals(((((((("test " + testNumber) + " Filter(File, String) ") + (filter.getClass().getName())) + " not ") + expected) + " for ") + file), expected, filter.accept(file.getParentFile(), file.getName()));
-        } else if (file == null) {
-            Assert.assertEquals((((((("test " + testNumber) + " Filter(File, String) ") + (filter.getClass().getName())) + " not ") + expected) + " for null"), expected, filter.accept(file));
-        } 
+        }else
+            if (file == null) {
+                Assert.assertEquals((((((("test " + testNumber) + " Filter(File, String) ") + (filter.getClass().getName())) + " not ") + expected) + " for null"), expected, filter.accept(file));
+            }
+        
     }
 
     public static void assertTrueFiltersInvoked(final int testNumber, final IOFileFilterAbstractTestCase.TesterTrueFileFilter[] filters, final boolean[] invoked) {
@@ -64,7 +69,7 @@ public abstract class IOFileFilterAbstractTestCase {
         for (final IOFileFilterAbstractTestCase.TesterFalseFileFilter filter : filters) {
             if (filter != null) {
                 filter.reset();
-            } 
+            }
         }
     }
 
@@ -72,7 +77,7 @@ public abstract class IOFileFilterAbstractTestCase {
         for (final IOFileFilterAbstractTestCase.TesterTrueFileFilter filter : filters) {
             if (filter != null) {
                 filter.reset();
-            } 
+            }
         }
     }
 
@@ -83,25 +88,28 @@ public abstract class IOFileFilterAbstractTestCase {
 
         @Override
         public boolean accept(final File file) {
+            // set invoked boolean{true} to TesterTrueFileFilter{}
             setInvoked(true);
             return super.accept(file);
         }
 
         @Override
         public boolean accept(final File file, final String str) {
+            // set invoked boolean{true} to TesterTrueFileFilter{}
             setInvoked(true);
             return super.accept(file, str);
         }
 
         public boolean isInvoked() {
-            return IOFileFilterAbstractTestCase.TesterTrueFileFilter.this.invoked;
+            return this.invoked;
         }
 
         public void setInvoked(final boolean invoked) {
-            IOFileFilterAbstractTestCase.TesterTrueFileFilter.this.invoked = invoked;
+            this.invoked = invoked;
         }
 
         public void reset() {
+            // set invoked boolean{false} to TesterTrueFileFilter{}
             setInvoked(false);
         }
     }
@@ -113,25 +121,28 @@ public abstract class IOFileFilterAbstractTestCase {
 
         @Override
         public boolean accept(final File file) {
+            // set invoked boolean{true} to TesterFalseFileFilter{}
             setInvoked(true);
             return super.accept(file);
         }
 
         @Override
         public boolean accept(final File file, final String str) {
+            // set invoked boolean{true} to TesterFalseFileFilter{}
             setInvoked(true);
             return super.accept(file, str);
         }
 
         public boolean isInvoked() {
-            return IOFileFilterAbstractTestCase.TesterFalseFileFilter.this.invoked;
+            return this.invoked;
         }
 
         public void setInvoked(final boolean invoked) {
-            IOFileFilterAbstractTestCase.TesterFalseFileFilter.this.invoked = invoked;
+            this.invoked = invoked;
         }
 
         public void reset() {
+            // set invoked boolean{false} to TesterFalseFileFilter{}
             setInvoked(false);
         }
     }

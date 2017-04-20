@@ -1,6 +1,6 @@
+// Generated from CommentTitle.g4 by ANTLR 4.6
 package com.nerzid.autocomment.grammar;
 
-// Generated from CommentTitle.g4 by ANTLR 4.5.3
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class CommentTitleParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.5.3", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.6", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -20,9 +20,9 @@ public class CommentTitleParser extends Parser {
 	public static final int
 		NPR=1, V=2, VR=3, PP=4, WS=5;
 	public static final int
-		RULE_rule1 = 0, RULE_boolean_one_verb_rule = 1, RULE_boolean_two_verb_rule = 2;
+		RULE_rule1 = 0, RULE_one_verb_rule = 1, RULE_two_verb_rule = 2;
 	public static final String[] ruleNames = {
-		"rule1", "boolean_one_verb_rule", "boolean_two_verb_rule"
+		"rule1", "one_verb_rule", "two_verb_rule"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -90,7 +90,7 @@ public class CommentTitleParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_rule1; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).enterRule1(this);
+			if ( listener instanceof CommentTitleListener) ((CommentTitleListener)listener).enterRule1(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
@@ -98,7 +98,7 @@ public class CommentTitleParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof CommentTitleVisitor ) return ((CommentTitleVisitor<? extends T>)visitor).visitRule1(this);
+			if ( visitor instanceof CommentTitleVisitor) return ((CommentTitleVisitor<? extends T>)visitor).visitRule1(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -115,6 +115,7 @@ public class CommentTitleParser extends Parser {
 			setState(7);
 			match(NPR);
 			setState(9);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==PP) {
 				{
@@ -138,40 +139,49 @@ public class CommentTitleParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Boolean_one_verb_ruleContext extends ParserRuleContext {
+	public static class One_verb_ruleContext extends ParserRuleContext {
 		public TerminalNode V() { return getToken(CommentTitleParser.V, 0); }
-		public TerminalNode NPR() { return getToken(CommentTitleParser.NPR, 0); }
 		public TerminalNode EOF() { return getToken(CommentTitleParser.EOF, 0); }
-		public Boolean_one_verb_ruleContext(ParserRuleContext parent, int invokingState) {
+		public TerminalNode NPR() { return getToken(CommentTitleParser.NPR, 0); }
+		public One_verb_ruleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_boolean_one_verb_rule; }
+		@Override public int getRuleIndex() { return RULE_one_verb_rule; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).enterBoolean_one_verb_rule(this);
+			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).enterOne_verb_rule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).exitBoolean_one_verb_rule(this);
+			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).exitOne_verb_rule(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof CommentTitleVisitor ) return ((CommentTitleVisitor<? extends T>)visitor).visitBoolean_one_verb_rule(this);
+			if ( visitor instanceof CommentTitleVisitor ) return ((CommentTitleVisitor<? extends T>)visitor).visitOne_verb_rule(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final Boolean_one_verb_ruleContext boolean_one_verb_rule() throws RecognitionException {
-		Boolean_one_verb_ruleContext _localctx = new Boolean_one_verb_ruleContext(_ctx, getState());
-		enterRule(_localctx, 2, RULE_boolean_one_verb_rule);
+	public final One_verb_ruleContext one_verb_rule() throws RecognitionException {
+		One_verb_ruleContext _localctx = new One_verb_ruleContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_one_verb_rule);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(13);
 			match(V);
-			setState(14);
-			match(NPR);
 			setState(15);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==NPR) {
+				{
+				setState(14);
+				match(NPR);
+				}
+			}
+
+			setState(17);
 			match(EOF);
 			}
 		}
@@ -186,7 +196,7 @@ public class CommentTitleParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Boolean_two_verb_ruleContext extends ParserRuleContext {
+	public static class Two_verb_ruleContext extends ParserRuleContext {
 		public List<TerminalNode> V() { return getTokens(CommentTitleParser.V); }
 		public TerminalNode V(int i) {
 			return getToken(CommentTitleParser.V, i);
@@ -196,48 +206,49 @@ public class CommentTitleParser extends Parser {
 			return getToken(CommentTitleParser.NPR, i);
 		}
 		public TerminalNode EOF() { return getToken(CommentTitleParser.EOF, 0); }
-		public Boolean_two_verb_ruleContext(ParserRuleContext parent, int invokingState) {
+		public Two_verb_ruleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_boolean_two_verb_rule; }
+		@Override public int getRuleIndex() { return RULE_two_verb_rule; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).enterBoolean_two_verb_rule(this);
+			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).enterTwo_verb_rule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).exitBoolean_two_verb_rule(this);
+			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).exitTwo_verb_rule(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof CommentTitleVisitor ) return ((CommentTitleVisitor<? extends T>)visitor).visitBoolean_two_verb_rule(this);
+			if ( visitor instanceof CommentTitleVisitor ) return ((CommentTitleVisitor<? extends T>)visitor).visitTwo_verb_rule(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final Boolean_two_verb_ruleContext boolean_two_verb_rule() throws RecognitionException {
-		Boolean_two_verb_ruleContext _localctx = new Boolean_two_verb_ruleContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_boolean_two_verb_rule);
+	public final Two_verb_ruleContext two_verb_rule() throws RecognitionException {
+		Two_verb_ruleContext _localctx = new Two_verb_ruleContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_two_verb_rule);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(17);
-			match(V);
-			setState(18);
-			match(NPR);
 			setState(19);
 			match(V);
+			setState(20);
+			match(NPR);
 			setState(21);
+			match(V);
+			setState(23);
+			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NPR) {
 				{
-				setState(20);
+				setState(22);
 				match(NPR);
 				}
 			}
 
-			setState(23);
+			setState(25);
 			match(EOF);
 			}
 		}
@@ -253,14 +264,15 @@ public class CommentTitleParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\7\34\4\2\t\2\4\3"+
-		"\t\3\4\4\t\4\3\2\3\2\3\2\5\2\f\n\2\3\2\3\2\3\3\3\3\3\3\3\3\3\4\3\4\3\4"+
-		"\3\4\5\4\30\n\4\3\4\3\4\3\4\2\2\5\2\4\6\2\2\32\2\b\3\2\2\2\4\17\3\2\2"+
-		"\2\6\23\3\2\2\2\b\t\7\4\2\2\t\13\7\3\2\2\n\f\7\6\2\2\13\n\3\2\2\2\13\f"+
-		"\3\2\2\2\f\r\3\2\2\2\r\16\7\2\2\3\16\3\3\2\2\2\17\20\7\4\2\2\20\21\7\3"+
-		"\2\2\21\22\7\2\2\3\22\5\3\2\2\2\23\24\7\4\2\2\24\25\7\3\2\2\25\27\7\4"+
-		"\2\2\26\30\7\3\2\2\27\26\3\2\2\2\27\30\3\2\2\2\30\31\3\2\2\2\31\32\7\2"+
-		"\2\3\32\7\3\2\2\2\4\13\27";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\7\36\4\2\t\2\4\3"+
+		"\t\3\4\4\t\4\3\2\3\2\3\2\5\2\f\n\2\3\2\3\2\3\3\3\3\5\3\22\n\3\3\3\3\3"+
+		"\3\4\3\4\3\4\3\4\5\4\32\n\4\3\4\3\4\3\4\2\2\5\2\4\6\2\2\35\2\b\3\2\2\2"+
+		"\4\17\3\2\2\2\6\25\3\2\2\2\b\t\7\4\2\2\t\13\7\3\2\2\n\f\7\6\2\2\13\n\3"+
+		"\2\2\2\13\f\3\2\2\2\f\r\3\2\2\2\r\16\7\2\2\3\16\3\3\2\2\2\17\21\7\4\2"+
+		"\2\20\22\7\3\2\2\21\20\3\2\2\2\21\22\3\2\2\2\22\23\3\2\2\2\23\24\7\2\2"+
+		"\3\24\5\3\2\2\2\25\26\7\4\2\2\26\27\7\3\2\2\27\31\7\4\2\2\30\32\7\3\2"+
+		"\2\31\30\3\2\2\2\31\32\3\2\2\2\32\33\3\2\2\2\33\34\7\2\2\3\34\7\3\2\2"+
+		"\2\5\13\21\31";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

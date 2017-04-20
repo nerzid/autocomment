@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,14 +30,20 @@ public class JabberWorkItemHandlerTest extends AbstractBaseTest {
         JabberWorkItemHandler handler = new JabberWorkItemHandler();
         WorkItemImpl workItem = new WorkItemImpl();
         // The contact in To must be added as a contact in the chat of gtalk
+        // set parameter String{"To"} to WorkItemImpl{workItem}
         workItem.setParameter("To", "drools.demo@gmail.com");
+        // set parameter String{"Text"} to WorkItemImpl{workItem}
         workItem.setParameter("Text", "Hello from Ruleflow WorkItem");
         // workItem.setParameter( "Server", "talk.google.com" );
         // workItem.setParameter( "Port", "5222" );
+        // set parameter String{"Service"} to WorkItemImpl{workItem}
         workItem.setParameter("Service", "gmail.com");
+        // set parameter String{"User"} to WorkItemImpl{workItem}
         workItem.setParameter("User", "drools.demo");
+        // set parameter String{"Password"} to WorkItemImpl{workItem}
         workItem.setParameter("Password", "pa$$word");
-        WorkItemManager manager = new org.drools.core.process.instance.impl.DefaultWorkItemManager(null);
+        WorkItemManager manager = new DefaultWorkItemManager(null);
+        // execute work WorkItemImpl{workItem} to JabberWorkItemHandler{handler}
         handler.executeWorkItem(workItem, manager);
         // In a real case i must register the WorkItemHandler:
         // workingMemory.getWorkItemManager()

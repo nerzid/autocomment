@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,29 +17,30 @@
 
 package org.jbpm.persistence.timer;
 
+import org.jbpm.process.core.timer.impl.GlobalTimerService.DisposableCommandService;
 import org.drools.core.command.CommandService;
 import org.jbpm.persistence.jta.ContainerManagedTransactionManager;
+import org.drools.persistence.jpa.JpaTimerJobInstance;
 import org.drools.core.time.impl.DefaultJobHandle;
-import org.jbpm.process.core.timer.impl.GlobalTimerService.DisposableCommandService;
+import org.drools.persistence.TransactionManagerFactory;
+import org.slf4j.Logger;
 import org.kie.api.runtime.Environment;
+import org.drools.core.time.Trigger;
 import org.jbpm.process.core.timer.impl.GlobalTimerService;
 import org.drools.core.time.InternalSchedulerService;
 import org.drools.persistence.jpa.JDKCallableJobCommand;
 import org.drools.core.time.Job;
-import org.drools.core.time.JobContext;
-import org.drools.core.time.JobHandle;
-import org.drools.persistence.jpa.JpaTimerJobInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import EnvironmentName.TRANSACTION_MANAGER;
 import org.jbpm.process.core.timer.TimerServiceRegistry;
+import org.drools.core.time.JobContext;
+import org.slf4j.LoggerFactory;
 import org.drools.persistence.TransactionManager;
-import org.drools.persistence.TransactionManagerFactory;
-import org.drools.core.time.Trigger;
+import org.drools.core.time.JobHandle;
 
 /**
  * Extension to the regular <code>JpaTimerJobInstance</code> that makes use of
  * GlobalTimerService to allow auto reactivate session.
- * 
+ *
  * Important to note is that when timer service created session this job instance
  * will dispose that session to leave it in the same state it was before job was executed
  * to avoid concurrent usage of the same session by different threads
@@ -62,13 +63,13 @@ public class GlobalJpaTimerJobInstance extends JpaTimerJobInstance {
         TransactionManager jtaTm = null;
         boolean success = false;
         try {
-            JDKCallableJobCommand command = new JDKCallableJobCommand(GlobalJpaTimerJobInstance.this);
+            JDKCallableJobCommand command = new JDKCallableJobCommand(this);
             if ((scheduler) == null) {
                 scheduler = ((InternalSchedulerService) (TimerServiceRegistry.getInstance().get(timerServiceId)));
-            } 
+            }
             if ((scheduler) == null) {
                 throw new RuntimeException(("No scheduler found for " + (timerServiceId)));
-            } 
+            }
             jtaTm = startTxIfNeeded(((GlobalTimerService) (scheduler)).getRuntimeManager().getEnvironment().getEnvironment());
             commandService = ((GlobalTimerService) (scheduler)).getCommandService(getJobContext());
             commandService.execute(command);
@@ -85,8 +86,8 @@ public class GlobalJpaTimerJobInstance extends JpaTimerJobInstance {
                 if (allowedToDispose(((DisposableCommandService) (commandService)).getEnvironment())) {
                     GlobalJpaTimerJobInstance.logger.debug("Allowed to dispose command service from global timer job instance");
                     ((DisposableCommandService) (commandService)).dispose();
-                } 
-            } 
+                }
+            }
             closeTansactionIfNeeded(jtaTm, success);
         }
     }
@@ -99,18 +100,18 @@ public class GlobalJpaTimerJobInstance extends JpaTimerJobInstance {
     protected boolean allowedToDispose(Environment environment) {
         if (hasEnvironmentEntry(environment, "IS_JTA_TRANSACTION", false)) {
             return true;
-        } 
+        }
         TransactionManager transactionManager = null;
-        Object txm = environment.get(EnvironmentName.TRANSACTION_MANAGER);
+        Object txm = environment.get(TRANSACTION_MANAGER);
         if ((txm != null) && (txm instanceof TransactionManager)) {
             transactionManager = ((TransactionManager) (txm));
-        } else {
+        }else {
             transactionManager = TransactionManagerFactory.get().newTransactionManager();
         }
         int status = transactionManager.getStatus();
         if (((status != (TransactionManager.STATUS_NO_TRANSACTION)) && (status != (TransactionManager.STATUS_ROLLEDBACK))) && (status != (TransactionManager.STATUS_COMMITTED))) {
             return false;
-        } 
+        }
         return true;
     }
 
@@ -118,7 +119,7 @@ public class GlobalJpaTimerJobInstance extends JpaTimerJobInstance {
         Object envEntry = environment.get(name);
         if (value == null) {
             return envEntry == null;
-        } 
+        }
         return value.equals(envEntry);
     }
 
@@ -126,13 +127,13 @@ public class GlobalJpaTimerJobInstance extends JpaTimerJobInstance {
         try {
             if (hasEnvironmentEntry(environment, "IS_TIMER_CMT", true)) {
                 return null;
-            } 
-            if ((environment.get(EnvironmentName.TRANSACTION_MANAGER)) instanceof ContainerManagedTransactionManager) {
+            }
+            if ((environment.get(TRANSACTION_MANAGER)) instanceof ContainerManagedTransactionManager) {
                 TransactionManager tm = TransactionManagerFactory.get().newTransactionManager();
                 if (tm.begin()) {
                     return tm;
-                } 
-            } 
+                }
+            }
         } catch (Exception e) {
             GlobalJpaTimerJobInstance.logger.debug("Unable to optionally start transaction due to {}", e.getMessage(), e);
         }
@@ -143,10 +144,10 @@ public class GlobalJpaTimerJobInstance extends JpaTimerJobInstance {
         if (jtaTm != null) {
             if (commit) {
                 jtaTm.commit(true);
-            } else {
+            }else {
                 jtaTm.rollback(true);
             }
-        } 
+        }
     }
 }
 

@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,13 +28,13 @@ public class ExtendedRuleFlowLogEvent extends RuleFlowLogEvent {
 
     public ExtendedRuleFlowLogEvent(int type, String processId, String processName, long processInstanceId, long parentProcessInstanceId) {
         super(type, processId, processName, processInstanceId);
-        ExtendedRuleFlowLogEvent.this.parentProcessInstanceId = parentProcessInstanceId;
+        this.parentProcessInstanceId = parentProcessInstanceId;
     }
 
     public ExtendedRuleFlowLogEvent(int type, String processId, String processName, long processInstanceId, int processInstanceState, String outcome) {
         super(type, processId, processName, processInstanceId);
-        ExtendedRuleFlowLogEvent.this.processInstanceState = processInstanceState;
-        ExtendedRuleFlowLogEvent.this.outcome = outcome;
+        this.processInstanceState = processInstanceState;
+        this.outcome = outcome;
     }
 
     public long getParentProcessInstanceId() {
@@ -42,7 +42,7 @@ public class ExtendedRuleFlowLogEvent extends RuleFlowLogEvent {
     }
 
     public void setParentProcessInstanceId(long parentProcessInstanceId) {
-        ExtendedRuleFlowLogEvent.this.parentProcessInstanceId = parentProcessInstanceId;
+        this.parentProcessInstanceId = parentProcessInstanceId;
     }
 
     public String getOutcome() {
@@ -50,7 +50,7 @@ public class ExtendedRuleFlowLogEvent extends RuleFlowLogEvent {
     }
 
     public void setOutcome(String outcome) {
-        ExtendedRuleFlowLogEvent.this.outcome = outcome;
+        this.outcome = outcome;
     }
 
     public int getProcessInstanceState() {
@@ -58,7 +58,7 @@ public class ExtendedRuleFlowLogEvent extends RuleFlowLogEvent {
     }
 
     protected void setProcessInstanceState(int processInstanceState) {
-        ExtendedRuleFlowLogEvent.this.processInstanceState = processInstanceState;
+        this.processInstanceState = processInstanceState;
     }
 }
 

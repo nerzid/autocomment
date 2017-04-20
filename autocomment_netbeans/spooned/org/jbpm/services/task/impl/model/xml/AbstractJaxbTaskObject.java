@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,10 +16,10 @@
 
 package org.jbpm.services.task.impl.model.xml;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.io.IOException;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import java.util.List;
 import java.lang.reflect.Method;
@@ -38,7 +38,7 @@ public class AbstractJaxbTaskObject<T> {
     }
 
     protected AbstractJaxbTaskObject(Class<?> realClass) {
-        AbstractJaxbTaskObject.this.realClass = realClass;
+        this.realClass = realClass;
     }
 
     protected AbstractJaxbTaskObject(T taskObject, Class<?> objectInterface) {
@@ -53,32 +53,34 @@ public class AbstractJaxbTaskObject<T> {
                 String fieldName;
                 if (getIsMethod.getReturnType().equals(User.class)) {
                     continue;
-                } 
+                }
                 if (methodName.startsWith("set")) {
                     continue;
-                } 
+                }
                 if (methodName.startsWith("get")) {
                     fieldName = methodName.substring(3);
-                } else if (methodName.startsWith("is")) {
-                    fieldName = methodName.substring(2);
-                } else {
-                    assert false : ((("Unknown method '" + methodName) + "' in ") + (AbstractJaxbTaskObject.this.getClass().getSimpleName())) + ".";
-                    continue;
-                }
+                }else
+                    if (methodName.startsWith("is")) {
+                        fieldName = methodName.substring(2);
+                    }else {
+                        assert false : ((("Unknown method '" + methodName) + "' in ") + (this.getClass().getSimpleName())) + ".";
+                        continue;
+                    }
+                
                 // getField -> field (lowercase f)
                 fieldName = (fieldName.substring(0, 1).toLowerCase()) + (fieldName.substring(1));
                 try {
-                    Field field = AbstractJaxbTaskObject.this.getClass().getDeclaredField(fieldName);
+                    Field field = this.getClass().getDeclaredField(fieldName);
                     boolean origAccessStatus = field.isAccessible();
                     field.setAccessible(true);
                     Object setObject = getIsMethod.invoke(taskObject, new Object[0]);
-                    field.set(AbstractJaxbTaskObject.this, setObject);
+                    field.set(this, setObject);
                     field.setAccessible(origAccessStatus);
                 } catch (Exception e) {
-                    throw new RuntimeException((((("Unable to initialize " + fieldName) + " when creating ") + (AbstractJaxbTaskObject.this.getClass().getSimpleName())) + "."), e);
+                    throw new RuntimeException((((("Unable to initialize " + fieldName) + " when creating ") + (this.getClass().getSimpleName())) + "."), e);
                 }
             }
-        } 
+        }
     }
 
     static <T> T unsupported(Class<T> realClass) {
@@ -94,11 +96,11 @@ public class AbstractJaxbTaskObject<T> {
             for (I interfaze : interfacelList) {
                 if (jaxbClass.isAssignableFrom(interfaze.getClass())) {
                     jaxbList.add(((J) (interfaze)));
-                } else {
+                }else {
                     jaxbList.add(AbstractJaxbTaskObject.jaxbConstructorWithInternalAsArgument(jaxbClass, interfaceClass, interfaze));
                 }
             }
-        } else {
+        }else {
             jaxbList = new ArrayList<J>();
         }
         return jaxbList;
@@ -118,15 +120,17 @@ public class AbstractJaxbTaskObject<T> {
     static <T> T whenNull(Object value, T defaultValue) {
         if (value == null) {
             return defaultValue;
-        } 
+        }
         return ((T) (value));
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // unsupported Class{realClass} to void{AbstractJaxbTaskObject}
         AbstractJaxbTaskObject.unsupported(realClass);
     }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        // unsupported Class{realClass} to void{AbstractJaxbTaskObject}
         AbstractJaxbTaskObject.unsupported(realClass);
     }
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,19 +17,19 @@
 
 package org.jbpm.process.workitem.webservice;
 
-import java.lang.reflect.Array;
+import org.kie.api.executor.ExecutionResults;
 import org.kie.internal.runtime.Cacheable;
 import org.apache.cxf.endpoint.Client;
+import javax.xml.namespace.QName;
 import org.kie.api.executor.Command;
 import org.kie.api.executor.CommandContext;
+import org.kie.api.runtime.process.WorkItem;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.cxf.endpoint.dynamic.DynamicClientFactory;
-import org.kie.api.executor.ExecutionResults;
+import Message.ENDPOINT_ADDRESS;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.xml.namespace.QName;
-import org.kie.api.runtime.process.WorkItem;
 
 /**
  * Web Service executor command that executes web service call using Apache CXF.
@@ -42,7 +42,7 @@ import org.kie.api.runtime.process.WorkItem;
  *  <li>Namespace - name space of the web service</li>
  *  <li>Endpoint - overrides the endpoint address defined in the referenced WSDL.</li>
  * </ul>
- * 
+ *
  * Web service call is synchronous but since it's executor command it will be invoked as asynchronous task any way.
  */
 public class WebServiceCommand implements Command , Cacheable {
@@ -64,25 +64,27 @@ public class WebServiceCommand implements Command , Cacheable {
             String endpointAddress = ((String) (workItem.getParameter("Endpoint")));
             if ((workItem.getParameter("Parameter")) instanceof Object[]) {
                 parameters = ((Object[]) (workItem.getParameter("Parameter")));
-            } else if (((workItem.getParameter("Parameter")) != null) && (workItem.getParameter("Parameter").getClass().isArray())) {
-                int length = Array.getLength(workItem.getParameter("Parameter"));
-                parameters = new Object[length];
-                for (int i = 0; i < length; i++) {
-                    parameters[i] = Array.get(workItem.getParameter("Parameter"), i);
+            }else
+                if (((workItem.getParameter("Parameter")) != null) && (workItem.getParameter("Parameter").getClass().isArray())) {
+                    int length = java.lang.reflect.Array.getLength(workItem.getParameter("Parameter"));
+                    parameters = new Object[length];
+                    for (int i = 0; i < length; i++) {
+                        parameters[i] = java.lang.reflect.Array.get(workItem.getParameter("Parameter"), i);
+                    }
+                }else {
+                    parameters = new Object[]{ workItem.getParameter("Parameter") };
                 }
-            } else {
-                parameters = new Object[]{ workItem.getParameter("Parameter") };
-            }
+            
             Client client = getWSClient(workItem, interfaceRef, ctx);
             // Override endpoint address if configured.
             if ((endpointAddress != null) && (!("".equals(endpointAddress)))) {
-                client.getRequestContext().put(Message.ENDPOINT_ADDRESS, endpointAddress);
-            } 
+                client.getRequestContext().put(ENDPOINT_ADDRESS, endpointAddress);
+            }
             Object[] result = client.invoke(operationRef, parameters);
             ExecutionResults results = new ExecutionResults();
             if ((result == null) || ((result.length) == 0)) {
                 results.setData("Result", null);
-            } else {
+            }else {
                 results.setData("Result", result[0]);
             }
             WebServiceCommand.logger.debug("Received sync response {}", result);
@@ -95,22 +97,22 @@ public class WebServiceCommand implements Command , Cacheable {
     protected synchronized Client getWSClient(WorkItem workItem, String interfaceRef, CommandContext ctx) {
         if (WebServiceCommand.clients.containsKey(interfaceRef)) {
             return WebServiceCommand.clients.get(interfaceRef);
-        } 
+        }
         String importLocation = ((String) (workItem.getParameter("Url")));
         String importNamespace = ((String) (workItem.getParameter("Namespace")));
         if ((((importLocation != null) && ((importLocation.trim().length()) > 0)) && (importNamespace != null)) && ((importNamespace.trim().length()) > 0)) {
             Client client = getDynamicClientFactory(ctx).createClient(importLocation, new QName(importNamespace, interfaceRef), Thread.currentThread().getContextClassLoader(), null);
             WebServiceCommand.clients.put(interfaceRef, client);
             return client;
-        } 
+        }
         return null;
     }
 
     protected synchronized DynamicClientFactory getDynamicClientFactory(CommandContext ctx) {
-        if ((WebServiceCommand.this.dcf) == null) {
-            WebServiceCommand.this.dcf = JaxWsDynamicClientFactory.newInstance();
-        } 
-        return WebServiceCommand.this.dcf;
+        if ((this.dcf) == null) {
+            this.dcf = JaxWsDynamicClientFactory.newInstance();
+        }
+        return this.dcf;
     }
 
     @Override
@@ -119,7 +121,7 @@ public class WebServiceCommand implements Command , Cacheable {
             for (Client client : WebServiceCommand.clients.values()) {
                 client.destroy();
             }
-        } 
+        }
     }
 }
 

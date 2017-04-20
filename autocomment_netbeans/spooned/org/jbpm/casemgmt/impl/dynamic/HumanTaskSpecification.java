@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,11 +44,11 @@ public class HumanTaskSpecification implements TaskSpecification {
     private Map<String, Object> parameters;
 
     public HumanTaskSpecification(String taskName, String actorIds, String groupIds, String description, Map<String, Object> parameters) {
-        HumanTaskSpecification.this.taskName = taskName;
-        HumanTaskSpecification.this.actorIds = actorIds;
-        HumanTaskSpecification.this.groupIds = groupIds;
-        HumanTaskSpecification.this.description = description;
-        HumanTaskSpecification.this.parameters = parameters;
+        this.taskName = taskName;
+        this.actorIds = actorIds;
+        this.groupIds = groupIds;
+        this.description = description;
+        this.parameters = parameters;
     }
 
     @Override
@@ -60,13 +60,19 @@ public class HumanTaskSpecification implements TaskSpecification {
     public Map<String, Object> getParameters() {
         if ((taskName) == null) {
             throw new IllegalArgumentException("Missing manadatory parameter - taskName");
-        } 
+        }
         Map<String, Object> workParams = new HashMap<String, Object>();
+        // put all Map{parameters} to Map{workParams}
         workParams.putAll(parameters);
+        // put String{"NodeName"} to Map{workParams}
         workParams.put("NodeName", taskName);
+        // put String{"TaskName"} to Map{workParams}
         workParams.put("TaskName", taskName);
+        // put String{"ActorId"} to Map{workParams}
         workParams.put("ActorId", actorIds);
+        // put String{"GroupId"} to Map{workParams}
         workParams.put("GroupId", groupIds);
+        // put String{"Comment"} to Map{workParams}
         workParams.put("Comment", description);
         return workParams;
     }

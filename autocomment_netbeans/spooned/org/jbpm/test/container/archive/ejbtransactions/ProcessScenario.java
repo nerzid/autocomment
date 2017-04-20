@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ public abstract class ProcessScenario {
 
     /**
      * Constructor with mandatory parameters:
-     * 
+     *
      * @param kbase
      *            KnowledgeBase instance containing the process definition
      * @param processId
@@ -48,9 +48,9 @@ public abstract class ProcessScenario {
      *            Parameters which will be passed to process instance.
      */
     public ProcessScenario(KieBase kbase, String processId, Map<String, Object> params) {
-        ProcessScenario.this.kbase = kbase;
-        ProcessScenario.this.processId = processId;
-        ProcessScenario.this.params = params;
+        this.kbase = kbase;
+        this.processId = processId;
+        this.params = params;
     }
 
     public ProcessScenario(KieBase kbase, String processId, Map<String, Object> params, ProcessEventListener l) {
@@ -62,6 +62,7 @@ public abstract class ProcessScenario {
      * Enables adding of listeners to monitor the sequence flow.
      */
     public void addProcessEventListener(ProcessEventListener listener) {
+        // add ProcessEventListener{listener} to List{listeners}
         listeners.add(listener);
     }
 
@@ -99,7 +100,7 @@ public abstract class ProcessScenario {
 
     /**
      * Useful when only one listener was registered.
-     * 
+     *
      * @return the first registered listener.
      */
     public ProcessEventListener getFirstListener() {
@@ -107,7 +108,7 @@ public abstract class ProcessScenario {
     }
 
     public KieBase getKbase() {
-        return ProcessScenario.this.kbase;
+        return this.kbase;
     }
 }
 

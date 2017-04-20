@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,6 +39,7 @@ public class HexDumpTest {
             testArray[j] = ((byte) (j));
         }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // dump byte[]{testArray} to void{HexDump}
         HexDump.dump(testArray, 0, stream, 0);
         byte[] outputArray = new byte[16 * (73 + (HexDump.EOL.length()))];
         for (int j = 0; j < 16; j++) {
@@ -63,12 +64,14 @@ public class HexDumpTest {
             System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset, HexDump.EOL.getBytes().length);
         }
         byte[] actualOutput = stream.toByteArray();
+        // assert equals String{"array size mismatch"} to void{Assert}
         Assert.assertEquals("array size mismatch", outputArray.length, actualOutput.length);
         for (int j = 0; j < (outputArray.length); j++) {
             Assert.assertEquals((("array[ " + j) + "] mismatch"), outputArray[j], actualOutput[j]);
         }
         // verify proper behavior with non-zero offset
         stream = new ByteArrayOutputStream();
+        // dump byte[]{testArray} to void{HexDump}
         HexDump.dump(testArray, 268435456, stream, 0);
         outputArray = new byte[16 * (73 + (HexDump.EOL.length()))];
         for (int j = 0; j < 16; j++) {
@@ -93,12 +96,14 @@ public class HexDumpTest {
             System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset, HexDump.EOL.getBytes().length);
         }
         actualOutput = stream.toByteArray();
+        // assert equals String{"array size mismatch"} to void{Assert}
         Assert.assertEquals("array size mismatch", outputArray.length, actualOutput.length);
         for (int j = 0; j < (outputArray.length); j++) {
             Assert.assertEquals((("array[ " + j) + "] mismatch"), outputArray[j], actualOutput[j]);
         }
         // verify proper behavior with negative offset
         stream = new ByteArrayOutputStream();
+        // dump byte[]{testArray} to void{HexDump}
         HexDump.dump(testArray, (-16777216), stream, 0);
         outputArray = new byte[16 * (73 + (HexDump.EOL.length()))];
         for (int j = 0; j < 16; j++) {
@@ -123,12 +128,14 @@ public class HexDumpTest {
             System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset, HexDump.EOL.getBytes().length);
         }
         actualOutput = stream.toByteArray();
+        // assert equals String{"array size mismatch"} to void{Assert}
         Assert.assertEquals("array size mismatch", outputArray.length, actualOutput.length);
         for (int j = 0; j < (outputArray.length); j++) {
             Assert.assertEquals((("array[ " + j) + "] mismatch"), outputArray[j], actualOutput[j]);
         }
         // verify proper behavior with non-zero index
         stream = new ByteArrayOutputStream();
+        // dump byte[]{testArray} to void{HexDump}
         HexDump.dump(testArray, 268435456, stream, 129);
         outputArray = new byte[(8 * (73 + (HexDump.EOL.length()))) - 1];
         for (int j = 0; j < 8; j++) {
@@ -147,7 +154,7 @@ public class HexDumpTest {
                 if (index < 256) {
                     outputArray[(offset++)] = ((byte) (toHex((index / 16))));
                     outputArray[(offset++)] = ((byte) (toHex(index)));
-                } else {
+                }else {
                     outputArray[(offset++)] = ((byte) (' '));
                     outputArray[(offset++)] = ((byte) (' '));
                 }
@@ -157,11 +164,12 @@ public class HexDumpTest {
                 final int index = (129 + (j * 16)) + k;
                 if (index < 256) {
                     outputArray[(offset++)] = ((byte) (toAscii(index)));
-                } 
+                }
             }
             System.arraycopy(HexDump.EOL.getBytes(), 0, outputArray, offset, HexDump.EOL.getBytes().length);
         }
         actualOutput = stream.toByteArray();
+        // assert equals String{"array size mismatch"} to void{Assert}
         Assert.assertEquals("array size mismatch", outputArray.length, actualOutput.length);
         for (int j = 0; j < (outputArray.length); j++) {
             Assert.assertEquals((("array[ " + j) + "] mismatch"), outputArray[j], actualOutput[j]);
@@ -193,7 +201,7 @@ public class HexDumpTest {
         char rval = '.';
         if ((c >= 32) && (c <= 126)) {
             rval = ((char) (c));
-        } 
+        }
         return rval;
     }
 }

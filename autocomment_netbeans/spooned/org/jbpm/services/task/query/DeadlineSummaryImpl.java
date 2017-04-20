@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,9 +33,9 @@ public class DeadlineSummaryImpl implements DeadlineSummary {
 
     public DeadlineSummaryImpl(long taskId, long deadlineId, Date date) {
         super();
-        DeadlineSummaryImpl.this.taskId = taskId;
-        DeadlineSummaryImpl.this.deadlineId = deadlineId;
-        DeadlineSummaryImpl.this.date = date;
+        this.taskId = taskId;
+        this.deadlineId = deadlineId;
+        this.date = date;
     }
 
     public long getTaskId() {
@@ -43,7 +43,7 @@ public class DeadlineSummaryImpl implements DeadlineSummary {
     }
 
     public void setTaskId(long taskId) {
-        DeadlineSummaryImpl.this.taskId = taskId;
+        this.taskId = taskId;
     }
 
     public long getDeadlineId() {
@@ -51,7 +51,7 @@ public class DeadlineSummaryImpl implements DeadlineSummary {
     }
 
     public void setDeadlineId(long deadlineId) {
-        DeadlineSummaryImpl.this.deadlineId = deadlineId;
+        this.deadlineId = deadlineId;
     }
 
     public Date getDate() {
@@ -59,7 +59,7 @@ public class DeadlineSummaryImpl implements DeadlineSummary {
     }
 
     public void setDate(Date date) {
-        DeadlineSummaryImpl.this.date = date;
+        this.date = date;
     }
 
     @Override
@@ -67,14 +67,14 @@ public class DeadlineSummaryImpl implements DeadlineSummary {
         final int prime = 31;
         int result = 1;
         result = (prime * result) + ((date) == null ? 0 : date.hashCode());
-        result = (prime * result) + ((int) (((deadlineId) ^ ((deadlineId) >>> 32))));
-        result = (prime * result) + ((int) (((taskId) ^ ((taskId) >>> 32))));
+        result = (prime * result) + ((int) ((deadlineId) ^ ((deadlineId) >>> 32)));
+        result = (prime * result) + ((int) ((taskId) ^ ((taskId) >>> 32)));
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if ((DeadlineSummaryImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -88,8 +88,10 @@ public class DeadlineSummaryImpl implements DeadlineSummary {
             if ((other.date) != null)
                 return false;
             
-        } else if ((date.getTime()) != (other.date.getTime()))
-            return false;
+        }else
+            if ((date.getTime()) != (other.date.getTime()))
+                return false;
+            
         
         if ((deadlineId) != (other.deadlineId))
             return false;

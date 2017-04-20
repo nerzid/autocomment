@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,7 @@ import org.jbpm.workflow.core.NodeContainer;
 import java.io.Serializable;
 
 /**
+ *
  */
 public class NodeContainerImpl implements Serializable , NodeContainer {
     private static final long serialVersionUID = 510L;
@@ -32,31 +33,32 @@ public class NodeContainerImpl implements Serializable , NodeContainer {
     private Map<Long, Node> nodes;
 
     public NodeContainerImpl() {
-        NodeContainerImpl.this.nodes = new HashMap<Long, Node>();
+        this.nodes = new HashMap<Long, Node>();
     }
 
     public void addNode(final Node node) {
+        // validate add Node{node} to NodeContainerImpl{}
         validateAddNode(node);
-        if (!(NodeContainerImpl.this.nodes.containsValue(node))) {
-            NodeContainerImpl.this.nodes.put(new Long(node.getId()), node);
-        } 
+        if (!(this.nodes.containsValue(node))) {
+            this.nodes.put(new Long(node.getId()), node);
+        }
     }
 
     protected void validateAddNode(Node node) {
         if (node == null) {
             throw new IllegalArgumentException("Node is null!");
-        } 
+        }
     }
 
     public Node[] getNodes() {
-        return ((Node[]) (NodeContainerImpl.this.nodes.values().toArray(new Node[NodeContainerImpl.this.nodes.size()])));
+        return ((Node[]) (this.nodes.values().toArray(new Node[this.nodes.size()])));
     }
 
     public Node getNode(final long id) {
-        Node node = NodeContainerImpl.this.nodes.get(id);
+        Node node = this.nodes.get(id);
         if (node == null) {
             throw new IllegalArgumentException(("Unknown node id: " + id));
-        } 
+        }
         return node;
     }
 
@@ -65,17 +67,19 @@ public class NodeContainerImpl implements Serializable , NodeContainer {
     }
 
     public void removeNode(final Node node) {
+        // validate remove Node{node} to NodeContainerImpl{}
         validateRemoveNode(node);
-        NodeContainerImpl.this.nodes.remove(new Long(node.getId()));
+        // remove Long{new Long(node.getId())} to Map{this.nodes}
+        this.nodes.remove(new Long(node.getId()));
     }
 
     protected void validateRemoveNode(Node node) {
         if (node == null) {
             throw new IllegalArgumentException("Node is null");
-        } 
-        if ((NodeContainerImpl.this.nodes.get(node.getId())) == null) {
+        }
+        if ((this.nodes.get(node.getId())) == null) {
             throw new IllegalArgumentException(("Unknown node: " + node));
-        } 
+        }
     }
 
     public Context resolveContext(String contextId, Object param) {

@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,17 +22,17 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import org.kie.internal.task.api.TaskVariable;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Transient;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import javax.persistence.SequenceGenerator;
-import java.io.Serializable;
-import org.kie.internal.task.api.TaskVariable;
-import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import org.slf4j.Logger;
+import javax.persistence.Temporal;
+import org.slf4j.LoggerFactory;
+import java.io.Serializable;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @SequenceGenerator(allocationSize = 1, name = "taskVarIdSeq", sequenceName = "TASK_VAR_ID_SEQ")
@@ -100,35 +100,35 @@ public class TaskVariableImpl implements Serializable , TaskVariable {
     }
 
     public void setId(Long id) {
-        TaskVariableImpl.this.id = id;
+        this.id = id;
     }
 
     public void setTaskId(Long taskId) {
-        TaskVariableImpl.this.taskId = taskId;
+        this.taskId = taskId;
     }
 
     public void setProcessInstanceId(Long processInstanceId) {
-        TaskVariableImpl.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public void setProcessId(String processId) {
-        TaskVariableImpl.this.processId = processId;
+        this.processId = processId;
     }
 
     public void setName(String name) {
-        TaskVariableImpl.this.name = name;
+        this.name = name;
     }
 
     public void setValue(String value) {
         if ((value != null) && ((value.length()) > (VARIABLE_LOG_LENGTH))) {
             value = value.substring(0, VARIABLE_LOG_LENGTH);
             TaskVariableImpl.logger.warn("Task variable '{}' content was trimmed as it was too long (more than {} characters)", name, VARIABLE_LOG_LENGTH);
-        } 
-        TaskVariableImpl.this.value = value;
+        }
+        this.value = value;
     }
 
     public void setModificationDate(Date modificationDate) {
-        TaskVariableImpl.this.modificationDate = modificationDate;
+        this.modificationDate = modificationDate;
     }
 
     public VariableType getType() {
@@ -136,7 +136,7 @@ public class TaskVariableImpl implements Serializable , TaskVariable {
     }
 
     public void setType(VariableType type) {
-        TaskVariableImpl.this.type = type;
+        this.type = type;
     }
 
     @Override

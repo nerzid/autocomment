@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * BpsimAdapterFactory
@@ -25,6 +26,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.common.notify.Notifier;
+import static BpsimPackage.eINSTANCE;
 
 /**
  * <!-- begin-user-doc -->
@@ -52,7 +54,7 @@ public class BpsimAdapterFactory extends AdapterFactoryImpl {
     public BpsimAdapterFactory() {
         if ((BpsimAdapterFactory.modelPackage) == null) {
             BpsimAdapterFactory.modelPackage = BpsimPackage.eINSTANCE;
-        } 
+        }
     }
 
     /**
@@ -67,10 +69,10 @@ public class BpsimAdapterFactory extends AdapterFactoryImpl {
     public boolean isFactoryForType(Object object) {
         if (object == (BpsimAdapterFactory.modelPackage)) {
             return true;
-        } 
+        }
         if (object instanceof EObject) {
             return (((EObject) (object)).eClass().getEPackage()) == (BpsimAdapterFactory.modelPackage);
-        } 
+        }
         return false;
     }
 

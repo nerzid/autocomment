@@ -39,28 +39,30 @@ public final class SQLScriptUtil {
             // Ignore comments.
             if ((line.startsWith("--")) || (line.startsWith("#"))) {
                 continue;
-            } 
+            }
             // If the whole line is a delimiter -> add buffered command to found commands.
             if ((line.equals(SQLScriptUtil.DELIMITER_STANDARD)) || (((databaseType == (DatabaseType.SQLSERVER)) || (databaseType == (DatabaseType.SQLSERVER2008))) && (line.equals(SQLScriptUtil.DELIMITER_MSSQL)))) {
                 if (!("".equals(command.toString()))) {
                     foundCommands.add(command.toString());
                     command.setLength(0);
                     command.trimToSize();
-                } 
-            } 
+                }
+            }
             // Split line by delimiter.
             if (line.contains(SQLScriptUtil.DELIMITER_STANDARD)) {
                 SQLScriptUtil.extractCommandsFromLine(line, ("\\" + (SQLScriptUtil.DELIMITER_STANDARD)), command, foundCommands);
-            } else if (((databaseType == (DatabaseType.SQLSERVER)) || (databaseType == (DatabaseType.SQLSERVER2008))) && (line.contains(SQLScriptUtil.DELIMITER_MSSQL))) {
-                SQLScriptUtil.extractCommandsFromLine(line, SQLScriptUtil.DELIMITER_MSSQL, command, foundCommands);
-            } else {
-                command.append(line).append(" ");
-            }
+            }else
+                if (((databaseType == (DatabaseType.SQLSERVER)) || (databaseType == (DatabaseType.SQLSERVER2008))) && (line.contains(SQLScriptUtil.DELIMITER_MSSQL))) {
+                    SQLScriptUtil.extractCommandsFromLine(line, SQLScriptUtil.DELIMITER_MSSQL, command, foundCommands);
+                }else {
+                    command.append(line).append(" ");
+                }
+            
         }
         // If there's still some buffered command, add it to found commands.
         if (!("".equals(command.toString()))) {
             foundCommands.add(command.toString());
-        } 
+        }
         return foundCommands;
     }
 
@@ -84,11 +86,11 @@ public final class SQLScriptUtil {
                 extractedCommands.add((((bufferedCommand.toString()) + " ") + (lineParts[i])));
                 bufferedCommand.setLength(0);
                 bufferedCommand.trimToSize();
-            } else {
+            }else {
                 // If the line doesn't end with delimiter, buffer the last line part.
                 if ((i == ((lineParts.length) - 1)) && (!(line.endsWith(delimiter)))) {
                     bufferedCommand.append(lineParts[i]);
-                } else {
+                }else {
                     extractedCommands.add(lineParts[i]);
                 }
             }

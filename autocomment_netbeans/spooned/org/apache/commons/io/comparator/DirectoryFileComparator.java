@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,7 +41,7 @@ import java.io.Serializable;
  *       ((AbstractFileComparator) DirectoryFileComparator.DIRECTORY_REVERSE).sort(array);
  * </pre>
  * <p>
- * 
+ *
  * @version $Id: DirectoryFileComparator.java 1642757 2014-12-01 21:09:30Z sebb $
  * @since 2.0
  */
@@ -60,7 +60,7 @@ public class DirectoryFileComparator extends AbstractFileComparator implements S
 
     /**
      * Compare the two files using the {@link File#isDirectory()} method.
-     * 
+     *
      * @param file1 The first file to compare
      * @param file2 The second file to compare
      * @return the result of calling file1's
@@ -72,14 +72,14 @@ public class DirectoryFileComparator extends AbstractFileComparator implements S
 
     /**
      * Convert type to numeric value.
-     * 
+     *
      * @param file The file
      * @return 1 for directories and 2 for files
      */
     private int getType(final File file) {
         if (file.isDirectory()) {
             return 1;
-        } else {
+        }else {
             return 2;
         }
     }

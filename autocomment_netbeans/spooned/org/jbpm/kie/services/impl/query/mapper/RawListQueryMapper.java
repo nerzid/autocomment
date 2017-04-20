@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@ import org.dashbuilder.dataset.DataSet;
 import java.util.List;
 import java.util.Map;
 import org.jbpm.services.api.query.QueryResultMapper;
+import org.jbpm.services.api.query.org.jbpm.kie.services.impl.query.mapper.QueryResultMapper;
 
 /**
  * Dedicated mapper that transforms DataSet to List of lists where each
@@ -55,9 +56,9 @@ public class RawListQueryMapper extends AbstractQueryMapper<List<Object>> implem
                     List<Object> row = buildInstance(dataSetResult, i);
                     mappedResult.add(row);
                 }
-            } 
+            }
             return mappedResult;
-        } 
+        }
         throw new IllegalArgumentException(("Unsupported result for mapping " + result));
     }
 

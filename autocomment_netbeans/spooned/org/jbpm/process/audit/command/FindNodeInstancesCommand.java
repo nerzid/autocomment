@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 
 package org.jbpm.process.audit.command;
 
-import org.jbpm.process.audit.AuditLogService;
 import org.kie.internal.command.Context;
+import org.jbpm.process.audit.AuditLogService;
 import java.util.List;
 import org.jbpm.process.audit.NodeInstanceLog;
 import org.kie.internal.command.ProcessInstanceIdCommand;
@@ -49,24 +49,25 @@ public class FindNodeInstancesCommand extends AuditCommand<List<NodeInstanceLog>
     }
 
     public FindNodeInstancesCommand(long processInstanceId) {
-        FindNodeInstancesCommand.this.processInstanceId = processInstanceId;
-        FindNodeInstancesCommand.this.nodeId = null;
+        this.processInstanceId = processInstanceId;
+        this.nodeId = null;
     }
 
     public FindNodeInstancesCommand(long processInstanceId, String nodeId) {
-        FindNodeInstancesCommand.this.processInstanceId = processInstanceId;
-        FindNodeInstancesCommand.this.nodeId = nodeId;
+        this.processInstanceId = processInstanceId;
+        this.nodeId = nodeId;
         if ((nodeId == null) || (nodeId.isEmpty())) {
             throw new IllegalArgumentException("The nodeId field must not be null or empty.");
-        } 
+        }
     }
 
     public List<NodeInstanceLog> execute(Context cntxt) {
+        // set log Context{cntxt} to FindNodeInstancesCommand{}
         setLogEnvironment(cntxt);
         if (((nodeId) == null) || (nodeId.isEmpty())) {
-            return FindNodeInstancesCommand.this.auditLogService.findNodeInstances(processInstanceId);
-        } else {
-            return FindNodeInstancesCommand.this.auditLogService.findNodeInstances(processInstanceId, nodeId);
+            return this.auditLogService.findNodeInstances(processInstanceId);
+        }else {
+            return this.auditLogService.findNodeInstances(processInstanceId, nodeId);
         }
     }
 
@@ -77,7 +78,7 @@ public class FindNodeInstancesCommand extends AuditCommand<List<NodeInstanceLog>
 
     @Override
     public void setProcessInstanceId(Long processInstanceId) {
-        FindNodeInstancesCommand.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public String getNodeId() {
@@ -85,13 +86,13 @@ public class FindNodeInstancesCommand extends AuditCommand<List<NodeInstanceLog>
     }
 
     public void setNodeId(String nodeId) {
-        FindNodeInstancesCommand.this.nodeId = nodeId;
+        this.nodeId = nodeId;
     }
 
     public String toString() {
         if (((nodeId) == null) || (nodeId.isEmpty())) {
             return (((AuditLogService.class.getSimpleName()) + ".findNodeInstances(") + (processInstanceId)) + ")";
-        } else {
+        }else {
             return (((((AuditLogService.class.getSimpleName()) + ".findNodeInstances(") + (processInstanceId)) + ", ") + (nodeId)) + ")";
         }
     }

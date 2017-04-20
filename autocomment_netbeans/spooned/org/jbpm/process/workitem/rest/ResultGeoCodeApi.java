@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,7 +50,7 @@ public class ResultGeoCodeApi {
      * @param latitude the latitude to set
      */
     public void setLatitude(String latitude) {
-        ResultGeoCodeApi.this.latitude = latitude;
+        this.latitude = latitude;
     }
 
     /**
@@ -64,7 +64,7 @@ public class ResultGeoCodeApi {
      * @param longitude the longitude to set
      */
     public void setLongitude(String longitude) {
-        ResultGeoCodeApi.this.longitude = longitude;
+        this.longitude = longitude;
     }
 
     /**
@@ -78,7 +78,7 @@ public class ResultGeoCodeApi {
      * @param address the address to set
      */
     public void setAddress(String address) {
-        ResultGeoCodeApi.this.address = address;
+        this.address = address;
     }
 
     /**
@@ -92,7 +92,7 @@ public class ResultGeoCodeApi {
      * @param city the city to set
      */
     public void setCity(String city) {
-        ResultGeoCodeApi.this.city = city;
+        this.city = city;
     }
 
     /**
@@ -106,7 +106,7 @@ public class ResultGeoCodeApi {
      * @param state the state to set
      */
     public void setState(String state) {
-        ResultGeoCodeApi.this.state = state;
+        this.state = state;
     }
 
     /**
@@ -120,7 +120,7 @@ public class ResultGeoCodeApi {
      * @param zip the zip to set
      */
     public void setZip(String zip) {
-        ResultGeoCodeApi.this.zip = zip;
+        this.zip = zip;
     }
 
     /**
@@ -134,7 +134,7 @@ public class ResultGeoCodeApi {
      * @param country the country to set
      */
     public void setCountry(String country) {
-        ResultGeoCodeApi.this.country = country;
+        this.country = country;
     }
 
     /**
@@ -148,7 +148,7 @@ public class ResultGeoCodeApi {
      * @param precision the precision to set
      */
     public void setPrecision(String precision) {
-        ResultGeoCodeApi.this.precision = precision;
+        this.precision = precision;
     }
 }
 

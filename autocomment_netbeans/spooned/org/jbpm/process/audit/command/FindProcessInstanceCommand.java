@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,12 +44,13 @@ public class FindProcessInstanceCommand extends AuditCommand<ProcessInstanceLog>
     }
 
     public FindProcessInstanceCommand(long processInstanceId) {
-        FindProcessInstanceCommand.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public ProcessInstanceLog execute(Context cntxt) {
+        // set log Context{cntxt} to FindProcessInstanceCommand{}
         setLogEnvironment(cntxt);
-        return FindProcessInstanceCommand.this.auditLogService.findProcessInstance(processInstanceId);
+        return this.auditLogService.findProcessInstance(processInstanceId);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class FindProcessInstanceCommand extends AuditCommand<ProcessInstanceLog>
 
     @Override
     public void setProcessInstanceId(Long processInstanceId) {
-        FindProcessInstanceCommand.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public String toString() {

@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,42 +41,42 @@ public class MigrationSpec implements Serializable {
      * @param toProcessId target process id within the target deployment id
      */
     public MigrationSpec(String deploymentId, Long processInstanceId, String toDeploymentId, String toProcessId) {
-        MigrationSpec.this.deploymentId = deploymentId;
-        MigrationSpec.this.processInstanceId = processInstanceId;
-        MigrationSpec.this.toProcessId = toProcessId;
-        MigrationSpec.this.toDeploymentId = toDeploymentId;
+        this.deploymentId = deploymentId;
+        this.processInstanceId = processInstanceId;
+        this.toProcessId = toProcessId;
+        this.toDeploymentId = toDeploymentId;
     }
 
     public String getDeploymentId() {
-        return MigrationSpec.this.deploymentId;
+        return this.deploymentId;
     }
 
     public void setDeploymentId(String deploymentId) {
-        MigrationSpec.this.deploymentId = deploymentId;
+        this.deploymentId = deploymentId;
     }
 
     public Long getProcessInstanceId() {
-        return MigrationSpec.this.processInstanceId;
+        return this.processInstanceId;
     }
 
     public void setProcessInstanceId(Long processInstanceId) {
-        MigrationSpec.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public String getToProcessId() {
-        return MigrationSpec.this.toProcessId;
+        return this.toProcessId;
     }
 
     public void setToProcessId(String toProcessId) {
-        MigrationSpec.this.toProcessId = toProcessId;
+        this.toProcessId = toProcessId;
     }
 
     public String getToDeploymentId() {
-        return MigrationSpec.this.toDeploymentId;
+        return this.toDeploymentId;
     }
 
     public void setToDeploymentId(String toDeploymentId) {
-        MigrationSpec.this.toDeploymentId = toDeploymentId;
+        this.toDeploymentId = toDeploymentId;
     }
 
     @Override

@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,15 +22,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import org.kie.api.task.model.I18NText;
+import org.kie.api.task.model.Task;
+import org.kie.internal.task.api.TaskModelProvider;
+import org.jbpm.services.task.utils.TaskFluent;
 import org.kie.internal.task.api.model.InternalI18NText;
 import org.kie.internal.task.api.InternalTaskService;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
-import org.kie.api.task.model.Task;
-import org.jbpm.services.task.utils.TaskFluent;
-import org.kie.internal.task.api.TaskModelProvider;
 
 public class AdHocUserTaskServiceImpl implements VariablesAware , AdHocUserTaskService {
     private static final Logger logger = LoggerFactory.getLogger(AdHocUserTaskServiceImpl.class);
@@ -38,11 +38,11 @@ public class AdHocUserTaskServiceImpl implements VariablesAware , AdHocUserTaskS
     private InternalTaskService nonProcessScopedTaskService;
 
     public void setNonProcessScopedTaskService(InternalTaskService nonProcessScopedTaskService) {
-        AdHocUserTaskServiceImpl.this.nonProcessScopedTaskService = nonProcessScopedTaskService;
+        this.nonProcessScopedTaskService = nonProcessScopedTaskService;
     }
 
     protected InternalTaskService getInternalTaskService() {
-        return AdHocUserTaskServiceImpl.this.nonProcessScopedTaskService;
+        return this.nonProcessScopedTaskService;
     }
 
     @Override
@@ -50,36 +50,39 @@ public class AdHocUserTaskServiceImpl implements VariablesAware , AdHocUserTaskS
         TaskFluent taskFluent = new TaskFluent().setName(taskName).setPriority(priority).setDueDate(dueDate).setFormName(taskformName);
         if ((deploymentId != null) && (!(deploymentId.equals("")))) {
             taskFluent.setDeploymentID(deploymentId);
-        } else {
+        }else {
             taskFluent.setDeploymentID(null);
         }
         if (processInstanceId > 0) {
             taskFluent.setProcessInstanceId(processInstanceId);
-        } 
+        }
         for (String user : users) {
             taskFluent.addPotentialUser(user);
         }
         for (String group : groups) {
             taskFluent.addPotentialGroup(group);
         }
+        // set admin String{"Administrator"} to TaskFluent{taskFluent}
         taskFluent.setAdminUser("Administrator");
+        // set admin String{"Administrators"} to TaskFluent{taskFluent}
         taskFluent.setAdminGroup("Administrators");
         Task task = taskFluent.getTask();
         if (params == null) {
             params = new HashMap<String, Object>();
-        } 
+        }
         long taskId = nonProcessScopedTaskService.addTask(taskFluent.getTask(), params);
         if (autoStart) {
             nonProcessScopedTaskService.start(taskId, identity);
-        } 
+        }
         if (autoClaim) {
             nonProcessScopedTaskService.claim(taskId, identity);
-        } 
+        }
         return taskId;
     }
 
     @Override
     public void updateTask(long taskId, int priority, String taskDescription, Date dueDate) {
+        // set priority long{taskId} to InternalTaskService{nonProcessScopedTaskService}
         nonProcessScopedTaskService.setPriority(taskId, priority);
         if (taskDescription != null) {
             InternalI18NText text = ((InternalI18NText) (TaskModelProvider.getFactory().newI18NText()));
@@ -88,10 +91,10 @@ public class AdHocUserTaskServiceImpl implements VariablesAware , AdHocUserTaskS
             List<I18NText> names = new ArrayList<I18NText>();
             names.add(text);
             nonProcessScopedTaskService.setDescriptions(taskId, names);
-        } 
+        }
         if (dueDate != null) {
             nonProcessScopedTaskService.setExpirationDate(taskId, dueDate);
-        } 
+        }
     }
 
     @Override

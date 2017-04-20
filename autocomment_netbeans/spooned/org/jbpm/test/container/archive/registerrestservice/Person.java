@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,9 +48,9 @@ public class Person implements Serializable {
      * @param surname
      */
     public Person(String name, String middlename, String surname) {
-        Person.this.name = name;
-        Person.this.middlename = middlename;
-        Person.this.surname = surname;
+        this.name = name;
+        this.middlename = middlename;
+        this.surname = surname;
     }
 
     /**
@@ -65,7 +65,7 @@ public class Person implements Serializable {
      *            the name to set
      */
     public void setName(String name) {
-        Person.this.name = name;
+        this.name = name;
     }
 
     /**
@@ -80,7 +80,7 @@ public class Person implements Serializable {
      *            the middlename to set
      */
     public void setMiddlename(String middlename) {
-        Person.this.middlename = middlename;
+        this.middlename = middlename;
     }
 
     /**
@@ -95,17 +95,19 @@ public class Person implements Serializable {
      *            the surname to set
      */
     public void setSurname(String surname) {
-        Person.this.surname = surname;
+        this.surname = surname;
     }
 
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder(name);
+        // append String{" - "} to StringBuilder{b}
         b.append(" - ");
         if (((middlename) != null) && (!(middlename.isEmpty()))) {
             b.append(middlename);
             b.append(" - ");
-        } 
+        }
+        // append String{surname} to StringBuilder{b}
         b.append(surname);
         return b.toString();
     }
@@ -124,11 +126,11 @@ public class Person implements Serializable {
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        } 
+        }
         if (obj instanceof Person) {
             Person p = ((Person) (obj));
             return p.toString().equals(toString());
-        } 
+        }
         return false;
     }
 }

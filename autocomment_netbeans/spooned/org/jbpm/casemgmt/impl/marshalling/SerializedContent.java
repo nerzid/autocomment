@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,9 +38,9 @@ public class SerializedContent implements Serializable {
 
     public SerializedContent(String marshaller, String name, byte[] content) {
         super();
-        SerializedContent.this.marshaller = marshaller;
-        SerializedContent.this.name = name;
-        SerializedContent.this.content = content;
+        this.marshaller = marshaller;
+        this.name = name;
+        this.content = content;
     }
 
     public String getMarshaller() {
@@ -48,7 +48,7 @@ public class SerializedContent implements Serializable {
     }
 
     public void setMarshaller(String marshaller) {
-        SerializedContent.this.marshaller = marshaller;
+        this.marshaller = marshaller;
     }
 
     public byte[] getContent() {
@@ -56,7 +56,7 @@ public class SerializedContent implements Serializable {
     }
 
     public void setContent(byte[] content) {
-        SerializedContent.this.content = content;
+        this.content = content;
     }
 
     public String getName() {
@@ -64,7 +64,7 @@ public class SerializedContent implements Serializable {
     }
 
     public void setName(String name) {
-        SerializedContent.this.name = name;
+        this.name = name;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SerializedContent implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if ((SerializedContent.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -101,15 +101,19 @@ public class SerializedContent implements Serializable {
             if ((other.marshaller) != null)
                 return false;
             
-        } else if (!(marshaller.equals(other.marshaller)))
-            return false;
+        }else
+            if (!(marshaller.equals(other.marshaller)))
+                return false;
+            
         
         if ((name) == null) {
             if ((other.name) != null)
                 return false;
             
-        } else if (!(name.equals(other.name)))
-            return false;
+        }else
+            if (!(name.equals(other.name)))
+                return false;
+            
         
         return true;
     }

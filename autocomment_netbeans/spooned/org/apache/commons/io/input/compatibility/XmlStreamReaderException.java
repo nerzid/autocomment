@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@
 package org.apache.commons.io.input.compatibility;
 
 import java.io.InputStream;
+import static org.apache.commons.io.input.XmlStreamReaderException.<init>;
 
 /**
  * The XmlStreamReaderException is thrown by the XmlStreamReader constructors if
@@ -29,7 +30,7 @@ import java.io.InputStream;
  * do an alternate processing with the stream. Note that the original
  * InputStream given to the XmlStreamReader cannot be used as that one has been
  * already read.
- * 
+ *
  * @version $Id: XmlStreamReaderException.java 1415850 2012-11-30 20:51:39Z ggregory $
  */
 public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStreamReaderException {
@@ -42,7 +43,7 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
      * determined.
      * <p>
      * Instances of this exception are thrown by the XmlStreamReader.
-     * 
+     *
      * @param msg message describing the reason for the exception.
      * @param bomEnc BOM encoding.
      * @param xmlGuessEnc XML guess encoding.
@@ -58,7 +59,7 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
      * determined.
      * <p>
      * Instances of this exception are thrown by the XmlStreamReader.
-     * 
+     *
      * @param msg message describing the reason for the exception.
      * @param ctMime MIME type in the content-type.
      * @param ctEnc encoding in the content-type.
@@ -75,7 +76,7 @@ public class XmlStreamReaderException extends org.apache.commons.io.input.XmlStr
     /**
      * Returns the unconsumed InputStream to allow the application to do an
      * alternate encoding detection on the InputStream.
-     * 
+     *
      * @return the unconsumed InputStream.
      */
     public InputStream getInputStream() {

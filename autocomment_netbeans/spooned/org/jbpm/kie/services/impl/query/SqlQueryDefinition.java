@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.jbpm.services.api.query.model.QueryDefinition;
 import java.io.Serializable;
+import static Target.CUSTOM;
 
 public class SqlQueryDefinition implements Serializable , QueryDefinition {
     private static final long serialVersionUID = 1L;
@@ -36,53 +37,53 @@ public class SqlQueryDefinition implements Serializable , QueryDefinition {
     private Map<String, String> columnsMapping = new HashMap<String, String>();
 
     public SqlQueryDefinition(String name, String source) {
-        SqlQueryDefinition.this.name = name;
-        SqlQueryDefinition.this.source = source;
+        this.name = name;
+        this.source = source;
     }
 
     public SqlQueryDefinition(String name, String source, Target target) {
-        SqlQueryDefinition.this.name = name;
-        SqlQueryDefinition.this.source = source;
-        SqlQueryDefinition.this.target = target;
+        this.name = name;
+        this.source = source;
+        this.target = target;
     }
 
     @Override
     public String getName() {
-        return SqlQueryDefinition.this.name;
+        return this.name;
     }
 
     @Override
     public void setName(String name) {
-        SqlQueryDefinition.this.name = name;
+        this.name = name;
     }
 
     @Override
     public String getSource() {
-        return SqlQueryDefinition.this.source;
+        return this.source;
     }
 
     @Override
     public void setSource(String source) {
-        SqlQueryDefinition.this.source = source;
+        this.source = source;
     }
 
     @Override
     public String getExpression() {
-        return SqlQueryDefinition.this.expression;
+        return this.expression;
     }
 
     @Override
     public void setExpression(String expression) {
-        SqlQueryDefinition.this.expression = expression;
+        this.expression = expression;
     }
 
     @Override
     public Target getTarget() {
-        return SqlQueryDefinition.this.target;
+        return this.target;
     }
 
     public void setTarget(Target target) {
-        SqlQueryDefinition.this.target = target;
+        this.target = target;
     }
 
     @Override
@@ -95,7 +96,7 @@ public class SqlQueryDefinition implements Serializable , QueryDefinition {
     }
 
     public void setColumnsMapping(Map<String, String> columnsMapping) {
-        SqlQueryDefinition.this.columnsMapping = columnsMapping;
+        this.columnsMapping = columnsMapping;
     }
 }
 

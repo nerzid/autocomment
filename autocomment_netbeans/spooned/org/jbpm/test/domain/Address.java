@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *       http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,9 +34,9 @@ public class Address implements Serializable {
 
     public Address(String street, int number, String city) {
         super();
-        Address.this.street = street;
-        Address.this.number = number;
-        Address.this.city = city;
+        this.street = street;
+        this.number = number;
+        this.city = city;
     }
 
     public String getStreet() {
@@ -44,7 +44,7 @@ public class Address implements Serializable {
     }
 
     public void setStreet(String street) {
-        Address.this.street = street;
+        this.street = street;
     }
 
     public int getNumber() {
@@ -52,7 +52,7 @@ public class Address implements Serializable {
     }
 
     public void setNumber(int number) {
-        Address.this.number = number;
+        this.number = number;
     }
 
     public String getCity() {
@@ -60,7 +60,7 @@ public class Address implements Serializable {
     }
 
     public void setCity(String city) {
-        Address.this.city = city;
+        this.city = city;
     }
 
     public int hashCode() {
@@ -73,7 +73,7 @@ public class Address implements Serializable {
     }
 
     public boolean equals(Object obj) {
-        if ((Address.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -87,8 +87,10 @@ public class Address implements Serializable {
             if ((other.city) != null)
                 return false;
             
-        } else if (!(city.equals(other.city)))
-            return false;
+        }else
+            if (!(city.equals(other.city)))
+                return false;
+            
         
         if ((number) != (other.number))
             return false;
@@ -97,8 +99,10 @@ public class Address implements Serializable {
             if ((other.street) != null)
                 return false;
             
-        } else if (!(street.equals(other.street)))
-            return false;
+        }else
+            if (!(street.equals(other.street)))
+                return false;
+            
         
         return true;
     }

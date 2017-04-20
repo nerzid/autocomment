@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,13 @@
 
 package org.jbpm.kie.services.impl.query.mapper;
 
+import java.util.List;
 import java.util.ArrayList;
 import org.dashbuilder.dataset.DataSet;
-import java.util.List;
 import java.util.Map;
 import org.jbpm.services.api.model.ProcessInstanceDesc;
 import org.jbpm.services.api.query.QueryResultMapper;
+import org.jbpm.services.api.query.org.jbpm.kie.services.impl.query.mapper.QueryResultMapper;
 
 /**
  * Dedicated mapper that transforms DataSet to ProcessInstanceDesc.
@@ -54,14 +55,14 @@ public class ProcessInstanceQueryMapper extends AbstractQueryMapper<ProcessInsta
                     ProcessInstanceDesc pi = buildInstance(dataSetResult, i);
                     mappedResult.add(pi);
                 }
-            } 
+            }
             return mappedResult;
-        } 
+        }
         throw new IllegalArgumentException(("Unsupported result for mapping " + result));
     }
 
     protected ProcessInstanceDesc buildInstance(DataSet dataSetResult, int index) {
-        ProcessInstanceDesc pi = new org.jbpm.kie.services.impl.model.ProcessInstanceDesc(getColumnLongValue(dataSetResult, COLUMN_PROCESSINSTANCEID, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSID, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSNAME, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSVERSION, index), getColumnIntValue(dataSetResult, COLUMN_STATUS, index), getColumnStringValue(dataSetResult, COLUMN_EXTERNALID, index), getColumnDateValue(dataSetResult, COLUMN_START, index), getColumnStringValue(dataSetResult, COLUMN_IDENTITY, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSINSTANCEDESCRIPTION, index), getColumnStringValue(dataSetResult, COLUMN_CORRELATIONKEY, index), getColumnLongValue(dataSetResult, COLUMN_PARENTPROCESSINSTANCEID, index));
+        ProcessInstanceDesc pi = new ProcessInstanceDesc(getColumnLongValue(dataSetResult, COLUMN_PROCESSINSTANCEID, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSID, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSNAME, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSVERSION, index), getColumnIntValue(dataSetResult, COLUMN_STATUS, index), getColumnStringValue(dataSetResult, COLUMN_EXTERNALID, index), getColumnDateValue(dataSetResult, COLUMN_START, index), getColumnStringValue(dataSetResult, COLUMN_IDENTITY, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSINSTANCEDESCRIPTION, index), getColumnStringValue(dataSetResult, COLUMN_CORRELATIONKEY, index), getColumnLongValue(dataSetResult, COLUMN_PARENTPROCESSINSTANCEID, index));
         return pi;
     }
 

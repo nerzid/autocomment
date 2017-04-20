@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,20 +17,19 @@
 
 package org.jbpm.services.task.wih;
 
-import java.util.Date;
+import org.slf4j.LoggerFactory;
+import OnErrorAction.ABORT;
 import org.kie.internal.task.api.InternalTaskService;
 import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.kie.api.runtime.process.WorkItem;
 import java.util.Map;
 import org.jbpm.services.task.exception.PermissionDeniedException;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.runtime.manager.RuntimeManager;
-import org.kie.api.task.model.Task;
-import org.kie.internal.task.exception.TaskException;
-import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemManager;
+import org.kie.api.task.model.Task;
 
 public class LocalHTWorkItemHandler extends AbstractHTWorkItemHandler {
     private static final Logger logger = LoggerFactory.getLogger(LocalHTWorkItemHandler.class);
@@ -42,7 +41,7 @@ public class LocalHTWorkItemHandler extends AbstractHTWorkItemHandler {
     }
 
     public void setRuntimeManager(RuntimeManager runtimeManager) {
-        LocalHTWorkItemHandler.this.runtimeManager = runtimeManager;
+        this.runtimeManager = runtimeManager;
     }
 
     public LocalHTWorkItemHandler() {
@@ -63,30 +62,35 @@ public class LocalHTWorkItemHandler extends AbstractHTWorkItemHandler {
                 } catch (PermissionDeniedException e) {
                     LocalHTWorkItemHandler.logger.warn("User {} is not allowed to auto claim task due to permission violation", workItem.getParameter("SwimlaneActorId"));
                 }
-            } 
+            }
         } catch (Exception e) {
-            if (action.equals(OnErrorAction.ABORT)) {
+            // rethrow to cancel processing if the exception is not recoverable
+            if (action.equals(ABORT)) {
                 manager.abortWorkItem(workItem.getId());
-            } else if (action.equals(OnErrorAction.RETHROW)) {
-                if (e instanceof RuntimeException) {
-                    throw ((RuntimeException) (e));
-                } else {
-                    throw new RuntimeException(e);
-                }
-            } else if (action.equals(OnErrorAction.LOG)) {
-                StringBuilder logMsg = new StringBuilder();
-                logMsg.append(new Date()).append(": Error when creating task on task server for work item id ").append(workItem.getId());
-                logMsg.append(". Error reported by task server: ").append(e.getMessage());
-                LocalHTWorkItemHandler.logger.error(logMsg.toString(), e);
-                // rethrow to cancel processing if the exception is not recoverable
-                if ((!(e instanceof TaskException)) || ((e instanceof TaskException) && (!(((TaskException) (e)).isRecoverable())))) {
+            }// rethrow to cancel processing if the exception is not recoverable
+            else
+                if (action.equals(OnErrorAction.RETHROW)) {
                     if (e instanceof RuntimeException) {
                         throw ((RuntimeException) (e));
-                    } else {
+                    }else {
                         throw new RuntimeException(e);
                     }
-                } 
-            } 
+                }else
+                    if (action.equals(OnErrorAction.LOG)) {
+                        StringBuilder logMsg = new StringBuilder();
+                        logMsg.append(new java.util.Date()).append(": Error when creating task on task server for work item id ").append(workItem.getId());
+                        logMsg.append(". Error reported by task server: ").append(e.getMessage());
+                        LocalHTWorkItemHandler.logger.error(logMsg.toString(), e);
+                        if ((!(e instanceof org.kie.internal.task.exception.TaskException)) || ((e instanceof org.kie.internal.task.exception.TaskException) && (!(((org.kie.internal.task.exception.TaskException) (e)).isRecoverable())))) {
+                            if (e instanceof RuntimeException) {
+                                throw ((RuntimeException) (e));
+                            }else {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                
+            
         }
     }
 
@@ -100,7 +104,7 @@ public class LocalHTWorkItemHandler extends AbstractHTWorkItemHandler {
             } catch (PermissionDeniedException e) {
                 LocalHTWorkItemHandler.logger.info(e.getMessage());
             }
-        } 
+        }
     }
 }
 

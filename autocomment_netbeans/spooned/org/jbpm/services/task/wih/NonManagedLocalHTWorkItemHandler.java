@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,19 +17,19 @@
 
 package org.jbpm.services.task.wih;
 
+import org.slf4j.Logger;
+import OnErrorAction.ABORT;
 import org.kie.internal.task.api.model.ContentData;
-import java.util.Date;
 import org.kie.internal.task.api.EventService;
 import org.kie.internal.task.api.InternalTaskService;
 import org.kie.api.runtime.KieSession;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jbpm.services.task.exception.PermissionDeniedException;
 import org.kie.api.task.model.Task;
-import org.kie.api.task.TaskLifeCycleEventListener;
-import org.kie.api.task.TaskService;
-import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemManager;
+import org.kie.api.task.TaskLifeCycleEventListener;
+import org.kie.api.runtime.process.WorkItem;
+import org.kie.api.task.TaskService;
 
 /**
  * LocalHumanTaskHandler that is intended to be used when RuntimeManager is not used, most likely
@@ -67,27 +67,27 @@ public class NonManagedLocalHTWorkItemHandler extends AbstractHTWorkItemHandler 
     }
 
     public NonManagedLocalHTWorkItemHandler(KieSession ksession, TaskService taskService) {
-        NonManagedLocalHTWorkItemHandler.this.ksession = ksession;
-        NonManagedLocalHTWorkItemHandler.this.taskService = taskService;
+        this.ksession = ksession;
+        this.taskService = taskService;
         init();
     }
 
     @SuppressWarnings(value = { "unchecked" , "rawtypes" })
     public void init() {
         if (!(initialized)) {
-            listener = new NonManagedTaskEventListener(NonManagedLocalHTWorkItemHandler.this.ksession, NonManagedLocalHTWorkItemHandler.this.taskService);
+            listener = new NonManagedTaskEventListener(this.ksession, this.taskService);
             if ((taskService) instanceof EventService) {
                 ((EventService) (taskService)).registerTaskEventListener(listener);
-            } 
+            }
             initialized = true;
-        } 
+        }
     }
 
     @SuppressWarnings(value = { "rawtypes" })
     public void close() {
         if ((taskService) instanceof EventService) {
             ((EventService) (taskService)).clearTaskEventListeners();
-        } 
+        }
     }
 
     @Override
@@ -98,22 +98,26 @@ public class NonManagedLocalHTWorkItemHandler extends AbstractHTWorkItemHandler 
             long taskId = ((InternalTaskService) (taskService)).addTask(task, content);
             if (isAutoClaim(workItem, task)) {
                 taskService.claim(taskId, ((String) (workItem.getParameter("SwimlaneActorId"))));
-            } 
+            }
         } catch (Exception e) {
-            if (action.equals(OnErrorAction.ABORT)) {
+            if (action.equals(ABORT)) {
                 manager.abortWorkItem(workItem.getId());
-            } else if (action.equals(OnErrorAction.RETHROW)) {
-                if (e instanceof RuntimeException) {
-                    throw ((RuntimeException) (e));
-                } else {
-                    throw new RuntimeException(e);
-                }
-            } else if (action.equals(OnErrorAction.LOG)) {
-                StringBuilder logMsg = new StringBuilder();
-                logMsg.append(new Date()).append(": Error when creating task on task server for work item id ").append(workItem.getId());
-                logMsg.append(". Error reported by task server: ").append(e.getMessage());
-                NonManagedLocalHTWorkItemHandler.logger.error(logMsg.toString(), e);
-            } 
+            }else
+                if (action.equals(OnErrorAction.RETHROW)) {
+                    if (e instanceof RuntimeException) {
+                        throw ((RuntimeException) (e));
+                    }else {
+                        throw new RuntimeException(e);
+                    }
+                }else
+                    if (action.equals(OnErrorAction.LOG)) {
+                        StringBuilder logMsg = new StringBuilder();
+                        logMsg.append(new java.util.Date()).append(": Error when creating task on task server for work item id ").append(workItem.getId());
+                        logMsg.append(". Error reported by task server: ").append(e.getMessage());
+                        NonManagedLocalHTWorkItemHandler.logger.error(logMsg.toString(), e);
+                    }
+                
+            
         }
     }
 
@@ -126,7 +130,7 @@ public class NonManagedLocalHTWorkItemHandler extends AbstractHTWorkItemHandler 
             } catch (PermissionDeniedException e) {
                 NonManagedLocalHTWorkItemHandler.logger.info(e.getMessage());
             }
-        } 
+        }
     }
 
     public KieSession getKsession() {
@@ -134,7 +138,7 @@ public class NonManagedLocalHTWorkItemHandler extends AbstractHTWorkItemHandler 
     }
 
     public void setKsession(KieSession ksession) {
-        NonManagedLocalHTWorkItemHandler.this.ksession = ksession;
+        this.ksession = ksession;
     }
 
     public TaskService getTaskService() {
@@ -142,7 +146,7 @@ public class NonManagedLocalHTWorkItemHandler extends AbstractHTWorkItemHandler 
     }
 
     public void setTaskService(TaskService taskService) {
-        NonManagedLocalHTWorkItemHandler.this.taskService = taskService;
+        this.taskService = taskService;
     }
 }
 

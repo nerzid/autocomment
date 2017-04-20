@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,21 +17,21 @@
 
 package org.jbpm.process.audit;
 
+import org.junit.Ignore;
 import org.junit.After;
 import org.junit.Before;
 import javax.persistence.EntityManagerFactory;
+import java.util.Properties;
+import org.drools.core.SessionConfiguration;
+import org.kie.api.runtime.process.ProcessInstance;
 import org.kie.api.runtime.Environment;
-import org.junit.Ignore;
 import org.kie.internal.persistence.jpa.JPAKnowledgeService;
 import org.kie.api.KieBase;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.KieSessionConfiguration;
+import org.jbpm.persistence.util.PersistenceUtil;
 import javax.persistence.Persistence;
 import org.jbpm.process.audit.strategy.PersistenceStrategyType;
-import org.jbpm.persistence.util.PersistenceUtil;
-import org.kie.api.runtime.process.ProcessInstance;
-import java.util.Properties;
-import org.drools.core.SessionConfiguration;
 
 /**
  * This class tests the following classes:
@@ -55,7 +55,7 @@ public class WorkingMemoryDbLoggerWithSeparateLoggingLocalEmfTest extends Abstra
     public void afterThis() {
         if (((emf) != null) && (emf.isOpen())) {
             emf.close();
-        } 
+        }
         emf = null;
     }
 
@@ -71,8 +71,8 @@ public class WorkingMemoryDbLoggerWithSeparateLoggingLocalEmfTest extends Abstra
             env.set("IS_JTA_TRANSACTION", false);
             ksession = JPAKnowledgeService.newStatefulKnowledgeSession(kbase, conf, env);
             ksession.addEventListener(new JPAWorkingMemoryDbLogger(emf, env));
-            ksession.getWorkItemManager().registerWorkItemHandler("Human Task", new org.jbpm.process.instance.impl.demo.SystemOutWorkItemHandler());
-        } 
+            ksession.getWorkItemManager().registerWorkItemHandler("Human Task", new SystemOutWorkItemHandler());
+        }
         return ksession.startProcess(processName);
     }
 }

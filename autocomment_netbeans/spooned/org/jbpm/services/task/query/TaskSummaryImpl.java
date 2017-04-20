@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -81,90 +81,90 @@ public class TaskSummaryImpl implements InternalTaskSummary {
 
     public TaskSummaryImpl(long id, String name, String subject, String description, Status status, int priority, boolean skipable, User actualOwner, User createdBy, Date createdOn, Date activationTime, Date expirationTime, String processId, long processSessionId, long processInstanceId, String deploymentId, SubTasksStrategy subTaskStrategy, long parentId) {
         super();
-        TaskSummaryImpl.this.id = id;
-        TaskSummaryImpl.this.name = name;
-        TaskSummaryImpl.this.subject = subject;
-        TaskSummaryImpl.this.description = description;
-        TaskSummaryImpl.this.status = status;
+        this.id = id;
+        this.name = name;
+        this.subject = subject;
+        this.description = description;
+        this.status = status;
         if (status != null) {
-            TaskSummaryImpl.this.statusId = status.name();
-        } 
-        TaskSummaryImpl.this.priority = priority;
-        TaskSummaryImpl.this.skipable = skipable;
-        TaskSummaryImpl.this.actualOwner = actualOwner;
+            this.statusId = status.name();
+        }
+        this.priority = priority;
+        this.skipable = skipable;
+        this.actualOwner = actualOwner;
         if (actualOwner != null) {
-            TaskSummaryImpl.this.actualOwnerId = actualOwner.getId();
-        } 
-        TaskSummaryImpl.this.createdBy = createdBy;
+            this.actualOwnerId = actualOwner.getId();
+        }
+        this.createdBy = createdBy;
         if (createdBy != null) {
-            TaskSummaryImpl.this.createdById = createdBy.getId();
-        } 
-        TaskSummaryImpl.this.createdOn = createdOn;
-        TaskSummaryImpl.this.activationTime = activationTime;
-        TaskSummaryImpl.this.expirationTime = expirationTime;
-        TaskSummaryImpl.this.processInstanceId = processInstanceId;
-        TaskSummaryImpl.this.processId = processId;
-        TaskSummaryImpl.this.processSessionId = processSessionId;
-        TaskSummaryImpl.this.deploymentId = deploymentId;
-        TaskSummaryImpl.this.subTaskStrategy = subTaskStrategy;
-        TaskSummaryImpl.this.parentId = parentId;
-        TaskSummaryImpl.this.quickTaskSummary = false;
+            this.createdById = createdBy.getId();
+        }
+        this.createdOn = createdOn;
+        this.activationTime = activationTime;
+        this.expirationTime = expirationTime;
+        this.processInstanceId = processInstanceId;
+        this.processId = processId;
+        this.processSessionId = processSessionId;
+        this.deploymentId = deploymentId;
+        this.subTaskStrategy = subTaskStrategy;
+        this.parentId = parentId;
+        this.quickTaskSummary = false;
     }
 
     // Query API constructor
     public TaskSummaryImpl(long id, String name, String subject, String description, Status status, int priority, boolean skipable, String actualOwnerId, String createdById, Date createdOn, Date activationTime, Date expirationTime, String processId, long processSessionId, long processInstanceId, String deploymentId, SubTasksStrategy subTaskStrategy, long parentId) {
         super();
-        TaskSummaryImpl.this.id = id;
-        TaskSummaryImpl.this.name = name;
-        TaskSummaryImpl.this.subject = subject;
-        TaskSummaryImpl.this.description = description;
-        TaskSummaryImpl.this.status = status;
+        this.id = id;
+        this.name = name;
+        this.subject = subject;
+        this.description = description;
+        this.status = status;
         if (status != null) {
-            TaskSummaryImpl.this.statusId = status.name();
-        } 
-        TaskSummaryImpl.this.priority = priority;
-        TaskSummaryImpl.this.skipable = skipable;
-        TaskSummaryImpl.this.actualOwnerId = actualOwnerId;
-        if (((TaskSummaryImpl.this.actualOwnerId) != null) && (!(TaskSummaryImpl.this.actualOwnerId.isEmpty()))) {
-            TaskSummaryImpl.this.actualOwner = TaskModelProvider.getFactory().newUser(TaskSummaryImpl.this.actualOwnerId);
-        } 
-        TaskSummaryImpl.this.createdById = createdById;
-        if (((TaskSummaryImpl.this.createdById) != null) && (!(TaskSummaryImpl.this.createdById.isEmpty()))) {
-            TaskSummaryImpl.this.createdBy = TaskModelProvider.getFactory().newUser(TaskSummaryImpl.this.createdById);
-        } 
-        TaskSummaryImpl.this.createdOn = createdOn;
-        TaskSummaryImpl.this.activationTime = activationTime;
-        TaskSummaryImpl.this.expirationTime = expirationTime;
-        TaskSummaryImpl.this.processInstanceId = processInstanceId;
-        TaskSummaryImpl.this.processId = processId;
-        TaskSummaryImpl.this.processSessionId = processSessionId;
-        TaskSummaryImpl.this.deploymentId = deploymentId;
-        TaskSummaryImpl.this.subTaskStrategy = subTaskStrategy;
-        TaskSummaryImpl.this.parentId = parentId;
-        TaskSummaryImpl.this.quickTaskSummary = false;
+            this.statusId = status.name();
+        }
+        this.priority = priority;
+        this.skipable = skipable;
+        this.actualOwnerId = actualOwnerId;
+        if (((this.actualOwnerId) != null) && (!(this.actualOwnerId.isEmpty()))) {
+            this.actualOwner = TaskModelProvider.getFactory().newUser(this.actualOwnerId);
+        }
+        this.createdById = createdById;
+        if (((this.createdById) != null) && (!(this.createdById.isEmpty()))) {
+            this.createdBy = TaskModelProvider.getFactory().newUser(this.createdById);
+        }
+        this.createdOn = createdOn;
+        this.activationTime = activationTime;
+        this.expirationTime = expirationTime;
+        this.processInstanceId = processInstanceId;
+        this.processId = processId;
+        this.processSessionId = processSessionId;
+        this.deploymentId = deploymentId;
+        this.subTaskStrategy = subTaskStrategy;
+        this.parentId = parentId;
+        this.quickTaskSummary = false;
     }
 
     /* Construct a QuickTaskSummary */
     public TaskSummaryImpl(long id, String name, String description, Status status, int priority, String actualOwner, String createdBy, Date createdOn, Date activationTime, Date expirationTime, String processId, long processInstanceId, long parentId, String deploymentId, boolean skipable) {
-        TaskSummaryImpl.this.id = id;
-        TaskSummaryImpl.this.processInstanceId = processInstanceId;
-        TaskSummaryImpl.this.name = name;
-        TaskSummaryImpl.this.description = description;
-        TaskSummaryImpl.this.status = status;
+        this.id = id;
+        this.processInstanceId = processInstanceId;
+        this.name = name;
+        this.description = description;
+        this.status = status;
         if (status != null) {
-            TaskSummaryImpl.this.statusId = status.name();
-        } 
-        TaskSummaryImpl.this.priority = priority;
-        TaskSummaryImpl.this.actualOwnerId = actualOwner;
-        TaskSummaryImpl.this.createdById = createdBy;
-        TaskSummaryImpl.this.createdOn = createdOn;
-        TaskSummaryImpl.this.activationTime = activationTime;
-        TaskSummaryImpl.this.expirationTime = expirationTime;
-        TaskSummaryImpl.this.processId = processId;
-        TaskSummaryImpl.this.parentId = parentId;
-        TaskSummaryImpl.this.deploymentId = deploymentId;
-        TaskSummaryImpl.this.skipable = skipable;
-        TaskSummaryImpl.this.quickTaskSummary = true;
+            this.statusId = status.name();
+        }
+        this.priority = priority;
+        this.actualOwnerId = actualOwner;
+        this.createdById = createdBy;
+        this.createdOn = createdOn;
+        this.activationTime = activationTime;
+        this.expirationTime = expirationTime;
+        this.processId = processId;
+        this.parentId = parentId;
+        this.deploymentId = deploymentId;
+        this.skipable = skipable;
+        this.quickTaskSummary = true;
     }
 
     public TaskSummaryImpl() {
@@ -172,96 +172,103 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long long{id} to ObjectOutput{out}
         out.writeLong(id);
+        // write long long{processInstanceId} to ObjectOutput{out}
         out.writeLong(processInstanceId);
         if ((name) != null) {
             out.writeBoolean(true);
             out.writeUTF(name);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((subject) != null) {
             out.writeBoolean(true);
             out.writeUTF(subject);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((description) != null) {
             out.writeBoolean(true);
             out.writeUTF(description);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((status) != null) {
             out.writeBoolean(true);
             out.writeUTF(status.toString());
-        } else {
+        }else {
             out.writeBoolean(false);
         }
+        // write int int{priority} to ObjectOutput{out}
         out.writeInt(priority);
+        // write long long{parentId} to ObjectOutput{out}
         out.writeLong(parentId);
+        // write boolean boolean{skipable} to ObjectOutput{out}
         out.writeBoolean(skipable);
         if ((actualOwner) != null) {
             out.writeBoolean(true);
             actualOwner.writeExternal(out);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((createdBy) != null) {
             out.writeBoolean(true);
             createdBy.writeExternal(out);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((createdOn) != null) {
             out.writeBoolean(true);
             out.writeLong(createdOn.getTime());
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((activationTime) != null) {
             out.writeBoolean(true);
             out.writeLong(activationTime.getTime());
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((expirationTime) != null) {
             out.writeBoolean(true);
             out.writeLong(expirationTime.getTime());
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((processId) != null) {
             out.writeBoolean(true);
             out.writeUTF(processId);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
+        // write long long{processSessionId} to ObjectOutput{out}
         out.writeLong(processSessionId);
         if ((subTaskStrategy) != null) {
             out.writeBoolean(true);
             out.writeUTF(subTaskStrategy.toString());
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((actualOwnerId) != null) {
             out.writeBoolean(true);
             out.writeUTF(actualOwnerId);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((createdById) != null) {
             out.writeBoolean(true);
             out.writeUTF(createdById);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((statusId) != null) {
             out.writeBoolean(true);
             out.writeUTF(statusId);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
+        // write boolean boolean{quickTaskSummary} to ObjectOutput{out}
         out.writeBoolean(quickTaskSummary);
     }
 
@@ -270,52 +277,52 @@ public class TaskSummaryImpl implements InternalTaskSummary {
         processInstanceId = in.readLong();
         if (in.readBoolean()) {
             name = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             subject = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             description = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             status = Status.valueOf(in.readUTF());
-        } 
+        }
         priority = in.readInt();
         parentId = in.readLong();
         skipable = in.readBoolean();
         if (in.readBoolean()) {
             actualOwner = TaskModelProvider.getFactory().newUser();
             actualOwner.readExternal(in);
-        } 
+        }
         if (in.readBoolean()) {
             createdBy = TaskModelProvider.getFactory().newUser();
             createdBy.readExternal(in);
-        } 
+        }
         if (in.readBoolean()) {
             createdOn = new Date(in.readLong());
-        } 
+        }
         if (in.readBoolean()) {
             activationTime = new Date(in.readLong());
-        } 
+        }
         if (in.readBoolean()) {
             expirationTime = new Date(in.readLong());
-        } 
+        }
         if (in.readBoolean()) {
             processId = in.readUTF();
-        } 
+        }
         processSessionId = in.readLong();
         if (in.readBoolean()) {
             subTaskStrategy = SubTasksStrategy.valueOf(in.readUTF());
-        } 
+        }
         if (in.readBoolean()) {
             actualOwnerId = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             createdById = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             statusId = in.readUTF();
-        } 
+        }
         quickTaskSummary = in.readBoolean();
     }
 
@@ -324,7 +331,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setId(long id) {
-        TaskSummaryImpl.this.id = id;
+        this.id = id;
     }
 
     public Long getProcessInstanceId() {
@@ -332,7 +339,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setProcessInstanceId(long processInstanceId) {
-        TaskSummaryImpl.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public String getName() {
@@ -340,7 +347,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setName(String name) {
-        TaskSummaryImpl.this.name = name;
+        this.name = name;
     }
 
     public String getSubject() {
@@ -348,7 +355,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setSubject(String subject) {
-        TaskSummaryImpl.this.subject = subject;
+        this.subject = subject;
     }
 
     public String getDescription() {
@@ -356,7 +363,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setDescription(String description) {
-        TaskSummaryImpl.this.description = description;
+        this.description = description;
     }
 
     public Status getStatus() {
@@ -364,7 +371,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setStatus(Status status) {
-        TaskSummaryImpl.this.status = status;
+        this.status = status;
     }
 
     public Integer getPriority() {
@@ -372,7 +379,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setPriority(int priority) {
-        TaskSummaryImpl.this.priority = priority;
+        this.priority = priority;
     }
 
     public Boolean isSkipable() {
@@ -380,29 +387,29 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setSkipable(boolean skipable) {
-        TaskSummaryImpl.this.skipable = skipable;
+        this.skipable = skipable;
     }
 
     public User getActualOwner() {
         if (((quickTaskSummary) && ((actualOwnerId) != null)) && (!(actualOwnerId.equals("")))) {
             actualOwner = TaskModelProvider.getFactory().newUser(actualOwnerId);
-        } 
+        }
         return actualOwner;
     }
 
     public void setActualOwner(User actualOwner) {
-        TaskSummaryImpl.this.actualOwner = actualOwner;
+        this.actualOwner = actualOwner;
     }
 
     public User getCreatedBy() {
         if (((quickTaskSummary) && ((createdById) != null)) && (!(createdById.equals("")))) {
             createdBy = TaskModelProvider.getFactory().newUser(createdById);
-        } 
+        }
         return createdBy;
     }
 
     public void setCreatedBy(User createdBy) {
-        TaskSummaryImpl.this.createdBy = createdBy;
+        this.createdBy = createdBy;
     }
 
     public Date getCreatedOn() {
@@ -410,7 +417,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setCreatedOn(Date createdOn) {
-        TaskSummaryImpl.this.createdOn = createdOn;
+        this.createdOn = createdOn;
     }
 
     public Date getActivationTime() {
@@ -418,7 +425,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setActivationTime(Date activationTime) {
-        TaskSummaryImpl.this.activationTime = activationTime;
+        this.activationTime = activationTime;
     }
 
     public Date getExpirationTime() {
@@ -426,7 +433,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setExpirationTime(Date expirationTime) {
-        TaskSummaryImpl.this.expirationTime = expirationTime;
+        this.expirationTime = expirationTime;
     }
 
     public String getProcessId() {
@@ -434,7 +441,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setProcessId(String processId) {
-        TaskSummaryImpl.this.processId = processId;
+        this.processId = processId;
     }
 
     public Long getProcessSessionId() {
@@ -442,7 +449,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setProcessSessionId(long processSessionId) {
-        TaskSummaryImpl.this.processSessionId = processSessionId;
+        this.processSessionId = processSessionId;
     }
 
     public SubTasksStrategy getSubTaskStrategy() {
@@ -450,7 +457,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setSubTaskStrategy(SubTasksStrategy subTaskStrategy) {
-        TaskSummaryImpl.this.subTaskStrategy = subTaskStrategy;
+        this.subTaskStrategy = subTaskStrategy;
     }
 
     public Long getParentId() {
@@ -458,7 +465,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     }
 
     public void setParentId(long parentId) {
-        TaskSummaryImpl.this.parentId = parentId;
+        this.parentId = parentId;
     }
 
     // remove in 7.0
@@ -470,7 +477,7 @@ public class TaskSummaryImpl implements InternalTaskSummary {
     // remove in 7.0
     @Deprecated
     public void setPotentialOwners(List<String> potentialOwners) {
-        TaskSummaryImpl.this.potentialOwners = potentialOwners;
+        this.potentialOwners = potentialOwners;
     }
 
     public Boolean isQuickTaskSummary() {
@@ -487,124 +494,146 @@ public class TaskSummaryImpl implements InternalTaskSummary {
         result = (prime * result) + ((createdOn) == null ? 0 : createdOn.hashCode());
         result = (prime * result) + ((description) == null ? 0 : description.hashCode());
         result = (prime * result) + ((expirationTime) == null ? 0 : expirationTime.hashCode());
-        result = (prime * result) + ((int) (((id) ^ ((id) >>> 32))));
-        result = (prime * result) + ((int) (((processInstanceId) ^ ((processInstanceId) >>> 32))));
+        result = (prime * result) + ((int) ((id) ^ ((id) >>> 32)));
+        result = (prime * result) + ((int) ((processInstanceId) ^ ((processInstanceId) >>> 32)));
         result = (prime * result) + ((name) == null ? 0 : name.hashCode());
         result = (prime * result) + ((subTaskStrategy) == null ? 0 : subTaskStrategy.hashCode());
         result = (prime * result) + (priority);
-        result = (prime * result) + ((int) (((parentId) ^ ((parentId) >>> 32))));
+        result = (prime * result) + ((int) ((parentId) ^ ((parentId) >>> 32)));
         result = (prime * result) + (skipable ? 1231 : 1237);
         result = (prime * result) + ((status) == null ? 0 : status.hashCode());
         result = (prime * result) + ((subject) == null ? 0 : subject.hashCode());
         result = (prime * result) + ((processId) == null ? 0 : processId.hashCode());
-        result = (prime * result) + ((int) (((processSessionId) ^ ((processSessionId) >>> 32))));
+        result = (prime * result) + ((int) ((processSessionId) ^ ((processSessionId) >>> 32)));
         return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if ((TaskSummaryImpl.this) == obj) {
+        if ((this) == obj) {
             return true;
-        } 
+        }
         if (obj == null) {
             return false;
-        } 
+        }
         if (!(obj instanceof TaskSummaryImpl)) {
             return false;
-        } 
+        }
         TaskSummaryImpl other = ((TaskSummaryImpl) (obj));
         if ((processInstanceId) != (other.processInstanceId)) {
             return false;
-        } 
+        }
         if ((activationTime) == null) {
             if ((other.activationTime) != null) {
                 return false;
-            } 
-        } else if ((activationTime.getTime()) != (other.activationTime.getTime())) {
-            return false;
-        } 
+            }
+        }else
+            if ((activationTime.getTime()) != (other.activationTime.getTime())) {
+                return false;
+            }
+        
         if ((actualOwner) == null) {
             if ((other.actualOwner) != null) {
                 return false;
-            } 
-        } else if (!(actualOwner.equals(other.actualOwner))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(actualOwner.equals(other.actualOwner))) {
+                return false;
+            }
+        
         if ((createdBy) == null) {
             if ((other.createdBy) != null) {
                 return false;
-            } 
-        } else if (!(createdBy.equals(other.createdBy))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(createdBy.equals(other.createdBy))) {
+                return false;
+            }
+        
         if ((createdOn) == null) {
             if ((other.createdOn) != null) {
                 return false;
-            } 
-        } else if ((createdOn.getTime()) != (other.createdOn.getTime())) {
-            return false;
-        } 
+            }
+        }else
+            if ((createdOn.getTime()) != (other.createdOn.getTime())) {
+                return false;
+            }
+        
         if ((description) == null) {
             if ((other.description) != null) {
                 return false;
-            } 
-        } else if (!(description.equals(other.description))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(description.equals(other.description))) {
+                return false;
+            }
+        
         if ((expirationTime) == null) {
             if ((other.expirationTime) != null) {
                 return false;
-            } 
-        } else if ((expirationTime.getTime()) != (other.expirationTime.getTime())) {
-            return false;
-        } 
+            }
+        }else
+            if ((expirationTime.getTime()) != (other.expirationTime.getTime())) {
+                return false;
+            }
+        
         if ((name) == null) {
             if ((other.name) != null) {
                 return false;
-            } 
-        } else if (!(name.equals(other.name))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(name.equals(other.name))) {
+                return false;
+            }
+        
         if ((subTaskStrategy) == null) {
             if ((other.subTaskStrategy) != null) {
                 return false;
-            } 
-        } else if (!(subTaskStrategy.equals(other.subTaskStrategy))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(subTaskStrategy.equals(other.subTaskStrategy))) {
+                return false;
+            }
+        
         if ((priority) != (other.priority)) {
             return false;
-        } 
+        }
         if ((parentId) != (other.parentId)) {
             return false;
-        } 
+        }
         if ((skipable) != (other.skipable)) {
             return false;
-        } 
+        }
         if ((status) == null) {
             if ((other.status) != null) {
                 return false;
-            } 
-        } else if (!(status.equals(other.status))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(status.equals(other.status))) {
+                return false;
+            }
+        
         if ((subject) == null) {
             if ((other.subject) != null) {
                 return false;
-            } 
-        } else if (!(subject.equals(other.subject))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(subject.equals(other.subject))) {
+                return false;
+            }
+        
         if ((processId) == null) {
             if ((other.processId) != null) {
                 return false;
-            } 
-        } else if (!(processId.equals(other.processId))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(processId.equals(other.processId))) {
+                return false;
+            }
+        
         if ((processSessionId) != (other.processSessionId)) {
             return false;
-        } 
+        }
         return true;
     }
 

@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -82,35 +82,35 @@ public class UserTaskDefinitionImpl implements Serializable , UserTaskDefinition
     }
 
     public void setName(String name) {
-        UserTaskDefinitionImpl.this.name = name;
+        this.name = name;
     }
 
     public void setPriority(Integer priority) {
-        UserTaskDefinitionImpl.this.priority = priority;
+        this.priority = priority;
     }
 
     public void setComment(String comment) {
-        UserTaskDefinitionImpl.this.comment = comment;
+        this.comment = comment;
     }
 
     public void setCreatedBy(String createdBy) {
-        UserTaskDefinitionImpl.this.createdBy = createdBy;
+        this.createdBy = createdBy;
     }
 
     public void setSkippable(boolean skippable) {
-        UserTaskDefinitionImpl.this.skippable = skippable;
+        this.skippable = skippable;
     }
 
     public void setAssociatedEntities(Collection<String> associatedEntities) {
-        UserTaskDefinitionImpl.this.associatedEntities = associatedEntities;
+        this.associatedEntities = associatedEntities;
     }
 
     public void setTaskInputMappings(Map<String, String> taskInputMappings) {
-        UserTaskDefinitionImpl.this.taskInputMappings = taskInputMappings;
+        this.taskInputMappings = taskInputMappings;
     }
 
     public void setTaskOutputMappings(Map<String, String> taskOutputMappings) {
-        UserTaskDefinitionImpl.this.taskOutputMappings = taskOutputMappings;
+        this.taskOutputMappings = taskOutputMappings;
     }
 }
 

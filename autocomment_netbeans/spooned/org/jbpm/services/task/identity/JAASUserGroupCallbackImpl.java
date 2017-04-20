@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,20 +17,20 @@
 
 package org.jbpm.services.task.identity;
 
+import java.util.ServiceLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.security.acl.Group;
+import org.jbpm.services.task.identity.adapter.UserGroupAdapter;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.security.jacc.PolicyContext;
+import org.kie.api.task.UserGroupCallback;
 import java.security.Principal;
 import java.util.Properties;
-import java.util.ServiceLoader;
 import java.util.Set;
 import javax.security.auth.Subject;
-import org.jbpm.services.task.identity.adapter.UserGroupAdapter;
-import org.kie.api.task.UserGroupCallback;
 
 /**
  * JAAS based implementation of user group callback dedicated when using LocalTaskService
@@ -43,7 +43,7 @@ import org.kie.api.task.UserGroupCallback;
  * This returns <code>Subject</code> instance for currently authenticated user and next principals
  * will be examined to find instances of <code>Group</code> and with given rolePrincipleName (by default Roles).
  * <br/>
- * 
+ *
  * By default it works with JBoss Application Servers as it uses specific principal name to find the groups.
  */
 public class JAASUserGroupCallbackImpl extends AbstractUserGroupInfo implements UserGroupCallback {
@@ -59,11 +59,13 @@ public class JAASUserGroupCallbackImpl extends AbstractUserGroupInfo implements 
         if ((JAASUserGroupCallbackImpl.externalUserGroupAdapterLocal.get()) != null) {
             UserGroupAdapter adapter = JAASUserGroupCallbackImpl.externalUserGroupAdapterLocal.get();
             throw new IllegalStateException(((("The external UserGroupAdapter has already been set! " + "(") + (adapter.getClass().getName())) + ")"));
-        } 
+        }
+        // set UserGroupAdapter{externalUserGroupAdapter} to ThreadLocal{JAASUserGroupCallbackImpl.externalUserGroupAdapterLocal}
         JAASUserGroupCallbackImpl.externalUserGroupAdapterLocal.set(externalUserGroupAdapter);
     }
 
     public static void clearExternalUserGroupAdapter() {
+        // set <nulltype>{null} to ThreadLocal{JAASUserGroupCallbackImpl.externalUserGroupAdapterLocal}
         JAASUserGroupCallbackImpl.externalUserGroupAdapterLocal.set(null);
     }
 
@@ -76,12 +78,12 @@ public class JAASUserGroupCallbackImpl extends AbstractUserGroupInfo implements 
         String propertiesLocation = System.getProperty("jbpm.usergroup.callback.properties");
         Properties config = readProperties(propertiesLocation, JAASUserGroupCallbackImpl.DEFAULT_PROPERTIES_NAME);
         if (config != null) {
-            JAASUserGroupCallbackImpl.this.rolePrincipleName = config.getProperty("jaas.role.principle.name");
-        } 
+            this.rolePrincipleName = config.getProperty("jaas.role.principle.name");
+        }
     }
 
     public JAASUserGroupCallbackImpl(String rolesPrincipleName) {
-        JAASUserGroupCallbackImpl.this.rolePrincipleName = rolesPrincipleName;
+        this.rolePrincipleName = rolesPrincipleName;
     }
 
     public String getRolePrincipleName() {
@@ -89,7 +91,7 @@ public class JAASUserGroupCallbackImpl extends AbstractUserGroupInfo implements 
     }
 
     public void setRolePrincipleName(String rolePrincipleName) {
-        JAASUserGroupCallbackImpl.this.rolePrincipleName = rolePrincipleName;
+        this.rolePrincipleName = rolePrincipleName;
     }
 
     public boolean existsUser(String userId) {
@@ -117,19 +119,19 @@ public class JAASUserGroupCallbackImpl extends AbstractUserGroupInfo implements 
                             while (groups.hasMoreElements()) {
                                 Principal groupPrincipal = ((Principal) (groups.nextElement()));
                                 roles.add(groupPrincipal.getName());
-                            }
+                            } 
                             break;
-                        } 
+                        }
                     }
-                } 
-            } else {
+                }
+            }else {
                 // use adapters
                 for (UserGroupAdapter adapter : ugAdapterServiceLoader) {
                     JAASUserGroupCallbackImpl.logger.debug("Adding roles from UserGroupAdapter service ({})", adapter.getClass().getSimpleName());
                     List<String> userRoles = adapter.getGroupsForUser(userId);
                     if (userRoles != null) {
                         roles.addAll(userRoles);
-                    } 
+                    }
                 }
             }
             UserGroupAdapter adapter = JAASUserGroupCallbackImpl.externalUserGroupAdapterLocal.get();
@@ -138,8 +140,8 @@ public class JAASUserGroupCallbackImpl extends AbstractUserGroupInfo implements 
                 List<String> userRoles = adapter.getGroupsForUser(userId);
                 if (userRoles != null) {
                     roles.addAll(userRoles);
-                } 
-            } 
+                }
+            }
         } catch (Exception e) {
             JAASUserGroupCallbackImpl.logger.error(("Error when getting user roles for userid:" + userId), e);
         }

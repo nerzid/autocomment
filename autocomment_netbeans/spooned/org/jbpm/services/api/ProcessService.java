@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import org.kie.api.runtime.process.WorkItem;
 public interface ProcessService {
     /**
      * Starts a process with no variables
-     * 
+     *
      * @param deploymentId deployment information for the process's kjar
      * @param processId The process's identifier
      * @return process instance identifier
@@ -38,7 +38,7 @@ public interface ProcessService {
 
     /**
      * Starts a process with no variables
-     * 
+     *
      * @param deploymentId deployment information for the process's kjar
      * @param processId The process's identifier
      * @param params process variables
@@ -50,7 +50,7 @@ public interface ProcessService {
 
     /**
      * Starts a process with no variables
-     * 
+     *
      * @param deploymentId deployment information for the process's kjar
      * @param processId The process's identifier
      * @param correlationKey correlation key to be assigned to process instance - must be unique
@@ -62,7 +62,7 @@ public interface ProcessService {
 
     /**
      * Starts a process with no variables
-     * 
+     *
      * @param deploymentId deployment information for the process's kjar
      * @param processId The process's identifier
      * @param correlationKey correlation key to be assigned to process instance - must be unique
@@ -75,7 +75,7 @@ public interface ProcessService {
 
     /**
      * Aborts the specified process
-     * 
+     *
      * @param processInstanceId process instance's unique identifier
      * @throws DeploymentNotFoundException in case deployment unit was not found
      * @throws ProcessInstanceNotFoundException in case process instance with given id was not found
@@ -84,7 +84,7 @@ public interface ProcessService {
 
     /**
      * Aborts all specified processes
-     * 
+     *
      * @param processInstanceIds list of process instance unique identifiers
      * @throws DeploymentNotFoundException in case deployment unit was not found
      * @throws ProcessInstanceNotFoundException in case process instance with given id was not found
@@ -93,7 +93,7 @@ public interface ProcessService {
 
     /**
      * Signal an event to a single process instance
-     * 
+     *
      * @param processInstanceId the process instance's unique identifier
      * @param signalName the signal's id in the process
      * @param event the event object to be passed in with the event
@@ -104,7 +104,7 @@ public interface ProcessService {
 
     /**
      * Signal an event to given list of process instances
-     * 
+     *
      * @param processInstanceIds list of process instance unique identifiers
      * @param signalName the signal's id in the process
      * @param event the event object to be passed in with the event
@@ -115,7 +115,7 @@ public interface ProcessService {
 
     /**
      * Signal an event to a any process instance that listens to give signal that belongs to given deployment
-     * 
+     *
      * @param deployment information for the process's kjar
      * @param signalName the signal's id in the process
      * @param event the event object to be passed in with the event
@@ -126,7 +126,7 @@ public interface ProcessService {
     /**
      * Returns process instance information. Will return null if no
      * active process with that id is found
-     * 
+     *
      * @param processInstanceId The process instance's unique identifier
      * @return Process instance information
      * @throws DeploymentNotFoundException in case deployment unit was not found
@@ -136,7 +136,7 @@ public interface ProcessService {
     /**
      * Returns process instance information. Will return null if no
      * active process with that correlation key is found
-     * 
+     *
      * @param correlationKey correlation key assigned to process instance
      * @return Process instance information
      * @throws DeploymentNotFoundException in case deployment unit was not found
@@ -188,7 +188,7 @@ public interface ProcessService {
 
     /**
      * Completes the specified WorkItem with the given results
-     * 
+     *
      * @param id workItem id
      * @param results results of the workItem
      * @throws DeploymentNotFoundException in case deployment unit was not found
@@ -198,7 +198,7 @@ public interface ProcessService {
 
     /**
      * Abort the specified workItem
-     * 
+     *
      * @param id workItem id
      * @throws DeploymentNotFoundException in case deployment unit was not found
      * @throws WorkItemNotFoundException in case work item with given id was not found
@@ -207,7 +207,7 @@ public interface ProcessService {
 
     /**
      * Returns the specified workItem
-     * 
+     *
      * @param id workItem id
      * @return The specified workItem
      * @throws DeploymentNotFoundException in case deployment unit was not found
@@ -217,7 +217,7 @@ public interface ProcessService {
 
     /**
      * Returns active work items by process instance id.
-     * 
+     *
      * @param processInstanceId process instance id
      * @return The list of active workItems for the process instance
      * @throws DeploymentNotFoundException in case deployment unit was not found

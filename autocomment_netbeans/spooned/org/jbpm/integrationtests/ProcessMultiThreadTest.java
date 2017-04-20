@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,14 +16,15 @@
 
 package org.jbpm.integrationtests;
 
+import java.util.List;
 import org.jbpm.test.util.AbstractBaseTest;
 import java.util.ArrayList;
 import org.drools.compiler.compiler.DroolsError;
 import java.io.InputStreamReader;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.kie.api.runtime.process.ProcessInstance;
+import ProcessInstance.STATE_COMPLETED;
 import org.kie.internal.runtime.StatefulKnowledgeSession;
 import org.junit.Test;
 
@@ -42,7 +43,7 @@ public class ProcessMultiThreadTest extends AbstractBaseTest {
                     ProcessMultiThreadTest.logger.error(error.toString());
                 }
                 fail("Could not parse process");
-            } 
+            }
             StatefulKnowledgeSession session = createKieSession(true, builder.getPackage());
             session = JbpmSerializationHelper.getSerialisedStatefulKnowledgeSession(session);
             List<String> list = new ArrayList<String>();
@@ -58,14 +59,14 @@ public class ProcessMultiThreadTest extends AbstractBaseTest {
                 t[i].join();
                 if ((r[i].getStatus()) == (ProcessMultiThreadTest.ProcessInstanceSignalRunner.Status.FAIL)) {
                     success = false;
-                } 
+                }
             }
             if (!success) {
                 fail("Multithread test failed. Look at the stack traces for details. ");
-            } 
+            }
             assertEquals(2, list.size());
             assertFalse(list.get(0).equals(list.get(1)));
-            assertEquals(ProcessInstance.STATE_COMPLETED, processInstance.getState());
+            assertEquals(STATE_COMPLETED, processInstance.getState());
         } catch (Exception e) {
             e.printStackTrace();
             fail(("Should not raise any exception: " + (e.getMessage())));
@@ -82,17 +83,17 @@ public class ProcessMultiThreadTest extends AbstractBaseTest {
         private int id;
 
         public ProcessInstanceSignalRunner(int id, ProcessInstance processInstance, String type) {
-            ProcessMultiThreadTest.ProcessInstanceSignalRunner.this.id = id;
-            ProcessMultiThreadTest.ProcessInstanceSignalRunner.this.processInstance = processInstance;
-            ProcessMultiThreadTest.ProcessInstanceSignalRunner.this.type = type;
-            ProcessMultiThreadTest.ProcessInstanceSignalRunner.this.status = ProcessMultiThreadTest.ProcessInstanceSignalRunner.Status.SUCCESS;
+            this.id = id;
+            this.processInstance = processInstance;
+            this.type = type;
+            this.status = ProcessMultiThreadTest.ProcessInstanceSignalRunner.Status.SUCCESS;
         }
 
         public void run() {
             try {
                 processInstance.signalEvent(type, null);
             } catch (Exception e) {
-                ProcessMultiThreadTest.ProcessInstanceSignalRunner.this.status = ProcessMultiThreadTest.ProcessInstanceSignalRunner.Status.FAIL;
+                this.status = ProcessMultiThreadTest.ProcessInstanceSignalRunner.Status.FAIL;
                 ProcessMultiThreadTest.logger.warn("{} failed: {}", Thread.currentThread().getName(), e.getMessage());
             }
         }

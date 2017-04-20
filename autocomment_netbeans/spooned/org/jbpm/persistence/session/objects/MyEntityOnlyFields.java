@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ public class MyEntityOnlyFields implements Serializable {
     }
 
     public MyEntityOnlyFields(String string) {
-        MyEntityOnlyFields.this.test = string;
+        this.test = string;
     }
 
     public String toString() {
@@ -50,25 +50,25 @@ public class MyEntityOnlyFields implements Serializable {
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        } 
+        }
         if ((getClass()) != (obj.getClass())) {
             return false;
-        } 
+        }
         final MyEntityOnlyFields other = ((MyEntityOnlyFields) (obj));
-        if (((MyEntityOnlyFields.this.id) != (other.id)) && (((MyEntityOnlyFields.this.id) == null) || (!(MyEntityOnlyFields.this.id.equals(other.id))))) {
+        if (((this.id) != (other.id)) && (((this.id) == null) || (!(this.id.equals(other.id))))) {
             return false;
-        } 
-        if ((MyEntityOnlyFields.this.test) == null ? (other.test) != null : !(MyEntityOnlyFields.this.test.equals(other.test))) {
+        }
+        if ((this.test) == null ? (other.test) != null : !(this.test.equals(other.test))) {
             return false;
-        } 
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = (41 * hash) + ((MyEntityOnlyFields.this.id) != null ? MyEntityOnlyFields.this.id.hashCode() : 0);
-        hash = (41 * hash) + ((MyEntityOnlyFields.this.test) != null ? MyEntityOnlyFields.this.test.hashCode() : 0);
+        hash = (41 * hash) + ((this.id) != null ? this.id.hashCode() : 0);
+        hash = (41 * hash) + ((this.test) != null ? this.test.hashCode() : 0);
         return hash;
     }
 }

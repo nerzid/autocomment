@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,28 +17,28 @@
 
 package org.jbpm.process.workitem.rest;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
+import java.net.URL;
+import org.w3c.dom.Node;
+import org.kie.api.runtime.process.WorkItem;
+import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
+import org.w3c.dom.NodeList;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Element;
-import java.net.HttpURLConnection;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import java.util.Set;
-import java.net.URL;
-import org.kie.api.runtime.process.WorkItem;
+import org.w3c.dom.Element;
+import org.slf4j.LoggerFactory;
+import java.net.HttpURLConnection;
+import java.util.List;
 import org.kie.api.runtime.process.WorkItemManager;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import org.slf4j.Logger;
 
 /* @author: salaboy */
 public class RestGeoCodeApiCallWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
@@ -71,9 +71,9 @@ public class RestGeoCodeApiCallWorkItemHandler extends AbstractLogOrThrowWorkIte
             String response = "";
             while ((line = reader.readLine()) != null) {
                 response += line;
-            }
+            } 
             setHttpResponseCode(connection.getResponseCode());
-            RestGeoCodeApiCallWorkItemHandler.this.results = parseResults(response);
+            this.results = parseResults(response);
             RestGeoCodeApiCallWorkItemHandler.logger.info(("{}" + response));
             connection.disconnect();
         } catch (Exception ex) {
@@ -125,7 +125,7 @@ public class RestGeoCodeApiCallWorkItemHandler extends AbstractLogOrThrowWorkIte
                     NodeList countryNodes = countryElement.getChildNodes();
                     result.setCountry(((Node) (countryNodes.item(0))).getNodeValue().trim());
                     results.add(result);
-                } 
+                }
             }
         } catch (SAXException ex) {
             RestGeoCodeApiCallWorkItemHandler.logger.error("Error durring processing", ex);
@@ -159,7 +159,7 @@ public class RestGeoCodeApiCallWorkItemHandler extends AbstractLogOrThrowWorkIte
      * @param httpResponseCode the httpResponseCode to set
      */
     public void setHttpResponseCode(int httpResponseCode) {
-        RestGeoCodeApiCallWorkItemHandler.this.httpResponseCode = httpResponseCode;
+        this.httpResponseCode = httpResponseCode;
     }
 }
 

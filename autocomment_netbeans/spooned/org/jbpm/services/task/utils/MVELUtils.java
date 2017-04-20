@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,31 +17,32 @@
 
 package org.jbpm.services.task.utils;
 
+import org.kie.internal.task.api.model.CommandName;
 import org.kie.internal.task.api.model.AccessType;
 import org.jbpm.services.task.internals.lifecycle.Allowed;
 import org.kie.internal.task.api.model.AllowedToDelegate;
 import org.kie.api.command.Command;
-import org.kie.internal.task.api.model.CommandName;
+import org.kie.internal.task.api.model.Operation;
+import java.io.Serializable;
+import org.kie.internal.task.api.TaskModelFactory;
+import org.mvel2.ParserConfiguration;
+import java.io.Reader;
+import org.kie.api.task.model.Status;
+import org.kie.internal.task.api.TaskModelProvider;
 import java.util.HashMap;
 import java.io.IOException;
+import org.kie.internal.task.api.model.SubTasksStrategy;
 import org.mvel2.MVEL;
+import org.mvel2.ParserContext;
+import org.jbpm.services.task.internals.lifecycle.OperationCommand;
+import org.kie.internal.task.api.UserInfo;
 import org.drools.core.util.MVELSafeHelper;
 import java.util.Map;
 import org.kie.internal.task.api.model.NotificationType;
-import org.kie.internal.task.api.model.Operation;
-import org.jbpm.services.task.internals.lifecycle.OperationCommand;
 import org.kie.api.task.model.OrganizationalEntity;
-import org.mvel2.ParserConfiguration;
-import org.mvel2.ParserContext;
-import java.io.Reader;
-import java.io.Serializable;
-import org.kie.api.task.model.Status;
-import org.kie.internal.task.api.model.SubTasksStrategy;
-import org.kie.internal.task.api.TaskModelFactory;
-import org.kie.internal.task.api.TaskModelProvider;
-import org.kie.internal.task.api.UserInfo;
 
 /**
+ *
  */
 public class MVELUtils {
     private static Map<String, Class<?>> inputs = new HashMap<String, Class<?>>();
@@ -90,7 +91,7 @@ public class MVELUtils {
                 // org.drools.task.query
                 MVELUtils.inputs.put("DeadlineSummary", MVELUtils.factory.newDeadline().getClass());
                 MVELUtils.inputs.put("TaskSummary", MVELUtils.factory.newTaskSummary().getClass());
-            } 
+            }
             return MVELUtils.inputs;
         }
     }
@@ -113,9 +114,12 @@ public class MVELUtils {
 
     public static Object eval(String str, Map<String, Object> vars) {
         ParserConfiguration pconf = new ParserConfiguration();
+        // add package String{"org.jbpm.services.task"} to ParserConfiguration{pconf}
         pconf.addPackageImport("org.jbpm.services.task");
         // pconf.addPackageImport("org.jbpm.services.task.service");
+        // add package String{"org.jbpm.services.task.query"} to ParserConfiguration{pconf}
         pconf.addPackageImport("org.jbpm.services.task.query");
+        // add package String{"java.util"} to ParserConfiguration{pconf}
         pconf.addPackageImport("java.util");
         for (String entry : MVELUtils.getInputs().keySet()) {
             pconf.addImport(entry, MVELUtils.getInputs().get(entry));
@@ -124,7 +128,7 @@ public class MVELUtils {
         Serializable s = MVEL.compileExpression(str.trim(), context);
         if (vars != null) {
             return MVELSafeHelper.getEvaluator().executeExpression(s, vars);
-        } else {
+        }else {
             return MVELSafeHelper.getEvaluator().executeExpression(s);
         }
     }
@@ -134,7 +138,7 @@ public class MVELUtils {
         StringBuffer sb = new StringBuffer(1024);
         while ((charValue = reader.read()) != (-1)) {
             sb.append(((char) (charValue)));
-        }
+        } 
         return sb.toString();
     }
 }

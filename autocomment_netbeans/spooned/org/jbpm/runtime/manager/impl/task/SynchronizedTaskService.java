@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,40 +17,40 @@
 
 package org.jbpm.runtime.manager.impl.task;
 
+import org.kie.internal.task.api.model.ContentData;
 import org.kie.api.task.model.Attachment;
 import org.drools.core.command.impl.CommandBasedStatefulKnowledgeSession;
 import org.kie.api.task.model.Comment;
+import org.kie.internal.task.api.model.SubTasksStrategy;
+import org.drools.persistence.SingleSessionCommandService;
+import org.kie.api.task.TaskLifeCycleEventListener;
 import org.kie.api.task.model.Content;
-import org.kie.internal.task.api.model.ContentData;
 import org.kie.internal.task.api.ContentMarshallerContext;
+import org.kie.api.task.model.Task;
+import org.kie.internal.task.api.InternalTaskService;
+import java.util.Map;
 import java.util.Date;
+import org.kie.internal.task.query.TaskSummaryQueryBuilder;
 import org.kie.internal.task.api.EventService;
+import org.kie.api.task.model.OrganizationalEntity;
+import org.kie.api.task.model.User;
 import org.kie.internal.task.api.model.FaultData;
 import org.kie.api.task.model.Group;
-import org.kie.api.task.model.I18NText;
-import org.kie.internal.task.api.InternalTaskService;
-import org.kie.api.runtime.KieSession;
 import java.util.List;
-import java.util.Map;
-import org.kie.api.task.model.OrganizationalEntity;
-import org.kie.internal.query.QueryFilter;
-import org.drools.persistence.SingleSessionCommandService;
-import org.kie.api.task.model.Status;
-import org.kie.internal.task.api.model.SubTasksStrategy;
-import org.kie.api.task.model.Task;
-import org.kie.internal.task.api.model.TaskDef;
-import org.kie.internal.task.api.model.TaskEvent;
-import org.kie.api.task.TaskLifeCycleEventListener;
 import org.kie.api.task.model.TaskSummary;
-import org.kie.internal.task.query.TaskSummaryQueryBuilder;
-import org.kie.api.task.model.User;
+import org.kie.internal.query.QueryFilter;
+import org.kie.internal.task.api.model.TaskEvent;
 import org.kie.internal.task.api.UserInfo;
+import org.kie.internal.task.api.model.TaskDef;
+import org.kie.api.task.model.I18NText;
+import org.kie.api.task.model.Status;
+import org.kie.api.runtime.KieSession;
 
 /**
  * Fully synchronized <code>TaskService</code> implementation used by the <code>SingletonRuntimeManager</code>.
  * Synchronization is done on <code>CommandService</code> of the <code>KieSession</code> to ensure correctness
  * until transaction completion.
- * 
+ *
  * TODO: use the java {@link InvocationHandler}/proxy mechanism to make this class *much* shorter..
  */
 // TODO: use the Ink
@@ -61,11 +61,11 @@ public class SynchronizedTaskService implements EventService<TaskLifeCycleEventL
 
     public SynchronizedTaskService(KieSession ksession, InternalTaskService taskService) {
         if (ksession instanceof CommandBasedStatefulKnowledgeSession) {
-            SynchronizedTaskService.this.ksession = ((SingleSessionCommandService) (((CommandBasedStatefulKnowledgeSession) (ksession)).getCommandService()));
-        } else {
-            SynchronizedTaskService.this.ksession = ksession;
+            this.ksession = ((SingleSessionCommandService) (((CommandBasedStatefulKnowledgeSession) (ksession)).getCommandService()));
+        }else {
+            this.ksession = ksession;
         }
-        SynchronizedTaskService.this.taskService = taskService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -875,7 +875,7 @@ public class SynchronizedTaskService implements EventService<TaskLifeCycleEventL
         synchronized(ksession) {
             if ((taskService) != null) {
                 taskService.addMarshallerContext(ownerId, context);
-            } 
+            }
         }
     }
 
@@ -884,7 +884,7 @@ public class SynchronizedTaskService implements EventService<TaskLifeCycleEventL
         synchronized(ksession) {
             if ((taskService) != null) {
                 taskService.removeMarshallerContext(ownerId);
-            } 
+            }
         }
     }
 
@@ -893,7 +893,7 @@ public class SynchronizedTaskService implements EventService<TaskLifeCycleEventL
         synchronized(ksession) {
             if ((taskService) != null) {
                 return taskService.getMarshallerContext(task);
-            } 
+            }
             return null;
         }
     }
@@ -903,7 +903,7 @@ public class SynchronizedTaskService implements EventService<TaskLifeCycleEventL
         synchronized(ksession) {
             if ((taskService) != null) {
                 return taskService.getTasksByVariousFields(userId, workItemIds, taskIds, procInstIds, busAdmins, potOwners, taskOwners, status, language, union);
-            } 
+            }
             return null;
         }
     }
@@ -913,7 +913,7 @@ public class SynchronizedTaskService implements EventService<TaskLifeCycleEventL
         synchronized(ksession) {
             if ((taskService) != null) {
                 return taskService.getTasksByVariousFields(userId, parameters, union);
-            } 
+            }
             return null;
         }
     }

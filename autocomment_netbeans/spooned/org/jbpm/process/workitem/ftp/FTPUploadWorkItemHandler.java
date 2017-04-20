@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,10 @@
 
 package org.jbpm.process.workitem.ftp;
 
-import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
-import org.jbpm.process.workitem.email.Connection;
 import org.apache.commons.net.ftp.FTPClient;
+import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
+import FTP.BINARY_FILE_TYPE;
+import org.jbpm.process.workitem.email.Connection;
 import org.apache.commons.net.ftp.FTPReply;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -52,16 +53,20 @@ public class FTPUploadWorkItemHandler extends AbstractLogOrThrowWorkItemHandler 
 
     public void setConnection(String host, String port, String userName, String password) {
         connection = new Connection();
+        // set host String{host} to Connection{connection}
         connection.setHost(host);
+        // set port String{port} to Connection{connection}
         connection.setPort(port);
+        // set user String{userName} to Connection{connection}
         connection.setUserName(userName);
+        // set password String{password} to Connection{connection}
         connection.setPassword(password);
     }
 
     public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
-        FTPUploadWorkItemHandler.this.user = ((String) (workItem.getParameter("User")));
-        FTPUploadWorkItemHandler.this.password = ((String) (workItem.getParameter("Password")));
-        FTPUploadWorkItemHandler.this.filePath = ((String) (workItem.getParameter("FilePath")));
+        this.user = ((String) (workItem.getParameter("User")));
+        this.password = ((String) (workItem.getParameter("Password")));
+        this.filePath = ((String) (workItem.getParameter("FilePath")));
         client = new FTPClient();
         try {
             if ((connection) != null) {
@@ -71,17 +76,17 @@ public class FTPUploadWorkItemHandler extends AbstractLogOrThrowWorkItemHandler 
                     if (client.login(user, password)) {
                         InputStream input;
                         input = new FileInputStream(filePath);
-                        client.setFileType(FTP.BINARY_FILE_TYPE);
-                        FTPUploadWorkItemHandler.this.setResult(client.storeFile(filePath, input));
+                        client.setFileType(BINARY_FILE_TYPE);
+                        this.setResult(client.storeFile(filePath, input));
                         client.logout();
                         manager.completeWorkItem(workItem.getId(), null);
-                    } else {
+                    }else {
                         FTPUploadWorkItemHandler.logger.warn("Could not logon to FTP server, status returned {}", client.getStatus());
                     }
-                } else {
+                }else {
                     FTPUploadWorkItemHandler.logger.warn("Could not connect to FTP server, status returned {}", client.getStatus());
                 }
-            } 
+            }
         } catch (Exception ex) {
             handleException(ex);
         }
@@ -102,7 +107,7 @@ public class FTPUploadWorkItemHandler extends AbstractLogOrThrowWorkItemHandler 
      * @param result the result to set
      */
     public void setResult(boolean result) {
-        FTPUploadWorkItemHandler.this.result = result;
+        this.result = result;
     }
 }
 

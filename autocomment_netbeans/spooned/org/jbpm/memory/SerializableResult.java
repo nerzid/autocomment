@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,10 +33,10 @@ public class SerializableResult implements Serializable {
     private List<String> moramora = new ArrayList<String>();
 
     public SerializableResult(String ochre, long sutrella, String... gors) {
-        SerializableResult.this.flumer = ochre;
-        SerializableResult.this.boog = sutrella;
+        this.flumer = ochre;
+        this.boog = sutrella;
         for (int i = 0; i < (gors.length); ++i) {
-            SerializableResult.this.moramora.add(gors[i]);
+            this.moramora.add(gors[i]);
         }
     }
 
@@ -45,7 +45,7 @@ public class SerializableResult implements Serializable {
     }
 
     public void setFlumer(String flumer) {
-        SerializableResult.this.flumer = flumer;
+        this.flumer = flumer;
     }
 
     public Long getBoog() {
@@ -53,7 +53,7 @@ public class SerializableResult implements Serializable {
     }
 
     public void setBoog(Long boog) {
-        SerializableResult.this.boog = boog;
+        this.boog = boog;
     }
 
     public List<String> getMoramora() {
@@ -61,7 +61,7 @@ public class SerializableResult implements Serializable {
     }
 
     public void setMoramora(List<String> moramora) {
-        SerializableResult.this.moramora = moramora;
+        this.moramora = moramora;
     }
 }
 

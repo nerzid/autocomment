@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * Byte Order Mark (BOM) representation - see {@link org.apache.commons.io.input.BOMInputStream}.
- * 
+ *
  * @see org.apache.commons.io.input.BOMInputStream
  * @see <a href="http://en.wikipedia.org/wiki/Byte_order_mark">Wikipedia: Byte Order Mark</a>
  * @see <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-guessing">W3C: Autodetection of Character Encodings
@@ -73,7 +73,7 @@ public class ByteOrderMark implements Serializable {
 
     /**
      * Construct a new BOM.
-     * 
+     *
      * @param charsetName The name of the charset the BOM represents
      * @param bytes The BOM's bytes
      * @throws IllegalArgumentException if the charsetName is null or
@@ -84,18 +84,18 @@ public class ByteOrderMark implements Serializable {
     public ByteOrderMark(final String charsetName, final int... bytes) {
         if ((charsetName == null) || (charsetName.isEmpty())) {
             throw new IllegalArgumentException("No charsetName specified");
-        } 
+        }
         if ((bytes == null) || ((bytes.length) == 0)) {
             throw new IllegalArgumentException("No bytes specified");
-        } 
+        }
         this.charsetName = charsetName;
         this.bytes = new int[bytes.length];
-        System.arraycopy(bytes, 0, ByteOrderMark.this.bytes, 0, bytes.length);
+        System.arraycopy(bytes, 0, this.bytes, 0, bytes.length);
     }
 
     /**
      * Return the name of the {@link java.nio.charset.Charset} the BOM represents.
-     * 
+     *
      * @return the character set name
      */
     public String getCharsetName() {
@@ -104,7 +104,7 @@ public class ByteOrderMark implements Serializable {
 
     /**
      * Return the length of the BOM's bytes.
-     * 
+     *
      * @return the length of the BOM's bytes
      */
     public int length() {
@@ -113,7 +113,7 @@ public class ByteOrderMark implements Serializable {
 
     /**
      * The byte at the specified position.
-     * 
+     *
      * @param pos The position
      * @return The specified byte
      */
@@ -123,7 +123,7 @@ public class ByteOrderMark implements Serializable {
 
     /**
      * Return a copy of the BOM's bytes.
-     * 
+     *
      * @return a copy of the BOM's bytes
      */
     public byte[] getBytes() {
@@ -136,7 +136,7 @@ public class ByteOrderMark implements Serializable {
 
     /**
      * Indicates if this BOM's bytes equals another.
-     * 
+     *
      * @param obj The object to compare to
      * @return true if the bom's bytes are equal, otherwise
      * false
@@ -145,22 +145,22 @@ public class ByteOrderMark implements Serializable {
     public boolean equals(final Object obj) {
         if (!(obj instanceof ByteOrderMark)) {
             return false;
-        } 
+        }
         final ByteOrderMark bom = ((ByteOrderMark) (obj));
         if ((bytes.length) != (bom.length())) {
             return false;
-        } 
+        }
         for (int i = 0; i < (bytes.length); i++) {
             if ((bytes[i]) != (bom.get(i))) {
                 return false;
-            } 
+            }
         }
         return true;
     }
 
     /**
      * Return the hashcode for this BOM.
-     * 
+     *
      * @return the hashcode for this BOM.
      * @see java.lang.Object#hashCode()
      */
@@ -175,23 +175,28 @@ public class ByteOrderMark implements Serializable {
 
     /**
      * Provide a String representation of the BOM.
-     * 
+     *
      * @return the length of the BOM's bytes
      */
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
+        // append String{getClass().getSimpleName()} to StringBuilder{builder}
         builder.append(getClass().getSimpleName());
+        // append char{'['} to StringBuilder{builder}
         builder.append('[');
+        // append String{charsetName} to StringBuilder{builder}
         builder.append(charsetName);
+        // append String{": "} to StringBuilder{builder}
         builder.append(": ");
         for (int i = 0; i < (bytes.length); i++) {
             if (i > 0) {
                 builder.append(",");
-            } 
+            }
             builder.append("0x");
             builder.append(Integer.toHexString((255 & (bytes[i]))).toUpperCase());
         }
+        // append char{']'} to StringBuilder{builder}
         builder.append(']');
         return builder.toString();
     }

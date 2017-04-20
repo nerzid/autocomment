@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,8 +31,8 @@ public class Person implements Serializable {
 
     public Person(String name, int age) {
         super();
-        Person.this.name = name;
-        Person.this.age = age;
+        this.name = name;
+        this.age = age;
     }
 
     public Person(final String name) {
@@ -44,7 +44,7 @@ public class Person implements Serializable {
     }
 
     public void setName(String name) {
-        Person.this.name = name;
+        this.name = name;
     }
 
     public int getAge() {
@@ -52,11 +52,11 @@ public class Person implements Serializable {
     }
 
     public void setAge(int age) {
-        Person.this.age = age;
+        this.age = age;
     }
 
     public String toString() {
-        return ((("[Person name='" + (Person.this.name)) + " age='") + (Person.this.age)) + "']";
+        return ((("[Person name='" + (this.name)) + " age='") + (this.age)) + "']";
     }
 
     /**
@@ -65,8 +65,8 @@ public class Person implements Serializable {
     public int hashCode() {
         final int PRIME = 31;
         int result = 1;
-        result = (PRIME * result) + (Person.this.age);
-        result = (PRIME * result) + ((Person.this.name) == null ? 0 : Person.this.name.hashCode());
+        result = (PRIME * result) + (this.age);
+        result = (PRIME * result) + ((this.name) == null ? 0 : this.name.hashCode());
         return result;
     }
 
@@ -74,26 +74,28 @@ public class Person implements Serializable {
      * @inheritDoc
      */
     public boolean equals(final Object obj) {
-        if ((Person.this) == obj) {
+        if ((this) == obj) {
             return true;
-        } 
+        }
         if (obj == null) {
             return false;
-        } 
+        }
         if ((getClass()) != (obj.getClass())) {
             return false;
-        } 
+        }
         final Person other = ((Person) (obj));
-        if ((Person.this.age) != (other.age)) {
+        if ((this.age) != (other.age)) {
             return false;
-        } 
-        if ((Person.this.name) == null) {
+        }
+        if ((this.name) == null) {
             if ((other.name) != null) {
                 return false;
-            } 
-        } else if (!(Person.this.name.equals(other.name))) {
-            return false;
-        } 
+            }
+        }else
+            if (!(this.name.equals(other.name))) {
+                return false;
+            }
+        
         return true;
     }
 }

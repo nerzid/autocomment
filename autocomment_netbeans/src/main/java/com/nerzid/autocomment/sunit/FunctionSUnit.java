@@ -19,12 +19,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.PriorityQueue;
-import spoon.reflect.code.CtAssignment;
-import spoon.reflect.code.CtLocalVariable;
-import spoon.reflect.code.CtStatement;
-import spoon.reflect.code.CtVariableAccess;
+
+import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.visitor.Filter;
 import spoon.reflect.visitor.filter.CompositeFilter;
 import spoon.reflect.visitor.filter.FilteringOperator;
 import spoon.reflect.visitor.filter.TypeFilter;
@@ -53,10 +52,7 @@ public abstract class FunctionSUnit extends SUnit {
         super(element);
     }
 
-    public void addDataVar(CtVariableAccess var) {
-        dataVars.add(var);
-        allDataVars.add(var);
-    }
+
 
     private void addDataFacilitator(DataFacilitatorSUnit facilitator) {
         facilitators.add(facilitator);
@@ -95,6 +91,37 @@ public abstract class FunctionSUnit extends SUnit {
         return false;
     }
 
+    public void addDataVar(CtVariableAccess var) {
+        dataVars.add(var);
+        allDataVars.add(var);
+    }
+
+    /**
+     * Add data vars using {@link CtElement#getElements(Filter)}
+     */
+    public void addDataVars() {
+//        if (element instanceof CtInvocation) {
+//            List<CtVariableAccess> vars = ((CtInvocation) element).getArguments();
+//            for (CtVariableAccess var : vars) {
+//                this.addDataVar(var);
+//            }
+//        }
+        List<CtVariableAccess> vars = element.getElements(new TypeFilter(CtVariableAccess.class));
+        for (CtVariableAccess var : vars) {
+            this.addDataVar(var);
+        }
+    }
+
+    /**
+     * Add data vars using {@link CtElement#getElements(Filter)}
+     * @param e
+     */
+    public void addDataVars(CtElement e){
+        List<CtVariableAccess> vars = e.getElements(new TypeFilter(CtVariableAccess.class));
+        for (CtVariableAccess var : vars) {
+            this.addDataVar(var);
+        }
+    }
 
     /**
      *

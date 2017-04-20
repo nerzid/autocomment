@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 /**
+ *
  */
 
 
 package org.jbpm.services.task.impl.model;
 
+import javax.persistence.Entity;
 import javax.persistence.Column;
 import org.kie.internal.task.api.model.EmailNotificationHeader;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.io.IOException;
@@ -29,8 +30,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.SequenceGenerator;
 
 @Entity
 @Table(name = "email_header")
@@ -57,35 +58,36 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
     private String body;
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long Long{id} to ObjectOutput{out}
         out.writeLong(id);
         if ((language) != null) {
             out.writeBoolean(true);
             out.writeUTF(language);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((subject) != null) {
             out.writeBoolean(true);
             out.writeUTF(subject);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((replyTo) != null) {
             out.writeBoolean(true);
             out.writeUTF(replyTo);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((from) != null) {
             out.writeBoolean(true);
             out.writeUTF(from);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
         if ((body) != null) {
             out.writeBoolean(true);
             out.writeUTF(body);
-        } else {
+        }else {
             out.writeBoolean(false);
         }
     }
@@ -94,19 +96,19 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
         id = in.readLong();
         if (in.readBoolean()) {
             language = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             subject = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             replyTo = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             from = in.readUTF();
-        } 
+        }
         if (in.readBoolean()) {
             body = in.readUTF();
-        } 
+        }
     }
 
     public long getId() {
@@ -114,7 +116,7 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
     }
 
     public void setId(long id) {
-        EmailNotificationHeaderImpl.this.id = id;
+        this.id = id;
     }
 
     public String getLanguage() {
@@ -122,7 +124,7 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
     }
 
     public void setLanguage(String language) {
-        EmailNotificationHeaderImpl.this.language = language;
+        this.language = language;
     }
 
     public String getSubject() {
@@ -130,7 +132,7 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
     }
 
     public void setSubject(String subject) {
-        EmailNotificationHeaderImpl.this.subject = subject;
+        this.subject = subject;
     }
 
     public String getBody() {
@@ -138,7 +140,7 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
     }
 
     public void setBody(String body) {
-        EmailNotificationHeaderImpl.this.body = body;
+        this.body = body;
     }
 
     public String getReplyTo() {
@@ -146,7 +148,7 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
     }
 
     public void setReplyTo(String replyTo) {
-        EmailNotificationHeaderImpl.this.replyTo = replyTo;
+        this.replyTo = replyTo;
     }
 
     public String getFrom() {
@@ -154,7 +156,7 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
     }
 
     public void setFrom(String from) {
-        EmailNotificationHeaderImpl.this.from = from;
+        this.from = from;
     }
 
     @Override
@@ -171,7 +173,7 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
 
     @Override
     public boolean equals(Object obj) {
-        if ((EmailNotificationHeaderImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -185,36 +187,46 @@ public class EmailNotificationHeaderImpl implements EmailNotificationHeader {
             if ((other.subject) != null)
                 return false;
             
-        } else if (!(subject.equals(other.subject)))
-            return false;
+        }else
+            if (!(subject.equals(other.subject)))
+                return false;
+            
         
         if ((body) == null) {
             if ((other.body) != null)
                 return false;
             
-        } else if (!(body.equals(other.body)))
-            return false;
+        }else
+            if (!(body.equals(other.body)))
+                return false;
+            
         
         if ((from) == null) {
             if ((other.from) != null)
                 return false;
             
-        } else if (!(from.equals(other.from)))
-            return false;
+        }else
+            if (!(from.equals(other.from)))
+                return false;
+            
         
         if ((language) == null) {
             if ((other.language) != null)
                 return false;
             
-        } else if (!(language.equals(other.language)))
-            return false;
+        }else
+            if (!(language.equals(other.language)))
+                return false;
+            
         
         if ((replyTo) == null) {
             if ((other.replyTo) != null)
                 return false;
             
-        } else if (!(replyTo.equals(other.replyTo)))
-            return false;
+        }else
+            if (!(replyTo.equals(other.replyTo)))
+                return false;
+            
         
         return true;
     }

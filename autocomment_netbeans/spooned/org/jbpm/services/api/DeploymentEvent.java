@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,8 +25,8 @@ public class DeploymentEvent {
     private DeployedUnit deployedUnit;
 
     public DeploymentEvent(String deploymentId, DeployedUnit deployedUnit) {
-        DeploymentEvent.this.deployedUnit = deployedUnit;
-        DeploymentEvent.this.deploymentId = deploymentId;
+        this.deployedUnit = deployedUnit;
+        this.deploymentId = deploymentId;
     }
 
     public DeployedUnit getDeployedUnit() {
@@ -34,7 +34,7 @@ public class DeploymentEvent {
     }
 
     public void setDeployedUnit(DeployedUnit deployedUnit) {
-        DeploymentEvent.this.deployedUnit = deployedUnit;
+        this.deployedUnit = deployedUnit;
     }
 
     public String getDeploymentId() {
@@ -42,7 +42,7 @@ public class DeploymentEvent {
     }
 
     public void setDeploymentId(String deploymentId) {
-        DeploymentEvent.this.deploymentId = deploymentId;
+        this.deploymentId = deploymentId;
     }
 }
 

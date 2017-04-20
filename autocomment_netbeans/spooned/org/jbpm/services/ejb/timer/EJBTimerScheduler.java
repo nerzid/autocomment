@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,24 +16,24 @@
 
 package org.jbpm.services.ejb.timer;
 
+import javax.ejb.LockType;
 import java.util.concurrent.Callable;
 import javax.ejb.ConcurrencyManagement;
+import javax.ejb.Timer;
 import javax.ejb.ConcurrencyManagementType;
 import java.util.Date;
 import org.drools.core.time.JobHandle;
 import javax.ejb.Lock;
-import javax.ejb.LockType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.annotation.Resource;
-import java.io.Serializable;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.Timeout;
-import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
+import javax.ejb.Timeout;
+import javax.annotation.Resource;
+import javax.ejb.Startup;
 import org.drools.core.time.impl.TimerJobInstance;
 import javax.ejb.TimerService;
+import java.io.Serializable;
+import javax.ejb.Singleton;
 import org.jbpm.process.core.timer.TimerServiceRegistry;
 
 @Singleton
@@ -52,6 +52,7 @@ public class EJBTimerScheduler {
     @Timeout
     public void executeTimerJob(Timer timer) {
         EjbTimerJob timerJob = ((EjbTimerJob) (timer.getInfo()));
+        // debug String{"About to execute timer for job {}"} to Logger{EJBTimerScheduler.logger}
         EJBTimerScheduler.logger.debug("About to execute timer for job {}", timerJob);
         TimerJobInstance timerJobInstance = timerJob.getTimerJobInstance();
         String timerServiceId = ((EjbGlobalJobHandle) (timerJobInstance.getJobHandle())).getDeploymentId();
@@ -68,8 +69,8 @@ public class EJBTimerScheduler {
             if (time > (EJBTimerScheduler.OVERDUE_WAIT_TIME)) {
                 EJBTimerScheduler.logger.debug("No timer service found after waiting {} ms", time);
                 break;
-            } 
-        }
+            }
+        } 
         try {
             ((Callable<Void>) (timerJobInstance)).call();
         } catch (Exception e) {
@@ -83,7 +84,7 @@ public class EJBTimerScheduler {
         if (expirationTime != null) {
             timerService.createSingleActionTimer(expirationTime, config);
             EJBTimerScheduler.logger.debug("Timer scheduled {} on {} scheduler service", timerJobInstance);
-        } else {
+        }else {
             EJBTimerScheduler.logger.info("Timer that was to be scheduled has already expired");
         }
     }
@@ -104,10 +105,11 @@ public class EJBTimerScheduler {
                         return false;
                     }
                     return true;
-                } 
-            } 
+                }
+            }
         }
-        EJBTimerScheduler.logger.debug("Job handle {} does not match any timer on {} scheduler service", jobHandle, EJBTimerScheduler.this);
+        // debug String{"Job handle {} does not match any timer on {} scheduler service"} to Logger{EJBTimerScheduler.logger}
+        EJBTimerScheduler.logger.debug("Job handle {} does not match any timer on {} scheduler service", jobHandle, this);
         return false;
     }
 
@@ -120,8 +122,8 @@ public class EJBTimerScheduler {
                 if (handle.getUuid().equals(jobName)) {
                     EJBTimerScheduler.logger.debug("Job  {} does match timer and is going to be returned", jobName);
                     return handle.getTimerJobInstance();
-                } 
-            } 
+                }
+            }
         }
         return null;
     }

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * ColorValidator
@@ -21,12 +22,16 @@
 
 package org.omg.spec.bpmn.non.normative.color.util;
 
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.ecore.util.EObjectValidator;
-import org.eclipse.emf.ecore.EPackage;
+import ColorPackage.Literals.HEX_COLOR;
 import java.util.Map;
 import org.eclipse.emf.ecore.xml.type.util.XMLTypeUtil;
 import org.eclipse.emf.ecore.xml.type.util.XMLTypeValidator;
+import static ColorPackage.DOCUMENT_ROOT;
+import static ColorPackage.HEX_COLOR;
+import static ColorPackage.eINSTANCE;
 
 /**
  * <!-- begin-user-doc -->
@@ -152,7 +157,7 @@ public class ColorValidator extends EObjectValidator {
      * @generated
      */
     public boolean validateHexColor_Pattern(String hexColor, DiagnosticChain diagnostics, Map<Object, Object> context) {
-        return validatePattern(ColorPackage.Literals.HEX_COLOR, hexColor, ColorValidator.HEX_COLOR__PATTERN__VALUES, diagnostics, context);
+        return validatePattern(HEX_COLOR, hexColor, ColorValidator.HEX_COLOR__PATTERN__VALUES, diagnostics, context);
     }
 }
 

@@ -10,10 +10,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.ANY;
+import static org.codehaus.jackson.annotate.JsonAutoDetect.Visibility.NONE;
 
 @XmlRootElement(name = "content-data")
 @XmlAccessorType(value = XmlAccessType.FIELD)
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
+@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, setterVisibility = NONE)
 public class JaxbContentData extends AbstractJaxbTaskObject<ContentData> implements ContentData {
     @XmlElement
     private AccessType accessType;
@@ -41,7 +43,7 @@ public class JaxbContentData extends AbstractJaxbTaskObject<ContentData> impleme
 
     @Override
     public void setAccessType(AccessType accessType) {
-        JaxbContentData.this.accessType = accessType;
+        this.accessType = accessType;
     }
 
     @Override
@@ -51,7 +53,7 @@ public class JaxbContentData extends AbstractJaxbTaskObject<ContentData> impleme
 
     @Override
     public void setType(String type) {
-        JaxbContentData.this.type = type;
+        this.type = type;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class JaxbContentData extends AbstractJaxbTaskObject<ContentData> impleme
 
     @Override
     public void setContent(byte[] content) {
-        JaxbContentData.this.content = content;
+        this.content = content;
     }
 }
 

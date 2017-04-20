@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@ import java.io.Serializable;
 
 public class OrderDetails implements Serializable {
     /**
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -29,8 +30,8 @@ public class OrderDetails implements Serializable {
     Date endDate;
 
     public OrderDetails(Date startDate, Date endDate) {
-        OrderDetails.this.startDate = startDate;
-        OrderDetails.this.endDate = endDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public Date getStartDate() {
@@ -38,7 +39,7 @@ public class OrderDetails implements Serializable {
     }
 
     public void setStartDate(Date startDate) {
-        OrderDetails.this.startDate = startDate;
+        this.startDate = startDate;
     }
 
     public Date getEndDate() {
@@ -46,7 +47,7 @@ public class OrderDetails implements Serializable {
     }
 
     public void setEndDate(Date endDate) {
-        OrderDetails.this.endDate = endDate;
+        this.endDate = endDate;
     }
 }
 

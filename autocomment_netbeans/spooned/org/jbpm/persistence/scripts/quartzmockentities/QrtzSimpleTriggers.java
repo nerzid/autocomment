@@ -18,7 +18,7 @@ public class QrtzSimpleTriggers {
     }
 
     public void setId(Long id) {
-        QrtzSimpleTriggers.this.id = id;
+        this.id = id;
     }
 }
 

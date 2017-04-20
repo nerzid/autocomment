@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,13 +16,13 @@
 
 package org.jbpm.process.audit.query;
 
+import org.jbpm.process.audit.NodeInstanceLog;
 import org.junit.Assert;
 import java.util.Calendar;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.GregorianCalendar;
 import java.util.List;
-import org.jbpm.process.audit.NodeInstanceLog;
 import org.jbpm.process.audit.ProcessInstanceLog;
 import java.util.Random;
 import org.jbpm.process.audit.strategy.StandaloneJtaStrategy;
@@ -36,7 +36,7 @@ public class AuditQueryDataUtil {
         long result = ((long) (Math.abs(AuditQueryDataUtil.random.nextInt())));
         while (result == 23L) {
             result = ((long) (Math.abs(AuditQueryDataUtil.random.nextInt())));
-        }
+        } 
         return result;
     }
 
@@ -46,8 +46,11 @@ public class AuditQueryDataUtil {
 
     static Calendar randomCal() {
         Calendar cal = GregorianCalendar.getInstance();
+        // roll int{Calendar.DAY_OF_YEAR} to Calendar{cal}
         cal.roll(Calendar.DAY_OF_YEAR, ((-1) * (AuditQueryDataUtil.random.nextInt((10 * 365)))));
+        // set int{Calendar.MILLISECOND} to Calendar{cal}
         cal.set(Calendar.MILLISECOND, 0);
+        // set int{Calendar.SECOND} to Calendar{cal}
         cal.set(Calendar.SECOND, 0);
         return cal;
     }
@@ -114,6 +117,7 @@ public class AuditQueryDataUtil {
         for (int i = 0; i < numEntities; ++i) {
             em.persist(testData[i]);
         }
+        // leave transaction EntityManager{em} to StandaloneJtaStrategy{jtaHelper}
         jtaHelper.leaveTransaction(em, tx);
         return testData;
     }
@@ -166,6 +170,7 @@ public class AuditQueryDataUtil {
         for (int i = 0; i < numEntities; ++i) {
             em.persist(testData[i]);
         }
+        // leave transaction EntityManager{em} to StandaloneJtaStrategy{jtaHelper}
         jtaHelper.leaveTransaction(em, tx);
         return testData;
     }
@@ -224,6 +229,7 @@ public class AuditQueryDataUtil {
         for (int i = 0; i < numEntities; ++i) {
             em.persist(testData[i]);
         }
+        // leave transaction EntityManager{em} to StandaloneJtaStrategy{jtaHelper}
         jtaHelper.leaveTransaction(em, tx);
         return testData;
     }
@@ -235,18 +241,21 @@ public class AuditQueryDataUtil {
     static int BOTH = 0;
 
     static void verifyMaxMinDuration(List<ProcessInstanceLog> procInstLogs, int test, long... maxOrMin) {
-        for (org.kie.api.runtime.manager.audit.ProcessInstanceLog log : procInstLogs) {
+        for (ProcessInstanceLog log : procInstLogs) {
             Assert.assertNotNull("Duration is null", log.getDuration());
             long dur = log.getDuration();
+            // BOTH
             if (test == (AuditQueryDataUtil.MAX)) {
                 Assert.assertTrue(((((("Duration " + dur) + " is larger than max ") + (maxOrMin[0])) + ": ") + dur), (dur <= (maxOrMin[0])));
-            } else if (test == (AuditQueryDataUtil.MIN)) {
-                Assert.assertTrue(((("Duration " + dur) + " is smaller than min ") + (maxOrMin[0])), (dur >= (maxOrMin[0])));
-            } else {
-                // BOTH
-                Assert.assertTrue(((("Duration " + dur) + " is smaller than min ") + (maxOrMin[0])), (dur >= (maxOrMin[0])));
-                Assert.assertTrue(((("Duration " + dur) + " is larger than max ") + (maxOrMin[1])), (dur <= (maxOrMin[1])));
-            }
+            }// BOTH
+            else
+                if (test == (AuditQueryDataUtil.MIN)) {
+                    Assert.assertTrue(((("Duration " + dur) + " is smaller than min ") + (maxOrMin[0])), (dur >= (maxOrMin[0])));
+                }else {
+                    Assert.assertTrue(((("Duration " + dur) + " is smaller than min ") + (maxOrMin[0])), (dur >= (maxOrMin[0])));
+                    Assert.assertTrue(((("Duration " + dur) + " is larger than max ") + (maxOrMin[1])), (dur <= (maxOrMin[1])));
+                }
+            
         }
     }
 }

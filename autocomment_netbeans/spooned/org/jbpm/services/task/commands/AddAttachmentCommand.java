@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
 
 package org.jbpm.services.task.commands;
 
+import org.jbpm.services.task.impl.model.xml.JaxbAttachment;
 import org.kie.api.task.model.Attachment;
 import org.kie.api.task.model.Content;
 import org.kie.internal.task.api.ContentMarshallerContext;
@@ -24,16 +25,15 @@ import org.jbpm.services.task.utils.ContentMarshallerHelper;
 import org.kie.internal.command.Context;
 import org.kie.internal.task.api.model.InternalAttachment;
 import org.kie.internal.task.api.model.InternalContent;
-import org.jbpm.services.task.impl.model.xml.JaxbAttachment;
 import org.jbpm.services.task.impl.model.xml.JaxbContent;
+import javax.xml.bind.annotation.XmlTransient;
 import org.kie.api.task.model.Task;
-import org.jbpm.services.task.impl.TaskContentRegistry;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.kie.internal.task.api.TaskModelProvider;
+import org.jbpm.services.task.impl.TaskContentRegistry;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement(name = "add-attachment-command")
 @XmlAccessorType(value = XmlAccessType.NONE)
@@ -75,28 +75,29 @@ public class AddAttachmentCommand extends UserGroupCallbackTaskCommand<Long> {
         Attachment attachmentImpl = attachment;
         if (attachmentImpl == null) {
             attachmentImpl = jaxbAttachment;
-        } 
+        }
         Content contentImpl = content;
         if (contentImpl == null) {
             contentImpl = jaxbContent;
-        } 
+        }
         if (((rawContent) != null) && (contentImpl == null)) {
             Task task = context.getPersistenceContext().findTask(taskId);
             contentImpl = TaskModelProvider.getFactory().newContent();
             ContentMarshallerContext ctx = TaskContentRegistry.get().getMarshallerContext(task.getTaskData().getDeploymentId());
             ((InternalContent) (contentImpl)).setContent(ContentMarshallerHelper.marshallContent(task, rawContent, ctx.getEnvironment()));
             ((InternalAttachment) (attachmentImpl)).setSize(contentImpl.getContent().length);
-        } 
+        }
+        // do callback Attachment{attachmentImpl} to AddAttachmentCommand{}
         doCallbackOperationForAttachment(attachmentImpl, context);
         return context.getTaskAttachmentService().addAttachment(taskId, attachmentImpl, contentImpl);
     }
 
     public void setAttachment(Attachment attachment) {
-        AddAttachmentCommand.this.attachment = attachment;
+        this.attachment = attachment;
         if (attachment instanceof JaxbAttachment) {
-            AddAttachmentCommand.this.jaxbAttachment = ((JaxbAttachment) (attachment));
-        } else {
-            AddAttachmentCommand.this.jaxbAttachment = new JaxbAttachment(attachment);
+            this.jaxbAttachment = ((JaxbAttachment) (attachment));
+        }else {
+            this.jaxbAttachment = new JaxbAttachment(attachment);
         }
     }
 
@@ -105,7 +106,7 @@ public class AddAttachmentCommand extends UserGroupCallbackTaskCommand<Long> {
     }
 
     public void setJaxbAttachment(JaxbAttachment jaxbAttachment) {
-        AddAttachmentCommand.this.jaxbAttachment = jaxbAttachment;
+        this.jaxbAttachment = jaxbAttachment;
     }
 
     public JaxbContent getJaxbContent() {
@@ -113,7 +114,7 @@ public class AddAttachmentCommand extends UserGroupCallbackTaskCommand<Long> {
     }
 
     public void setJaxbContent(JaxbContent jaxbContent) {
-        AddAttachmentCommand.this.jaxbContent = jaxbContent;
+        this.jaxbContent = jaxbContent;
     }
 
     public Content getContent() {
@@ -121,11 +122,11 @@ public class AddAttachmentCommand extends UserGroupCallbackTaskCommand<Long> {
     }
 
     public void setContent(Content content) {
-        AddAttachmentCommand.this.content = content;
+        this.content = content;
         if (content instanceof JaxbContent) {
-            AddAttachmentCommand.this.jaxbContent = ((JaxbContent) (content));
-        } else {
-            AddAttachmentCommand.this.jaxbContent = new JaxbContent(content);
+            this.jaxbContent = ((JaxbContent) (content));
+        }else {
+            this.jaxbContent = new JaxbContent(content);
         }
     }
 
@@ -138,7 +139,7 @@ public class AddAttachmentCommand extends UserGroupCallbackTaskCommand<Long> {
     }
 
     public void setRawContent(Object rawContent) {
-        AddAttachmentCommand.this.rawContent = rawContent;
+        this.rawContent = rawContent;
     }
 }
 

@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,13 +17,14 @@
 
 package org.jbpm.kie.services.impl.query.mapper;
 
+import java.util.HashMap;
 import java.util.ArrayList;
 import org.dashbuilder.dataset.DataSet;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.jbpm.services.api.model.ProcessInstanceWithVarsDesc;
 import org.jbpm.services.api.query.QueryResultMapper;
+import org.jbpm.services.api.query.org.jbpm.kie.services.impl.query.mapper.QueryResultMapper;
 
 /**
  * Dedicated mapper to transform data set into list of ProcessInstanceWithVarsDesc
@@ -41,7 +42,7 @@ public class ProcessInstanceWithCustomVarsQueryMapper extends AbstractQueryMappe
     }
 
     public ProcessInstanceWithCustomVarsQueryMapper(Map<String, String> variablesMap) {
-        ProcessInstanceWithCustomVarsQueryMapper.this.variablesMap = variablesMap;
+        this.variablesMap = variablesMap;
     }
 
     public static ProcessInstanceWithCustomVarsQueryMapper get(Map<String, String> variablesMap) {
@@ -62,19 +63,19 @@ public class ProcessInstanceWithCustomVarsQueryMapper extends AbstractQueryMappe
                         pi = buildInstance(dataSetResult, i);
                         mappedResult.add(pi);
                         tmp.put(processInstanceId, pi);
-                    } 
+                    }
                     Map<String, Object> variables = readVariables(variablesMap, dataSetResult, i);
-                    ((org.jbpm.kie.services.impl.model.ProcessInstanceWithVarsDesc) (pi)).setVariables(variables);
+                    ((ProcessInstanceWithVarsDesc) (pi)).setVariables(variables);
                 }
-            } 
+            }
             tmp = null;
             return mappedResult;
-        } 
+        }
         throw new IllegalArgumentException(("Unsupported result for mapping " + result));
     }
 
     protected ProcessInstanceWithVarsDesc buildInstance(DataSet dataSetResult, int index) {
-        ProcessInstanceWithVarsDesc pi = new org.jbpm.kie.services.impl.model.ProcessInstanceWithVarsDesc(getColumnLongValue(dataSetResult, COLUMN_PROCESSINSTANCEID, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSID, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSNAME, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSVERSION, index), getColumnIntValue(dataSetResult, COLUMN_STATUS, index), getColumnStringValue(dataSetResult, COLUMN_EXTERNALID, index), getColumnDateValue(dataSetResult, COLUMN_START, index), getColumnStringValue(dataSetResult, COLUMN_IDENTITY, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSINSTANCEDESCRIPTION, index), getColumnStringValue(dataSetResult, COLUMN_CORRELATIONKEY, index), getColumnLongValue(dataSetResult, COLUMN_PARENTPROCESSINSTANCEID, index));
+        ProcessInstanceWithVarsDesc pi = new ProcessInstanceWithVarsDesc(getColumnLongValue(dataSetResult, COLUMN_PROCESSINSTANCEID, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSID, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSNAME, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSVERSION, index), getColumnIntValue(dataSetResult, COLUMN_STATUS, index), getColumnStringValue(dataSetResult, COLUMN_EXTERNALID, index), getColumnDateValue(dataSetResult, COLUMN_START, index), getColumnStringValue(dataSetResult, COLUMN_IDENTITY, index), getColumnStringValue(dataSetResult, COLUMN_PROCESSINSTANCEDESCRIPTION, index), getColumnStringValue(dataSetResult, COLUMN_CORRELATIONKEY, index), getColumnLongValue(dataSetResult, COLUMN_PARENTPROCESSINSTANCEID, index));
         return pi;
     }
 

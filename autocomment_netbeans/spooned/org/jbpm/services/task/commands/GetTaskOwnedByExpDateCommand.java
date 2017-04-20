@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,9 +45,9 @@ public class GetTaskOwnedByExpDateCommand extends UserGroupCallbackTaskCommand<L
 
     public GetTaskOwnedByExpDateCommand(String userId, List<Status> status, Date expirationDate, boolean optional) {
         this.userId = userId;
-        GetTaskOwnedByExpDateCommand.this.statuses = status;
-        GetTaskOwnedByExpDateCommand.this.expirationDate = expirationDate;
-        GetTaskOwnedByExpDateCommand.this.optional = optional;
+        this.statuses = status;
+        this.expirationDate = expirationDate;
+        this.optional = optional;
     }
 
     public List<Status> getStatuses() {
@@ -55,7 +55,7 @@ public class GetTaskOwnedByExpDateCommand extends UserGroupCallbackTaskCommand<L
     }
 
     public void setStatuses(List<Status> status) {
-        GetTaskOwnedByExpDateCommand.this.statuses = status;
+        this.statuses = status;
     }
 
     public Date getExpirationDate() {
@@ -63,7 +63,7 @@ public class GetTaskOwnedByExpDateCommand extends UserGroupCallbackTaskCommand<L
     }
 
     public void setExpirationDate(Date expirationDate) {
-        GetTaskOwnedByExpDateCommand.this.expirationDate = expirationDate;
+        this.expirationDate = expirationDate;
     }
 
     public boolean isOptional() {
@@ -71,15 +71,16 @@ public class GetTaskOwnedByExpDateCommand extends UserGroupCallbackTaskCommand<L
     }
 
     public void setOptional(boolean optional) {
-        GetTaskOwnedByExpDateCommand.this.optional = optional;
+        this.optional = optional;
     }
 
     public List<TaskSummary> execute(Context cntxt) {
         TaskContext context = ((TaskContext) (cntxt));
+        // do callback GetTaskOwnedByExpDateCommand{userId} to GetTaskOwnedByExpDateCommand{}
         doCallbackUserOperation(userId, context);
         if (optional) {
             return context.getTaskQueryService().getTasksOwnedByExpirationDateOptional(userId, statuses, expirationDate);
-        } else {
+        }else {
             return context.getTaskQueryService().getTasksOwnedByExpirationDate(userId, statuses, expirationDate);
         }
     }

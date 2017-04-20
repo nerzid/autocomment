@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,16 +42,17 @@ public class GetTaskAssignedAsBusinessAdminCommand extends UserGroupCallbackTask
 
     public GetTaskAssignedAsBusinessAdminCommand(String userId, List<Status> status) {
         this.userId = userId;
-        GetTaskAssignedAsBusinessAdminCommand.this.status = status;
+        this.status = status;
     }
 
     public List<TaskSummary> execute(Context cntxt) {
         TaskContext context = ((TaskContext) (cntxt));
+        // do callback GetTaskAssignedAsBusinessAdminCommand{userId} to GetTaskAssignedAsBusinessAdminCommand{}
         doCallbackUserOperation(userId, context);
         List<String> groups = doUserGroupCallbackOperation(userId, null, context);
         if (((status) == null) || (status.isEmpty())) {
             return context.getTaskQueryService().getTasksAssignedAsBusinessAdministrator(userId, groups);
-        } 
+        }
         return context.getTaskQueryService().getTasksAssignedAsBusinessAdministratorByStatus(userId, groups, status);
     }
 }

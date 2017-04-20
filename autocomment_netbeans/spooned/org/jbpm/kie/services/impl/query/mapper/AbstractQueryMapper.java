@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +30,7 @@ public abstract class AbstractQueryMapper<T> {
         DataColumn column = currentDataSet.getColumnById(columnId);
         if (column == null) {
             return null;
-        } 
+        }
         Object value = column.getValues().get(index);
         return value != null ? ((Number) (value)).longValue() : null;
     }
@@ -39,7 +39,7 @@ public abstract class AbstractQueryMapper<T> {
         DataColumn column = currentDataSet.getColumnById(columnId);
         if (column == null) {
             return null;
-        } 
+        }
         Object value = column.getValues().get(index);
         return value != null ? value.toString() : null;
     }
@@ -48,7 +48,7 @@ public abstract class AbstractQueryMapper<T> {
         DataColumn column = currentDataSet.getColumnById(columnId);
         if (column == null) {
             return null;
-        } 
+        }
         try {
             return ((Date) (column.getValues().get(index)));
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public abstract class AbstractQueryMapper<T> {
         DataColumn column = currentDataSet.getColumnById(columnId);
         if (column == null) {
             return -1;
-        } 
+        }
         Object value = column.getValues().get(index);
         return value != null ? ((Number) (value)).intValue() : -1;
     }
@@ -69,7 +69,7 @@ public abstract class AbstractQueryMapper<T> {
         DataColumn column = currentDataSet.getColumnById(columnId);
         if (column == null) {
             return null;
-        } 
+        }
         Object value = column.getValues().get(index);
         return value != null ? ((Number) (value)).doubleValue() : null;
     }
@@ -82,15 +82,21 @@ public abstract class AbstractQueryMapper<T> {
             Object varValue;
             if (entry.getValue().equalsIgnoreCase(Long.class.getSimpleName())) {
                 varValue = getColumnLongValue(currentDataSet, varName, i);
-            } else if (entry.getValue().equalsIgnoreCase(Integer.class.getSimpleName())) {
-                varValue = getColumnIntValue(currentDataSet, varName, i);
-            } else if (entry.getValue().equalsIgnoreCase(Date.class.getSimpleName())) {
-                varValue = getColumnDateValue(currentDataSet, varName, i);
-            } else if (entry.getValue().equalsIgnoreCase(Double.class.getSimpleName())) {
-                varValue = getColumnDoubleValue(currentDataSet, varName, i);
-            } else {
-                varValue = getColumnStringValue(currentDataSet, varName, i);
-            }
+            }else
+                if (entry.getValue().equalsIgnoreCase(Integer.class.getSimpleName())) {
+                    varValue = getColumnIntValue(currentDataSet, varName, i);
+                }else
+                    if (entry.getValue().equalsIgnoreCase(Date.class.getSimpleName())) {
+                        varValue = getColumnDateValue(currentDataSet, varName, i);
+                    }else
+                        if (entry.getValue().equalsIgnoreCase(Double.class.getSimpleName())) {
+                            varValue = getColumnDoubleValue(currentDataSet, varName, i);
+                        }else {
+                            varValue = getColumnStringValue(currentDataSet, varName, i);
+                        }
+                    
+                
+            
             variables.put(varName, varValue);
         }
         return variables;

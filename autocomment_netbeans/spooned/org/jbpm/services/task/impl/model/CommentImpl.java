@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,8 @@
 
 package org.jbpm.services.task.impl.model;
 
-import javax.persistence.Column;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,11 +27,11 @@ import javax.persistence.Id;
 import org.kie.internal.task.api.model.InternalComment;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import org.kie.api.task.model.User;
+import java.io.ObjectOutput;
+import javax.persistence.Table;
+import javax.persistence.SequenceGenerator;
+import java.io.ObjectInput;
 
 @Entity
 @Table(name = "task_comment")
@@ -51,17 +51,21 @@ public class CommentImpl implements InternalComment {
     private Date addedAt;
 
     public void writeExternal(ObjectOutput out) throws IOException {
+        // write long Long{id} to ObjectOutput{out}
         out.writeLong(id);
         if ((text) == null) {
             text = "";
-        } 
+        }
+        // write utf String{text} to ObjectOutput{out}
         out.writeUTF(text);
         // There are no guarantees that addedBy is not null = potential bug
+        // write external ObjectOutput{out} to UserImpl{addedBy}
         addedBy.writeExternal(out);
         long addedAtTime = 0;
         if ((addedAt) != null) {
             addedAtTime = addedAt.getTime();
-        } 
+        }
+        // write long long{addedAtTime} to ObjectOutput{out}
         out.writeLong(addedAtTime);
     }
 
@@ -69,6 +73,7 @@ public class CommentImpl implements InternalComment {
         id = in.readLong();
         text = in.readUTF();
         addedBy = new UserImpl();
+        // read external ObjectInput{in} to UserImpl{addedBy}
         addedBy.readExternal(in);
         addedAt = new Date(in.readLong());
     }
@@ -78,7 +83,7 @@ public class CommentImpl implements InternalComment {
     }
 
     public void setId(long id) {
-        CommentImpl.this.id = id;
+        this.id = id;
     }
 
     public String getText() {
@@ -86,7 +91,7 @@ public class CommentImpl implements InternalComment {
     }
 
     public void setText(String text) {
-        CommentImpl.this.text = text;
+        this.text = text;
     }
 
     public Date getAddedAt() {
@@ -94,7 +99,7 @@ public class CommentImpl implements InternalComment {
     }
 
     public void setAddedAt(Date addedDate) {
-        CommentImpl.this.addedAt = addedDate;
+        this.addedAt = addedDate;
     }
 
     public User getAddedBy() {
@@ -102,7 +107,7 @@ public class CommentImpl implements InternalComment {
     }
 
     public void setAddedBy(User addedBy) {
-        CommentImpl.this.addedBy = convertToUserImpl(addedBy);
+        this.addedBy = convertToUserImpl(addedBy);
     }
 
     @Override
@@ -117,7 +122,7 @@ public class CommentImpl implements InternalComment {
 
     @Override
     public boolean equals(Object obj) {
-        if ((CommentImpl.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -131,22 +136,28 @@ public class CommentImpl implements InternalComment {
             if ((other.addedBy) != null)
                 return false;
             
-        } else if (!(addedBy.equals(other.addedBy)))
-            return false;
+        }else
+            if (!(addedBy.equals(other.addedBy)))
+                return false;
+            
         
         if ((addedAt) == null) {
             if ((other.addedAt) != null)
                 return false;
             
-        } else if ((addedAt.getTime()) != (other.addedAt.getTime()))
-            return false;
+        }else
+            if ((addedAt.getTime()) != (other.addedAt.getTime()))
+                return false;
+            
         
         if ((text) == null) {
             if ((other.text) != null)
                 return false;
             
-        } else if (!(text.equals(other.text)))
-            return false;
+        }else
+            if (!(text.equals(other.text)))
+                return false;
+            
         
         return true;
     }

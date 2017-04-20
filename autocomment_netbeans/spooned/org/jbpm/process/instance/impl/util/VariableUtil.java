@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import org.kie.api.runtime.process.NodeInstance;
 import java.util.regex.Pattern;
+import VariableScope.VARIABLE_SCOPE;
 import org.jbpm.process.instance.context.variable.VariableScopeInstance;
 
 public class VariableUtil {
@@ -15,20 +16,20 @@ public class VariableUtil {
     public static String resolveVariable(String s, NodeInstance nodeInstance) {
         if (s == null) {
             return null;
-        } 
+        }
         Map<String, String> replacements = new HashMap<String, String>();
         Matcher matcher = VariableUtil.PARAMETER_MATCHER.matcher(s);
         while (matcher.find()) {
             String paramName = matcher.group(1);
             if ((replacements.get(paramName)) == null) {
-                VariableScopeInstance variableScopeInstance = ((VariableScopeInstance) (((org.jbpm.workflow.instance.NodeInstance) (nodeInstance)).resolveContextInstance(VariableScope.VARIABLE_SCOPE, paramName)));
+                VariableScopeInstance variableScopeInstance = ((VariableScopeInstance) (((NodeInstance) (nodeInstance)).resolveContextInstance(VARIABLE_SCOPE, paramName)));
                 if (variableScopeInstance != null) {
                     Object variableValue = variableScopeInstance.getVariable(paramName);
-                    String variableValueString = variableValue == null ? "" : variableValue.toString();
+                    String variableValueString = (variableValue == null) ? "" : variableValue.toString();
                     replacements.put(paramName, variableValueString);
-                } 
-            } 
-        }
+                }
+            }
+        } 
         for (Map.Entry<String, String> replacement : replacements.entrySet()) {
             s = s.replace((("#{" + (replacement.getKey())) + "}"), replacement.getValue());
         }

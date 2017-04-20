@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,20 +16,20 @@
 
 package org.jbpm.services.task.commands;
 
+import org.jbpm.services.task.impl.model.xml.JaxbFaultData;
 import org.kie.internal.command.Context;
 import java.util.Date;
 import org.kie.internal.task.api.model.FaultData;
 import org.kie.api.task.model.I18NText;
-import org.jbpm.services.task.impl.model.xml.JaxbFaultData;
 import org.jbpm.services.task.impl.model.xml.JaxbI18NText;
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.kie.internal.task.api.model.SubTasksStrategy;
+import javax.xml.bind.annotation.XmlSchemaType;
 import org.kie.internal.task.api.TaskInstanceService;
 import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlRootElement(name = "set-task-property-command")
 @XmlAccessorType(value = XmlAccessType.NONE)
@@ -86,7 +86,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
     public SetTaskPropertyCommand(long taskId, String userId, Integer property, Object value) {
         this.taskId = taskId;
         this.userId = userId;
-        SetTaskPropertyCommand.this.property = property;
+        this.property = property;
         JaxbFaultData newValue = null;
         List<JaxbI18NText> newListValue = null;
         switch (property) {
@@ -94,51 +94,51 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
                 if (value != null) {
                     checkValueType(value, FaultData.class, property, true, false);
                     newValue = new JaxbFaultData(((FaultData) (value)));
-                } 
-                SetTaskPropertyCommand.this.faultData = newValue;
+                }
+                this.faultData = newValue;
                 break;
             case SetTaskPropertyCommand.OUTPUT_PROPERTY :
-                SetTaskPropertyCommand.this.output = value;
+                this.output = value;
                 break;
             case SetTaskPropertyCommand.PRIORITY_PROPERTY :
                 checkValueType(value, Integer.class, property, false, false);
-                SetTaskPropertyCommand.this.priority = ((Integer) (value));
+                this.priority = ((Integer) (value));
                 break;
             case SetTaskPropertyCommand.TASK_NAMES_PROPERTY :
                 if (value != null) {
                     checkValueType(value, I18NText.class, property, true, true);
                     newListValue = JaxbI18NText.convertListFromInterfaceToJaxbImpl(((List<I18NText>) (value)), I18NText.class, JaxbI18NText.class);
-                } 
-                SetTaskPropertyCommand.this.namesOrDescriptions = newListValue;
+                }
+                this.namesOrDescriptions = newListValue;
                 break;
             case SetTaskPropertyCommand.EXPIRATION_DATE_PROPERTY :
                 checkValueType(value, Date.class, property, false, false);
-                SetTaskPropertyCommand.this.expirationDate = ((Date) (value));
+                this.expirationDate = ((Date) (value));
                 break;
             case SetTaskPropertyCommand.DESCRIPTION_PROPERTY :
                 if (value != null) {
                     checkValueType(value, I18NText.class, property, true, true);
                     newListValue = JaxbI18NText.convertListFromInterfaceToJaxbImpl(((List<I18NText>) (value)), I18NText.class, JaxbI18NText.class);
-                } 
-                SetTaskPropertyCommand.this.namesOrDescriptions = newListValue;
+                }
+                this.namesOrDescriptions = newListValue;
                 break;
             case SetTaskPropertyCommand.SKIPPABLE_PROPERTY :
                 checkValueType(value, Boolean.class, property, false, false);
-                SetTaskPropertyCommand.this.skippable = ((Boolean) (value));
+                this.skippable = ((Boolean) (value));
                 break;
             case SetTaskPropertyCommand.SUB_TASK_STRATEGY_PROPERTY :
                 checkValueType(value, SubTasksStrategy.class, property, false, false);
-                SetTaskPropertyCommand.this.subTasksStrategy = ((SubTasksStrategy) (value));
+                this.subTasksStrategy = ((SubTasksStrategy) (value));
                 break;
             default :
-                throw new IllegalStateException(((("Unknown property in " + (SetTaskPropertyCommand.this.getClass().getSimpleName())) + " constructor: ") + property));
+                throw new IllegalStateException(((("Unknown property in " + (this.getClass().getSimpleName())) + " constructor: ") + property));
         }
     }
 
     private void checkValueType(Object value, Class expectedClass, int property, boolean assignable, boolean list) {
         if (value == null) {
             return ;
-        } 
+        }
         String propType = null;
         switch (property) {
             case SetTaskPropertyCommand.FAULT_PROPERTY :
@@ -166,28 +166,28 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
                 propType = ("SUB_TASK_STRATEGY_PROPERTY (" + property) + ")";
                 break;
             default :
-                throw new IllegalStateException(((("Unknown property in " + (SetTaskPropertyCommand.this.getClass().getSimpleName())) + " constructor check: ") + property));
+                throw new IllegalStateException(((("Unknown property in " + (this.getClass().getSimpleName())) + " constructor check: ") + property));
         }
         Class valueClass = value.getClass();
         if (list) {
             if (!(List.class.isAssignableFrom(valueClass))) {
                 throw new IllegalStateException(((((("Expected a " + (expectedClass.getSimpleName())) + " for property ") + propType) + ", not a ") + (valueClass.getName())));
-            } 
+            }
             List listVal = ((List) (value));
             if (listVal.isEmpty()) {
                 return ;
-            } 
+            }
             value = listVal.get(0);
             valueClass = value.getClass();
-        } 
+        }
         if (assignable) {
             if (!(expectedClass.isAssignableFrom(valueClass))) {
                 throw new IllegalStateException(((((("Expected a " + (expectedClass.getSimpleName())) + " for property ") + propType) + ", not a ") + (valueClass.getName())));
-            } 
-        } else {
+            }
+        }else {
             if (!(expectedClass.isInstance(value))) {
                 throw new IllegalStateException(((((("Expected a " + (expectedClass.getSimpleName())) + " for property ") + propType) + ", not a ") + (valueClass.getName())));
-            } 
+            }
         }
     }
 
@@ -196,7 +196,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
     }
 
     public void setProperty(Integer name) {
-        SetTaskPropertyCommand.this.property = name;
+        this.property = name;
     }
 
     public JaxbFaultData getFaultData() {
@@ -204,7 +204,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
     }
 
     public void setFaultData(JaxbFaultData faultData) {
-        SetTaskPropertyCommand.this.faultData = faultData;
+        this.faultData = faultData;
     }
 
     public Object getOutput() {
@@ -212,7 +212,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
     }
 
     public void setOutput(Object output) {
-        SetTaskPropertyCommand.this.output = output;
+        this.output = output;
     }
 
     public Integer getPriority() {
@@ -220,7 +220,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
     }
 
     public void setPriority(Integer priority) {
-        SetTaskPropertyCommand.this.priority = priority;
+        this.priority = priority;
     }
 
     public List<JaxbI18NText> getNamesOrDescriptions() {
@@ -228,7 +228,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
     }
 
     public void setNamesOrDescriptions(List<JaxbI18NText> namesOrDescriptions) {
-        SetTaskPropertyCommand.this.namesOrDescriptions = namesOrDescriptions;
+        this.namesOrDescriptions = namesOrDescriptions;
     }
 
     public Date getExpirationDate() {
@@ -236,7 +236,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
     }
 
     public void setExpirationDate(Date expirationDate) {
-        SetTaskPropertyCommand.this.expirationDate = expirationDate;
+        this.expirationDate = expirationDate;
     }
 
     public Boolean getSkippable() {
@@ -244,7 +244,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
     }
 
     public void setSkippable(Boolean skippable) {
-        SetTaskPropertyCommand.this.skippable = skippable;
+        this.skippable = skippable;
     }
 
     public SubTasksStrategy getSubTasksStrategy() {
@@ -252,7 +252,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
     }
 
     public void setSubTasksStrategy(SubTasksStrategy subTasksStrategy) {
-        SetTaskPropertyCommand.this.subTasksStrategy = subTasksStrategy;
+        this.subTasksStrategy = subTasksStrategy;
     }
 
     public Void execute(Context cntxt) {
@@ -274,7 +274,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
                 List<I18NText> names = null;
                 if ((namesOrDescriptions) != null) {
                     names = JaxbI18NText.convertListFromJaxbImplToInterface(namesOrDescriptions);
-                } 
+                }
                 service.setTaskNames(taskId, names);
                 break;
             case SetTaskPropertyCommand.EXPIRATION_DATE_PROPERTY :
@@ -284,7 +284,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
                 List<I18NText> descriptions = null;
                 if ((namesOrDescriptions) != null) {
                     descriptions = JaxbI18NText.convertListFromJaxbImplToInterface(namesOrDescriptions);
-                } 
+                }
                 service.setDescriptions(taskId, descriptions);
                 break;
             case SetTaskPropertyCommand.SKIPPABLE_PROPERTY :
@@ -294,7 +294,7 @@ public class SetTaskPropertyCommand extends UserGroupCallbackTaskCommand<Void> {
                 service.setSubTaskStrategy(taskId, subTasksStrategy);
                 break;
             default :
-                throw new IllegalStateException(((("Unknown property in " + (SetTaskPropertyCommand.this.getClass().getSimpleName())) + " execute: ") + (property)));
+                throw new IllegalStateException(((("Unknown property in " + (this.getClass().getSimpleName())) + " execute: ") + (property)));
         }
         return null;
     }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,19 +17,19 @@
 
 package org.jbpm.process.workitem.parser;
 
+import javax.xml.bind.JAXBException;
 import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
 import java.util.HashMap;
 import java.io.IOException;
 import javax.xml.bind.JAXB;
+import org.kie.api.runtime.process.WorkItemManager;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import org.kie.api.runtime.process.WorkItem;
 import java.util.Map;
 import javax.xml.bind.Marshaller;
 import java.io.StringReader;
 import java.io.StringWriter;
-import org.kie.api.runtime.process.WorkItem;
-import org.kie.api.runtime.process.WorkItemManager;
 
 /**
  * WorkItemHandler that is capable of parsing String to objects and vice-versa. Currently supports only two formats
@@ -44,7 +44,7 @@ import org.kie.api.runtime.process.WorkItemManager;
  *  <li>Result - The result is an output parameter that will be a string if you provide an Input object that is not of String type; and an object of type Type if you provide an Input object of type String.</li>
  *  <li>Type - The FQN of the object type (for example com.acme.Customer)</li>
  * </ul>
- * 
+ *
  * Providing these parameters correctly is enough to use the parser task. Please bear in mind that it uses JAXB to parse the object, so it must have the @XmlRootElement annotation.
  */
 public class ParserWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
@@ -76,11 +76,11 @@ public class ParserWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
     private ClassLoader cl;
 
     public ParserWorkItemHandler() {
-        ParserWorkItemHandler.this.cl = ParserWorkItemHandler.this.getClass().getClassLoader();
+        this.cl = this.getClass().getClassLoader();
     }
 
     public ParserWorkItemHandler(ClassLoader cl) {
-        ParserWorkItemHandler.this.cl = cl;
+        this.cl = cl;
     }
 
     public void abortWorkItem(WorkItem wi, WorkItemManager wim) {
@@ -104,20 +104,22 @@ public class ParserWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
                 } catch (Exception e) {
                     throw new RuntimeException((("Could not load the provided type. The parameter " + (ParserWorkItemHandler.TYPE)) + " is required when parsing from String to Object. Please provide the full qualified name of the target object class."), e);
                 }
-            } 
+            }
             if (ParserWorkItemHandler.JSON.equals(format.toUpperCase())) {
                 try {
                     result = (toObject) ? convertJSONToObject(input.toString(), type) : convertToJSON(input);
                 } catch (Exception e) {
                     throw new RuntimeException("Error parsing to JSON. Check the input format or the output object", e);
                 }
-            } else if (ParserWorkItemHandler.XML.equals(format.toUpperCase())) {
-                try {
-                    result = (toObject) ? convertXMLToObject(input.toString(), type) : convertToXML(input);
-                } catch (JAXBException e) {
-                    throw new RuntimeException("Error parsing to XML. Check the input format or the output object", e);
+            }else
+                if (ParserWorkItemHandler.XML.equals(format.toUpperCase())) {
+                    try {
+                        result = (toObject) ? convertXMLToObject(input.toString(), type) : convertToXML(input);
+                    } catch (JAXBException e) {
+                        throw new RuntimeException("Error parsing to XML. Check the input format or the output object", e);
+                    }
                 }
-            } 
+            
             results.put(ParserWorkItemHandler.RESULT, result);
             wim.completeWorkItem(wi.getId(), results);
         } catch (Exception e) {
@@ -133,17 +135,19 @@ public class ParserWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
         StringWriter result = new StringWriter();
         JAXBContext jaxbContext = JAXBContext.newInstance(input.getClass());
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        // set property String{Marshaller.JAXB_FORMATTED_OUTPUT} to Marshaller{jaxbMarshaller}
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+        // marshal Object{input} to Marshaller{jaxbMarshaller}
         jaxbMarshaller.marshal(input, result);
         return result.toString();
     }
 
     protected Object convertJSONToObject(String input, Class<?> type) throws JsonMappingException, IOException {
-        return new com.fasterxml.jackson.databind.ObjectMapper().readValue(input, type);
+        return new ObjectMapper().readValue(input, type);
     }
 
     protected Object convertToJSON(Object input) throws JsonMappingException, IOException {
-        return new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(input);
+        return new ObjectMapper().writeValueAsString(input);
     }
 }
 

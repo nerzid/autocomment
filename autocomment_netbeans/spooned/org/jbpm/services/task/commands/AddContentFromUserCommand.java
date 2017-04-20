@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,9 @@
 
 package org.jbpm.services.task.commands;
 
+import org.drools.core.xml.jaxb.util.JaxbMapAdapter;
 import org.kie.internal.command.Context;
 import java.util.HashMap;
-import org.drools.core.xml.jaxb.util.JaxbMapAdapter;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -55,31 +55,37 @@ public class AddContentFromUserCommand extends UserGroupCallbackTaskCommand<Long
     }
 
     public void setDocumentContentBytes(byte[] documentContentBytes) {
-        AddContentFromUserCommand.this.documentContentBytes = documentContentBytes;
+        this.documentContentBytes = documentContentBytes;
     }
 
     public Map<String, Object> getOutputContentMap() {
-        if ((AddContentFromUserCommand.this.outputContentMap) == null) {
-            AddContentFromUserCommand.this.outputContentMap = new HashMap<String, Object>();
-        } 
+        if ((this.outputContentMap) == null) {
+            this.outputContentMap = new HashMap<String, Object>();
+        }
         return outputContentMap;
     }
 
     public void setOutputContentMap(Map<String, Object> outputContentMap) {
-        AddContentFromUserCommand.this.outputContentMap = outputContentMap;
+        this.outputContentMap = outputContentMap;
     }
 
     public Long execute(Context cntxt) {
         TaskContext context = ((TaskContext) (cntxt));
+        // do callback AddContentFromUserCommand{userId} to AddContentFromUserCommand{}
         doCallbackUserOperation(userId, context);
         groupIds = doUserGroupCallbackOperation(userId, null, context);
+        // set String{"local:groups"} to TaskContext{context}
         context.set("local:groups", groupIds);
+        // TODO!
+        // return context.getTaskInstanceService().setDocumentContentFromUser(taskId, userId, documentContentBytes);
         if ((outputContentMap) != null) {
             return context.getTaskInstanceService().addOutputContentFromUser(taskId, userId, outputContentMap);
-        } else if ((documentContentBytes) != null) {
-            // TODO!
-            // return context.getTaskInstanceService().setDocumentContentFromUser(taskId, userId, documentContentBytes);
-        } 
+        }// TODO!
+        // return context.getTaskInstanceService().setDocumentContentFromUser(taskId, userId, documentContentBytes);
+        else
+            if ((documentContentBytes) != null) {
+            }
+        
         return -1L;
     }
 }

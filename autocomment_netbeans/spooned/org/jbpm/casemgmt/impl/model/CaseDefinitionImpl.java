@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,12 +45,12 @@ public class CaseDefinitionImpl implements Serializable , CaseDefinition {
     }
 
     public CaseDefinitionImpl(ProcessAssetDesc processDef, String identifierPrefix, Collection<CaseStage> caseStages, Collection<CaseMilestone> caseMilestones, Collection<CaseRole> caseRoles, Collection<AdHocFragment> adHocFragments) {
-        CaseDefinitionImpl.this.processDef = processDef;
-        CaseDefinitionImpl.this.identifierPrefix = identifierPrefix;
-        CaseDefinitionImpl.this.caseStages = caseStages;
-        CaseDefinitionImpl.this.caseMilestones = caseMilestones;
-        CaseDefinitionImpl.this.caseRoles = caseRoles;
-        CaseDefinitionImpl.this.adHocFragments = adHocFragments;
+        this.processDef = processDef;
+        this.identifierPrefix = identifierPrefix;
+        this.caseStages = caseStages;
+        this.caseMilestones = caseMilestones;
+        this.caseRoles = caseRoles;
+        this.adHocFragments = adHocFragments;
     }
 
     @Override

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import java.io.Serializable;
  * <p>
  * For example, to print all files and directories in the
  * current directory whose size is greater than 1 MB:
- * 
+ *
  * <pre>
  * File dir = new File(".");
  * String[] files = dir.list( new SizeFileFilter(1024 * 1024) );
@@ -35,7 +35,7 @@ import java.io.Serializable;
  *     System.out.println(files[i]);
  * }
  * </pre>
- * 
+ *
  * @version $Id: SizeFileFilter.java 1642757 2014-12-01 21:09:30Z sebb $
  * @since 1.2
  * @see FileFilterUtils#sizeFileFilter(long)
@@ -58,7 +58,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new size file filter for files equal to or
      * larger than a certain size.
-     * 
+     *
      * @param size  the threshold size of the files
      * @throws IllegalArgumentException if the size is negative
      */
@@ -69,7 +69,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     /**
      * Constructs a new size file filter for files based on a certain size
      * threshold.
-     * 
+     *
      * @param size  the threshold size of the files
      * @param acceptLarger  if true, files equal to or larger are accepted,
      * otherwise smaller ones (but not equal to)
@@ -78,7 +78,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
     public SizeFileFilter(final long size, final boolean acceptLarger) {
         if (size < 0) {
             throw new IllegalArgumentException("The size must be non-negative");
-        } 
+        }
         this.size = size;
         this.acceptLarger = acceptLarger;
     }
@@ -91,7 +91,7 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
      * file <b>IS NOT</b> selected.
      * If size equals threshold and larger files are required,
      * file <b>IS</b> selected.
-     * 
+     *
      * @param file  the File to check
      * @return true if the filename matches
      */
@@ -103,12 +103,12 @@ public class SizeFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Provide a String representaion of this file filter.
-     * 
+     *
      * @return a String representaion
      */
     @Override
     public String toString() {
-        final String condition = acceptLarger ? ">=" : "<";
+        final String condition = (acceptLarger) ? ">=" : "<";
         return ((((super.toString()) + "(") + condition) + (size)) + ")";
     }
 }

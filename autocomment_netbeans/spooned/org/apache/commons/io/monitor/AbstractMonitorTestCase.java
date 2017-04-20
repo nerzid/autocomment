@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,9 +18,9 @@
 
 package org.apache.commons.io.monitor;
 
+import org.junit.Before;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import java.io.File;
 import java.io.FileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -63,7 +63,7 @@ public abstract class AbstractMonitorTestCase {
         testDir = new File(new File("."), testDirName);
         if (testDir.exists()) {
             FileUtils.cleanDirectory(testDir);
-        } else {
+        }else {
             testDir.mkdir();
         }
         final IOFileFilter files = FileFilterUtils.fileFileFilter();
@@ -73,18 +73,21 @@ public abstract class AbstractMonitorTestCase {
         final IOFileFilter visible = HiddenFileFilter.VISIBLE;
         final IOFileFilter dirFilter = FileFilterUtils.and(directories, visible);
         final IOFileFilter filter = FileFilterUtils.or(dirFilter, fileFilter);
+        // create observer File{testDir} to AbstractMonitorTestCase{}
         createObserver(testDir, filter);
     }
 
     /**
      * Create a {@link FileAlterationObserver}.
-     * 
+     *
      * @param file The directory to observe
      * @param fileFilter The file filter to apply
      */
     protected void createObserver(final File file, final FileFilter fileFilter) {
         observer = new FileAlterationObserver(file, fileFilter);
+        // add listener CollectionFileListener{listener} to FileAlterationObserver{observer}
         observer.addListener(listener);
+        // add listener FileAlterationListenerAdaptor{new FileAlterationListenerAdaptor()} to FileAlterationObserver{observer}
         observer.addListener(new FileAlterationListenerAdaptor());
         try {
             observer.initialize();
@@ -95,21 +98,23 @@ public abstract class AbstractMonitorTestCase {
 
     @After
     public void tearDown() throws Exception {
+        // delete directory File{testDir} to void{FileUtils}
         FileUtils.deleteDirectory(testDir);
     }
 
     /**
      * Check all the Collections are empty
-     * 
+     *
      * @param label the label to use for this check
      */
     protected void checkCollectionsEmpty(final String label) {
+        // check collection String{("EMPTY-" + label)} to AbstractMonitorTestCase{}
         checkCollectionSizes(("EMPTY-" + label), 0, 0, 0, 0, 0, 0);
     }
 
     /**
      * Check all the Collections have the expected sizes.
-     * 
+     *
      * @param label the label to use for this check
      * @param dirCreate expected number of dirs created
      * @param dirChange expected number of dirs changed
@@ -120,23 +125,29 @@ public abstract class AbstractMonitorTestCase {
      */
     protected void checkCollectionSizes(String label, final int dirCreate, final int dirChange, final int dirDelete, final int fileCreate, final int fileChange, final int fileDelete) {
         label = ((((((((((((label + "[") + (listener.getCreatedDirectories().size())) + " ") + (listener.getChangedDirectories().size())) + " ") + (listener.getDeletedDirectories().size())) + " ") + (listener.getCreatedFiles().size())) + " ") + (listener.getChangedFiles().size())) + " ") + (listener.getDeletedFiles().size())) + "]";
+        // assert equals String{(label + ": No. of directories created")} to void{Assert}
         Assert.assertEquals((label + ": No. of directories created"), dirCreate, listener.getCreatedDirectories().size());
+        // assert equals String{(label + ": No. of directories changed")} to void{Assert}
         Assert.assertEquals((label + ": No. of directories changed"), dirChange, listener.getChangedDirectories().size());
+        // assert equals String{(label + ": No. of directories deleted")} to void{Assert}
         Assert.assertEquals((label + ": No. of directories deleted"), dirDelete, listener.getDeletedDirectories().size());
+        // assert equals String{(label + ": No. of files created")} to void{Assert}
         Assert.assertEquals((label + ": No. of files created"), fileCreate, listener.getCreatedFiles().size());
+        // assert equals String{(label + ": No. of files changed")} to void{Assert}
         Assert.assertEquals((label + ": No. of files changed"), fileChange, listener.getChangedFiles().size());
+        // assert equals String{(label + ": No. of files deleted")} to void{Assert}
         Assert.assertEquals((label + ": No. of files deleted"), fileDelete, listener.getDeletedFiles().size());
     }
 
     /**
      * Either creates a file if it doesn't exist or updates the last modified date/time
      * if it does.
-     * 
+     *
      * @param file The file to touch
      * @return The file
      */
     protected File touch(File file) {
-        final long lastModified = file.exists() ? file.lastModified() : 0;
+        final long lastModified = (file.exists()) ? file.lastModified() : 0;
         try {
             FileUtils.touch(file);
             file = new File(file.getParent(), file.getName());
@@ -144,10 +155,11 @@ public abstract class AbstractMonitorTestCase {
                 TestUtils.sleepQuietly(pauseTime);
                 FileUtils.touch(file);
                 file = new File(file.getParent(), file.getName());
-            }
+            } 
         } catch (final Exception e) {
             Assert.fail(((("Touching " + file) + ": ") + e));
         }
+        // sleep quietly long{pauseTime} to void{TestUtils}
         TestUtils.sleepQuietly(pauseTime);
         return file;
     }

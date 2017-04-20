@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,9 +32,9 @@ public class WorkItemTaskSpecification implements TaskSpecification {
     private Map<String, Object> parameters;
 
     public WorkItemTaskSpecification(String nodeType, String nodeName, Map<String, Object> parameters) {
-        WorkItemTaskSpecification.this.nodeType = nodeType;
-        WorkItemTaskSpecification.this.nodeName = nodeName;
-        WorkItemTaskSpecification.this.parameters = parameters;
+        this.nodeType = nodeType;
+        this.nodeName = nodeName;
+        this.parameters = parameters;
     }
 
     @Override
@@ -46,11 +46,12 @@ public class WorkItemTaskSpecification implements TaskSpecification {
     public Map<String, Object> getParameters() {
         if (((nodeType) == null) || ((nodeName) == null)) {
             throw new IllegalArgumentException("Missing manadatory parameter - NodeType and NodeName");
-        } 
+        }
         Map<String, Object> workParams = new HashMap<String, Object>();
         if ((parameters) != null) {
             workParams.putAll(parameters);
-        } 
+        }
+        // put String{"TaskName"} to Map{workParams}
         workParams.put("TaskName", nodeName);
         return workParams;
     }

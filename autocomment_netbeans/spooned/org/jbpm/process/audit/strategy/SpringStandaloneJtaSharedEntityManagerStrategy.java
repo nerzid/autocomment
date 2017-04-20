@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,13 +27,13 @@ public class SpringStandaloneJtaSharedEntityManagerStrategy extends StandaloneJt
     public SpringStandaloneJtaSharedEntityManagerStrategy(EntityManagerFactory emf) {
         super(null);
         this.em = emf.createEntityManager();
-        SpringStandaloneJtaSharedEntityManagerStrategy.this.manageTx = true;
+        this.manageTx = true;
     }
 
     public SpringStandaloneJtaSharedEntityManagerStrategy(EntityManager em) {
         super(null);
         this.em = em;
-        SpringStandaloneJtaSharedEntityManagerStrategy.this.manageTx = false;
+        this.manageTx = false;
     }
 
     @Override
@@ -46,14 +46,14 @@ public class SpringStandaloneJtaSharedEntityManagerStrategy extends StandaloneJt
         // do not close or clear the entity manager
         if (manageTx) {
             commitTransaction(transaction);
-        } 
+        }
     }
 
     @Override
     public Object joinTransaction(EntityManager em) {
         if (manageTx) {
             return super.joinTransaction(em);
-        } 
+        }
         return manageTx;
     }
 }

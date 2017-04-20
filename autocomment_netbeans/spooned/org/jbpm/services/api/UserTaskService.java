@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,7 @@ public interface UserTaskService {
     // user task life cycle operation
     /**
      * Activate the task, i.e. set the task to status Ready.
-     * 
+     *
      * @param taskId
      * @param userId
      * @throws TaskNotFoundException in case task with given id was not found
@@ -38,7 +38,7 @@ public interface UserTaskService {
 
     /**
      * Claim responsibility for a task, i.e. set the task to status Reserved
-     * 
+     *
      * @param taskId
      * @param userId
      * @throws TaskNotFoundException in case task with given id was not found
@@ -47,7 +47,7 @@ public interface UserTaskService {
 
     /**
      * Complete a task with the given data
-     * 
+     *
      * @param taskId
      * @param userId
      * @param data
@@ -57,7 +57,7 @@ public interface UserTaskService {
 
     /**
      * Complete a task with the given data. If needed, the task is automatically claimed and/or started.
-     * 
+     *
      * @param taskId
      * @param userId
      * @param data
@@ -67,7 +67,7 @@ public interface UserTaskService {
 
     /**
      * Delegate a task from userId to targetUserId
-     * 
+     *
      * @param taskId
      * @param userId
      * @param targetUserId
@@ -77,8 +77,8 @@ public interface UserTaskService {
 
     /**
      * Requesting application is no longer interested in the task output
-     * 
-     * 
+     *
+     *
      * @param taskId
      * @param userId
      * @throws TaskNotFoundException in case task with given id was not found
@@ -90,8 +90,8 @@ public interface UserTaskService {
      * fault illegalOperationFault is returned if the task interface defines no
      * faults. If fault name or fault data is not set the operation returns
      * illegalArgumentFault.
-     * 
-     * 
+     *
+     *
      * @param taskId
      * @param userId
      * @param faultData
@@ -104,8 +104,8 @@ public interface UserTaskService {
      * specify the receiving organizational entity. Potential owners can only
      * forward a task while the task is in the Ready state. For details on
      * forwarding human tasks refer to section 4.7.3 in WS-HumanTask_v1.pdf
-     * 
-     * 
+     *
+     *
      * @param taskId
      * @param userId
      * @param targetEntityId
@@ -115,7 +115,7 @@ public interface UserTaskService {
 
     /**
      * Release a previously claimed task
-     * 
+     *
      * @param taskId
      * @param userId
      * @throws TaskNotFoundException in case task with given id was not found
@@ -124,7 +124,7 @@ public interface UserTaskService {
 
     /**
      * Resume a previously suspended task
-     * 
+     *
      * @param taskId
      * @param userId
      * @throws TaskNotFoundException in case task with given id was not found
@@ -133,7 +133,7 @@ public interface UserTaskService {
 
     /**
      * Skip a claimed task
-     * 
+     *
      * @param taskId
      * @param userId
      * @throws TaskNotFoundException in case task with given id was not found
@@ -142,7 +142,7 @@ public interface UserTaskService {
 
     /**
      * Start the execution of the task, i.e. set the task to status InProgress.
-     * 
+     *
      * @param taskId
      * @param userId
      * @throws TaskNotFoundException in case task with given id was not found
@@ -152,8 +152,8 @@ public interface UserTaskService {
     /**
      * Cancel/stop the processing of the task. The task returns to the Reserved
      * state.
-     * 
-     * 
+     *
+     *
      * @param taskId
      * @param userId
      * @throws TaskNotFoundException in case task with given id was not found
@@ -162,7 +162,7 @@ public interface UserTaskService {
 
     /**
      * Suspend a claimed task.
-     * 
+     *
      * @param taskId
      * @param userId
      * @throws TaskNotFoundException in case task with given id was not found
@@ -171,7 +171,7 @@ public interface UserTaskService {
 
     /**
      * Nominate a task to be handled by potentialOwners
-     * 
+     *
      * @param taskId
      * @param userId
      * @param potentialOwners

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +45,7 @@ JPA, JMS;    }
      * Depending on the types several properties are supported:
      * <bold>JPA</bold>
      * No properties are supported
-     * 
+     *
      * <bold>JMS</bold>
      * <ul>
      * <li>jbpm.audit.jms.transacted - determines if JMS session is transacted or not - default true - type Boolean</li>
@@ -69,27 +69,27 @@ JPA, JMS;    }
                 boolean transacted = true;
                 if (properties.containsKey("jbpm.audit.jms.transacted")) {
                     transacted = ((Boolean) (properties.get("jbpm.audit.jms.transacted")));
-                } 
+                }
                 logger = new AsyncAuditLogProducer(ksession, transacted);
                 // set connection factory and queue if given as property
                 if (properties.containsKey("jbpm.audit.jms.connection.factory")) {
                     ConnectionFactory connFactory = ((ConnectionFactory) (properties.get("jbpm.audit.jms.connection.factory")));
                     ((AsyncAuditLogProducer) (logger)).setConnectionFactory(connFactory);
-                } 
+                }
                 if (properties.containsKey("jbpm.audit.jms.queue")) {
                     Queue queue = ((Queue) (properties.get("jbpm.audit.jms.queue")));
                     ((AsyncAuditLogProducer) (logger)).setQueue(queue);
-                } 
+                }
                 // look up connection factory and queue if given as property
                 try {
                     if (properties.containsKey("jbpm.audit.jms.connection.factory.jndi")) {
                         ConnectionFactory connFactory = ((ConnectionFactory) (InitialContext.doLookup(((String) (properties.get(properties.get("jbpm.audit.jms.connection.factory.jndi")))))));
                         ((AsyncAuditLogProducer) (logger)).setConnectionFactory(connFactory);
-                    } 
+                    }
                     if (properties.containsKey("jbpm.audit.jms.queue.jndi")) {
                         Queue queue = ((Queue) (InitialContext.doLookup(((String) (properties.get("jbpm.audit.jms.queue.jndi"))))));
                         ((AsyncAuditLogProducer) (logger)).setQueue(queue);
-                    } 
+                    }
                 } catch (NamingException e) {
                     throw new RuntimeException("Error when looking up ConnectionFactory/Queue", e);
                 }
@@ -144,30 +144,31 @@ JPA, JMS;    }
             Object transactedObj = properties.get("jbpm.audit.jms.transacted");
             if (transactedObj instanceof Boolean) {
                 transacted = ((Boolean) (properties.get("jbpm.audit.jms.transacted")));
-            } else {
+            }else {
                 transacted = Boolean.parseBoolean(transactedObj.toString());
             }
-        } 
+        }
+        // set transacted boolean{transacted} to AsyncAuditLogProducer{logger}
         logger.setTransacted(transacted);
         // set connection factory and queue if given as property
         if (properties.containsKey("jbpm.audit.jms.connection.factory")) {
             ConnectionFactory connFactory = ((ConnectionFactory) (properties.get("jbpm.audit.jms.connection.factory")));
             logger.setConnectionFactory(connFactory);
-        } 
+        }
         if (properties.containsKey("jbpm.audit.jms.queue")) {
             Queue queue = ((Queue) (properties.get("jbpm.audit.jms.queue")));
             logger.setQueue(queue);
-        } 
+        }
         try {
             // look up connection factory and queue if given as property
             if (properties.containsKey("jbpm.audit.jms.connection.factory.jndi")) {
                 ConnectionFactory connFactory = ((ConnectionFactory) (InitialContext.doLookup(((String) (properties.get("jbpm.audit.jms.connection.factory.jndi"))))));
                 logger.setConnectionFactory(connFactory);
-            } 
+            }
             if (properties.containsKey("jbpm.audit.jms.queue.jndi")) {
                 Queue queue = ((Queue) (InitialContext.doLookup(((String) (properties.get("jbpm.audit.jms.queue.jndi"))))));
                 logger.setQueue(queue);
-            } 
+            }
         } catch (NamingException e) {
             throw new RuntimeException("Error when looking up ConnectionFactory/Queue", e);
         }
@@ -185,8 +186,11 @@ JPA, JMS;    }
      */
     public static AbstractAuditLogger newJMSInstance(boolean transacted, ConnectionFactory connFactory, Queue queue) {
         AsyncAuditLogProducer logger = new AsyncAuditLogProducer();
+        // set transacted boolean{transacted} to AsyncAuditLogProducer{logger}
         logger.setTransacted(transacted);
+        // set connection ConnectionFactory{connFactory} to AsyncAuditLogProducer{logger}
         logger.setConnectionFactory(connFactory);
+        // set queue Queue{queue} to AsyncAuditLogProducer{logger}
         logger.setQueue(queue);
         return logger;
     }

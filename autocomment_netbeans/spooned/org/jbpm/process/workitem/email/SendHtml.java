@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,28 +17,29 @@
 
 package org.jbpm.process.workitem.email;
 
+import java.io.File;
 import javax.mail.Authenticator;
+import java.util.Properties;
+import javax.mail.org.jbpm.process.workitem.email.Message;
+import javax.naming.NamingException;
+import javax.mail.Transport;
+import java.net.URL;
+import javax.mail.Message.RecipientType;
 import javax.activation.DataHandler;
 import java.util.Date;
-import java.io.File;
+import javax.activation.FileTypeMap;
 import java.io.IOException;
+import javax.mail.Multipart;
 import javax.naming.InitialContext;
 import javax.mail.internet.InternetAddress;
 import java.util.List;
 import java.net.MalformedURLException;
-import javax.mail.Message;
+import javax.activation.MimetypesFileTypeMap;
+import javax.mail.Session;
+import javax.mail.PasswordAuthentication;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
-import javax.activation.MimetypesFileTypeMap;
-import javax.mail.Multipart;
-import javax.naming.NamingException;
-import javax.mail.PasswordAuthentication;
-import java.util.Properties;
-import javax.mail.Message.RecipientType;
-import javax.mail.Session;
-import javax.mail.Transport;
-import java.net.URL;
-import javax.mail.org.jbpm.process.workitem.email.Message;
+import javax.mail.Message;
 
 public class SendHtml {
     private static final String MAIL_JNDI_KEY = System.getProperty("org.kie.mail.session", "mail/jbpmMailSession");
@@ -46,14 +47,17 @@ public class SendHtml {
     private static boolean debug = Boolean.parseBoolean(System.getProperty("org.kie.mail.debug", "false"));
 
     public static void sendHtml(Email email) {
+        // send html Email{email} to void{SendHtml}
         SendHtml.sendHtml(email, email.getConnection());
     }
 
     public static void sendHtml(Email email, boolean debug) {
+        // send html Email{email} to void{SendHtml}
         SendHtml.sendHtml(email, email.getConnection(), debug);
     }
 
     public static void sendHtml(Email email, Connection connection) {
+        // send html Email{email} to void{SendHtml}
         SendHtml.sendHtml(email, connection, SendHtml.debug);
     }
 
@@ -63,6 +67,7 @@ public class SendHtml {
         String username = connection.getUserName();
         String password = connection.getPassword();
         Session session = SendHtml.getSession(connection);
+        // set debug boolean{debug} to Session{session}
         session.setDebug(debug);
         try {
             Message msg = SendHtml.fillMessage(email, session);
@@ -89,41 +94,45 @@ public class SendHtml {
         String mailer = "sendhtml";
         if (from == null) {
             throw new RuntimeException("Email must have 'from' address");
-        } 
+        }
         if (replyTo == null) {
             replyTo = from;
-        } 
+        }
         // Construct and fill the Message
         Message msg = null;
         try {
-            msg = new javax.mail.internet.MimeMessage(session);
+            msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));
             msg.setReplyTo(new InternetAddress[]{ new InternetAddress(replyTo) });
             for (Recipient recipient : message.getRecipients().getRecipients()) {
                 RecipientType type = null;
                 if ("To".equals(recipient.getType())) {
                     type = RecipientType.TO;
-                } else if ("Cc".equals(recipient.getType())) {
-                    type = RecipientType.CC;
-                } else if ("Bcc".equals(recipient.getType())) {
-                    type = RecipientType.BCC;
-                } else {
-                    throw new RuntimeException("Unable to determine recipient type");
-                }
+                }else
+                    if ("Cc".equals(recipient.getType())) {
+                        type = RecipientType.CC;
+                    }else
+                        if ("Bcc".equals(recipient.getType())) {
+                            type = RecipientType.BCC;
+                        }else {
+                            throw new RuntimeException("Unable to determine recipient type");
+                        }
+                    
+                
                 msg.addRecipients(type, InternetAddress.parse(recipient.getEmail(), false));
             }
             if (message.hasAttachment()) {
-                Multipart multipart = new javax.mail.internet.MimeMultipart();
+                Multipart multipart = new MimeMultipart();
                 // prepare body as first mime body part
                 MimeBodyPart messageBodyPart = new MimeBodyPart();
-                messageBodyPart.setDataHandler(new DataHandler(new javax.mail.util.ByteArrayDataSource(message.getBody(), "text/html")));
+                messageBodyPart.setDataHandler(new DataHandler(new ByteArrayDataSource(message.getBody(), "text/html")));
                 multipart.addBodyPart(messageBodyPart);
                 List<String> attachments = message.getAttachments();
                 for (String attachment : attachments) {
                     MimeBodyPart attachementBodyPart = new MimeBodyPart();
                     URL attachmentUrl = SendHtml.getAttachemntURL(attachment);
                     String contentType = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(attachmentUrl.getFile());
-                    attachementBodyPart.setDataHandler(new DataHandler(new javax.mail.util.ByteArrayDataSource(attachmentUrl.openStream(), contentType)));
+                    attachementBodyPart.setDataHandler(new DataHandler(new ByteArrayDataSource(attachmentUrl.openStream(), contentType)));
                     String fileName = new File(attachmentUrl.getFile()).getName();
                     attachementBodyPart.setFileName(fileName);
                     attachementBodyPart.setContentID((("<" + fileName) + ">"));
@@ -131,8 +140,8 @@ public class SendHtml {
                 }
                 // Put parts in message
                 msg.setContent(multipart);
-            } else {
-                msg.setDataHandler(new DataHandler(new javax.mail.util.ByteArrayDataSource(message.getBody(), "text/html")));
+            }else {
+                msg.setDataHandler(new DataHandler(new ByteArrayDataSource(message.getBody(), "text/html")));
             }
             msg.setSubject(subject);
             msg.setHeader("X-Mailer", mailer);
@@ -154,6 +163,7 @@ public class SendHtml {
         // sb.append( "</HEAD>\n" );
         // sb.append( "<BODY>\n" );
         // sb.append( "<H1>" + subject + "</H1>" + "\n" );
+        // append String{body} to StringBuffer{sb}
         sb.append(body);
         // sb.append( "</BODY>\n" );
         // sb.append( "</HTML>\n" );
@@ -171,17 +181,17 @@ public class SendHtml {
             properties.setProperty("mail.smtp.port", connection.getPort());
             if (((connection.getStartTls()) != null) && (connection.getStartTls())) {
                 properties.put("mail.smtp.starttls.enable", "true");
-            } 
+            }
             if (username != null) {
                 properties.setProperty("mail.smtp.submitter", username);
                 if (password != null) {
                     SendHtml.Authenticator authenticator = new SendHtml.Authenticator(username, password);
                     properties.setProperty("mail.smtp.auth", "true");
                     session = Session.getInstance(properties, authenticator);
-                } else {
+                }else {
                     session = Session.getInstance(properties);
                 }
-            } else {
+            }else {
                 session = Session.getInstance(properties);
             }
         }
@@ -192,13 +202,13 @@ public class SendHtml {
         if (attachment.startsWith("classpath:")) {
             String location = attachment.replaceFirst("classpath:", "");
             return SendHtml.class.getResource(location);
-        } else {
+        }else {
             URL attachmentUrl = new URL(attachment);
             return attachmentUrl;
         }
     }
 
-    private static class Authenticator extends Authenticator {
+    private static class Authenticator extends javax.mail.Authenticator {
         private PasswordAuthentication authentication;
 
         public Authenticator(String username, String password) {

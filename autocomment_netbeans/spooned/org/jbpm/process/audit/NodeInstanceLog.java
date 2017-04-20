@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,11 +17,11 @@
 
 package org.jbpm.process.audit;
 
+import javax.persistence.GeneratedValue;
 import org.jbpm.process.audit.event.AuditEvent;
 import javax.persistence.Column;
 import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
@@ -31,7 +31,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @SequenceGenerator(allocationSize = 1, name = "nodeInstanceLogIdSeq", sequenceName = "NODE_INST_LOG_ID_SEQ")
-public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.runtime.manager.audit.NodeInstanceLog {
+public class NodeInstanceLog implements NodeInstanceLog , Serializable , AuditEvent {
     private static final long serialVersionUID = 510L;
 
     @Id
@@ -66,13 +66,13 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public NodeInstanceLog(int type, long processInstanceId, String processId, String nodeInstanceId, String nodeId, String nodeName) {
-        NodeInstanceLog.this.type = type;
-        NodeInstanceLog.this.processInstanceId = processInstanceId;
-        NodeInstanceLog.this.processId = processId;
-        NodeInstanceLog.this.nodeInstanceId = nodeInstanceId;
-        NodeInstanceLog.this.nodeId = nodeId;
-        NodeInstanceLog.this.nodeName = nodeName;
-        NodeInstanceLog.this.date = new Date();
+        this.type = type;
+        this.processInstanceId = processInstanceId;
+        this.processId = processId;
+        this.nodeInstanceId = nodeInstanceId;
+        this.nodeId = nodeId;
+        this.nodeName = nodeName;
+        this.date = new Date();
     }
 
     public Integer getType() {
@@ -80,7 +80,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setType(int type) {
-        NodeInstanceLog.this.type = type;
+        this.type = type;
     }
 
     public long getId() {
@@ -88,7 +88,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     void setId(long id) {
-        NodeInstanceLog.this.id = id;
+        this.id = id;
     }
 
     public Long getProcessInstanceId() {
@@ -96,7 +96,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setProcessInstanceId(long processInstanceId) {
-        NodeInstanceLog.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public String getProcessId() {
@@ -104,7 +104,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setProcessId(String processId) {
-        NodeInstanceLog.this.processId = processId;
+        this.processId = processId;
     }
 
     public String getNodeInstanceId() {
@@ -112,7 +112,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setNodeInstanceId(String nodeInstanceId) {
-        NodeInstanceLog.this.nodeInstanceId = nodeInstanceId;
+        this.nodeInstanceId = nodeInstanceId;
     }
 
     public String getNodeId() {
@@ -120,7 +120,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setNodeId(String nodeId) {
-        NodeInstanceLog.this.nodeId = nodeId;
+        this.nodeId = nodeId;
     }
 
     public String getNodeName() {
@@ -128,7 +128,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setNodeName(String nodeName) {
-        NodeInstanceLog.this.nodeName = nodeName;
+        this.nodeName = nodeName;
     }
 
     public Date getDate() {
@@ -136,7 +136,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setDate(Date date) {
-        NodeInstanceLog.this.date = date;
+        this.date = date;
     }
 
     public String toString() {
@@ -163,7 +163,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
 
     @Override
     public boolean equals(Object obj) {
-        if ((NodeInstanceLog.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -177,8 +177,10 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
             if ((other.date) != null)
                 return false;
             
-        } else if (!(date.equals(other.date)))
-            return false;
+        }else
+            if (!(date.equals(other.date)))
+                return false;
+            
         
         if ((id) != (other.id))
             return false;
@@ -187,22 +189,28 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
             if ((other.nodeId) != null)
                 return false;
             
-        } else if (!(nodeId.equals(other.nodeId)))
-            return false;
+        }else
+            if (!(nodeId.equals(other.nodeId)))
+                return false;
+            
         
         if ((nodeInstanceId) == null) {
             if ((other.nodeInstanceId) != null)
                 return false;
             
-        } else if (!(nodeInstanceId.equals(other.nodeInstanceId)))
-            return false;
+        }else
+            if (!(nodeInstanceId.equals(other.nodeInstanceId)))
+                return false;
+            
         
         if ((processId) == null) {
             if ((other.processId) != null)
                 return false;
             
-        } else if (!(processId.equals(other.processId)))
-            return false;
+        }else
+            if (!(processId.equals(other.processId)))
+                return false;
+            
         
         if ((processInstanceId) != (other.processInstanceId))
             return false;
@@ -214,29 +222,37 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
             if ((other.nodeType) != null)
                 return false;
             
-        } else if (!(nodeType.equals(other.nodeType)))
-            return false;
+        }else
+            if (!(nodeType.equals(other.nodeType)))
+                return false;
+            
         
         if ((workItemId) == null) {
             if ((other.workItemId) != null)
                 return false;
             
-        } else if (!(workItemId.equals(other.workItemId)))
-            return false;
+        }else
+            if (!(workItemId.equals(other.workItemId)))
+                return false;
+            
         
         if ((connection) == null) {
             if ((other.connection) != null)
                 return false;
             
-        } else if (!(connection.equals(other.connection)))
-            return false;
+        }else
+            if (!(connection.equals(other.connection)))
+                return false;
+            
         
         if ((externalId) == null) {
             if ((other.externalId) != null)
                 return false;
             
-        } else if (!(externalId.equals(other.externalId)))
-            return false;
+        }else
+            if (!(externalId.equals(other.externalId)))
+                return false;
+            
         
         return true;
     }
@@ -246,7 +262,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setWorkItemId(Long workItemId) {
-        NodeInstanceLog.this.workItemId = workItemId;
+        this.workItemId = workItemId;
     }
 
     public String getConnection() {
@@ -254,7 +270,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setConnection(String connection) {
-        NodeInstanceLog.this.connection = connection;
+        this.connection = connection;
     }
 
     public String getExternalId() {
@@ -262,7 +278,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setExternalId(String domainId) {
-        NodeInstanceLog.this.externalId = domainId;
+        this.externalId = domainId;
     }
 
     public String getNodeType() {
@@ -270,7 +286,7 @@ public class NodeInstanceLog implements Serializable , AuditEvent , org.kie.api.
     }
 
     public void setNodeType(String nodeType) {
-        NodeInstanceLog.this.nodeType = nodeType;
+        this.nodeType = nodeType;
     }
 }
 

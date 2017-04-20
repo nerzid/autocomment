@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,7 @@ import java.util.List;
 import java.io.Serializable;
 import org.jbpm.services.api.model.UserTaskInstanceDesc;
 
-public class ProcessInstanceDesc implements Serializable , org.jbpm.services.api.model.ProcessInstanceDesc {
+public class ProcessInstanceDesc implements ProcessInstanceDesc , Serializable {
     private static final long serialVersionUID = 7310019271033570922L;
 
     private long id;
@@ -54,24 +54,24 @@ public class ProcessInstanceDesc implements Serializable , org.jbpm.services.api
 
     public ProcessInstanceDesc(long id, String processId, String processName, String processVersion, int state, String deploymentId, Date dataTimeStamp, String initiator, String processInstanceDescription, String correlationKey, Long parentId) {
         this(id, processId, processName, processVersion, state, deploymentId, dataTimeStamp, initiator, processInstanceDescription, correlationKey);
-        ProcessInstanceDesc.this.parentId = parentId;
+        this.parentId = parentId;
     }
 
     public ProcessInstanceDesc(long id, String processId, String processName, String processVersion, int state, String deploymentId, Date dataTimeStamp, String initiator, String processInstanceDescription, String correlationKey) {
         this(id, processId, processName, processVersion, state, deploymentId, dataTimeStamp, initiator, correlationKey);
-        ProcessInstanceDesc.this.processInstanceDescription = processInstanceDescription;
+        this.processInstanceDescription = processInstanceDescription;
     }
 
     public ProcessInstanceDesc(long id, String processId, String processName, String processVersion, int state, String deploymentId, Date dataTimeStamp, String initiator, String correlationKey) {
-        ProcessInstanceDesc.this.id = id;
-        ProcessInstanceDesc.this.processId = processId;
-        ProcessInstanceDesc.this.processName = processName;
-        ProcessInstanceDesc.this.processVersion = (processVersion == null) ? "" : processVersion;
-        ProcessInstanceDesc.this.state = state;
-        ProcessInstanceDesc.this.deploymentId = deploymentId;
-        ProcessInstanceDesc.this.dataTimeStamp = dataTimeStamp;
-        ProcessInstanceDesc.this.initiator = initiator;
-        ProcessInstanceDesc.this.correlationKey = (correlationKey == null) ? "" : correlationKey;
+        this.id = id;
+        this.processId = processId;
+        this.processName = processName;
+        this.processVersion = (processVersion == null) ? "" : processVersion;
+        this.state = state;
+        this.deploymentId = deploymentId;
+        this.dataTimeStamp = dataTimeStamp;
+        this.initiator = initiator;
+        this.correlationKey = (correlationKey == null) ? "" : correlationKey;
     }
 
     public String getProcessId() {
@@ -103,7 +103,7 @@ public class ProcessInstanceDesc implements Serializable , org.jbpm.services.api
     }
 
     public void setState(int state) {
-        ProcessInstanceDesc.this.state = state;
+        this.state = state;
     }
 
     public String getInitiator() {
@@ -111,11 +111,11 @@ public class ProcessInstanceDesc implements Serializable , org.jbpm.services.api
     }
 
     public void setInitiator(String initiator) {
-        ProcessInstanceDesc.this.initiator = initiator;
+        this.initiator = initiator;
     }
 
     public void setDeploymentId(String deploymentId) {
-        ProcessInstanceDesc.this.deploymentId = deploymentId;
+        this.deploymentId = deploymentId;
     }
 
     public String getProcessInstanceDescription() {
@@ -123,7 +123,7 @@ public class ProcessInstanceDesc implements Serializable , org.jbpm.services.api
     }
 
     public void setProcessInstanceDescription(String processInstanceDescription) {
-        ProcessInstanceDesc.this.processInstanceDescription = processInstanceDescription;
+        this.processInstanceDescription = processInstanceDescription;
     }
 
     public List<UserTaskInstanceDesc> getActiveTasks() {
@@ -131,7 +131,7 @@ public class ProcessInstanceDesc implements Serializable , org.jbpm.services.api
     }
 
     public void setActiveTasks(List<UserTaskInstanceDesc> activeTasks) {
-        ProcessInstanceDesc.this.activeTasks = activeTasks;
+        this.activeTasks = activeTasks;
     }
 
     public String getCorrelationKey() {
@@ -139,7 +139,7 @@ public class ProcessInstanceDesc implements Serializable , org.jbpm.services.api
     }
 
     public void setCorrelationKey(String correlationKey) {
-        ProcessInstanceDesc.this.correlationKey = correlationKey;
+        this.correlationKey = correlationKey;
     }
 
     public Long getParentId() {
@@ -147,7 +147,7 @@ public class ProcessInstanceDesc implements Serializable , org.jbpm.services.api
     }
 
     public void setParentId(Long parentId) {
-        ProcessInstanceDesc.this.parentId = parentId;
+        this.parentId = parentId;
     }
 
     @Override

@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 /**
+ *
  */
 /**
  * ColorXMLProcessor
@@ -21,8 +22,10 @@
 
 package org.omg.spec.bpmn.non.normative.color.util;
 
+import EPackage.Registry.INSTANCE;
 import java.util.Map;
 import org.eclipse.emf.ecore.xmi.util.XMLProcessor;
+import ColorPackage.eINSTANCE;
 
 /**
  * This class contains helper methods to serialize and deserialize XML documents
@@ -38,8 +41,8 @@ public class ColorXMLProcessor extends XMLProcessor {
      * @generated
      */
     public ColorXMLProcessor() {
-        super(EPackage.Registry.INSTANCE);
-        ColorPackage.eINSTANCE.eClass();
+        super(INSTANCE);
+        eINSTANCE.eClass();
     }
 
     /**
@@ -54,7 +57,7 @@ public class ColorXMLProcessor extends XMLProcessor {
             super.getRegistrations();
             registrations.put(XML_EXTENSION, new ColorResourceFactoryImpl());
             registrations.put(STAR_EXTENSION, new ColorResourceFactoryImpl());
-        } 
+        }
         return registrations;
     }
 }

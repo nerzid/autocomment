@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ import org.drools.core.time.JobHandle;
 import java.io.Serializable;
 
 /**
+ *
  */
 public class TimerInstance implements Serializable {
     /**
@@ -56,7 +57,7 @@ public class TimerInstance implements Serializable {
     }
 
     public void setId(long id) {
-        TimerInstance.this.id = id;
+        this.id = id;
     }
 
     public long getTimerId() {
@@ -64,7 +65,7 @@ public class TimerInstance implements Serializable {
     }
 
     public void setTimerId(long timerId) {
-        TimerInstance.this.timerId = timerId;
+        this.timerId = timerId;
     }
 
     public long getDelay() {
@@ -72,7 +73,7 @@ public class TimerInstance implements Serializable {
     }
 
     public void setDelay(long delay) {
-        TimerInstance.this.delay = delay;
+        this.delay = delay;
     }
 
     public long getPeriod() {
@@ -80,7 +81,7 @@ public class TimerInstance implements Serializable {
     }
 
     public void setPeriod(long period) {
-        TimerInstance.this.period = period;
+        this.period = period;
     }
 
     public JobHandle getJobHandle() {
@@ -88,7 +89,7 @@ public class TimerInstance implements Serializable {
     }
 
     public void setJobHandle(JobHandle jobHandle) {
-        TimerInstance.this.jobHandle = jobHandle;
+        this.jobHandle = jobHandle;
     }
 
     public Date getActivated() {
@@ -96,11 +97,11 @@ public class TimerInstance implements Serializable {
     }
 
     public void setActivated(Date activated) {
-        TimerInstance.this.activated = activated;
+        this.activated = activated;
     }
 
     public void setLastTriggered(Date lastTriggered) {
-        TimerInstance.this.lastTriggered = lastTriggered;
+        this.lastTriggered = lastTriggered;
     }
 
     public Date getLastTriggered() {
@@ -112,7 +113,7 @@ public class TimerInstance implements Serializable {
     }
 
     public void setProcessInstanceId(long processInstanceId) {
-        TimerInstance.this.processInstanceId = processInstanceId;
+        this.processInstanceId = processInstanceId;
     }
 
     public int getRepeatLimit() {
@@ -120,7 +121,7 @@ public class TimerInstance implements Serializable {
     }
 
     public void setRepeatLimit(int stopAfter) {
-        TimerInstance.this.repeatLimit = stopAfter;
+        this.repeatLimit = stopAfter;
     }
 
     public long getSessionId() {
@@ -128,7 +129,7 @@ public class TimerInstance implements Serializable {
     }
 
     public void setSessionId(long sessionId) {
-        TimerInstance.this.sessionId = sessionId;
+        this.sessionId = sessionId;
     }
 
     public String getCronExpression() {
@@ -136,7 +137,7 @@ public class TimerInstance implements Serializable {
     }
 
     public void setCronExpression(String cronExpression) {
-        TimerInstance.this.cronExpression = cronExpression;
+        this.cronExpression = cronExpression;
     }
 
     @Override

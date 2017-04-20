@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,14 +20,17 @@ package org.jbpm.process.instance.event.listeners;
 import java.io.ByteArrayOutputStream;
 import org.kie.api.event.process.DefaultProcessEventListener;
 import org.slf4j.Logger;
+import org.jbpm.workflow.instance.WorkflowProcessInstance;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
+import EnvironmentName.OBJECT_MARSHALLING_STRATEGIES;
 import org.kie.api.marshalling.ObjectMarshallingStrategy;
 import org.kie.api.event.process.ProcessCompletedEvent;
 import org.drools.core.marshalling.impl.ProcessMarshallerWriteContext;
-import org.drools.core.marshalling.impl.SerializablePlaceholderResolverStrategy;
+import VariableScope.VARIABLE_SCOPE;
+import ProcessMarshallerWriteContext.STATE_COMPLETED;
 import org.jbpm.process.instance.context.variable.VariableScopeInstance;
-import org.jbpm.workflow.instance.WorkflowProcessInstance;
+import org.drools.core.marshalling.impl.SerializablePlaceholderResolverStrategy;
 
 /**
  * Process event listener to be used with plugable variable strategies to make sure that upon process instance completion
@@ -40,8 +43,8 @@ public class MarshalVariablesProcessEventListener extends DefaultProcessEventLis
     private static final Logger logger = LoggerFactory.getLogger(MarshalVariablesProcessEventListener.class);
 
     public void afterProcessCompleted(ProcessCompletedEvent event) {
-        ObjectMarshallingStrategy[] strategies = ((ObjectMarshallingStrategy[]) (event.getKieRuntime().getEnvironment().get(EnvironmentName.OBJECT_MARSHALLING_STRATEGIES)));
-        VariableScopeInstance variableScope = ((VariableScopeInstance) (((WorkflowProcessInstance) (event.getProcessInstance())).getContextInstance(VariableScope.VARIABLE_SCOPE)));
+        ObjectMarshallingStrategy[] strategies = ((ObjectMarshallingStrategy[]) (event.getKieRuntime().getEnvironment().get(OBJECT_MARSHALLING_STRATEGIES)));
+        VariableScopeInstance variableScope = ((VariableScopeInstance) (((WorkflowProcessInstance) (event.getProcessInstance())).getContextInstance(VARIABLE_SCOPE)));
         Map<String, Object> variables = variableScope.getVariables();
         for (Map.Entry<String, Object> variable : variables.entrySet()) {
             MarshalVariablesProcessEventListener.logger.debug("Searching for applicable strategy to handle variable name '{}' value '{}'", variable.getKey(), variable.getValue());
@@ -50,13 +53,13 @@ public class MarshalVariablesProcessEventListener extends DefaultProcessEventLis
                 // are removed together with process instance
                 if (strategy instanceof SerializablePlaceholderResolverStrategy) {
                     continue;
-                } 
+                }
                 if (strategy.accept(variable.getValue())) {
                     MarshalVariablesProcessEventListener.logger.debug("Strategy of type {} found to handle variable '{}'", strategy, variable.getKey());
                     try {
                         ProcessMarshallerWriteContext context = new ProcessMarshallerWriteContext(new ByteArrayOutputStream(), null, null, null, null, event.getKieRuntime().getEnvironment());
                         context.setProcessInstanceId(event.getProcessInstance().getId());
-                        context.setState(ProcessMarshallerWriteContext.STATE_COMPLETED);
+                        context.setState(STATE_COMPLETED);
                         strategy.marshal(null, context, variable.getValue());
                         MarshalVariablesProcessEventListener.logger.debug("Variable '{}' successfully persisted by strategy {}", variable.getKey(), strategy);
                         break;
@@ -64,7 +67,7 @@ public class MarshalVariablesProcessEventListener extends DefaultProcessEventLis
                         MarshalVariablesProcessEventListener.logger.warn("Errer while storing process variable {} due to {}", variable.getKey(), e.getMessage());
                         MarshalVariablesProcessEventListener.logger.debug("Variable marshal error:", e);
                     }
-                } 
+                }
             }
         }
     }

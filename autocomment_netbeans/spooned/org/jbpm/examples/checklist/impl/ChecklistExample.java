@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,8 +17,10 @@
 package org.jbpm.examples.checklist.impl;
 
 import java.util.ArrayList;
+import ResourceType.BPMN2;
 import org.jbpm.examples.checklist.ChecklistItem;
 import org.jbpm.examples.checklist.ChecklistManager;
+import RuntimeEnvironmentBuilder.Factory;
 import org.jbpm.test.JBPMHelper;
 import java.util.List;
 import org.kie.api.runtime.manager.RuntimeEnvironment;
@@ -29,12 +31,12 @@ public class ChecklistExample {
         try {
             JBPMHelper.startH2Server();
             JBPMHelper.setupDataSource();
-            RuntimeEnvironment environment = RuntimeEnvironmentBuilder.Factory.get().newDefaultBuilder().userGroupCallback(new UserGroupCallback() {
+            RuntimeEnvironment environment = Factory.get().newDefaultBuilder().userGroupCallback(new UserGroupCallback() {
                 public List<String> getGroupsForUser(String userId, List<String> groupIds, List<String> allExistingGroupIds) {
                     List<String> result = new ArrayList<String>();
                     if ("actor4".equals(userId)) {
                         result.add("group1");
-                    } 
+                    }
                     return result;
                 }
 
@@ -45,7 +47,7 @@ public class ChecklistExample {
                 public boolean existsGroup(String arg0) {
                     return true;
                 }
-            }).addAsset(KieServices.Factory.get().getResources().newClassPathResource("checklist/SampleChecklistProcess.bpmn"), ResourceType.BPMN2).get();
+            }).addAsset(KieServices.Factory.get().getResources().newClassPathResource("checklist/SampleChecklistProcess.bpmn"), BPMN2).get();
             ChecklistManager checklistManager = new DefaultChecklistManager(environment);
             long c1 = checklistManager.createContext("org.jbpm.examples.checklist.sample1", "actor1");
             List<ChecklistItem> items = checklistManager.getTasks(c1, null);
@@ -90,18 +92,22 @@ public class ChecklistExample {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+        // exit int{0} to void{System}
         System.exit(0);
     }
 
     private static void printChecklistItems(List<ChecklistItem> items, long processInstanceId) {
+        // println String{("Checklist " + processInstanceId)} to PrintStream{System.out}
         System.out.println(("Checklist " + processInstanceId));
         for (ChecklistItem item : items) {
             String orderingNb = item.getOrderingNb();
             if (orderingNb == null) {
                 orderingNb = "";
-            } else if (orderingNb.endsWith("+")) {
-                orderingNb = "*";
-            } 
+            }else
+                if (orderingNb.endsWith("+")) {
+                    orderingNb = "*";
+                }
+            
             System.out.println(((((((((ChecklistExample.fixedLength(orderingNb, 4)) + " ") + (ChecklistExample.fixedLength(item.getName(), 20))) + " ") + (ChecklistExample.fixedLength(item.getStatus().toString(), 10))) + " ") + (ChecklistExample.fixedLength(item.getActors(), 25))) + (ChecklistExample.fixedLength(((item.getTaskId()) == null ? "" : (item.getTaskId()) + ""), 3))));
         }
     }
@@ -110,7 +116,7 @@ public class ChecklistExample {
         for (ChecklistItem item : items) {
             if (name.equals(item.getName())) {
                 return item;
-            } 
+            }
         }
         return null;
     }
@@ -118,10 +124,10 @@ public class ChecklistExample {
     private static String fixedLength(String s, int length) {
         if (s == null) {
             s = "";
-        } 
+        }
         if ((s.length()) > length) {
             return s.substring(0, (length - 1));
-        } else {
+        }else {
             int l = s.length();
             for (int i = l; i <= length; i++) {
                 s += " ";

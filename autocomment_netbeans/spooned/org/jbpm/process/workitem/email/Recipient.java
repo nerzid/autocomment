@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,10 +31,10 @@ public class Recipient {
     }
 
     public Recipient(String type, String displayName, String email, String mobile) {
-        Recipient.this.type = type;
-        Recipient.this.displayName = displayName;
-        Recipient.this.email = email;
-        Recipient.this.mobile = mobile;
+        this.type = type;
+        this.displayName = displayName;
+        this.email = email;
+        this.mobile = mobile;
     }
 
     public String getType() {
@@ -42,7 +42,7 @@ public class Recipient {
     }
 
     public void setType(String type) {
-        Recipient.this.type = type;
+        this.type = type;
     }
 
     public String getDisplayName() {
@@ -50,7 +50,7 @@ public class Recipient {
     }
 
     public void setDisplayName(String displayName) {
-        Recipient.this.displayName = displayName;
+        this.displayName = displayName;
     }
 
     public String getEmail() {
@@ -58,7 +58,7 @@ public class Recipient {
     }
 
     public void setEmail(String email) {
-        Recipient.this.email = email;
+        this.email = email;
     }
 
     public String getMobile() {
@@ -66,7 +66,7 @@ public class Recipient {
     }
 
     public void setMobile(String mobile) {
-        Recipient.this.mobile = mobile;
+        this.mobile = mobile;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class Recipient {
 
     @Override
     public boolean equals(Object obj) {
-        if ((Recipient.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -96,29 +96,37 @@ public class Recipient {
             if ((other.displayName) != null)
                 return false;
             
-        } else if (!(displayName.equals(other.displayName)))
-            return false;
+        }else
+            if (!(displayName.equals(other.displayName)))
+                return false;
+            
         
         if ((email) == null) {
             if ((other.email) != null)
                 return false;
             
-        } else if (!(email.equals(other.email)))
-            return false;
+        }else
+            if (!(email.equals(other.email)))
+                return false;
+            
         
         if ((mobile) == null) {
             if ((other.mobile) != null)
                 return false;
             
-        } else if (!(mobile.equals(other.mobile)))
-            return false;
+        }else
+            if (!(mobile.equals(other.mobile)))
+                return false;
+            
         
         if ((type) == null) {
             if ((other.type) != null)
                 return false;
             
-        } else if (!(type.equals(other.type)))
-            return false;
+        }else
+            if (!(type.equals(other.type)))
+                return false;
+            
         
         return true;
     }

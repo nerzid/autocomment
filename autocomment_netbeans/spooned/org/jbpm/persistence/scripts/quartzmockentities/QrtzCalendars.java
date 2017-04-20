@@ -18,7 +18,7 @@ public class QrtzCalendars {
     }
 
     public void setId(Long id) {
-        QrtzCalendars.this.id = id;
+        this.id = id;
     }
 }
 

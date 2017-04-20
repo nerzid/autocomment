@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,44 +17,46 @@
 
 package org.jbpm.bpmn2.xml;
 
-import org.xml.sax.Attributes;
 import org.drools.core.xml.BaseAbstractHandler;
+import org.xml.sax.Attributes;
 import org.jbpm.process.core.ContextContainer;
+import org.jbpm.compiler.xml.ProcessBuildData;
+import VariableScope.VARIABLE_SCOPE;
+import org.jbpm.ruleflow.core.RuleFlowProcess;
+import org.drools.core.process.core.datatype.impl.type.UndefinedDataType;
+import org.kie.api.definition.process.Node;
 import org.drools.core.process.core.datatype.DataType;
 import org.jbpm.bpmn2.core.Definitions;
 import org.w3c.dom.Element;
+import java.util.List;
 import org.drools.core.xml.ExtensibleXmlParser;
 import org.jbpm.workflow.core.node.ForEachNode;
 import org.drools.core.xml.Handler;
-import java.util.HashSet;
-import org.jbpm.bpmn2.core.Interface;
-import org.jbpm.bpmn2.core.ItemDefinition;
-import java.util.List;
-import java.util.Map;
-import org.kie.api.definition.process.Node;
-import org.jbpm.workflow.core.NodeContainer;
-import org.jbpm.bpmn2.core.Interface.Operation;
-import org.jbpm.compiler.xml.ProcessBuildData;
-import org.jbpm.ruleflow.core.RuleFlowProcess;
-import org.xml.sax.SAXException;
-import org.drools.core.process.core.datatype.impl.type.UndefinedDataType;
 import org.jbpm.process.core.context.variable.Variable;
+import java.util.Map;
+import org.jbpm.bpmn2.core.ItemDefinition;
+import java.util.HashSet;
 import org.jbpm.process.core.context.variable.VariableScope;
 import org.jbpm.workflow.core.node.WorkItemNode;
+import org.jbpm.workflow.core.NodeContainer;
+import org.jbpm.bpmn2.core.Interface.Operation;
+import org.jbpm.bpmn2.core.Interface;
+import org.xml.sax.SAXException;
 
 public class DefinitionsHandler extends BaseAbstractHandler implements Handler {
     @SuppressWarnings(value = "unchecked")
     public DefinitionsHandler() {
-        if (((DefinitionsHandler.this.validParents) == null) && ((DefinitionsHandler.this.validPeers) == null)) {
+        if (((this.validParents) == null) && ((this.validPeers) == null)) {
             this.validParents = new HashSet();
-            DefinitionsHandler.this.validParents.add(null);
+            this.validParents.add(null);
             this.validPeers = new HashSet();
-            DefinitionsHandler.this.validPeers.add(null);
+            this.validPeers.add(null);
             this.allowNesting = false;
-        } 
+        }
     }
 
     public Object start(final String uri, final String localName, final Attributes attrs, final ExtensibleXmlParser parser) throws SAXException {
+        // start element String{localName} to ExtensibleXmlParser{parser}
         parser.startElementBuilder(localName, attrs);
         return new Definitions();
     }
@@ -72,6 +74,7 @@ public class DefinitionsHandler extends BaseAbstractHandler implements Handler {
             postProcessItemDefinitions(ruleFlowProcess, itemDefinitions, parser.getClassLoader());
             postProcessInterfaces(ruleFlowProcess, interfaces);
         }
+        // set target String{namespace} to Definitions{definitions}
         definitions.setTargetNamespace(namespace);
         return definitions;
     }
@@ -84,12 +87,12 @@ public class DefinitionsHandler extends BaseAbstractHandler implements Handler {
         for (Node node : nodeContainer.getNodes()) {
             if (node instanceof NodeContainer) {
                 postProcessInterfaces(((NodeContainer) (node)), interfaces);
-            } 
+            }
             if ((node instanceof WorkItemNode) && ("Service Task".equals(((WorkItemNode) (node)).getMetaData("Type")))) {
                 WorkItemNode workItemNode = ((WorkItemNode) (node));
                 if (interfaces == null) {
                     throw new IllegalArgumentException("No interfaces found");
-                } 
+                }
                 String operationRef = ((String) (workItemNode.getMetaData("OperationRef")));
                 String implementation = ((String) (workItemNode.getMetaData("Implementation")));
                 Operation operation = null;
@@ -97,83 +100,92 @@ public class DefinitionsHandler extends BaseAbstractHandler implements Handler {
                     operation = i.getOperation(operationRef);
                     if (operation != null) {
                         break;
-                    } 
+                    }
                 }
                 if (operation == null) {
                     throw new IllegalArgumentException(("Could not find operation " + operationRef));
-                } 
+                }
                 // avoid overriding parameters set by data input associations
                 if ((workItemNode.getWork().getParameter("Interface")) == null) {
                     workItemNode.getWork().setParameter("Interface", operation.getInterface().getName());
-                } 
+                }
                 if ((workItemNode.getWork().getParameter("Operation")) == null) {
                     workItemNode.getWork().setParameter("Operation", operation.getName());
-                } 
+                }
                 if ((workItemNode.getWork().getParameter("ParameterType")) == null) {
                     workItemNode.getWork().setParameter("ParameterType", operation.getMessage().getType());
-                } 
+                }
                 // parameters to support web service invocation
                 if (implementation != null) {
                     workItemNode.getWork().setParameter("interfaceImplementationRef", operation.getInterface().getImplementationRef());
                     workItemNode.getWork().setParameter("operationImplementationRef", operation.getImplementationRef());
                     workItemNode.getWork().setParameter("implementation", implementation);
-                } 
-            } 
+                }
+            }
         }
     }
 
     private void postProcessItemDefinitions(NodeContainer nodeContainer, Map<String, ItemDefinition> itemDefinitions, ClassLoader cl) {
         if (nodeContainer instanceof ContextContainer) {
             setVariablesDataType(((ContextContainer) (nodeContainer)), itemDefinitions, cl);
-        } 
+        }
         // process composite context node of for each to enhance its variables with types
         if (nodeContainer instanceof ForEachNode) {
             setVariablesDataType(((ForEachNode) (nodeContainer)).getCompositeNode(), itemDefinitions, cl);
-        } 
+        }
         for (Node node : nodeContainer.getNodes()) {
             if (node instanceof NodeContainer) {
                 postProcessItemDefinitions(((NodeContainer) (node)), itemDefinitions, cl);
-            } 
+            }
             if (node instanceof ContextContainer) {
                 setVariablesDataType(((ContextContainer) (node)), itemDefinitions, cl);
-            } 
+            }
         }
     }
 
     private void setVariablesDataType(ContextContainer container, Map<String, ItemDefinition> itemDefinitions, ClassLoader cl) {
-        VariableScope variableScope = ((VariableScope) (container.getDefaultContext(VariableScope.VARIABLE_SCOPE)));
+        VariableScope variableScope = ((VariableScope) (container.getDefaultContext(VARIABLE_SCOPE)));
         if (variableScope != null) {
             for (Variable variable : variableScope.getVariables()) {
                 setVariableDataType(variable, itemDefinitions, cl);
             }
-        } 
+        }
     }
 
     private void setVariableDataType(Variable variable, Map<String, ItemDefinition> itemDefinitions, ClassLoader cl) {
         // retrieve type from item definition
         String itemSubjectRef = ((String) (variable.getMetaData("ItemSubjectRef")));
         if (((UndefinedDataType.getInstance().equals(variable.getType())) && (itemDefinitions != null)) && (itemSubjectRef != null)) {
-            DataType dataType = new org.drools.core.process.core.datatype.impl.type.ObjectDataType();
+            DataType dataType = new ObjectDataType();
             ItemDefinition itemDefinition = itemDefinitions.get(itemSubjectRef);
             if (itemDefinition != null) {
                 String structureRef = itemDefinition.getStructureRef();
+                // use FQCN of Object
                 if (("java.lang.Boolean".equals(structureRef)) || ("Boolean".equals(structureRef))) {
-                    dataType = new org.drools.core.process.core.datatype.impl.type.BooleanDataType();
-                } else if (("java.lang.Integer".equals(structureRef)) || ("Integer".equals(structureRef))) {
-                    dataType = new org.drools.core.process.core.datatype.impl.type.IntegerDataType();
-                } else if (("java.lang.Float".equals(structureRef)) || ("Float".equals(structureRef))) {
-                    dataType = new org.drools.core.process.core.datatype.impl.type.FloatDataType();
-                } else if (("java.lang.String".equals(structureRef)) || ("String".equals(structureRef))) {
-                    dataType = new org.drools.core.process.core.datatype.impl.type.StringDataType();
-                } else if (("java.lang.Object".equals(structureRef)) || ("Object".equals(structureRef))) {
-                    // use FQCN of Object
-                    dataType = new org.drools.core.process.core.datatype.impl.type.ObjectDataType("java.lang.Object");
-                } else {
-                    dataType = new org.drools.core.process.core.datatype.impl.type.ObjectDataType(structureRef, cl);
-                }
-            } 
+                    dataType = new BooleanDataType();
+                }// use FQCN of Object
+                else
+                    if (("java.lang.Integer".equals(structureRef)) || ("Integer".equals(structureRef))) {
+                        dataType = new IntegerDataType();
+                    }else
+                        if (("java.lang.Float".equals(structureRef)) || ("Float".equals(structureRef))) {
+                            dataType = new FloatDataType();
+                        }else
+                            if (("java.lang.String".equals(structureRef)) || ("String".equals(structureRef))) {
+                                dataType = new StringDataType();
+                            }else
+                                if (("java.lang.Object".equals(structureRef)) || ("Object".equals(structureRef))) {
+                                    dataType = new ObjectDataType("java.lang.Object");
+                                }else {
+                                    dataType = new ObjectDataType(structureRef, cl);
+                                }
+                            
+                        
+                    
+                
+            }
             variable.setType(dataType);
-        } 
+        }
     }
 }
 

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ public class VariableScopeResolverFactory extends ImmutableDefaultFactory {
     private VariableScopeInstance variableScope;
 
     public VariableScopeResolverFactory(VariableScopeInstance variableScope) {
-        VariableScopeResolverFactory.this.variableScope = variableScope;
+        this.variableScope = variableScope;
     }
 
     public boolean isResolveable(String name) {
@@ -36,7 +36,7 @@ public class VariableScopeResolverFactory extends ImmutableDefaultFactory {
 
     public VariableResolver getVariableResolver(String name) {
         Object value = variableScope.getVariable(name);
-        return new org.mvel2.integration.impl.SimpleValueResolver(value);
+        return new SimpleValueResolver(value);
     }
 }
 

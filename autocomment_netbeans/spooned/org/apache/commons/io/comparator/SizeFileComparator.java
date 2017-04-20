@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,7 +46,7 @@ import java.io.Serializable;
  * <p>
  * <strong>N.B.</strong> Directories are treated as <b>zero size</b> unless
  * <code>sumDirectoryContents</code> is {@code true}.
- * 
+ *
  * @version $Id: SizeFileComparator.java 1642757 2014-12-01 21:09:30Z sebb $
  * @since 1.4
  */
@@ -93,7 +93,7 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
      * <p>
      * If the <code>sumDirectoryContents</code> is {@code true} The size of
      * directories is calculated using  {@link FileUtils#sizeOfDirectory(File)}.
-     * 
+     *
      * @param sumDirectoryContents {@code true} if the sum of the directoryies contents
      *  should be calculated, otherwise {@code false} if directories should be treated
      *  as size zero (see {@link FileUtils#sizeOfDirectory(File)}).
@@ -104,7 +104,7 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
 
     /**
      * Compare the length of two files.
-     * 
+     *
      * @param file1 The first file to compare
      * @param file2 The second file to compare
      * @return a negative value if the first file's length
@@ -116,28 +116,30 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
         long size1 = 0;
         if (file1.isDirectory()) {
             size1 = ((sumDirectoryContents) && (file1.exists())) ? FileUtils.sizeOfDirectory(file1) : 0;
-        } else {
+        }else {
             size1 = file1.length();
         }
         long size2 = 0;
         if (file2.isDirectory()) {
             size2 = ((sumDirectoryContents) && (file2.exists())) ? FileUtils.sizeOfDirectory(file2) : 0;
-        } else {
+        }else {
             size2 = file2.length();
         }
         final long result = size1 - size2;
         if (result < 0) {
             return -1;
-        } else if (result > 0) {
-            return 1;
-        } else {
-            return 0;
-        }
+        }else
+            if (result > 0) {
+                return 1;
+            }else {
+                return 0;
+            }
+        
     }
 
     /**
      * String representation of this file comparator.
-     * 
+     *
      * @return String representation of this file comparator
      */
     @Override

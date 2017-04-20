@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,10 +33,10 @@ public class CommentInstanceImpl implements CommentInstance {
     private String comment;
 
     public CommentInstanceImpl(String author, String comment) {
-        CommentInstanceImpl.this.id = UUID.randomUUID().toString();
-        CommentInstanceImpl.this.createdAt = new Date();
-        CommentInstanceImpl.this.author = author;
-        CommentInstanceImpl.this.comment = comment;
+        this.id = UUID.randomUUID().toString();
+        this.createdAt = new Date();
+        this.author = author;
+        this.comment = comment;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CommentInstanceImpl implements CommentInstance {
     }
 
     public void setComment(String comment) {
-        CommentInstanceImpl.this.comment = comment;
+        this.comment = comment;
     }
 
     @Override

@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,37 +17,40 @@
 
 package org.jbpm.kie.services.impl;
 
-import org.jbpm.runtime.manager.impl.AbstractRuntimeManager;
+import org.jbpm.services.api.model.DeploymentUnit;
 import java.util.ArrayList;
+import org.jbpm.runtime.manager.impl.AbstractRuntimeManager;
+import DeploymentDescriptor.TYPE_EXECUTE;
+import java.util.Set;
 import org.jbpm.process.audit.event.AuditEventBuilder;
+import java.util.HashSet;
+import ProcessInstance.STATE_ACTIVE;
 import java.util.Collection;
+import org.jbpm.runtime.manager.impl.SimpleRuntimeEnvironment;
+import ProcessInstance.STATE_SUSPENDED;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
+import org.kie.internal.identity.IdentityProvider;
+import java.util.Map;
+import org.jbpm.services.api.ListenerSupport;
 import org.jbpm.services.api.model.DeployedUnit;
+import org.slf4j.LoggerFactory;
 import org.kie.internal.runtime.conf.DeploymentDescriptor;
 import org.jbpm.services.api.DeploymentEvent;
-import org.jbpm.services.api.DeploymentEventListener;
-import org.jbpm.kie.services.api.DeploymentIdResolver;
-import org.jbpm.services.api.DeploymentService;
-import org.jbpm.services.api.model.DeploymentUnit;
-import javax.persistence.EntityManagerFactory;
-import java.util.HashSet;
-import org.kie.internal.identity.IdentityProvider;
-import org.kie.internal.runtime.manager.InternalRuntimeManager;
-import org.kie.api.runtime.KieContainer;
-import java.util.List;
-import org.jbpm.services.api.ListenerSupport;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Map;
-import org.jbpm.services.api.model.ProcessInstanceDesc;
+import org.kie.internal.runtime.manager.InternalRuntimeManager;
+import org.jbpm.services.api.DeploymentEventListener;
+import org.jbpm.services.api.DeploymentService;
+import org.kie.api.runtime.KieContainer;
 import org.jbpm.services.api.RuntimeDataService;
+import java.util.List;
+import javax.persistence.EntityManagerFactory;
+import org.kie.api.runtime.manager.RuntimeManagerFactory;
+import ProcessInstance.STATE_PENDING;
+import org.jbpm.kie.services.impl.audit.ServicesAwareAuditEventBuilder;
+import org.jbpm.services.api.model.ProcessInstanceDesc;
 import org.kie.api.runtime.manager.RuntimeEnvironment;
 import org.kie.api.runtime.manager.RuntimeManager;
-import org.kie.api.runtime.manager.RuntimeManagerFactory;
-import org.jbpm.kie.services.impl.audit.ServicesAwareAuditEventBuilder;
-import java.util.Set;
-import org.jbpm.runtime.manager.impl.SimpleRuntimeEnvironment;
 
 public abstract class AbstractDeploymentService implements DeploymentService , ListenerSupport {
     private static Logger logger = LoggerFactory.getLogger(AbstractDeploymentService.class);
@@ -64,12 +67,14 @@ public abstract class AbstractDeploymentService implements DeploymentService , L
 
     @Override
     public void addListener(DeploymentEventListener listener) {
-        AbstractDeploymentService.this.listeners.add(listener);
+        // add DeploymentEventListener{listener} to Set{this.listeners}
+        this.listeners.add(listener);
     }
 
     @Override
     public void removeListener(DeploymentEventListener listener) {
-        AbstractDeploymentService.this.listeners.remove(listener);
+        // remove DeploymentEventListener{listener} to Set{this.listeners}
+        this.listeners.remove(listener);
     }
 
     @Override
@@ -83,7 +88,7 @@ public abstract class AbstractDeploymentService implements DeploymentService , L
     public void deploy(DeploymentUnit unit) {
         if (deploymentsMap.containsKey(unit.getIdentifier())) {
             throw new IllegalStateException((("Unit with id " + (unit.getIdentifier())) + " is already deployed"));
-        } 
+        }
     }
 
     public void notifyOnDeploy(DeploymentUnit unit, DeployedUnit deployedUnit) {
@@ -115,12 +120,12 @@ public abstract class AbstractDeploymentService implements DeploymentService , L
     }
 
     public void commonDeploy(DeploymentUnit unit, DeployedUnitImpl deployedUnit, RuntimeEnvironment environemnt, KieContainer kieContainer) {
-        synchronized(AbstractDeploymentService.this) {
+        synchronized(this) {
             if (deploymentsMap.containsKey(unit.getIdentifier())) {
                 DeployedUnit deployed = deploymentsMap.remove(unit.getIdentifier());
                 RuntimeManager manager = deployed.getRuntimeManager();
                 manager.close();
-            } 
+            }
             RuntimeManager manager = null;
             deploymentsMap.put(unit.getIdentifier(), deployedUnit);
             ((SimpleRuntimeEnvironment) (environemnt)).addToEnvironment("IdentityProvider", identityProvider);
@@ -144,16 +149,16 @@ public abstract class AbstractDeploymentService implements DeploymentService , L
                 ((InternalRuntimeManager) (manager)).setKieContainer(kieContainer);
                 deployedUnit.setRuntimeManager(manager);
                 DeploymentDescriptor descriptor = ((InternalRuntimeManager) (manager)).getDeploymentDescriptor();
-                List<String> requiredRoles = descriptor.getRequiredRoles(DeploymentDescriptor.TYPE_EXECUTE);
+                List<String> requiredRoles = descriptor.getRequiredRoles(TYPE_EXECUTE);
                 if ((requiredRoles != null) && (!(requiredRoles.isEmpty()))) {
-                    ((InternalRuntimeManager) (manager)).setSecurityManager(new org.jbpm.kie.services.impl.security.IdentityRolesSecurityManager(identityProvider, requiredRoles));
-                } 
+                    ((InternalRuntimeManager) (manager)).setSecurityManager(new IdentityRolesSecurityManager(identityProvider, requiredRoles));
+                }
                 notifyOnDeploy(unit, deployedUnit);
             } catch (Throwable e) {
                 deploymentsMap.remove(unit.getIdentifier());
                 if (manager != null) {
                     manager.close();
-                } 
+                }
                 notifyOnUnDeploy(unit, deployedUnit);
                 throw new RuntimeException(e);
             }
@@ -163,19 +168,22 @@ public abstract class AbstractDeploymentService implements DeploymentService , L
     @Override
     public void undeploy(DeploymentUnit unit) {
         List<Integer> states = new ArrayList<Integer>();
-        states.add(ProcessInstance.STATE_ACTIVE);
-        states.add(ProcessInstance.STATE_PENDING);
-        states.add(ProcessInstance.STATE_SUSPENDED);
-        Collection<ProcessInstanceDesc> activeProcesses = runtimeDataService.getProcessInstancesByDeploymentId(unit.getIdentifier(), states, new org.kie.api.runtime.query.QueryContext());
+        // add void{STATE_ACTIVE} to List{states}
+        states.add(STATE_ACTIVE);
+        // add void{STATE_PENDING} to List{states}
+        states.add(STATE_PENDING);
+        // add void{STATE_SUSPENDED} to List{states}
+        states.add(STATE_SUSPENDED);
+        Collection<ProcessInstanceDesc> activeProcesses = runtimeDataService.getProcessInstancesByDeploymentId(unit.getIdentifier(), states, new QueryContext());
         if (!(activeProcesses.isEmpty())) {
             throw new IllegalStateException(("Undeploy forbidden - there are active processes instances for deployment " + (unit.getIdentifier())));
-        } 
-        synchronized(AbstractDeploymentService.this) {
+        }
+        synchronized(this) {
             DeployedUnit deployed = deploymentsMap.remove(unit.getIdentifier());
             if (deployed != null) {
                 RuntimeManager manager = deployed.getRuntimeManager();
                 ((AbstractRuntimeManager) (manager)).close(true);
-            } 
+            }
             notifyOnUnDeploy(unit, deployed);
         }
     }
@@ -184,10 +192,12 @@ public abstract class AbstractDeploymentService implements DeploymentService , L
     public RuntimeManager getRuntimeManager(String deploymentUnitId) {
         if ((deploymentUnitId != null) && (deploymentsMap.containsKey(deploymentUnitId))) {
             return deploymentsMap.get(deploymentUnitId).getRuntimeManager();
-        } else if ((deploymentUnitId != null) && (deploymentUnitId.toLowerCase().contains("latest"))) {
-            String matched = DeploymentIdResolver.matchAndReturnLatest(deploymentUnitId, deploymentsMap.keySet());
-            return deploymentsMap.get(matched).getRuntimeManager();
-        } 
+        }else
+            if ((deploymentUnitId != null) && (deploymentUnitId.toLowerCase().contains("latest"))) {
+                String matched = org.jbpm.kie.services.api.DeploymentIdResolver.matchAndReturnLatest(deploymentUnitId, deploymentsMap.keySet());
+                return deploymentsMap.get(matched).getRuntimeManager();
+            }
+        
         return null;
     }
 
@@ -196,10 +206,12 @@ public abstract class AbstractDeploymentService implements DeploymentService , L
         DeployedUnit deployedUnit = null;
         if (deploymentsMap.containsKey(deploymentUnitId)) {
             deployedUnit = deploymentsMap.get(deploymentUnitId);
-        } else if ((deploymentUnitId != null) && (deploymentUnitId.toLowerCase().contains("latest"))) {
-            String matched = DeploymentIdResolver.matchAndReturnLatest(deploymentUnitId, deploymentsMap.keySet());
-            deployedUnit = deploymentsMap.get(matched);
-        } 
+        }else
+            if ((deploymentUnitId != null) && (deploymentUnitId.toLowerCase().contains("latest"))) {
+                String matched = org.jbpm.kie.services.api.DeploymentIdResolver.matchAndReturnLatest(deploymentUnitId, deploymentsMap.keySet());
+                deployedUnit = deploymentsMap.get(matched);
+            }
+        
         return deployedUnit;
     }
 
@@ -217,7 +229,7 @@ public abstract class AbstractDeploymentService implements DeploymentService , L
     }
 
     public void setManagerFactory(RuntimeManagerFactory managerFactory) {
-        AbstractDeploymentService.this.managerFactory = managerFactory;
+        this.managerFactory = managerFactory;
     }
 
     public RuntimeDataService getRuntimeDataService() {
@@ -229,20 +241,22 @@ public abstract class AbstractDeploymentService implements DeploymentService , L
     }
 
     public void setEmf(EntityManagerFactory emf) {
-        AbstractDeploymentService.this.emf = emf;
+        this.emf = emf;
     }
 
     public void setRuntimeDataService(RuntimeDataService runtimeDataService) {
-        AbstractDeploymentService.this.runtimeDataService = runtimeDataService;
+        this.runtimeDataService = runtimeDataService;
     }
 
     public void setIdentityProvider(IdentityProvider identityProvider) {
-        AbstractDeploymentService.this.identityProvider = identityProvider;
+        this.identityProvider = identityProvider;
     }
 
     protected AuditEventBuilder setupAuditLogger(IdentityProvider identityProvider, String deploymentUnitId) {
         ServicesAwareAuditEventBuilder auditEventBuilder = new ServicesAwareAuditEventBuilder();
+        // set identity IdentityProvider{identityProvider} to ServicesAwareAuditEventBuilder{auditEventBuilder}
         auditEventBuilder.setIdentityProvider(identityProvider);
+        // set deployment String{deploymentUnitId} to ServicesAwareAuditEventBuilder{auditEventBuilder}
         auditEventBuilder.setDeploymentUnitId(deploymentUnitId);
         return auditEventBuilder;
     }

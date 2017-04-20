@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,12 +17,12 @@
 
 package org.jbpm.process.workitem.archive;
 
+import org.apache.commons.compress.utils.IOUtils;
 import org.jbpm.process.workitem.AbstractLogOrThrowWorkItemHandler;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import org.apache.commons.compress.utils.IOUtils;
 import java.util.List;
 import java.io.OutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -35,7 +35,7 @@ public class ArchiveWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
         List<File> files = ((List<File>) (workItem.getParameter("Files")));
         try {
             OutputStream outputStream = new FileOutputStream(new File(archive));
-            ArchiveOutputStream os = new org.apache.commons.compress.archivers.ArchiveStreamFactory().createArchiveOutputStream("tar", outputStream);
+            ArchiveOutputStream os = new ArchiveStreamFactory().createArchiveOutputStream("tar", outputStream);
             if (files != null) {
                 for (File file : files) {
                     final TarArchiveEntry entry = new TarArchiveEntry("testdata/test1.xml");
@@ -47,7 +47,7 @@ public class ArchiveWorkItemHandler extends AbstractLogOrThrowWorkItemHandler {
                     os.putArchiveEntry(entry);
                     IOUtils.copy(new FileInputStream(file), os);
                 }
-            } 
+            }
             os.closeArchiveEntry();
             os.close();
             manager.completeWorkItem(workItem.getId(), null);

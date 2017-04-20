@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,8 +28,8 @@ public class Email {
     }
 
     public Email() {
-        Email.this.message = new Message();
-        Email.this.connection = new Connection();
+        this.message = new Message();
+        this.connection = new Connection();
     }
 
     public Message getMessage() {
@@ -37,7 +37,7 @@ public class Email {
     }
 
     public void setMessage(Message message) {
-        Email.this.message = message;
+        this.message = message;
     }
 
     public Connection getConnection() {
@@ -45,7 +45,7 @@ public class Email {
     }
 
     public void setConnection(Connection connection) {
-        Email.this.connection = connection;
+        this.connection = connection;
     }
 
     public int hashCode() {
@@ -57,7 +57,7 @@ public class Email {
     }
 
     public boolean equals(Object obj) {
-        if ((Email.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -71,15 +71,19 @@ public class Email {
             if ((other.connection) != null)
                 return false;
             
-        } else if (!(connection.equals(other.connection)))
-            return false;
+        }else
+            if (!(connection.equals(other.connection)))
+                return false;
+            
         
         if ((message) == null) {
             if ((other.message) != null)
                 return false;
             
-        } else if (!(message.equals(other.message)))
-            return false;
+        }else
+            if (!(message.equals(other.message)))
+                return false;
+            
         
         return true;
     }

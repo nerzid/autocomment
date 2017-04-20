@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,14 +27,14 @@ public class DateTimeUtils extends TimeUtils {
     public static boolean isRepeatable(String dateTimeStr) {
         if ((dateTimeStr != null) && (dateTimeStr.startsWith("R"))) {
             return true;
-        } 
+        }
         return false;
     }
 
     public static boolean isPeriod(String dateTimeStr) {
         if ((dateTimeStr != null) && (dateTimeStr.startsWith("P"))) {
             return true;
-        } 
+        }
         return false;
     }
 
@@ -47,7 +47,7 @@ public class DateTimeUtils extends TimeUtils {
         if (DateTimeUtils.isPeriod(durationStr)) {
             Period p = ISOPeriodFormat.standard().parsePeriod(durationStr);
             return p.toStandardDuration().getMillis();
-        } else {
+        }else {
             return TimeUtils.parseTimeString(durationStr);
         }
     }
@@ -69,7 +69,7 @@ public class DateTimeUtils extends TimeUtils {
             result[0] = elements[0].substring(1);
             result[1] = elements[1];
             result[2] = elements[2];
-        } else {
+        }else {
             result[0] = elements[0].substring(1);
             result[1] = new DateTime().toString();
             result[2] = elements[1];
@@ -89,20 +89,20 @@ public class DateTimeUtils extends TimeUtils {
             if ((startAtDelayDur.getMillis()) <= 0) {
                 // need to introduce delay to allow all initialization
                 startAtDelayDur = Duration.standardSeconds(1);
-            } 
+            }
             Period period = ISOPeriodFormat.standard().parsePeriod(periodIn);
             result[0] = Long.parseLong(((repeats.length()) == 0 ? "-1" : repeats));
             result[1] = startAtDelayDur.getMillis();
             result[2] = period.toStandardDuration().getMillis();
             return result;
-        } else {
+        }else {
             int index = dateTimeStr.indexOf("###");
             if (index != (-1)) {
                 String period = dateTimeStr.substring((index + 3));
                 String delay = dateTimeStr.substring(0, index);
                 result = new long[]{ TimeUtils.parseTimeString(delay) , TimeUtils.parseTimeString(period) };
                 return result;
-            } 
+            }
             result = new long[]{ TimeUtils.parseTimeString(dateTimeStr) };
             return result;
         }

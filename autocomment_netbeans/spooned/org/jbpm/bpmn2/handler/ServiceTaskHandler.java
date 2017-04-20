@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.lang.reflect.Method;
+import WorkItemHandlerRuntimeException.WORKITEMHANDLERTYPE;
 import org.kie.api.runtime.process.WorkItem;
 import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.api.runtime.process.WorkItemManager;
@@ -37,7 +38,7 @@ public class ServiceTaskHandler implements WorkItemHandler {
     }
 
     public ServiceTaskHandler(String resultVarName) {
-        ServiceTaskHandler.this.resultVarName = resultVarName;
+        this.resultVarName = resultVarName;
     }
 
     public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
@@ -55,7 +56,7 @@ public class ServiceTaskHandler implements WorkItemHandler {
             } catch (ClassNotFoundException cnfe) {
                 if ((serv.compareTo(services[((services.length) - 1)])) == 0) {
                     handleException(cnfe, service, interfaceImplementationRef, operation, parameterType, parameter);
-                } 
+                }
             }
         }
         try {
@@ -65,7 +66,7 @@ public class ServiceTaskHandler implements WorkItemHandler {
             if (parameterType != null) {
                 classes = new Class<?>[]{ Class.forName(parameterType) };
                 params = new Object[]{ parameter };
-            } 
+            }
             Method method = c.getMethod(operation, classes);
             Object result = method.invoke(instance, params);
             Map<String, Object> results = new HashMap<String, Object>();
@@ -87,22 +88,29 @@ public class ServiceTaskHandler implements WorkItemHandler {
     }
 
     private void handleException(Throwable cause, String service, String interfaceImplementationRef, String operation, String paramType, Object param) {
+        // debug String{"Handling exception {} inside service {} or {} and operation {} with param type {} and value {}"} to Logger{ServiceTaskHandler.logger}
         ServiceTaskHandler.logger.debug("Handling exception {} inside service {} or {} and operation {} with param type {} and value {}", cause.getMessage(), service, operation, paramType, param);
         WorkItemHandlerRuntimeException wihRe;
         if (cause instanceof InvocationTargetException) {
             Throwable realCause = cause.getCause();
             wihRe = new WorkItemHandlerRuntimeException(realCause);
             wihRe.setStackTrace(realCause.getStackTrace());
-        } else {
+        }else {
             wihRe = new WorkItemHandlerRuntimeException(cause);
             wihRe.setStackTrace(cause.getStackTrace());
         }
+        // set information String{"Interface"} to WorkItemHandlerRuntimeException{wihRe}
         wihRe.setInformation("Interface", service);
+        // set information String{"InterfaceImplementationRef"} to WorkItemHandlerRuntimeException{wihRe}
         wihRe.setInformation("InterfaceImplementationRef", interfaceImplementationRef);
+        // set information String{"Operation"} to WorkItemHandlerRuntimeException{wihRe}
         wihRe.setInformation("Operation", operation);
+        // set information String{"ParameterType"} to WorkItemHandlerRuntimeException{wihRe}
         wihRe.setInformation("ParameterType", paramType);
+        // set information String{"Parameter"} to WorkItemHandlerRuntimeException{wihRe}
         wihRe.setInformation("Parameter", param);
-        wihRe.setInformation(WorkItemHandlerRuntimeException.WORKITEMHANDLERTYPE, ServiceTaskHandler.this.getClass().getSimpleName());
+        // set information void{WORKITEMHANDLERTYPE} to WorkItemHandlerRuntimeException{wihRe}
+        wihRe.setInformation(WORKITEMHANDLERTYPE, this.getClass().getSimpleName());
         throw wihRe;
     }
 

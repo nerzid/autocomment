@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,22 +17,22 @@
 
 package org.jbpm.runtime.manager.impl;
 
-import org.kie.api.event.rule.AgendaEventListener;
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
+import org.kie.api.event.rule.AgendaEventListener;
+import org.kie.api.task.TaskService;
+import java.util.ArrayList;
 import java.lang.reflect.Constructor;
+import org.kie.api.event.process.ProcessEventListener;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.HashMap;
+import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.internal.runtime.manager.InternalRegisterableItemsFactory;
 import org.kie.internal.runtime.manager.InternalRuntimeManager;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.task.TaskLifeCycleEventListener;
+import org.kie.api.event.rule.RuleRuntimeEventListener;
 import java.util.List;
 import java.util.Map;
-import org.kie.api.event.process.ProcessEventListener;
-import org.kie.api.event.rule.RuleRuntimeEventListener;
-import org.kie.api.runtime.manager.RuntimeEngine;
-import org.kie.api.task.TaskLifeCycleEventListener;
-import org.kie.api.task.TaskService;
 import org.kie.api.runtime.process.WorkItemHandler;
 
 /**
@@ -74,7 +74,7 @@ public class SimpleRegisterableItemsFactory implements InternalRegisterableItems
 
     @Override
     public void setRuntimeManager(InternalRuntimeManager runtimeManager) {
-        SimpleRegisterableItemsFactory.this.runtimeManager = runtimeManager;
+        this.runtimeManager = runtimeManager;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SimpleRegisterableItemsFactory implements InternalRegisterableItems
             WorkItemHandler handler = createInstance(entry.getValue(), runtime);
             if (handler != null) {
                 handlers.put(entry.getKey(), handler);
-            } 
+            }
         }
         return handlers;
     }
@@ -96,7 +96,7 @@ public class SimpleRegisterableItemsFactory implements InternalRegisterableItems
             ProcessEventListener pListener = createInstance(clazz, runtime);
             if (pListener != null) {
                 listeners.add(pListener);
-            } 
+            }
         }
         return listeners;
     }
@@ -108,7 +108,7 @@ public class SimpleRegisterableItemsFactory implements InternalRegisterableItems
             AgendaEventListener aListener = createInstance(clazz, runtime);
             if (aListener != null) {
                 listeners.add(aListener);
-            } 
+            }
         }
         return listeners;
     }
@@ -120,7 +120,7 @@ public class SimpleRegisterableItemsFactory implements InternalRegisterableItems
             RuleRuntimeEventListener wmListener = createInstance(clazz, runtime);
             if (wmListener != null) {
                 listeners.add(wmListener);
-            } 
+            }
         }
         return listeners;
     }
@@ -132,7 +132,7 @@ public class SimpleRegisterableItemsFactory implements InternalRegisterableItems
             TaskLifeCycleEventListener tListener = createInstance(clazz, null);
             if (tListener != null) {
                 listeners.add(tListener);
-            } 
+            }
         }
         return listeners;
     }
@@ -143,27 +143,33 @@ public class SimpleRegisterableItemsFactory implements InternalRegisterableItems
     }
 
     public void addWorkItemHandler(String name, Class<? extends WorkItemHandler> clazz) {
-        SimpleRegisterableItemsFactory.this.workItemHandlersClasses.put(name, clazz);
+        // put String{name} to Map{this.workItemHandlersClasses}
+        this.workItemHandlersClasses.put(name, clazz);
     }
 
     public void addProcessListener(Class<? extends ProcessEventListener> clazz) {
-        SimpleRegisterableItemsFactory.this.processListeners.add(clazz);
+        // add Class{clazz} to List{this.processListeners}
+        this.processListeners.add(clazz);
     }
 
     public void addAgendaListener(Class<? extends AgendaEventListener> clazz) {
-        SimpleRegisterableItemsFactory.this.agendListeners.add(clazz);
+        // add Class{clazz} to List{this.agendListeners}
+        this.agendListeners.add(clazz);
     }
 
     public void addWorkingMemoryListener(Class<? extends RuleRuntimeEventListener> clazz) {
-        SimpleRegisterableItemsFactory.this.workingMemoryListeners.add(clazz);
+        // add Class{clazz} to List{this.workingMemoryListeners}
+        this.workingMemoryListeners.add(clazz);
     }
 
     public void addGlobal(String name, Object global) {
-        SimpleRegisterableItemsFactory.this.globals.put(name, global);
+        // put String{name} to Map{this.globals}
+        this.globals.put(name, global);
     }
 
     public void addTaskListener(Class<? extends TaskLifeCycleEventListener> clazz) {
-        SimpleRegisterableItemsFactory.this.taskListeners.add(clazz);
+        // add Class{clazz} to List{this.taskListeners}
+        this.taskListeners.add(clazz);
     }
 
     protected <T> T createInstance(Class<T> clazz, RuntimeEngine engine) {
@@ -184,13 +190,13 @@ public class SimpleRegisterableItemsFactory implements InternalRegisterableItems
                 instance = constructor.newInstance(engine);
             } catch (Exception e) {
             }
-        } 
+        }
         if (instance == null) {
             try {
                 instance = clazz.newInstance();
             } catch (Exception e) {
             }
-        } 
+        }
         return instance;
     }
 }

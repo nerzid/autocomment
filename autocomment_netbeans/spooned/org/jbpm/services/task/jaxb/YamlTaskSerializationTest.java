@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
 package org.jbpm.services.task.jaxb;
 
 import org.yaml.snakeyaml.Yaml;
+import static TestType.YAML;
 
 public class YamlTaskSerializationTest extends AbstractTaskSerializationTest {
     public TestType getType() {
@@ -27,6 +28,7 @@ public class YamlTaskSerializationTest extends AbstractTaskSerializationTest {
 
     public <T> T testRoundTrip(T in) throws Exception {
         String output = yaml.dump(in);
+        // debug String{output} to YamlTaskSerializationTest{logger}
         logger.debug(output);
         return ((T) (yaml.load(output)));
     }

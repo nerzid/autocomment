@@ -1,12 +1,12 @@
 /**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,12 +35,14 @@ public class MVELDataTransformer implements DataTransformer {
 
     @Override
     public Object compile(String expression, Map<String, Object> parameters) {
+        // debug String{"About to compile mvel expression {}"} to Logger{MVELDataTransformer.logger}
         MVELDataTransformer.logger.debug("About to compile mvel expression {}", expression);
         ClassLoader classLoader = ((ClassLoader) (parameters.get("classloader")));
         if (classLoader == null) {
-            classLoader = MVELDataTransformer.this.getClass().getClassLoader();
-        } 
+            classLoader = this.getClass().getClassLoader();
+        }
         ParserConfiguration config = new ParserConfiguration();
+        // set class ClassLoader{classLoader} to ParserConfiguration{config}
         config.setClassLoader(classLoader);
         ParserContext context = new ParserContext(config);
         if (parameters != null) {
@@ -55,13 +57,14 @@ public class MVELDataTransformer implements DataTransformer {
                         MVELDataTransformer.logger.warn("Unable to load class {} due to {}", clazz, e.getException());
                     }
                 }
-            } 
-        } 
+            }
+        }
         return MVEL.compileExpression(expression, context);
     }
 
     @Override
     public Object transform(Object expression, Map<String, Object> parameters) {
+        // debug String{"About to execute mvel expression {} with parameters {}"} to Logger{MVELDataTransformer.logger}
         MVELDataTransformer.logger.debug("About to execute mvel expression {} with parameters {}", expression, parameters);
         return MVELSafeHelper.getEvaluator().executeExpression(expression, parameters);
     }

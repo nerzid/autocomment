@@ -1,6 +1,6 @@
+// Generated from CommentTitle.g4 by ANTLR 4.6
 package com.nerzid.autocomment.grammar;
 
-// Generated from CommentTitle.g4 by ANTLR 4.5.3
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -25,12 +25,12 @@ public class CommentTitleBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBoolean_one_verb_rule(CommentTitleParser.Boolean_one_verb_ruleContext ctx) { return visitChildren(ctx); }
+	@Override public T visitOne_verb_rule(CommentTitleParser.One_verb_ruleContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBoolean_two_verb_rule(CommentTitleParser.Boolean_two_verb_ruleContext ctx) { return visitChildren(ctx); }
+	@Override public T visitTwo_verb_rule(CommentTitleParser.Two_verb_ruleContext ctx) { return visitChildren(ctx); }
 }

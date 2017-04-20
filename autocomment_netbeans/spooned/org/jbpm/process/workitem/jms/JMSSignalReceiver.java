@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,28 +17,28 @@
 
 package org.jbpm.process.workitem.jms;
 
-import java.util.ArrayList;
-import java.io.ByteArrayInputStream;
 import javax.jms.BytesMessage;
+import java.util.ArrayList;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import java.util.ServiceLoader;
+import org.slf4j.LoggerFactory;
+import java.io.ByteArrayInputStream;
+import org.kie.api.runtime.manager.RuntimeManager;
 import org.apache.commons.io.input.ClassLoaderObjectInputStream;
 import java.util.Collection;
+import org.kie.internal.runtime.manager.RuntimeManagerRegistry;
 import java.util.Collections;
 import java.util.HashMap;
 import java.io.IOException;
-import org.kie.internal.runtime.manager.InternalRuntimeManager;
-import javax.jms.JMSException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Map;
-import javax.jms.Message;
-import javax.jms.MessageListener;
+import org.kie.internal.runtime.manager.RuntimeManagerIdFilter;
 import java.io.ObjectInputStream;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
+import org.kie.internal.runtime.manager.InternalRuntimeManager;
+import javax.jms.JMSException;
+import java.util.Map;
 import org.kie.api.runtime.manager.RuntimeEngine;
-import org.kie.api.runtime.manager.RuntimeManager;
-import org.kie.internal.runtime.manager.RuntimeManagerIdFilter;
-import org.kie.internal.runtime.manager.RuntimeManagerRegistry;
-import java.util.ServiceLoader;
+import org.slf4j.Logger;
 
 public class JMSSignalReceiver implements MessageListener {
     private static final Logger logger = LoggerFactory.getLogger(JMSSignalReceiver.class);
@@ -61,7 +61,7 @@ public class JMSSignalReceiver implements MessageListener {
                 deploymentId = ((String) (bytesMessage.getObjectProperty("KIE_SignalDeploymentId")));
                 if (deploymentId == null) {
                     deploymentId = ((String) (bytesMessage.getObjectProperty("KIE_DeploymentId")));
-                } 
+                }
                 signal = ((String) (bytesMessage.getObjectProperty("KIE_Signal")));
                 processInstanceId = ((Long) (bytesMessage.getObjectProperty("KIE_SignalProcessInstanceId")));
                 workItemId = ((Long) (bytesMessage.getObjectProperty("KIE_SignalWorkItemId")));
@@ -72,7 +72,7 @@ public class JMSSignalReceiver implements MessageListener {
                         runtimeManager = RuntimeManagerRegistry.get().getManager(matchedDeploymentId);
                         if (runtimeManager == null) {
                             throw new IllegalStateException(("There is no runtime manager for deployment " + matchedDeploymentId));
-                        } 
+                        }
                         JMSSignalReceiver.logger.debug("RuntimeManager found for deployment id {}, reading message content with custom class loader of the deployment", matchedDeploymentId);
                         data = readData(bytesMessage, ((InternalRuntimeManager) (runtimeManager)).getEnvironment().getClassLoader());
                         JMSSignalReceiver.logger.debug("Data read successfully with output {}", data);
@@ -83,37 +83,39 @@ public class JMSSignalReceiver implements MessageListener {
                             if (data != null) {
                                 if (data instanceof Map) {
                                     results.putAll(((Map) (data)));
-                                } else {
+                                }else {
                                     results.put("Data", data);
                                 }
-                            } 
+                            }
                             JMSSignalReceiver.logger.debug("About to complete work item with id {} and data {}", workItemId, results);
                             engine.getKieSession().getWorkItemManager().completeWorkItem(workItemId, results);
                             JMSSignalReceiver.logger.debug("Successfully completed work item with id {}", workItemId);
-                        } else if (signal != null) {
-                            if (processInstanceId != null) {
-                                JMSSignalReceiver.logger.debug("About to signal process instance with id {} and event data {} with signal {}", processInstanceId, data, signal);
-                                engine.getKieSession().signalEvent(signal, data, processInstanceId);
-                            } else {
-                                JMSSignalReceiver.logger.debug("About to broadcast signal {} and event data {}", signal, data);
-                                runtimeManager.signalEvent(signal, data);
+                        }else
+                            if (signal != null) {
+                                if (processInstanceId != null) {
+                                    JMSSignalReceiver.logger.debug("About to signal process instance with id {} and event data {} with signal {}", processInstanceId, data, signal);
+                                    engine.getKieSession().signalEvent(signal, data, processInstanceId);
+                                }else {
+                                    JMSSignalReceiver.logger.debug("About to broadcast signal {} and event data {}", signal, data);
+                                    runtimeManager.signalEvent(signal, data);
+                                }
+                                JMSSignalReceiver.logger.debug("Signal completed successfully for signal {} with data {}", signal, data);
+                            }else {
+                                JMSSignalReceiver.logger.warn("No signal or workitem id is given, skipping this message");
                             }
-                            JMSSignalReceiver.logger.debug("Signal completed successfully for signal {} with data {}", signal, data);
-                        } else {
-                            JMSSignalReceiver.logger.warn("No signal or workitem id is given, skipping this message");
-                        }
+                        
                     } catch (Exception e) {
                         JMSSignalReceiver.logger.error("Unexpected exception while signaling: {}", e.getMessage(), e);
                     } finally {
                         if ((runtimeManager != null) && (engine != null)) {
                             runtimeManager.disposeRuntimeEngine(engine);
-                        } 
+                        }
                     }
                 }
             } catch (Exception e) {
                 JMSSignalReceiver.logger.error("Unexpected exception while processing signal JMS message: {}", e.getMessage(), e);
             }
-        } 
+        }
     }
 
     protected Object readData(BytesMessage message, ClassLoader cl) throws Exception, JMSException {
@@ -131,23 +133,23 @@ public class JMSSignalReceiver implements MessageListener {
                 } finally {
                     if (in != null) {
                         in.close();
-                    } 
+                    }
                 }
-            } 
-        } 
+            }
+        }
         return data;
     }
 
     protected Collection<String> matchDeployments(String deploymentId, Collection<String> availableDeployments) {
         if ((availableDeployments == null) || (availableDeployments.isEmpty())) {
             return Collections.emptyList();
-        } 
+        }
         Collection<String> matched = new ArrayList<String>();
         for (RuntimeManagerIdFilter filter : JMSSignalReceiver.runtimeManagerIdFilters) {
             matched = filter.filter(deploymentId, availableDeployments);
             if ((matched != null) && (!(matched.isEmpty()))) {
                 return matched;
-            } 
+            }
         }
         // nothing matched return given deployment id
         return Collections.singletonList(deploymentId);

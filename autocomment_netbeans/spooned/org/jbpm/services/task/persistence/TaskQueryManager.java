@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -54,7 +54,7 @@ public class TaskQueryManager {
         String query = null;
         if (!(queries.containsKey(name))) {
             return null;
-        } 
+        }
         StringBuilder buf = new StringBuilder(queries.get(name));
         query = TaskQueryManager.adaptQueryString(buf, params);
         return query;
@@ -65,15 +65,15 @@ public class TaskQueryManager {
         if ((params != null) && (params.containsKey(FILTER))) {
             buf.append((" and " + (params.get(FILTER))));
             query = buf;
-        } 
+        }
         if ((params != null) && (params.containsKey(ORDER_BY))) {
             buf.append((" ORDER BY " + (TaskQueryManager.adaptOrderBy(((String) (params.get(ORDER_BY)))))));
             Object orderTypeObj = params.get(ORDER_TYPE);
             if (orderTypeObj != null) {
                 buf.append(" ").append(orderTypeObj);
-            } 
+            }
             query = buf;
-        } 
+        }
         return query == null ? null : query.toString();
     }
 
@@ -88,12 +88,12 @@ public class TaskQueryManager {
                 case XMLStreamConstants.START_ELEMENT :
                     if ("named-query".equals(reader.getLocalName())) {
                         name = reader.getAttributeValue(0);
-                    } 
+                    }
                     break;
                 case XMLStreamConstants.CHARACTERS :
                     if (name != null) {
                         tagContent.append(reader.getText());
-                    } 
+                    }
                     break;
                 case XMLStreamConstants.END_ELEMENT :
                     if ("named-query".equals(reader.getLocalName())) {
@@ -102,39 +102,55 @@ public class TaskQueryManager {
                         int orderByIndex = origQuery.toLowerCase().indexOf("order by");
                         if (orderByIndex != (-1)) {
                             alteredQuery = origQuery.substring(0, orderByIndex);
-                        } 
+                        }
                         queries.put(name, alteredQuery);
                         name = null;
                         tagContent = new StringBuilder();
-                    } 
+                    }
                     // remove order by clause as it will be provided on request
                     break;
             }
-        }
+        } 
     }
 
     private static String adaptOrderBy(String orderBy) {
         if (orderBy != null) {
             if (orderBy.equalsIgnoreCase("Task")) {
                 return "t.name";
-            } else if (orderBy.equalsIgnoreCase("Description")) {
-                return "t.description";
-            } else if (orderBy.equalsIgnoreCase("Id")) {
-                return "t.id";
-            } else if (orderBy.equalsIgnoreCase("Priority")) {
-                return "t.priority";
-            } else if (orderBy.equalsIgnoreCase("Status")) {
-                return "t.taskData.status";
-            } else if (orderBy.equalsIgnoreCase("CreatedOn")) {
-                return "t.taskData.createdOn";
-            } else if (orderBy.equalsIgnoreCase("CreatedBy")) {
-                return "t.taskData.createdBy.id";
-            } else if (orderBy.equalsIgnoreCase("DueOn")) {
-                return "t.taskData.expirationTime";
-            } else if (orderBy.equalsIgnoreCase("ProcessInstanceId")) {
-                return "t.taskData.processInstanceId";
-            } 
-        } 
+            }else
+                if (orderBy.equalsIgnoreCase("Description")) {
+                    return "t.description";
+                }else
+                    if (orderBy.equalsIgnoreCase("Id")) {
+                        return "t.id";
+                    }else
+                        if (orderBy.equalsIgnoreCase("Priority")) {
+                            return "t.priority";
+                        }else
+                            if (orderBy.equalsIgnoreCase("Status")) {
+                                return "t.taskData.status";
+                            }else
+                                if (orderBy.equalsIgnoreCase("CreatedOn")) {
+                                    return "t.taskData.createdOn";
+                                }else
+                                    if (orderBy.equalsIgnoreCase("CreatedBy")) {
+                                        return "t.taskData.createdBy.id";
+                                    }else
+                                        if (orderBy.equalsIgnoreCase("DueOn")) {
+                                            return "t.taskData.expirationTime";
+                                        }else
+                                            if (orderBy.equalsIgnoreCase("ProcessInstanceId")) {
+                                                return "t.taskData.processInstanceId";
+                                            }
+                                        
+                                    
+                                
+                            
+                        
+                    
+                
+            
+        }
         return orderBy;
     }
 }

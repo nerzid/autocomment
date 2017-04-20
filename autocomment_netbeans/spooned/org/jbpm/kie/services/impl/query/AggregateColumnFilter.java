@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,9 +30,9 @@ public class AggregateColumnFilter implements Serializable {
     private String newColumnId;
 
     public AggregateColumnFilter(AggregateFunctionType type, String columnId, String newColumnId) {
-        AggregateColumnFilter.this.type = type;
-        AggregateColumnFilter.this.columnId = columnId;
-        AggregateColumnFilter.this.newColumnId = newColumnId;
+        this.type = type;
+        this.columnId = columnId;
+        this.newColumnId = newColumnId;
     }
 
     public AggregateFunctionType getType() {
@@ -40,7 +40,7 @@ public class AggregateColumnFilter implements Serializable {
     }
 
     public void setType(AggregateFunctionType type) {
-        AggregateColumnFilter.this.type = type;
+        this.type = type;
     }
 
     public String getColumnId() {
@@ -48,7 +48,7 @@ public class AggregateColumnFilter implements Serializable {
     }
 
     public void setColumnId(String columnId) {
-        AggregateColumnFilter.this.columnId = columnId;
+        this.columnId = columnId;
     }
 
     public String getNewColumnId() {
@@ -56,7 +56,7 @@ public class AggregateColumnFilter implements Serializable {
     }
 
     public void setNewColumnId(String newColumnId) {
-        AggregateColumnFilter.this.newColumnId = newColumnId;
+        this.newColumnId = newColumnId;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class AggregateColumnFilter implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if ((AggregateColumnFilter.this) == obj)
+        if ((this) == obj)
             return true;
         
         if (obj == null)
@@ -85,15 +85,19 @@ public class AggregateColumnFilter implements Serializable {
             if ((other.columnId) != null)
                 return false;
             
-        } else if (!(columnId.equals(other.columnId)))
-            return false;
+        }else
+            if (!(columnId.equals(other.columnId)))
+                return false;
+            
         
         if ((newColumnId) == null) {
             if ((other.newColumnId) != null)
                 return false;
             
-        } else if (!(newColumnId.equals(other.newColumnId)))
-            return false;
+        }else
+            if (!(newColumnId.equals(other.newColumnId)))
+                return false;
+            
         
         if ((type) != (other.type))
             return false;

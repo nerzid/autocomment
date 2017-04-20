@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,7 +44,7 @@ import java.io.Serializable;
  *   System.out.println(files[i]);
  * }
  * </pre>
- * 
+ *
  * @version $Id: WildcardFilter.java 1642757 2014-12-01 21:09:30Z sebb $
  * @since 1.1
  * @deprecated Use WilcardFileFilter. Deprecated as this class performs directory
@@ -61,34 +61,34 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Construct a new case-sensitive wildcard filter for a single wildcard.
-     * 
+     *
      * @param wildcard  the wildcard to match
      * @throws IllegalArgumentException if the pattern is null
      */
     public WildcardFilter(final String wildcard) {
         if (wildcard == null) {
             throw new IllegalArgumentException("The wildcard must not be null");
-        } 
+        }
         this.wildcards = new String[]{ wildcard };
     }
 
     /**
      * Construct a new case-sensitive wildcard filter for an array of wildcards.
-     * 
+     *
      * @param wildcards  the array of wildcards to match
      * @throws IllegalArgumentException if the pattern array is null
      */
     public WildcardFilter(final String[] wildcards) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard array must not be null");
-        } 
+        }
         this.wildcards = new String[wildcards.length];
-        System.arraycopy(wildcards, 0, WildcardFilter.this.wildcards, 0, wildcards.length);
+        System.arraycopy(wildcards, 0, this.wildcards, 0, wildcards.length);
     }
 
     /**
      * Construct a new case-sensitive wildcard filter for a list of wildcards.
-     * 
+     *
      * @param wildcards  the list of wildcards to match
      * @throws IllegalArgumentException if the pattern list is null
      * @throws ClassCastException if the list does not contain Strings
@@ -96,14 +96,14 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     public WildcardFilter(final List<String> wildcards) {
         if (wildcards == null) {
             throw new IllegalArgumentException("The wildcard list must not be null");
-        } 
+        }
         this.wildcards = wildcards.toArray(new String[wildcards.size()]);
     }
 
     // -----------------------------------------------------------------------
     /**
      * Checks to see if the filename matches one of the wildcards.
-     * 
+     *
      * @param dir  the file directory
      * @param name  the filename
      * @return true if the filename matches one of the wildcards
@@ -112,18 +112,18 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     public boolean accept(final File dir, final String name) {
         if ((dir != null) && (new File(dir, name).isDirectory())) {
             return false;
-        } 
+        }
         for (final String wildcard : wildcards) {
             if (FilenameUtils.wildcardMatch(name, wildcard)) {
                 return true;
-            } 
+            }
         }
         return false;
     }
 
     /**
      * Checks to see if the filename matches one of the wildcards.
-     * 
+     *
      * @param file the file to check
      * @return true if the filename matches one of the wildcards
      */
@@ -131,11 +131,11 @@ public class WildcardFilter extends AbstractFileFilter implements Serializable {
     public boolean accept(final File file) {
         if (file.isDirectory()) {
             return false;
-        } 
+        }
         for (final String wildcard : wildcards) {
             if (FilenameUtils.wildcardMatch(file.getName(), wildcard)) {
                 return true;
-            } 
+            }
         }
         return false;
     }
