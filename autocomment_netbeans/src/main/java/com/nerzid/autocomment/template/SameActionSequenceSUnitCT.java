@@ -54,7 +54,7 @@ public class SameActionSequenceSUnitCT extends SUnitCommentTemplate {
             }
 
             commentStr = verb + " ";
-            for (CtVariableAccess dataVar : sameActionSequenceSUnit.getDataVars()) {
+            for (CtExpression dataVar : sameActionSequenceSUnit.getDataVars()) {
                 commentStr += dataVar.getType().getSimpleName() + "{" +
                         dataVar.toString() + "}"
                         + " to " + target + "{" + invoc.getTarget().toString() + "}";

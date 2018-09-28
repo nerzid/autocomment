@@ -29,6 +29,12 @@ import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
 import spoon.reflect.visitor.filter.*;
 import spoon.processing.AbstractProcessor;
+import spoon.support.compiler.jdt.JDTTreeBuilder;
+import spoon.support.compiler.jdt.JDTTreeBuilderHelper;
+import spoon.support.reflect.reference.CtVariableReferenceImpl;
+import spoon.template.Template;
+
+import static com.nerzid.autocomment.nlp.NLPToolkit.insertSUnitsToMongo;
 
 /**
  * @author nerzid
@@ -45,48 +51,70 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
 
         if (e.getBody() != null) {
 
-            getIfCount(e);
+//            getIfCount(e);
 
             // Clear lists for every method.
             SUnit.clearAndInitSUnitLists();
 
-            sameActionSUnits(e);
-            endingSUnits(e);
-            voidReturnSUnits(e);
+            insertSUnitsToMongo(getSUnits(e));
+//            sameActionSUnits(e);
+//            endingSUnits(e);
+//            voidReturnSUnits(e);
+//            dataFacilitatingSUnits(e);
+//            controllingSUnits(e);
+//
+//            print(e.getSignature());
 
-            controllingSUnits(e);
-            dataFacilitatingSUnits(e);
 
-            print(e.getSignature());
-            System.out.println();
-
-            createComments();
-
+//            String commentStr = "Important Statements: " + createComments();
+//            e.setDocComment(e.getDocComment() + "\n" + commentStr);
         }
     }
 
+    public SUnitStorage getSUnits(CtMethod e) {
+        sameActionSUnits(e);
+        endingSUnits(e);
+        voidReturnSUnits(e);
+        dataFacilitatingSUnits(e);
+        controllingSUnits(e);
+        SUnitStorage sunits = SUnit.getSUnitStorage();
+        SUnit.clearAndInitSUnitLists();
+        return sunits;
+    }
+
     public void endingSUnits(CtMethod e) {
-        if (!e.getType().toString().equals("void")) {
-            List<CtCFlowBreak> flowBreakersList = e.getBody().getElements(new ReturnOrThrowFilter());
-            if (flowBreakersList.size() >= 0) {
-                for (CtCFlowBreak flowbreaker : flowBreakersList) {
-                    if (flowbreaker instanceof CtReturn) {
-                        CtReturn returnStmt = (CtReturn) flowbreaker;
+
+        List<CtCFlowBreak> flowBreakersList = e.getBody().getElements(new ReturnOrThrowFilter());
+        if (flowBreakersList.size() >= 0) {
+            for (CtCFlowBreak flowbreaker : flowBreakersList) {
+                if (flowbreaker instanceof CtReturn) {
+                    CtReturn returnStmt = (CtReturn) flowbreaker;
 //                        CtExpression returnExp = returnStmt.getReturnedExpression();
 //                        String returned_var = returnExp.toString();
+                    FunctionSUnit sunit = new EndingSUnit(returnStmt);
 
-                        FunctionSUnit sunit = new EndingSUnit(returnStmt);
-
-                        List<CtVariableAccess> vars = returnStmt.getElements(new TypeFilter(CtVariableAccess.class));
-                        for (CtVariableAccess var : vars) {
-                            sunit.addDataVar(var);
-                        }
+                    List<CtVariableAccess> vars = returnStmt.getElements(new TypeFilter(CtVariableAccess.class));
+                    for (CtVariableAccess var : vars) {
+                        sunit.addDataVar(var);
                     }
+                } else if (flowbreaker instanceof CtThrow) {
+                    FunctionSUnit sunit = new EndingSUnit(flowbreaker);
                 }
             }
-        } else {
-            if (e.getBody().getStatements().size() > 0) {
-                CtStatement lastStatement = e.getBody().getLastStatement();
+        }
+
+        if (e.getBody().getStatements().size() > 0) {
+            CtElement tmpElem = e;
+            boolean hasBody = true;
+            while (hasBody) {
+                if (tmpElem instanceof CtBodyHolder) {
+                    tmpElem = ((CtBlock) ((CtBodyHolder) tmpElem).getBody()).getLastStatement();
+                } else {
+                    hasBody = false;
+                }
+            }
+            CtStatement lastStatement = (CtStatement) tmpElem;
+            if (lastStatement != null) {
                 FunctionSUnit sunit = new EndingSUnit(lastStatement);
 
                 List<CtVariableAccess> vars = lastStatement.getElements(new TypeFilter(CtVariableAccess.class));
@@ -95,67 +123,146 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
                 }
             }
         }
-    }
 
-    public void voidReturnSUnits(CtMethod e) {
-        List<CtStatement> stmts = e.getBody().getStatements();
-        for (CtStatement stmt : stmts) {
-            if (stmt instanceof CtInvocation) {
-                if (!SUnit.isElementExists(stmt, SUnitType.SAME_ACTION_SEQUENCE)) {
-                    FunctionSUnit sunit = new VoidReturnSUnit(stmt);
-                    List<CtExpression> args = ((CtInvocation) stmt).getArguments();
-                    for (CtExpression arg : args) {
-                        if (arg instanceof CtVariableAccess) {
-                            sunit.addDataVar((CtVariableAccess) arg);
-//                        data_args.add((CtVariableAccess) arg);
-                        } else if (arg instanceof CtAssignment) {
-                            CtAssignment assignment = (CtAssignment) arg;
-                            if (assignment.getAssigned() instanceof CtVariableAccess) {
-                                sunit.addDataVar((CtVariableAccess) assignment.getAssigned());
-//                            data_args.add((CtVariableAccess) (assignment.getAssigned()));
-                            }
-                        }
+        for (EndingSUnit endingSUnit : SUnit.getEndingSUnits()) {
+            CtElement controlling_parent = endingSUnit.getElement().getParent(new CompositeFilter(
+                    FilteringOperator.UNION,
+                    new TypeFilter(CtLoop.class),
+                    new TypeFilter(CtSwitch.class),
+                    new TypeFilter(CtIf.class)));
+            if (controlling_parent != null){
+                boolean hasElement = false;
+                for(SUnit sUnit : SUnit.getControllingSUnits()){
+                    if (sUnit.getElement().equals(controlling_parent)) {
+                        hasElement = true;
+                        break;
                     }
-//                void_return_units.add((CtInvocation) stmt);
                 }
+                if(!hasElement)
+                    new ControllingSUnit(controlling_parent);
             }
         }
     }
 
-    // TO DO
-    // ADD CODE TO GET DATA VARS FROM SAME ACTION SEQUENCE SUNITS
+    public void voidReturnSUnits(CtMethod e) {
+        List<CtStatement> stmts = e.getBody().getElements(new TypeFilter(CtAbstractInvocation.class));
+        for (CtStatement stmt : stmts) {
+
+            // statement's parent should be a CtBlock, otherwise its gets all AbstractInvocations.
+            // e.g. We don't want the invocations that is inside of an assigment like, String input = s.getEnteredText();
+            if (stmt.getParent() instanceof CtBlock) {
+                if (isStatementExistsInCondition(stmt))
+                    continue;
+                if (stmt.getParent(CtAssignment.class) != null)
+                    continue;
+                CtElement aa = stmt.getParent(CtAssignment.class);
+                if (!SUnit.isElementExists(stmt, SUnitType.SAME_ACTION_SEQUENCE)) {
+                    FunctionSUnit sunit = new VoidReturnSUnit(stmt);
+                    List<CtExpression> args = ((CtAbstractInvocation) stmt).getArguments();
+                    for (CtExpression arg : args) {
+                        if (arg instanceof CtVariableAccess) {
+                            sunit.addDataVar(arg);
+                        } else if (arg instanceof CtAssignment) {
+                            CtAssignment assignment = (CtAssignment) arg;
+                            if (assignment.getAssigned() instanceof CtVariableAccess) {
+                                sunit.addDataVar(assignment.getAssigned());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (VoidReturnSUnit voidReturnSUnit : SUnit.getVoidReturnSUnits()) {
+            CtElement controlling_parent = voidReturnSUnit.getElement().getParent(new CompositeFilter(
+                    FilteringOperator.UNION,
+                    new TypeFilter(CtLoop.class),
+                    new TypeFilter(CtSwitch.class),
+                    new TypeFilter(CtIf.class)));
+            if (controlling_parent != null){
+                boolean hasElement = false;
+                for(SUnit sUnit : SUnit.getControllingSUnits()){
+                    if (sUnit.getElement().equals(controlling_parent)) {
+                        hasElement = true;
+                        break;
+                    }
+                }
+                if(!hasElement)
+                    new ControllingSUnit(controlling_parent);
+            }
+        }
+    }
+
+    public boolean isStatementExistsInCondition(CtElement stmt){
+        CtElement controlling_parent = stmt.getParent(new CompositeFilter(
+                FilteringOperator.UNION,
+                new TypeFilter(CtLoop.class),
+                new TypeFilter(CtSwitch.class),
+                new TypeFilter(CtIf.class)));
+        if (controlling_parent instanceof CtWhile) {
+            if (((CtWhile) controlling_parent).getLoopingExpression().toString().contains(stmt.toString()))
+                return true;
+        }
+        if (controlling_parent instanceof CtIf) {
+            if (((CtIf) controlling_parent).getCondition().toString().contains(stmt.toString()))
+                return true;
+        }
+
+        if (controlling_parent instanceof CtFor) {
+            if (((CtFor) controlling_parent).getExpression().toString().contains(stmt.toString()))
+                return true;
+        }
+
+        if (controlling_parent instanceof CtDo) {
+            if (((CtDo) controlling_parent).getLoopingExpression().toString().contains(stmt.toString()))
+                return true;
+        }
+        return false;
+    }
+
     public void sameActionSUnits(CtMethod e) {
-        List<CtStatement> stmts = e.getBody().getStatements();
+        List<CtStatement> stmts = e.getBody().getElements(new TypeFilter(CtAbstractInvocation.class));
         HashMap<String, Integer> same_stmts = new HashMap<>();
         List<CtInvocation> invocs = new ArrayList<>();
         for (CtStatement stmt : stmts) {
-            if (stmt instanceof CtInvocation) {
+            if (stmt instanceof CtInvocation && stmt.getParent() != null && !(stmt.getParent() instanceof CtInvocation)) {
                 CtInvocation invoc = (CtInvocation) stmt;
+                if (stmt.getParent(CtAssignment.class) != null || stmt.getParent(CtLocalVariable.class) != null)
+                    continue;
+                CtElement aa = stmt.getParent(CtAssignment.class);
                 String invoc_str = invoc.toString();
-
+                if (isStatementExistsInCondition(stmt))
+                    continue;
                 // get only the invoked method
                 invoc_str = invoc_str.replaceFirst("\\(.*$", "");
                 invocs.add(invoc);
+
+                boolean isFoundSASSunit = false;
                 if (same_stmts.containsKey(invoc_str)) {
                     same_stmts.put(invoc_str, same_stmts.get(invoc_str) + 1);
                     if (same_stmts.get(invoc_str) >= 2) {
                         for (CtInvocation invocation : invocs) {
                             String invocation_str = invocation.toString().replaceFirst("\\(.*$", "");
                             if (invocation_str.equals(invoc_str)) {
-                                if (!SUnit.isElementExists(invocation, SUnitType.SAME_ACTION_SEQUENCE)) {
-                                    SameActionSequenceSUnit sunit = new SameActionSequenceSUnit(invocation);
-                                    sunit.addDataVars();
-                                    sunit.addDataVars(invoc);
-                                } else {
-                                    for (SameActionSequenceSUnit sunit : SUnit.getSameActionSequenceSUnits()) {
-                                        System.out.println();
-                                        if (sunit.getElement().toString().replaceFirst("\\(.*$", "").equals(invoc_str)) {
-                                            sunit.addDataVars(invoc);
-                                            break;
+                                if (!invoc.equals(invocation)) {
+                                    if (!SUnit.isElementExists(invocation, SUnitType.SAME_ACTION_SEQUENCE)) {
+                                        SameActionSequenceSUnit sunit = new SameActionSequenceSUnit(invocation);
+                                        sunit.addDataVars();
+                                        sunit.addDataVars(invoc);
+                                        isFoundSASSunit = true;
+                                    } else {
+                                        for (SameActionSequenceSUnit sunit : SUnit.getSameActionSequenceSUnits()) {
+                                            System.out.println();
+                                            if (sunit.getElement().toString().replaceFirst("\\(.*$", "").equals(invoc_str)) {
+                                                sunit.addDataVars(invoc);
+                                                isFoundSASSunit = true;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
                             }
+                            if (isFoundSASSunit)
+                                break;
                         }
                     }
                 } else {
@@ -163,6 +270,24 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
                 }
             } else if (stmt instanceof CtAssignment) {
 
+            }
+        }
+        for (SameActionSequenceSUnit sameActionSequenceSUnit : SUnit.getSameActionSequenceSUnits()) {
+            CtElement controlling_parent = sameActionSequenceSUnit.getElement().getParent(new CompositeFilter(
+                    FilteringOperator.UNION,
+                    new TypeFilter(CtLoop.class),
+                    new TypeFilter(CtSwitch.class),
+                    new TypeFilter(CtIf.class)));
+            if (controlling_parent != null){
+                boolean hasElement = false;
+                for(SUnit sUnit : SUnit.getControllingSUnits()){
+                    if (sUnit.getElement().equals(controlling_parent)) {
+                        hasElement = true;
+                        break;
+                    }
+                }
+                if(!hasElement)
+                    new ControllingSUnit(controlling_parent);
             }
         }
     }
@@ -176,16 +301,39 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
         for (FunctionSUnit fsunit : fsunits) {
             fsunit.dataVarsToFacilitators(e, fsunit);
         }
+        List<CtParameter> params = e.getParameters();
+
+//        for(CtParameter param : params){
+//            CtVariableAccess variableAccess = getFactory().Code().createVariableRead(getFactory().Core().createVariableRead().getVariable(), false);
+//            variableAccess.setVariable(new CtVariableReferenceImpl() {
+//            })
+//        }
     }
 
-    public void controllingSUnits(CtMethod e) {
-        List<CtStatement> stmts = e.getBody().getStatements();
+    public Set<CtElement> getRecursiveConrollingUnits(CtElement e) {
+        Set<CtElement> elems = new HashSet<>();
         CompositeFilter cf = new CompositeFilter(
                 FilteringOperator.UNION,
                 new TypeFilter(CtLoop.class),
                 new TypeFilter(CtSwitch.class),
                 new TypeFilter(CtIf.class));
-        List<CtElement> elems = e.getElements(cf);
+        Set<CtElement> tmp_elems = new HashSet<>();
+        tmp_elems.addAll(e.getElements(cf));
+        if (tmp_elems != null && tmp_elems.size() > 0) {
+            elems.addAll(tmp_elems);
+            for (CtElement el : tmp_elems) {
+                if (el != e)
+                    elems.addAll(getRecursiveConrollingUnits(el));
+            }
+        } else {
+            return new HashSet<>();
+        }
+        return elems;
+    }
+
+    public void controllingSUnits(CtElement e) {
+        Set<CtElement> elems = getRecursiveConrollingUnits(e);
+
 
 // conditional expression needs to be added in the future as well.
         List<CtVariableAccess> vars;
@@ -197,35 +345,28 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
                     vars = e_for.getExpression().getElements(new TypeFilter(CtVariableAccess.class));
                     for (DataFacilitatorSUnit data_sunit : FunctionSUnit.getDataFacilitatorSUnits()) {
                         for (CtVariableAccess var : vars) {
-                            if (data_sunit.getDataVar().getVariable().equals(var.getVariable())) {
+                            if (((CtVariableAccess) data_sunit.getDataVar()).getVariable().equals(var.getVariable())) {
                                 if (!SUnit.isElementExists(e_for.getExpression(), SUnitType.CONTROLLING)) {
-                                    new ControllingSUnit(e_for.getExpression());
+                                    new ControllingSUnit(e_for);
                                     break;
                                 }
                             }
                         }
                     }
-                } else if (e_loop instanceof CtWhile) {
-                    CtWhile e_while = (CtWhile) e_loop;
-                    vars = e_while.getLoopingExpression().getElements(new TypeFilter(CtVariableAccess.class));
-                    for (DataFacilitatorSUnit data_sunit : FunctionSUnit.getDataFacilitatorSUnits()) {
-                        for (CtVariableAccess var : vars) {
-                            if (data_sunit.getDataVar().getVariable().equals(var.getVariable())) {
-                                if (!SUnit.isElementExists(e_while.getLoopingExpression(), SUnitType.CONTROLLING)) {
-                                    new ControllingSUnit(e_while.getLoopingExpression());
-                                    break;
-                                }
-                            }
-                        }
+                } else if (e_loop instanceof CtWhile || e_loop instanceof CtDo) {
+                    CtExpression<Boolean> loop_exp;
+                    if (e_loop instanceof CtWhile) {
+                        loop_exp = ((CtWhile) e_loop).getLoopingExpression();
+
+                    } else {
+                        loop_exp = ((CtDo) e_loop).getLoopingExpression();
                     }
-                } else if (e_loop instanceof CtDo) {
-                    CtDo e_do = (CtDo) e_loop;
-                    vars = e_do.getLoopingExpression().getElements(new TypeFilter(CtVariableAccess.class));
+                    vars = loop_exp.getElements(new TypeFilter(CtVariableAccess.class));
                     for (DataFacilitatorSUnit data_sunit : FunctionSUnit.getDataFacilitatorSUnits()) {
                         for (CtVariableAccess var : vars) {
-                            if (data_sunit.getDataVar().getVariable().equals(var.getVariable())) {
-                                if (!SUnit.isElementExists(e_do.getLoopingExpression(), SUnitType.CONTROLLING)) {
-                                    new ControllingSUnit(e_do.getLoopingExpression());
+                            if (((CtVariableAccess) data_sunit.getDataVar()).getVariable().equals(var.getVariable())) {
+                                if (!SUnit.isElementExists(loop_exp, SUnitType.CONTROLLING)) {
+                                    new ControllingSUnit(e_loop);
                                     break;
                                 }
                             }
@@ -237,9 +378,9 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
                 vars = e_switch.getSelector().getElements(new TypeFilter(CtVariableAccess.class));
                 for (DataFacilitatorSUnit data_sunit : FunctionSUnit.getDataFacilitatorSUnits()) {
                     for (CtVariableAccess var : vars) {
-                        if (data_sunit.getDataVar().getVariable().equals(var.getVariable())) {
+                        if (((CtVariableAccess) data_sunit.getDataVar()).getVariable().equals(var.getVariable())) {
                             if (!SUnit.isElementExists(e_switch.getSelector(), SUnitType.CONTROLLING)) {
-                                new ControllingSUnit(e_switch.getSelector());
+                                new ControllingSUnit(e_switch);
                                 break;
                             }
                         }
@@ -248,11 +389,12 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
             } else if (elem instanceof CtIf) {
                 CtIf e_if = (CtIf) elem;
                 vars = e_if.getCondition().getElements(new TypeFilter(CtVariableAccess.class));
+
                 for (DataFacilitatorSUnit data_sunit : FunctionSUnit.getDataFacilitatorSUnits()) {
                     for (CtVariableAccess var : vars) {
-                        if (data_sunit.getDataVar().getVariable().equals(var.getVariable())) {
+                        if (((CtVariableAccess) data_sunit.getDataVar()).getVariable().equals(var.getVariable())) {
                             if (!SUnit.isElementExists(e_if.getCondition(), SUnitType.CONTROLLING)) {
-                                new ControllingSUnit(e_if.getCondition());
+                                new ControllingSUnit(e_if);
                                 break;
                             }
                         }
@@ -447,38 +589,40 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
         }
     }
 
-    public void createComments() {
-        for (VoidReturnSUnit voidReturnSUnit : FunctionSUnit.getVoidReturnSUnits()) {
-            CtElement element = voidReturnSUnit.getElement();
-            if (element instanceof CtInvocation) {
-                CtInvocation invoc = (CtInvocation) element;
-                String method_name = invoc.getExecutable().getSimpleName();
-                CtExpression target = invoc.getTarget();
+    public String createComments() {
+        String comment = "";
+        comment += createCommentForSUnit(SUnitType.VOID_RETURN);
+        comment += createCommentForSUnit(SUnitType.SAME_ACTION_SEQUENCE);
+        comment += createCommentForSUnit(SUnitType.CONTROLLING);
+        return comment;
+    }
 
-                List<CtExpression> params = invoc.getArguments();
-//
-//                List<String> verbs = Tokenizer.split(verb);
-//                verb = verbs.get(0);
-//                if (verbs.size() > 1) {
-//                    verb += " " + verbs.get(1);
-//                }
-//
-//                String commentStr = verb + " " + params.get(0).getType().getSimpleName() + "{" +
-//                        params.get(0).toString() + "}"
-//                        + " to " + target + "{" + invoc.getTarget().toString() + "}";
-                MethodTable mt = NLPToolkit.getMethodWithProperties("", method_name, 0);
-
-                String postag = mt.getPostag();
-                String splitted_identifier = mt.getSplittedIdentifier();
-                SUnitCommentTemplate sunit_ct = new VoidReturnSUnitCT(voidReturnSUnit);
-                String commentStr = sunit_ct.prepareThenGetComment(SUnitType.VOID_RETURN, target, postag, splitted_identifier.split(" "), params);
-
-                CtComment c = getFactory().Code().createComment(commentStr, CtComment.CommentType.INLINE);
-                invoc.addComment(c);
-            }
+    private String createCommentForSUnit(SUnitType sunitType) {
+        String comment = "";
+        // Prepare the collection of sunits to create comments for
+        Collection<? extends SUnit> sunits;
+        switch (sunitType) {
+            case VOID_RETURN:
+                sunits = FunctionSUnit.getVoidReturnSUnits();
+                break;
+            case ENDING:
+                sunits = FunctionSUnit.getEndingSUnits();
+                break;
+            case SAME_ACTION_SEQUENCE:
+                sunits = FunctionSUnit.getSameActionSequenceSUnits();
+                break;
+            case CONTROLLING:
+                sunits = FunctionSUnit.getControllingSUnits();
+                break;
+            case DATA_FACILITATOR:
+                sunits = SUnit.getDataFacilitatorSUnits();
+                break;
+            default:
+                throw new NoSuchSUnitTypeException();
         }
 
-        for (SameActionSequenceSUnit sunit : FunctionSUnit.getSameActionSequenceSUnits()) {
+        // Create a comment foreach sunit in the collection
+        for (SUnit sunit : sunits) {
             CtElement element = sunit.getElement();
             if (element instanceof CtInvocation) {
                 CtInvocation invoc = (CtInvocation) element;
@@ -486,26 +630,25 @@ public class SUnitMethodProcessor extends AbstractProcessor<CtMethod> {
                 CtExpression target = invoc.getTarget();
 
                 List<CtExpression> params = invoc.getArguments();
-//
-//                List<String> verbs = Tokenizer.split(verb);
-//                verb = verbs.get(0);
-//                if (verbs.size() > 1) {
-//                    verb += " " + verbs.get(1);
-//                }
-//
-//                String commentStr = verb + " " + params.get(0).getType().getSimpleName() + "{" +
-//                        params.get(0).toString() + "}"
-//                        + " to " + target + "{" + invoc.getTarget().toString() + "}";
+
                 MethodTable mt = NLPToolkit.getMethodWithProperties("", method_name, 0);
 
                 String postag = mt.getPostag();
                 String splitted_identifier = mt.getSplittedIdentifier();
-                SUnitCommentTemplate sunit_ct = new VoidReturnSUnitCT(sunit);
-                String commentStr = sunit_ct.prepareThenGetComment(SUnitType.VOID_RETURN, target, postag, splitted_identifier.split(" "), params);
+                SUnitCommentTemplate sunit_ct = new SUnitCommentTemplate(sunit);
+                String commentStr = sunit_ct.prepareThenGetComment(target, postag, splitted_identifier.split(" "), params);
 
                 CtComment c = getFactory().Code().createComment(commentStr, CtComment.CommentType.INLINE);
                 invoc.addComment(c);
+                comment += commentStr + "\n";
+            } else if (element instanceof CtExpression) {
+//                CtExpression expression = (CtExpression) element;
+//
+//                String postag = mt.getPostag();
+//                String splitted_identifier = mt.getSplittedIdentifier();
+//                SUnitCommentTemplate sunit_ct = new SUnitCommentTemplate(sunit);
             }
         }
+        return comment;
     }
 }

@@ -22,14 +22,15 @@ import com.nerzid.autocomment.database.MethodModel;
 import com.nerzid.autocomment.database.MethodTable;
 import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.io.FilePicker;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
+import com.nerzid.autocomment.model.Comment;
+import com.nerzid.autocomment.sunit.SUnitStorage;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -38,7 +39,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FileUtils;
 
 /**
- *
  * @author nerzid
  */
 public class Test {
@@ -86,7 +86,7 @@ public class Test {
 
     }
 
-    public static String getTemplateSentence(String return_type, String postag_sentence, String[] words, List<String> params, String target, boolean forSUnit) {
+    public static String getTemplateSentence(String return_type, String postag_sentence, String[] words, List<String> params, String target, boolean forSUnit, SUnitStorage sUnitStorage, boolean isStatic, boolean invocComment) {
         ANTLRInputStream input = new ANTLRInputStream(postag_sentence);
         CommentTitleLexer lexer = new CommentTitleLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -104,90 +104,114 @@ public class Test {
 
         try {
             ParseTree tree = null;
-            if (return_type.equals("boolean")) {
-                int verbCount = postag_sentence.split("v").length;
-                if (verbCount == 1) {
-                    tree = parser.one_verb_rule();
-                    ParseTreeWalker ptw = new ParseTreeWalker();
-                    ptw.walk(evalListener, tree);
-                    System.out.println("PTW string. " + evalListener.getPostagSent());
-                    String postagsByAntlr = evalListener.getPostagSent();
-                    PostaggedWord postaggedWord = evalListener.getPostaggedWord();
-
-                    postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
-//
-                    //for (int i = 1; i < words.length; i++) {
-                    //nouns.add(words[i]);
-                    //}
-                    if (params.isEmpty())
-                        return new BooleanMCT().booleanMethodWithOneVerb(postaggedWord, true);
-                    else 
-                        return new BooleanMCT().booleanMethodWithOneVerbAndParameters(postaggedWord, params, true);
-                } else {
-                    tree = parser.two_verb_rule();
-
-                    ParseTreeWalker ptw = new ParseTreeWalker();
-                    ptw.walk(evalListener, tree);
-                    System.out.println("PTW string. " + evalListener.getPostagSent());
-                    String postagsByAntlr = evalListener.getPostagSent();
-
-                    PostaggedWord postaggedWord = evalListener.getPostaggedWord();
-
-                    postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
-                    return new BooleanMCT().booleanMethodWithTwoVerb(postaggedWord, true);
-                }
-
+            String first_postag = postag_sentence.split(" ")[0];
+            if (first_postag.equals("IN")) {
+                tree = parser.first_prp_rule();
+                ParseTreeWalker ptw = new ParseTreeWalker();
+                ptw.walk(evalListener, tree);
+//                System.out.println("PTW string. " + evalListener.getPostagSent());
+//                String postagsByAntlr = evalListener.getPostagSent();
+                PostaggedWord postaggedWord = evalListener.getPostaggedWord();
+                postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
+                if (return_type.equalsIgnoreCase("boolean"))
+                    return new BooleanMCT().startingWithPRP(postaggedWord, params, sUnitStorage, isStatic, invocComment, null, false, null).getCommentString(invocComment);
+                else if (return_type.toLowerCase().contains("int") ||
+                        return_type.toLowerCase().contains("double") ||
+                        return_type.toLowerCase().contains("float") ||
+                        return_type.toLowerCase().contains("long"))
+                    return new NumericMCT().startingWithPRP(postaggedWord, params, sUnitStorage, isStatic, invocComment, null, false, null).getCommentString(invocComment);
+                else if (return_type.equalsIgnoreCase("string"))
+                    return new StringMCT().startingWithPRP(postaggedWord, params, sUnitStorage, isStatic, invocComment, null, false, null).getCommentString(invocComment);
+                else if (return_type.equalsIgnoreCase("void"))
+                    return new VoidMCT().startingWithPRP(postaggedWord, params, sUnitStorage, isStatic, invocComment, null, false, null).getCommentString(invocComment);
+                else
+                    return new CustomMCT().startingWithPRP(postaggedWord, params, sUnitStorage, isStatic, invocComment, null, false, null).getCommentString(invocComment);
             } else {
                 int verbCount = postag_sentence.split("v").length;
                 if (verbCount == 1) {
                     tree = parser.one_verb_rule();
                     ParseTreeWalker ptw = new ParseTreeWalker();
                     ptw.walk(evalListener, tree);
-                    System.out.println("PTW string. " + evalListener.getPostagSent());
-                    String postagsByAntlr = evalListener.getPostagSent();
+//                System.out.println("PTW string. " + evalListener.getPostagSent());
+//                String postagsByAntlr = evalListener.getPostagSent();
                     PostaggedWord postaggedWord = evalListener.getPostaggedWord();
-
                     postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
-//
-                    //for (int i = 1; i < words.length; i++) {
-                    //nouns.add(words[i]);
-                    //}
-                    if (params.isEmpty())
-                        if (forSUnit){
-                        return new BooleanMCT().booleanMethodWithOneVerb(postaggedWord, true);
-                    }
+
+                    if (return_type.equalsIgnoreCase("boolean"))
+                        return new BooleanMCT().withOneVerb(postaggedWord, params, sUnitStorage, isStatic, invocComment).getCommentString(invocComment);
+                    else if (return_type.toLowerCase().contains("int") ||
+                            return_type.toLowerCase().contains("double") ||
+                            return_type.toLowerCase().contains("float") ||
+                            return_type.toLowerCase().contains("long"))
+                        return new NumericMCT().withOneVerb(postaggedWord, params, sUnitStorage, isStatic, invocComment, null, false, null).getCommentString(invocComment);
+                    else if (return_type.equalsIgnoreCase("string"))
+                        return new StringMCT().withOneVerb(postaggedWord, params, sUnitStorage, isStatic, invocComment, null, false, null).getCommentString(invocComment);
+                    else if (return_type.equalsIgnoreCase("void"))
+                        return new VoidMCT().withOneVerb(postaggedWord, params, sUnitStorage, isStatic, invocComment, null, false, null).getCommentString(invocComment);
                     else
-                        return new BooleanMCT().booleanMethodWithOneVerbAndParameters(postaggedWord, params, true);
+                        return new CustomMCT().withOneVerb(postaggedWord, params, sUnitStorage, isStatic, invocComment, null, false, null).getCommentString(invocComment);
+
                 } else {
                     tree = parser.two_verb_rule();
-
                     ParseTreeWalker ptw = new ParseTreeWalker();
                     ptw.walk(evalListener, tree);
-                    System.out.println("PTW string. " + evalListener.getPostagSent());
-                    String postagsByAntlr = evalListener.getPostagSent();
-
                     PostaggedWord postaggedWord = evalListener.getPostaggedWord();
-
                     postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
-                    return new BooleanMCT().booleanMethodWithTwoVerb(postaggedWord, true);
+                    if (return_type.equalsIgnoreCase("boolean"))
+                        return new BooleanMCT().withTwoVerbs(postaggedWord, params, sUnitStorage, isStatic, invocComment).getCommentString(invocComment);
                 }
+
+                ParseTreeWalker ptw = new ParseTreeWalker();
+                ptw.walk(evalListener, tree);
+                System.out.println("PTW string. " + evalListener.getPostagSent());
+                String postagsByAntlr = evalListener.getPostagSent();
+
+                String verb1 = "";
+                String verb2 = "";
+                List<String> nouns = new ArrayList<>();
             }
 
-            ParseTreeWalker ptw = new ParseTreeWalker();
-            ptw.walk(evalListener, tree);
-            System.out.println("PTW string. " + evalListener.getPostagSent());
-            String postagsByAntlr = evalListener.getPostagSent();
-
-            String verb1 = "";
-            String verb2 = "";
-            List<String> nouns = new ArrayList<>();
-
-            return evalListener.getPostagSent();
+            return Comment.empty().toString();
         } catch (Exception e) {
             ppel.errorList.add("err");
             System.out.println("Hata: " + e.getMessage());
-            return "";
+            e.printStackTrace();
+            return Comment.empty().toString();
         }
+    }
+
+    public static PostaggedWord getPostaggedWord(String postag_sentence, String[] words){
+        ANTLRInputStream input = new ANTLRInputStream(postag_sentence);
+        CommentTitleLexer lexer = new CommentTitleLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        CommentTitleParser parser = new CommentTitleParser(tokens);
+
+        lexer.removeErrorListeners();
+        parser.removeErrorListeners();
+
+        PostagParsingErrorListener ppel = new PostagParsingErrorListener();
+        lexer.addErrorListener(ppel);
+        parser.addErrorListener(ppel);
+        parser.setErrorHandler(new BailErrorStrategy());
+
+        EvalCommentTitleListener evalListener = new EvalCommentTitleListener();
+
+        ParseTree tree = null;
+        String first_postag = postag_sentence.split(" ")[0];
+        boolean startingWithPRP = false;
+        if (first_postag.equals("IN")) {
+            tree = parser.first_prp_rule();
+            startingWithPRP = true;
+        } else {
+            tree = parser.one_verb_rule();
+             startingWithPRP = false;
+        }
+        ParseTreeWalker ptw = new ParseTreeWalker();
+        ptw.walk(evalListener, tree);
+        PostaggedWord postaggedWord = evalListener.getPostaggedWord();
+        postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
+        postaggedWord.setStartingWithPRP(startingWithPRP);
+        return evalListener.getPostaggedWord();
     }
 
     private static void work() throws IOException, FileNotSelected {

@@ -15,22 +15,31 @@
  */
 package com.nerzid.autocomment.sunit;
 
+import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtExecutable;
+import spoon.reflect.visitor.filter.TypeFilter;
 
 /**
- *
  * @author nerzid
  */
 public class EndingSUnit extends FunctionSUnit {
 
     public EndingSUnit(CtElement element) {
         super(element);
+        sunitType = SUnitType.ENDING;
         endingSUnits.add(this);
     }
 
 //    @Override
 //    public String toString() {
 //        return super.toString() + "\t\t" + "EndingSUnit{" + '}' + "\n";
+//    }
+
+
+//    @Override
+//    public String toString() {
+//        return getUnknownTypedElementComment(element, false);
 //    }
 
 }

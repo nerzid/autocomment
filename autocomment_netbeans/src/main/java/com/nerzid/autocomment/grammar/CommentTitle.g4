@@ -12,6 +12,11 @@ one_verb_rule
 two_verb_rule
   : V NPR V NPR? EOF
   ;
+  
+first_prp_rule
+  : PP NPR? V? NPR? EOF
+  ;
+
 
 NPR // Recursive Noun Phrase Variable
   : 'NN'
@@ -51,7 +56,7 @@ VR // Recursive Verb Variable
   ;
 
 PP
-  : 'IN' ' ' NPR
+  : 'IN'
   ;
 
 WS

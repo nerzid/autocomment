@@ -15,6 +15,8 @@
  */
 package com.nerzid.autocomment.template;
 
+import com.nerzid.autocomment.model.Comment;
+import com.nerzid.autocomment.sunit.SUnitStorage;
 import spoon.reflect.code.CtExpression;
 
 import java.util.Collection;
@@ -24,22 +26,5 @@ import java.util.List;
  * @author nerzid
  */
 public class VoidMCT extends MethodCommentTemplate {
-    public VoidMCT() {
 
-    }
-
-    // e.g. VBZ NN - appendString()
-    public String oneVerb(PostaggedWord postaggedWord, List<CtExpression> params, CtExpression target, boolean prefix){
-        String res = "";
-
-        if (prefix)
-            res += "This method ";
-        res += postaggedWord.getVerb1().getText() + " ";
-        res += postaggedWord.getNounphrase1().getText() + " ";
-
-        res += params.get(0).getType().getSimpleName() + " {" + params.get(0).toString() + "} ";
-        res += "to ";
-        res += target.getType().getSimpleName() + " {" + target.toString() + " }";
-        return res;
-    }
 }

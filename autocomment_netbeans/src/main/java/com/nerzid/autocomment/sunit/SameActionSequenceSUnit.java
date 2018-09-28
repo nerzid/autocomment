@@ -25,12 +25,13 @@ public class SameActionSequenceSUnit extends FunctionSUnit{
     
     public SameActionSequenceSUnit(CtElement element) {
         super(element);
+        sunitType = SUnitType.SAME_ACTION_SEQUENCE;
         sameActionSequenceSUnits.add(this);
     }
 
 //    @Override
 //    public String toString() {
-//        return super.toString() + "SameActionSequenceSUnit{" + '}';
+//        return super.toString();
 //    }
 
     

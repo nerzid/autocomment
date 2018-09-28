@@ -15,7 +15,17 @@
  */
 package com.nerzid.autocomment.sunit;
 
+import com.nerzid.autocomment.model.Comment;
+import spoon.reflect.code.*;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.ParentNotInitializedException;
+import spoon.reflect.visitor.filter.CompositeFilter;
+import spoon.reflect.visitor.filter.FilteringOperator;
+import spoon.reflect.visitor.filter.TypeFilter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  *
@@ -25,12 +35,34 @@ public class ControllingSUnit extends SUnit{
     
     public ControllingSUnit(CtElement element) {
         super(element);
-        controllingSUnits.add(this);
+        boolean hasElement = false;
+        for (ControllingSUnit controllingSUnit : controllingSUnits){
+            if (controllingSUnit.getElement().equals(element)) {
+                hasElement = true;
+                break;
+            }
+        }
+        if (!hasElement) {
+            sunitType = SUnitType.CONTROLLING;
+            controllingSUnits.add(this);
+        }
     }
 
 //    @Override
 //    public String toString() {
 //        return super.toString() + "ControllingSUnit{" + '}';
 //    }
-    
+
+    public List<CtExpression> getConditions() {
+        List<CtExpression> conditions = new ArrayList<>();
+
+        if (element instanceof CtExpression) {
+            CtExpression full_condition = (CtExpression) element;
+            full_condition.getElements(new TypeFilter<>(CtExpression.class));
+            System.out.println();
+        }
+
+        return conditions;
+    }
+
 }

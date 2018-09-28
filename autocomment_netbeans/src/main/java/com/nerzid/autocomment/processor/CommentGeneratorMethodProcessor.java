@@ -17,6 +17,7 @@ package com.nerzid.autocomment.processor;
 
 import com.nerzid.autocomment.database.MethodTable;
 import com.nerzid.autocomment.nlp.NLPToolkit;
+import com.nerzid.autocomment.sunit.SUnitStorage;
 import com.nerzid.autocomment.template.Test;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtComment;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
+import spoon.reflect.declaration.ModifierKind;
 
 /**
  *
@@ -60,36 +62,41 @@ public class CommentGeneratorMethodProcessor extends AbstractProcessor<CtMethod>
         for (CtParameter ctp : ctParams) {
             params.add(ctp.getSimpleName());
         }
-        
-//        commentStr = Test.getTemplateSentence(data_type, postag, splitted_identifier.split(" "), params);
+
+        SUnitMethodProcessor sunitProcessor = new SUnitMethodProcessor();
+        SUnitStorage sunitStore = sunitProcessor.getSUnits(e);
+        boolean isStatic = e.getModifiers().contains(ModifierKind.STATIC);
+        commentStr = Test.getTemplateSentence(data_type, postag, splitted_identifier.split(" "), params, "", false, sunitStore, isStatic, false);
 
 //        int ix = 0;
 //        if(!template.isEmpty()){
 //            String[] parts = template.split("\\|");
-//            
+//
 //            int firstPart = parts[0].split(" ").length;
-//            
+//
 //            for(int i = ix; i < firstPart; i++){
 //                commentStr += identifiers[i] + " ";
 //                ix++;
 //            }
-//            
+//
 //            int secondPart = parts[1].split(" ").length;
-//            
+//
 //            for(int i = ix; i < firstPart + secondPart; i++){
 //                commentStr += identifiers[i] + " ";
 //                ix++;
 //            }
-//            
+//
 //            int thirdPart = parts[2].split(" ").length;
-//            
+//
 //            for(int i = ix; i < firstPart+ secondPart +thirdPart; i++){
 //                commentStr += identifiers[i] + " ";
 //                ix++;
 //            }
 //        }
-        CtComment c = getFactory().Code().createComment(commentStr, CtComment.CommentType.JAVADOC);
-        e.addComment(c);
+        CtComment c = e.getFactory().Code().createComment(commentStr, CtComment.CommentType.JAVADOC);
+        e.setDocComment(commentStr);
+
+//        e.addComment(c);
     }
 
 }

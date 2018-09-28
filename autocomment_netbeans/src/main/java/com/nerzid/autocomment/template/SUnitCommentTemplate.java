@@ -20,6 +20,7 @@ package com.nerzid.autocomment.template;
 
 import com.nerzid.autocomment.grammar.CommentTitleLexer;
 import com.nerzid.autocomment.grammar.CommentTitleParser;
+import com.nerzid.autocomment.sunit.ControllingSUnit;
 import com.nerzid.autocomment.sunit.FunctionSUnit;
 import com.nerzid.autocomment.sunit.SUnit;
 import com.nerzid.autocomment.sunit.SUnitType;
@@ -30,15 +31,13 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtThisAccess;
-import spoon.reflect.code.CtVariableAccess;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by @author nerzid on 16.04.2017.
  */
-public abstract class SUnitCommentTemplate {
+public class SUnitCommentTemplate {
     protected String comment;
     protected SUnit sunit;
 
@@ -58,7 +57,7 @@ public abstract class SUnitCommentTemplate {
         this.comment = comment;
     }
 
-    public String prepareThenGetComment(SUnitType sUnitType, CtExpression target, String postag_sentence, String[] words, List<CtExpression> params) {
+    public String prepareThenGetComment(CtExpression target, String postag_sentence, String[] words, List<CtExpression> params) {
         ANTLRInputStream input = new ANTLRInputStream(postag_sentence);
         CommentTitleLexer lexer = new CommentTitleLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -73,22 +72,22 @@ public abstract class SUnitCommentTemplate {
         parser.setErrorHandler(new BailErrorStrategy());
 
         EvalCommentTitleListener evalListener = new EvalCommentTitleListener();
-
+        SUnitType sunitType = sunit.getSUnitType();
         try {
             ParseTree tree = null;
             ParseTreeWalker ptw = new ParseTreeWalker();
             int verbCount = postag_sentence.split("v").length;
-            if (sUnitType == SUnitType.ENDING) {
+            if (sunitType == SUnitType.ENDING
+                    || sunitType == SUnitType.VOID_RETURN
+                    || sunitType == SUnitType.SAME_ACTION_SEQUENCE) {
                 if (verbCount == 1) {
                     tree = parser.one_verb_rule();
                     ptw.walk(evalListener, tree);
 
                     PostaggedWord postaggedWord = evalListener.getPostaggedWord();
-
                     postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
 
-                    if (params.isEmpty())
-                        return new BooleanMCT().booleanMethodWithOneVerb(postaggedWord, true);
+                    return useOneVerbRule(postaggedWord, target);
                 } else {
                     tree = parser.two_verb_rule();
                     ptw.walk(evalListener, tree);
@@ -96,50 +95,12 @@ public abstract class SUnitCommentTemplate {
                     PostaggedWord postaggedWord = evalListener.getPostaggedWord();
 
                     postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
-                    return new BooleanMCT().booleanMethodWithTwoVerb(postaggedWord, true);
+//                    return new BooleanMCT().withTwoVerbs(postaggedWord, true);
                 }
 
-            } else if (sUnitType == SUnitType.VOID_RETURN){
+            } else if (sunitType == SUnitType.CONTROLLING) {
                 if (verbCount == 1) {
-                    tree = parser.one_verb_rule();
-                    ptw.walk(evalListener, tree);
-                    PostaggedWord postaggedWord = evalListener.getPostaggedWord();
-
-                    postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
-
-                    if (params.isEmpty())
-                        return useOneVerbRule(postaggedWord, target);
-                    else
-                        return useOneVerbRuleWithParams(postaggedWord, target, params);
-                } else {
-                    tree = parser.two_verb_rule();
-                    ptw.walk(evalListener, tree);
-
-                    PostaggedWord postaggedWord = evalListener.getPostaggedWord();
-
-                    postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
-                    return new BooleanMCT().booleanMethodWithTwoVerb(postaggedWord, true);
-                }
-            } else if (sUnitType == SUnitType.SAME_ACTION_SEQUENCE){
-                if (verbCount == 1) {
-                    tree = parser.one_verb_rule();
-                    ptw.walk(evalListener, tree);
-                    PostaggedWord postaggedWord = evalListener.getPostaggedWord();
-
-                    postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
-
-                    if (params.isEmpty())
-                        return useOneVerbRule(postaggedWord, target);
-                    else
-                        return useOneVerbRuleWithParams(postaggedWord, target, params);
-                } else {
-                    tree = parser.two_verb_rule();
-                    ptw.walk(evalListener, tree);
-
-                    PostaggedWord postaggedWord = evalListener.getPostaggedWord();
-
-                    postaggedWord.setTextUsingPostagsLength(words, postag_sentence.split(" "));
-                    return new BooleanMCT().booleanMethodWithTwoVerb(postaggedWord, true);
+                    ((ControllingSUnit)sunit).getConditions();
                 }
             }
 
@@ -160,45 +121,34 @@ public abstract class SUnitCommentTemplate {
         if (postaggedWord.getNounphrase1() != null) {
             res += postaggedWord.getNounphrase1().getText() + " ";
         }
-        res += getAppropriatePrepositionForVerb(postaggedWord.getVerb1().getText()) + " ";
-        if (target instanceof CtThisAccess) {
-            res += "this instance";
-        } else {
-            res += target.getType().getSimpleName() + "{" + target.toString() + "}";
-        }
-        return res;
-    }
-
-    protected String useOneVerbRuleWithParams(PostaggedWord postaggedWord, CtExpression target, List<CtExpression> params) {
-        String res = "";
-
-        res += postaggedWord.getVerb1().getText() + " ";
-        if (postaggedWord.getNounphrase1() != null) {
-            res += postaggedWord.getNounphrase1().getText() + " ";
-        }
-        if (sunit instanceof FunctionSUnit){
+        if (sunit instanceof FunctionSUnit) {
             FunctionSUnit fsunit = (FunctionSUnit) sunit;
-            for (CtVariableAccess dataVar : fsunit.getDataVars()) {
-                res += dataVar.getType().getSimpleName() + "{" + dataVar.toString() + "} ";
-            }
-        } else {
-            res += params.get(0).getType().getSimpleName() + "{" + params.get(0).toString() + "} ";
+            res += fsunit.getPrettyDataVars();
         }
         res += getAppropriatePrepositionForVerb(postaggedWord.getVerb1().getText()) + " ";
         if (target instanceof CtThisAccess) {
             res += "this instance";
         } else {
-            res += target.getType().getSimpleName() + "{" + target.toString() + "}";
+            if (target.getType().getSimpleName().equalsIgnoreCase("void"))
+                res += target.toString();
+            else
+                res += target.getType().getSimpleName() + "{" + target.toString() + "}";
         }
         return res;
     }
 
-    protected String getAppropriatePrepositionForVerb(String verb){
-        switch(verb){
-            case "append": return "to";
-            case "add": return "to";
-            case "get": return "from";
-            default: return "to";
+    protected String getAppropriatePrepositionForVerb(String verb) {
+        switch (verb) {
+            case "append":
+                return "to";
+            case "add":
+                return "to";
+            case "get":
+                return "from";
+            case "initialize":
+                return "the";
+            default:
+                return "to";
         }
     }
 

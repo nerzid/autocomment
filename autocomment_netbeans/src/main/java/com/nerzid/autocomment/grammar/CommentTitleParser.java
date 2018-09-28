@@ -1,6 +1,6 @@
-// Generated from CommentTitle.g4 by ANTLR 4.6
 package com.nerzid.autocomment.grammar;
 
+// Generated from CommentTitle.g4 by ANTLR 4.6
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -20,12 +20,13 @@ public class CommentTitleParser extends Parser {
 	public static final int
 		NPR=1, V=2, VR=3, PP=4, WS=5;
 	public static final int
-		RULE_rule1 = 0, RULE_one_verb_rule = 1, RULE_two_verb_rule = 2;
+		RULE_rule1 = 0, RULE_one_verb_rule = 1, RULE_two_verb_rule = 2, RULE_first_prp_rule = 3;
 	public static final String[] ruleNames = {
-		"rule1", "one_verb_rule", "two_verb_rule"
+		"rule1", "one_verb_rule", "two_verb_rule", "first_prp_rule"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
+		null, null, null, null, "'IN'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, "NPR", "V", "VR", "PP", "WS"
@@ -90,7 +91,7 @@ public class CommentTitleParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_rule1; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof CommentTitleListener) ((CommentTitleListener)listener).enterRule1(this);
+			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).enterRule1(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
@@ -98,7 +99,7 @@ public class CommentTitleParser extends Parser {
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof CommentTitleVisitor) return ((CommentTitleVisitor<? extends T>)visitor).visitRule1(this);
+			if ( visitor instanceof CommentTitleVisitor ) return ((CommentTitleVisitor<? extends T>)visitor).visitRule1(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -110,21 +111,21 @@ public class CommentTitleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(6);
+			setState(8);
 			match(V);
-			setState(7);
-			match(NPR);
 			setState(9);
+			match(NPR);
+			setState(11);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==PP) {
 				{
-				setState(8);
+				setState(10);
 				match(PP);
 				}
 			}
 
-			setState(11);
+			setState(13);
 			match(EOF);
 			}
 		}
@@ -169,19 +170,19 @@ public class CommentTitleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(13);
-			match(V);
 			setState(15);
+			match(V);
+			setState(17);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NPR) {
 				{
-				setState(14);
+				setState(16);
 				match(NPR);
 				}
 			}
 
-			setState(17);
+			setState(19);
 			match(EOF);
 			}
 		}
@@ -232,23 +233,104 @@ public class CommentTitleParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(19);
-			match(V);
-			setState(20);
-			match(NPR);
 			setState(21);
 			match(V);
+			setState(22);
+			match(NPR);
 			setState(23);
+			match(V);
+			setState(25);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==NPR) {
 				{
-				setState(22);
+				setState(24);
 				match(NPR);
 				}
 			}
 
-			setState(25);
+			setState(27);
+			match(EOF);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class First_prp_ruleContext extends ParserRuleContext {
+		public TerminalNode PP() { return getToken(CommentTitleParser.PP, 0); }
+		public TerminalNode EOF() { return getToken(CommentTitleParser.EOF, 0); }
+		public List<TerminalNode> NPR() { return getTokens(CommentTitleParser.NPR); }
+		public TerminalNode NPR(int i) {
+			return getToken(CommentTitleParser.NPR, i);
+		}
+		public TerminalNode V() { return getToken(CommentTitleParser.V, 0); }
+		public First_prp_ruleContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_first_prp_rule; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).enterFirst_prp_rule(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CommentTitleListener ) ((CommentTitleListener)listener).exitFirst_prp_rule(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommentTitleVisitor ) return ((CommentTitleVisitor<? extends T>)visitor).visitFirst_prp_rule(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final First_prp_ruleContext first_prp_rule() throws RecognitionException {
+		First_prp_ruleContext _localctx = new First_prp_ruleContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_first_prp_rule);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(29);
+			match(PP);
+			setState(31);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
+			case 1:
+				{
+				setState(30);
+				match(NPR);
+				}
+				break;
+			}
+			setState(34);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==V) {
+				{
+				setState(33);
+				match(V);
+				}
+			}
+
+			setState(37);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==NPR) {
+				{
+				setState(36);
+				match(NPR);
+				}
+			}
+
+			setState(39);
 			match(EOF);
 			}
 		}
@@ -264,15 +346,18 @@ public class CommentTitleParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\7\36\4\2\t\2\4\3"+
-		"\t\3\4\4\t\4\3\2\3\2\3\2\5\2\f\n\2\3\2\3\2\3\3\3\3\5\3\22\n\3\3\3\3\3"+
-		"\3\4\3\4\3\4\3\4\5\4\32\n\4\3\4\3\4\3\4\2\2\5\2\4\6\2\2\35\2\b\3\2\2\2"+
-		"\4\17\3\2\2\2\6\25\3\2\2\2\b\t\7\4\2\2\t\13\7\3\2\2\n\f\7\6\2\2\13\n\3"+
-		"\2\2\2\13\f\3\2\2\2\f\r\3\2\2\2\r\16\7\2\2\3\16\3\3\2\2\2\17\21\7\4\2"+
-		"\2\20\22\7\3\2\2\21\20\3\2\2\2\21\22\3\2\2\2\22\23\3\2\2\2\23\24\7\2\2"+
-		"\3\24\5\3\2\2\2\25\26\7\4\2\2\26\27\7\3\2\2\27\31\7\4\2\2\30\32\7\3\2"+
-		"\2\31\30\3\2\2\2\31\32\3\2\2\2\32\33\3\2\2\2\33\34\7\2\2\3\34\7\3\2\2"+
-		"\2\5\13\21\31";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\7,\4\2\t\2\4\3\t"+
+		"\3\4\4\t\4\4\5\t\5\3\2\3\2\3\2\5\2\16\n\2\3\2\3\2\3\3\3\3\5\3\24\n\3\3"+
+		"\3\3\3\3\4\3\4\3\4\3\4\5\4\34\n\4\3\4\3\4\3\5\3\5\5\5\"\n\5\3\5\5\5%\n"+
+		"\5\3\5\5\5(\n\5\3\5\3\5\3\5\2\2\6\2\4\6\b\2\2-\2\n\3\2\2\2\4\21\3\2\2"+
+		"\2\6\27\3\2\2\2\b\37\3\2\2\2\n\13\7\4\2\2\13\r\7\3\2\2\f\16\7\6\2\2\r"+
+		"\f\3\2\2\2\r\16\3\2\2\2\16\17\3\2\2\2\17\20\7\2\2\3\20\3\3\2\2\2\21\23"+
+		"\7\4\2\2\22\24\7\3\2\2\23\22\3\2\2\2\23\24\3\2\2\2\24\25\3\2\2\2\25\26"+
+		"\7\2\2\3\26\5\3\2\2\2\27\30\7\4\2\2\30\31\7\3\2\2\31\33\7\4\2\2\32\34"+
+		"\7\3\2\2\33\32\3\2\2\2\33\34\3\2\2\2\34\35\3\2\2\2\35\36\7\2\2\3\36\7"+
+		"\3\2\2\2\37!\7\6\2\2 \"\7\3\2\2! \3\2\2\2!\"\3\2\2\2\"$\3\2\2\2#%\7\4"+
+		"\2\2$#\3\2\2\2$%\3\2\2\2%\'\3\2\2\2&(\7\3\2\2\'&\3\2\2\2\'(\3\2\2\2()"+
+		"\3\2\2\2)*\7\2\2\3*\t\3\2\2\2\b\r\23\33!$\'";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

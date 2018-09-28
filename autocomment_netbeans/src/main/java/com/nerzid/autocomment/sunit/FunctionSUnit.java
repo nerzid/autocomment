@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import spoon.reflect.code.*;
+import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtElement;
+import spoon.reflect.declaration.CtField;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.visitor.Filter;
 import spoon.reflect.visitor.filter.CompositeFilter;
@@ -29,15 +31,14 @@ import spoon.reflect.visitor.filter.FilteringOperator;
 import spoon.reflect.visitor.filter.TypeFilter;
 
 /**
- *
  * @author nerzid
  */
 public abstract class FunctionSUnit extends SUnit {
 
     protected Collection<DataFacilitatorSUnit> facilitators;
-    protected Collection<CtVariableAccess> dataVars;
+    protected Collection<CtExpression> dataVars;
 
-    protected static Collection<CtVariableAccess> allDataVars;
+    protected static Collection<CtExpression> allDataVars;
 
     {
         facilitators = new PriorityQueue<>();
@@ -53,7 +54,6 @@ public abstract class FunctionSUnit extends SUnit {
     }
 
 
-
     private void addDataFacilitator(DataFacilitatorSUnit facilitator) {
         facilitators.add(facilitator);
     }
@@ -66,19 +66,19 @@ public abstract class FunctionSUnit extends SUnit {
         this.facilitators = facilitators;
     }
 
-    public Collection<CtVariableAccess> getDataVars() {
+    public Collection<CtExpression> getDataVars() {
         return dataVars;
     }
 
-    public void setDataVars(Collection<CtVariableAccess> dataVars) {
+    public void setDataVars(Collection<CtExpression> dataVars) {
         this.dataVars = dataVars;
     }
 
-    public static Collection<CtVariableAccess> getAllDataVars() {
+    public static Collection<CtExpression> getAllDataVars() {
         return allDataVars;
     }
 
-    public static void setAllDataVars(Collection<CtVariableAccess> allDataVars) {
+    public static void setAllDataVars(Collection<CtExpression> allDataVars) {
         FunctionSUnit.allDataVars = allDataVars;
     }
 
@@ -91,7 +91,7 @@ public abstract class FunctionSUnit extends SUnit {
         return false;
     }
 
-    public void addDataVar(CtVariableAccess var) {
+    public void addDataVar(CtExpression var) {
         dataVars.add(var);
         allDataVars.add(var);
     }
@@ -100,32 +100,56 @@ public abstract class FunctionSUnit extends SUnit {
      * Add data vars using {@link CtElement#getElements(Filter)}
      */
     public void addDataVars() {
-//        if (element instanceof CtInvocation) {
-//            List<CtVariableAccess> vars = ((CtInvocation) element).getArguments();
-//            for (CtVariableAccess var : vars) {
-//                this.addDataVar(var);
-//            }
-//        }
-        List<CtVariableAccess> vars = element.getElements(new TypeFilter(CtVariableAccess.class));
-        for (CtVariableAccess var : vars) {
-            this.addDataVar(var);
+
+        // AbstractInvocation has ConstructorCall, Invocation and NewClass subinterfaces.
+        if (element instanceof CtAbstractInvocation) {
+            List<CtExpression> expressions = ((CtAbstractInvocation) element).getArguments();
+            for (CtExpression expression : expressions) {
+                this.addDataVar(expression);
+            }
         }
     }
 
     /**
      * Add data vars using {@link CtElement#getElements(Filter)}
+     *
      * @param e
      */
-    public void addDataVars(CtElement e){
-        List<CtVariableAccess> vars = e.getElements(new TypeFilter(CtVariableAccess.class));
-        for (CtVariableAccess var : vars) {
-            this.addDataVar(var);
+    public void addDataVars(CtElement e) {
+        if (e instanceof CtAbstractInvocation) {
+            List<CtExpression> expressions = ((CtAbstractInvocation) e).getArguments();
+            for (CtExpression expression : expressions) {
+                this.addDataVar(expression);
+            }
         }
     }
 
+    public String getPrettyDataVars() {
+        String res = "";
+        Collection<CtExpression> dataVars = getDataVars();
+        List<String> addedTypesList = new ArrayList<>();
+        if (dataVars.size() != 0) {
+            for (CtExpression e : dataVars) {
+                if (!addedTypesList.contains(e.getType().toString())) {
+                    res += e.getType().getSimpleName() + "{" + e.toString();
+                    for (CtExpression e2 : dataVars) {
+                        if (!e.equals(e2)
+                                && !addedTypesList.contains(e2.getType().toString())
+                                && e.getType().equals(e2.getType())) {
+                            res += ", " + e2.toString();
+                        }
+                    }
+                    res += "}, ";
+                    addedTypesList.add(e.getType().toString());
+                }
+            }
+            res = res.substring(0, res.length() - 2) + " ";
+        }
+        return res;
+    }
+
     /**
-     *
-     * @param e Get the method to search for facilitators using dataVars
+     * @param e      Get the method to search for facilitators using dataVars
      * @param fsunit
      */
     public void dataVarsToFacilitators(CtMethod e, FunctionSUnit fsunit) {
@@ -133,34 +157,41 @@ public abstract class FunctionSUnit extends SUnit {
                 FilteringOperator.UNION,
                 new TypeFilter(CtAssignment.class),
                 new TypeFilter(CtLocalVariable.class));
-        List<CtStatement> stmts = e.getElements(cf);
+        List<CtElement> elems = e.getElements(cf);
+        elems.addAll(((CtClass)e.getParent()).getFields());
 
-        CtLocalVariable clv;
+        for (CtElement elem : elems) {
+            for (CtExpression dataVar : fsunit.getDataVars()) {
+                if (dataVar instanceof CtVariableAccess) {
+                    CtVariableAccess data = (CtVariableAccess) dataVar;
+                    if ((elem instanceof CtAssignment && data.toString().equals(((CtAssignment) elem).getAssigned().toString()))
+                            || (elem instanceof CtLocalVariable && data.toString().equals(((CtLocalVariable) elem).getSimpleName()))
+                            || (elem instanceof CtField && data.toString().equals(((CtField) elem).getSimpleName()))) {
+                        if (!FunctionSUnit.isDataVarExists(data)) {
+                            addDataFacilitator(new DataFacilitatorSUnit(elem, data));
+                        }
 
-        for (CtStatement stmt : stmts) {
-            for (CtVariableAccess dataVar : fsunit.getDataVars()) {
-                if ((stmt instanceof CtAssignment && dataVar.toString().equals(((CtAssignment) stmt).getAssigned().toString()))
-                        || (stmt instanceof CtLocalVariable && dataVar.toString().equals(((CtLocalVariable) stmt).getSimpleName()))) {
-                    if (!FunctionSUnit.isDataVarExists(dataVar)) {
-                        addDataFacilitator(new DataFacilitatorSUnit(stmt, dataVar));
                     }
-
                 }
             }
         }
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + "\n" + "\t"+ "FunctionSUnit{\n\t\t" + "facilitators=> \n" + prettyFacilitators() + '}' + "\n";
-    }
-    
-    public String prettyFacilitators() {
-        String result = "";
-        for (DataFacilitatorSUnit facilitator : facilitators) {
-            result += "\t\t\t->" + facilitator.toString() + "\n";
-        }
-        return result;
-    }
+//    @Override
+//    public String toString() {
+//        return super.toString() + "\n" + "\t" + "FunctionSUnit{\n\t\t" + "facilitators=> \n" + prettyFacilitators() + '}' + "\n";
+//    }
 
+//    public String prettyFacilitators() {
+//        String result = "";
+//        for (DataFacilitatorSUnit facilitator : facilitators) {
+//            result += "\t\t\t->" + facilitator.toString() + "\n";
+//        }
+//        return result;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return super.toString();
+//    }
 }

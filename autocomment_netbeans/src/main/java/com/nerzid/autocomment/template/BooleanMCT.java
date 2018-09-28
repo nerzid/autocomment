@@ -15,64 +15,107 @@
  */
 package com.nerzid.autocomment.template;
 
+import com.nerzid.autocomment.model.Comment;
+import com.nerzid.autocomment.sunit.EndingSUnit;
+import com.nerzid.autocomment.sunit.FunctionSUnit;
+import com.nerzid.autocomment.sunit.SUnitStorage;
+import spoon.reflect.code.CtExpression;
+import spoon.reflect.code.CtReturn;
+
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * @author nerzid
  */
 public class BooleanMCT extends MethodCommentTemplate {
 
-    // e.g. VBZ NN - isDirectory()
-    public String booleanMethodWithOneVerb(PostaggedWord postaggedWord, boolean prefix) {
-        String res = "";
+    // e.g. VBZ NN - isDirectory()  isSeperator(char)
+    public Comment withOneVerb(PostaggedWord postaggedWord, List<String> params, SUnitStorage sUnitStorage, boolean isStatic, boolean isInvocComment) {
+        Comment comment = new Comment();
+        if (postaggedWord.getNounphrase1() == null) {
+            if (isInvocComment)
+                comment.appendToSummary("This method ");
+            comment.appendToSummary(postaggedWord.getVerb1().getText() + "s ");
+            if (isStatic)
+                comment.appendToSummary("this class ");
+            else
+                comment.appendToSummary("this instance ");
+            comment.appendToSummary("and returns true if it is successfuly ");
+            comment.appendToSummary(postaggedWord.getVerb1().getText() +"d");
+            // TODO need to implement code to add sunits to comment here
+        } else {
+            if (isInvocComment)
+                comment.appendToSummary("This method checks whether ");
 
-        if (prefix)
-            res += "This method ";
-        res += "checks whether " + "this instance ";
-        res += postaggedWord.getVerb1().getText() + " ";
-        res += postaggedWord.getNounphrase1().getText() + " ";
-        res += "or not.";
-
-        return res;
-    }
-
-    // e.g. VBZ NN - isSeperator(char)
-    public String booleanMethodWithOneVerbAndParameters(PostaggedWord postaggedWord, List<String> params, boolean prefix) {
-        String res = "";
-
-        if (prefix)
-            res += "This method ";
-        res += "checks whether " + "the given ";
-        int ix = 0;
-        for (String param : params) {
-            if (ix + 1 == params.size()) {
-                res += param + " ";
-            } else {
-                res += param + " and ";
+            String verb1_postag = postaggedWord.getVerb1().getPostag();
+            if (verb1_postag.equalsIgnoreCase("vbz")) {
+                comment.appendComment(withVBZVerb(postaggedWord, params, isStatic));
+            } else if (verb1_postag.equalsIgnoreCase("vb"))
+                comment.appendComment(withVBVerb(postaggedWord, params, isStatic));
+            else {
+                comment.appendToSummary(
+                        prepareStringForParams(postaggedWord.getVerb1().getText(), params, isStatic)
+                                + postaggedWord.getVerb1().getText() + " "
+                                + postaggedWord.getNounphrase1().getText() + " "
+                                + "or not."
+                );
             }
-            ix++;
         }
-
-        res += postaggedWord.getVerb1().getText() + " ";
-        res += postaggedWord.getNounphrase1().getText() + " ";
-        res += "or not.";
-
-        return res;
+        return comment;
     }
+
+    // isDirectory
+    protected Comment withVBZVerb(PostaggedWord postaggedWord, List<String> params, boolean isStatic) {
+        // boolean delete(Page page)
+        Comment comment = new Comment();
+        if (params.isEmpty())
+            if (isStatic)
+                comment.appendToSummary("this class ");
+            else
+                comment.appendToSummary("this instance ");
+        comment.appendToSummary(postaggedWord.getVerb1().getText() + " ");
+        if (postaggedWord.getNounphrase1() != null)
+            comment.appendToSummary(postaggedWord.getNounphrase1().getText() + " ");
+        comment.appendToSummary(prepareStringForParams(postaggedWord.getVerb1().getText(), params, isStatic));
+        comment.appendToSummary("or not.");
+        return comment;
+    }
+
+    // delete(Page page), close()
+    protected Comment withVBVerb(PostaggedWord postaggedWord, List<String> params, boolean isStatic) {
+        // boolean delete(Page page)
+        Comment comment = new Comment();
+        comment.appendToSummary(postaggedWord.getVerb1().getText() + "ing ");
+        if (params.isEmpty())
+            if (isStatic)
+                comment.appendToSummary("this class ");
+            else
+                comment.appendToSummary("this instance ");
+        if (postaggedWord.getNounphrase1() != null)
+            comment.appendToSummary(postaggedWord.getNounphrase1().getText() + " ");
+        comment.appendToSummary(prepareStringForParams(postaggedWord.getVerb1().getText(), params, isStatic));
+        comment.appendToSummary(" is successful or not.");
+        return comment;
+    }
+
 
     // e.g. VBZ NN NN NN VBD - isGroupTargetEntityAllowed()
-    public String booleanMethodWithTwoVerb(PostaggedWord postaggedWord, boolean prefix) {
-        String res = "";
-
+    protected Comment withTwoVerbs(PostaggedWord postaggedWord, List<String> params, SUnitStorage sUnitStorage, boolean prefix) {
+        Comment comment = new Comment();
         if (prefix)
-            res += "This method ";
-        res += "checks whether the ";
-        res += postaggedWord.getNounphrase1().getText() + " ";
-        res += postaggedWord.getVerb1().getText() + " ";
-        res += postaggedWord.getVerb2().getText() + " ";
-        res += "or not.";
+            comment.appendToSummary("This method ");
+        comment.appendToSummary("checks whether the ");
+        comment.appendToSummary(postaggedWord.getNounphrase1().getText() + " ");
+        if (postaggedWord.getVerb1().getText().equalsIgnoreCase("check")) {
+            comment.appendToSummary("is correct ");
+        } else {
+            comment.appendToSummary(postaggedWord.getVerb1().getText() + " ");
+            comment.appendToSummary(postaggedWord.getVerb2().getText() + " ");
+        }
+        comment.appendToSummary("or not.");
 
-        return res;
+        return comment;
     }
 
 }

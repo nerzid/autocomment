@@ -1,5 +1,6 @@
-// Generated from CommentTitle.g4 by ANTLR 4.6
 package com.nerzid.autocomment.grammar;
+
+// Generated from CommentTitle.g4 by ANTLR 4.6
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -47,6 +48,18 @@ public class CommentTitleBaseListener implements CommentTitleListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTwo_verb_rule(CommentTitleParser.Two_verb_ruleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFirst_prp_rule(CommentTitleParser.First_prp_ruleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFirst_prp_rule(CommentTitleParser.First_prp_ruleContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

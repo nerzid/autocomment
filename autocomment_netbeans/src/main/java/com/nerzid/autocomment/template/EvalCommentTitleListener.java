@@ -37,7 +37,6 @@ public class EvalCommentTitleListener extends CommentTitleBaseListener {
         Word npr1 = new Word();
         npr1.setPostag(ctx.NPR().getText());
         postaggedWord.setNounphrase1(npr1);
-
         Word pp = new Word();
 
         if (ctx.PP() != null) {
@@ -59,6 +58,30 @@ public class EvalCommentTitleListener extends CommentTitleBaseListener {
             npr1.setPostag(ctx.NPR().getText());
             postaggedWord.setNounphrase1(npr1);
         }
+    }
+
+    @Override
+    public void enterFirst_prp_rule(CommentTitleParser.First_prp_ruleContext ctx) {
+        postaggedWord = new PostaggedWord();
+        Word verb1 = new Word();
+        if(ctx.V() != null) {
+            verb1.setPostag(ctx.V().getText());
+            postaggedWord.setVerb1(verb1);
+        }
+
+        if (ctx.NPR().size() > 0) {
+            Word npr1 = new Word();
+            npr1.setPostag(ctx.NPR().get(0).getText());
+            postaggedWord.setNounphrase1(npr1);
+        }
+        if (ctx.NPR().size() > 1 ) {
+            Word npr2 = new Word();
+            npr2.setPostag(ctx.NPR().get(1).getText());
+            postaggedWord.setNounphrase1(npr2);
+        }
+        Word pp = new Word();
+        pp.setPostag(ctx.PP().getText());
+        postaggedWord.setPreposition(pp);
     }
 
     @Override

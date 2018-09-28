@@ -15,10 +15,32 @@
  */
 package com.nerzid.autocomment.template;
 
+import com.nerzid.autocomment.model.Comment;
+import com.nerzid.autocomment.sunit.EndingSUnit;
+import com.nerzid.autocomment.sunit.SUnitStorage;
+import spoon.reflect.code.CtExpression;
+import spoon.reflect.code.CtReturn;
+
+import java.util.List;
+import java.util.PriorityQueue;
+
 /**
- *
  * @author nerzid
  */
-public class NumericMCT {
-    
+public class NumericMCT extends MethodCommentTemplate {
+//
+//    @Override
+//    protected Comment withOneVerb(PostaggedWord postaggedWord, List<String> params, SUnitStorage sUnitStorage, boolean isStatic, boolean isInvocComment, List<PostaggedWord> postaggedWords) {
+//        Comment comment = new Comment();
+//        if (isInvocComment)
+//            comment.appendToSummary("This method ");
+//        comment.appendToSummary(postaggedWord.getVerb1().getText() + " ");
+//        if (postaggedWord.getNounphrase1() != null)
+//            comment.appendToSummary(postaggedWord.getNounphrase1().getText() + " ");
+//        comment.appendToSummary(prepareStringForParams(postaggedWord.getVerb1().getText(), params, isStatic));
+////        comment.appendComment(getReturnedInfo(sUnitStorage));
+//        comment.appendComment(getSUnitComments(sUnitStorage));
+//        return comment;
+//    }
+
 }

@@ -2,6 +2,8 @@ package com.nerzid.autocomment.train;
 
 import com.nerzid.autocomment.exception.FileNotSelected;
 import com.nerzid.autocomment.io.FilePicker;
+import com.nerzid.autocomment.processor.CommentGeneratorMethodProcessor;
+import com.nerzid.autocomment.processor.MethodNameProcessor;
 import com.nerzid.autocomment.processor.SUnitMethodProcessor;
 import java.io.File;
 import java.util.List;
@@ -59,26 +61,27 @@ public class AverageIfCalculator {
             // WARNING: Priority is important DO NOT CHANGE
             // JavaOutputProcessor must be at LOWERMOST to get all differences
             // and write them
-            l.addProcessor(new SUnitMethodProcessor());
-
+            l.addProcessor(new CommentGeneratorMethodProcessor());
+//            l.addProcessor(new SUnitMethodProcessor());
+//                l.addProcessor(new MethodNameProcessor());
             // Uncomment this if you want to insert comment into code
             l.addProcessor(jop);
-            // Debuglevel 
+            // Debuglevel
             // env.setLevel("0");
             // Run the Launcher
-
-            try {
+//
+//            try {
                 l.run();
-                System.out.println("Average Depth:" + SUnitMethodProcessor.calculateAverageIfDepth());
-                System.out.println("Average Condition: " + SUnitMethodProcessor.calculateAverageOfIfConditions());
-            } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-                e.printStackTrace();
-                count++;
-            } finally {
-                System.out.println("Error Count: " + count);
-//                System.out.println(Arrays.toString(S_UnitMethodProcessor.actual_conditions.toArray()));
-            }
+//                System.out.println("Average Depth:" + SUnitMethodProcessor.calculateAverageIfDepth());
+//                System.out.println("Average Condition: " + SUnitMethodProcessor.calculateAverageOfIfConditions());
+//            } catch (Exception e) {
+//                System.out.println("Error: " + e.getMessage());
+//                e.printStackTrace();
+//                count++;
+//            } finally {
+//                System.out.println("Error Count: " + count);
+////                System.out.println(Arrays.toString(S_UnitMethodProcessor.actual_conditions.toArray()));
+//            }
 
         }
 

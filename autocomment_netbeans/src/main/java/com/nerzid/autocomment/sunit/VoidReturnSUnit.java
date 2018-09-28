@@ -25,12 +25,14 @@ public class VoidReturnSUnit extends FunctionSUnit {
     
     public VoidReturnSUnit(CtElement element) {
         super(element);
+        sunitType = SUnitType.VOID_RETURN;
         voidReturnSUnits.add(this);
     }
 
 //    @Override
 //    public String toString() {
-//        return super.toString() + "\t\t" + "VoidReturnSUnit{" + '}' + "\n";
+//        // TODO statement isimlerini pasifleştirmem gerekiyor.
+//        return super.toString();
 //    }
 
 }

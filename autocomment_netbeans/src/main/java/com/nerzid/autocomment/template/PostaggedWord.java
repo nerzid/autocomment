@@ -18,6 +18,8 @@
 
 package com.nerzid.autocomment.template;
 
+import java.util.List;
+
 /**
  * Created by @author nerzid on 18.04.2017.
  */
@@ -27,6 +29,9 @@ public class PostaggedWord {
     private Word verb2;
     private Word nounphrase2;
     private Word preposition;
+    private List<String> params;
+
+    private boolean startingWithPRP;
 
     public PostaggedWord() {
     }
@@ -71,10 +76,26 @@ public class PostaggedWord {
         this.preposition = preposition;
     }
 
+    public List<String> getParams() {
+        return params;
+    }
+
+    public void setParams(List<String> params) {
+        this.params = params;
+    }
+
+    public boolean isStartingWithPRP() {
+        return startingWithPRP;
+    }
+
+    public void setStartingWithPRP(boolean startingWithPRP) {
+        this.startingWithPRP = startingWithPRP;
+    }
+
     public void setTextUsingPostagsLength(String[] words, String postags[]) {
-        if (verb1 == null) {
-            return;
-        }
+//        if (verb1 == null) {
+//            return;
+//        }
 
         int i = 0;
         boolean isVerb1Finished = false;
@@ -100,10 +121,11 @@ public class PostaggedWord {
                     }
                 }
             } else if (postags[i].contains("NN") || postags[i].contains("JJ")) {
-                if (!verb1.getText().isEmpty()) {
-                    isVerb1Finished = true;
+                if (verb1 != null) {
+                    if (!verb1.getText().isEmpty()) {
+                        isVerb1Finished = true;
+                    }
                 }
-
                 if (!isNounPhrase1Finished) {
                     if (nounphrase1.getText().isEmpty()) {
                         nounphrase1.setText(words[i]);
@@ -117,7 +139,7 @@ public class PostaggedWord {
                         nounphrase2.appendTextAfterSpace(words[i]);
                     }
                 }
-            } else if (postags[i].contains("PP")) {
+            } else if (postags[i].contains("IN")) {
                 preposition.setText(words[i]);
             }
             i++;

@@ -15,6 +15,9 @@
  */
 package com.nerzid.autocomment.nlp;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -121,7 +124,7 @@ public class Tokenizer {
      * @param s
      * @return
      */
-    private static String removePunctuations(String s) {
+    public static String removePunctuations(String s) {
         String res = "";
         for (Character c : s.toCharArray()) {
             if (Character.isLetterOrDigit(c)) {
@@ -129,6 +132,16 @@ public class Tokenizer {
             }
         }
         return res;
+    }
+
+    public static String removePunctuationsExcludeSpaces(String s) {
+        String res = "";
+        for (Character c : s.toCharArray()) {
+            if (Character.isLetterOrDigit(c) || Character.isSpaceChar(c)){
+                res += c;
+            }
+        }
+        return getHTMLFreeText(res);
     }
 
     /**
@@ -174,16 +187,16 @@ public class Tokenizer {
                     if (!newWord.isEmpty()) {
                         if (beforeWasUpperCase) {
                             waitingUpperCaseLetter = true;
-//                            if(j + 1 < word.length()){
-//                                if(Character.isLowerCase(word.charAt(j+1))){
-//                                    splitted.add(newWord.toLowerCase());
-//                                    newWord = "";
-//                                    newWord += Character.toLowerCase(ch);
-//                                    waitingUpperCaseLetter = false;
-//                                    beforeWasUpperCase = false;
-//                                    continue;
-//                                }
-//                            }
+                            if(j + 1 < word.length()){
+                                if(Character.isLowerCase(word.charAt(j+1))){
+                                    splitted.add(newWord.toLowerCase());
+                                    newWord = "";
+                                    newWord += Character.toLowerCase(ch);
+                                    waitingUpperCaseLetter = false;
+                                    beforeWasUpperCase = false;
+                                    continue;
+                                }
+                            }
                         }
                         if (!waitingUpperCaseLetter) {
                             splitted.add(newWord.toLowerCase());
@@ -234,6 +247,10 @@ public class Tokenizer {
             }
         }
         return false;
+    }
+
+    public static String getHTMLFreeText(String text){
+        return Jsoup.clean(text, Whitelist.none()).toLowerCase();
     }
 
     /**

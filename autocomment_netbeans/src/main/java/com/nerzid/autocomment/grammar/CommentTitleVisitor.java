@@ -1,6 +1,6 @@
-// Generated from CommentTitle.g4 by ANTLR 4.6
 package com.nerzid.autocomment.grammar;
 
+// Generated from CommentTitle.g4 by ANTLR 4.6
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -29,4 +29,10 @@ public interface CommentTitleVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTwo_verb_rule(CommentTitleParser.Two_verb_ruleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CommentTitleParser#first_prp_rule}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFirst_prp_rule(CommentTitleParser.First_prp_ruleContext ctx);
 }

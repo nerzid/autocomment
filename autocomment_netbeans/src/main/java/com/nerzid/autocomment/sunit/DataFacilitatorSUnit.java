@@ -16,6 +16,8 @@
 package com.nerzid.autocomment.sunit;
 
 import java.util.Objects;
+
+import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtVariableAccess;
 import spoon.reflect.declaration.CtElement;
 
@@ -26,11 +28,12 @@ import spoon.reflect.declaration.CtElement;
 public class DataFacilitatorSUnit extends SUnit{
 
     // Data Variable to get Data Facilitators of it.
-    private CtVariableAccess dataVar;
+    private CtExpression dataVar;
 
-    public DataFacilitatorSUnit(CtElement element, CtVariableAccess dataVar) {
+    public DataFacilitatorSUnit(CtElement element, CtExpression dataVar) {
         super(element);
         this.dataVar = dataVar;
+        sunitType = SUnitType.DATA_FACILITATOR;
         dataFacilitatorSUnits.add(this);
     }
 
@@ -38,11 +41,11 @@ public class DataFacilitatorSUnit extends SUnit{
         this.dataVar = dataVar;
     }
     
-    public CtVariableAccess getDataVar() {
+    public CtExpression getDataVar() {
         return dataVar;
     }
 
-    public void setDataVar(CtVariableAccess dataVar) {
+    public void setDataVar(CtExpression dataVar) {
         this.dataVar = dataVar;
     }
     
@@ -71,9 +74,9 @@ public class DataFacilitatorSUnit extends SUnit{
         return true;
     }
     
-    @Override
-    public String toString() {
-        return super.toString() + " => "+ "{" + "dataVar=> " + dataVar + '}' + "\n";
-    }
+//    @Override
+//    public String toString() {
+//        return super.toString() + " => "+ "{" + "dataVar=> " + dataVar + '}' + "\n";
+//    }
 
 }

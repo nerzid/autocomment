@@ -15,10 +15,15 @@
  */
 package com.nerzid.autocomment.template;
 
+import com.nerzid.autocomment.model.Comment;
+import com.nerzid.autocomment.sunit.SUnitStorage;
+
+import java.util.List;
+
 /**
- *
  * @author nerzid
  */
-public class CustomMCT {
-    
+public class CustomMCT extends MethodCommentTemplate {
+
+
 }
